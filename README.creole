@@ -1,0 +1,43 @@
+= django-for-runners
+
+Store your GPX tracks of your running (or other sports activity) in django.
+
+It's currently experimental ... Pre-Alpha state...
+
+| {{https://travis-ci.org/jedie/django-for-runners.svg|Build Status on travis-ci.org}} | [[https://travis-ci.org/jedie/django-for-runners/|travis-ci.org/jedie/django-for-runners]] |
+| {{https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg|Coverage Status on codecov.io}} | [[https://codecov.io/gh/jedie/django-for-runners|codecov.io/gh/jedie/django-tools]] |
+| {{https://coveralls.io/repos/jedie/django-for-runners/badge.svg|Coverage Status on coveralls.io}} | [[https://coveralls.io/r/jedie/django-for-runners|coveralls.io/r/jedie/django-for-runners]] |
+| {{https://landscape.io/github/jedie/django-for-runners/master/landscape.svg|Status on landscape.io}} | [[https://landscape.io/github/jedie/django-for-runners/master|landscape.io/github/jedie/django-for-runners/master]] |
+
+== Django compatibility
+
+|= django-for-runners |= Django CMS |= django version |= python         |
+| v0.x.x            | 3.4.x TLS   | 1.11 TLS        | 3.5, 3.6   |
+
+(See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
+
+== TODO:
+
+ * Add real tests
+ * Support Django CMS v3.5 and run tests against these versions.
+ * Support Django v2.0 and run tests against these versions.
+
+
+== history
+
+* *dev* - [[https://github.com/jedie/django-for-runners/compare/v0.0.1...master|compare v0.0.1...master]]
+* v0.0.1 - 30.05.2018
+** Just create a pre-alpha release to save the PyPi package name ;)
+
+
+== links ==
+
+| Homepage   | http://github.com/jedie/django-for-runners
+| PyPi       | https://pypi.org/project/django-for-runners/
+
+
+== donation ==
+
+* [[https://www.paypal.me/JensDiemer|paypal.me/JensDiemer]]
+* [[https://flattr.com/submit/auto?uid=jedie&url=https%3A%2F%2Fgithub.com%2Fjedie%2Fdjango-for-runners%2F|Flattr This!]]
+* Send [[http://www.bitcoin.org/|Bitcoins]] to [[https://blockexplorer.com/address/1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F|1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F]]

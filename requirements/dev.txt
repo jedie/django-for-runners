@@ -1,0 +1,21 @@
+#
+# for develope
+#
+
+-r base.txt
+
+django-filer
+flake8
+pydocstyle
+pylint
+Sphinx
+tox
+wheel
+twine
+python-creole>=v0.8
+
+# http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
+django-debug-toolbar
+
+# https://github.com/Peter-Slump/django-dynamic-fixtures
+django-dynamic-fixtures

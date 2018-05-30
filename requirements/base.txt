@@ -1,0 +1,20 @@
+#
+# basic requirements
+#
+
+# https://github.com/divio/djangocms-text-ckeditor
+djangocms-text-ckeditor
+
+# https://github.com/jedie/django-tools
+django-tools
+
+# https://github.com/jedie/django-cms-tools
+django-cms-tools
+
+# https://github.com/tkrajina/gpxpy
+#gpxpy
+-e git+https://github.com/tkrajina/gpxpy.git@dev#egg=gpxpy
+
+# https://pypi.org/project/Gpxity/
+# https://github.com/wrohdewald/Gpxity
+Gpxity
