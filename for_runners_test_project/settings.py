@@ -63,8 +63,6 @@ INSTALLED_APPS = (
     'cms', # https://github.com/divio/django-cms
     'menus', # Part of Django-CMS
 
-    'meta', # https://github.com/nephila/django-meta
-
     'easy_thumbnails', # https://github.com/SmileyChris/easy-thumbnails
     'treebeard', # https://github.com/django-treebeard/django-treebeard
     'sekizai', # https://github.com/ojii/django-sekizai

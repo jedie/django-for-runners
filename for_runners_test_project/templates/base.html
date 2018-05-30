@@ -1,11 +1,10 @@
-{% load cms_tags menu_tags sekizai_tags meta %}
+{% load cms_tags menu_tags sekizai_tags %}
 
 <!DOCTYPE html>
 <html>
-    <head {% meta_namespaces %} >
-        <title>{% if meta.title %}{{ meta.title }}{% else %}{% page_attribute "page_title" %}{% endif %}</title>
-        {% include 'meta/meta.html' %}
-        <meta name="robots" content="{% block "meta_robots_content" %}noindex, nofollow{% endblock %}">
+    <head>
+        <title>{% page_attribute "page_title" %}</title>
+        <meta name="robots" content="noindex, nofollow">
         {% render_block "css" %}
     </head>
     <body>
