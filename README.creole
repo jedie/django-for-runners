@@ -47,6 +47,11 @@ It's currently experimental ... Pre-Alpha state...
 | PyPi       | https://pypi.org/project/django-for-runners/
 
 
+=== alternatives (OpenSource only) ==
+
+* https://github.com/GoldenCheetah/GoldenCheetah/
+
+
 == donation ==
 
 * [[https://www.paypal.me/JensDiemer|paypal.me/JensDiemer]]
