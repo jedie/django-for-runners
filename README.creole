@@ -9,6 +9,16 @@ It's currently experimental ... Pre-Alpha state...
 | {{https://coveralls.io/repos/jedie/django-for-runners/badge.svg|Coverage Status on coveralls.io}} | [[https://coveralls.io/r/jedie/django-for-runners|coveralls.io/r/jedie/django-for-runners]] |
 | {{https://landscape.io/github/jedie/django-for-runners/master/landscape.svg|Status on landscape.io}} | [[https://landscape.io/github/jedie/django-for-runners/master|landscape.io/github/jedie/django-for-runners/master]] |
 
+
+== Screenshots
+
+== for-runners v0.0.1 2018-5-30 change list.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change list.png|for-runners v0.0.1 2018-5-30 change list.png}}
+
+== for-runners v0.0.1 2018-5-30 change GPX Track.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change GPX Track.png|for-runners v0.0.1 2018-5-30 change GPX Track.png}}
+
+
 == Django compatibility
 
 |= django-for-runners |= Django CMS |= django version |= python         |
