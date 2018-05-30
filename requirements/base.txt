@@ -12,9 +12,17 @@ django-tools
 django-cms-tools
 
 # https://github.com/tkrajina/gpxpy
-#gpxpy
--e git+https://github.com/tkrajina/gpxpy.git@dev#egg=gpxpy
+gpxpy
+#-e git+https://github.com/tkrajina/gpxpy.git@dev#egg=gpxpy
 
 # https://pypi.org/project/Gpxity/
 # https://github.com/wrohdewald/Gpxity
 Gpxity
+
+# https://wrobell.dcmod.org/geotiler/
+# https://pypi.org/project/geotiler/
+geotiler
+
+# https://pypi.org/project/matplotlib/
+# http://matplotlib.org/
+matplotlib
