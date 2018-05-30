@@ -1,16 +1,7 @@
-"""
-
-http://nbviewer.jupyter.org/github/python-visualization/folium/blob/master/examples/Folium_and_mplleaflet.ipynb
-https://leafletjs.com/index.html
-
-https://gist.github.com/deparkes/610b112f74eadbda663806ba8dd83069
-"""
 import asyncio
 
-import geotiler
-import matplotlib.pyplot as plt
-
-
+import geotiler  # https://wrobell.dcmod.org/geotiler/
+import matplotlib.pyplot as plt  # https://pypi.org/project/matplotlib/
 
 
 def generate_map(gpxpy_instance):
@@ -48,7 +39,7 @@ def generate_map(gpxpy_instance):
     lon_min2, lat_min2, lon_max2, lat_max2 = map.extent
 
     print("Render map...")
-    asyncio.set_event_loop(asyncio.new_event_loop()) # Fix: There is no current event loop in thread 'Thread-1'.
+    asyncio.set_event_loop(asyncio.new_event_loop())  # Fix: There is no current event loop in thread 'Thread-1'.
     image = geotiler.render_map(map)
     print("OK")
 
@@ -64,7 +55,6 @@ def generate_map(gpxpy_instance):
     plt.ylabel('longitude')
 
     return image, plt
-
 
 
 # gpx = garmin2gpxpy(filepath=FILEPATH)
