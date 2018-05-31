@@ -3,11 +3,17 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
+import io
 import logging
 
 from django.conf import settings
+from django.core.files import File
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
+from filer.fields.file import FilerFileField
+from filer.utils.loader import load_model
 
 # https://github.com/jedie/django-tools
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
@@ -17,6 +23,7 @@ from for_runners.geo import reverse_geo
 from for_runners.gpx import get_identifier, parse_gpx
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
+from for_runners.svg import gpx2svg_string
 
 log = logging.getLogger(__name__)
 
@@ -63,6 +70,10 @@ class GpxModel(UpdateTimeBaseModel):
     )
 
     gpx = models.TextField(help_text="The raw gpx file content",)
+    track_svg = FilerFileField(verbose_name=_("Track SVG"), related_name="+",
+        null=True,
+        blank=True,
+    )
 
     start_time = models.DateTimeField(editable=False,
         help_text=_("Start time of the first segment in track"),
@@ -178,9 +189,21 @@ class GpxModel(UpdateTimeBaseModel):
 
         super().save(*args, **kwargs)
 
-    # def summary_html(self):
-    # summary_html.short_description = _("Map Image")
-    # summary_html.allow_tags = True
+    def svg_tag(self):
+        if self.track_svg:
+            return '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(self.track_svg.url)
+        return ""
+
+    svg_tag.short_description = _("SVG")
+    svg_tag.allow_tags = True
+
+    def svg_tag_big(self):
+        if self.track_svg:
+            return '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(self.track_svg.url)
+        return ""
+
+    svg_tag_big.short_description = _("SVG")
+    svg_tag_big.allow_tags = True
 
     def image_tag(self):
         if self.map_image:
@@ -224,7 +247,7 @@ class GpxModel(UpdateTimeBaseModel):
         """
         return self._coordinate2link(
             lat=self.start_latitude,
-            lon = self.start_longitude,
+            lon=self.start_longitude,
         )
 
     start_coordinate_html.short_description = _("Start coordinates")
@@ -275,10 +298,25 @@ class GpxModel(UpdateTimeBaseModel):
             self.short_finish_address = finish_address.short
             self.full_finish_address = finish_address.full
 
+        # if not self.track_svg:
+        log.debug("Create SVG from GPX...")
+        svg_string = gpx2svg_string(gpxpy_instance)
+
+        # import filer.models.imagemodels.Image
+        Image = load_model(settings.FILER_IMAGE_MODEL)
+
+        temp = io.BytesIO(bytes(svg_string, "utf-8"))
+        django_file_obj = File(temp, name="gpx.svg")
+        filer_image = Image.objects.create(
+            owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
+        )
+        filer_image.save()
+
+        # self.track_svg.save("gpx2svg", svg_string)
+        self.track_svg = filer_image  #save("gpx2svg", svg_string)
+
     def __str__(self):
-        parts = [
-            self.start_time, self.event, self.short_start_address
-        ]
+        parts = [self.start_time, self.event, self.short_start_address]
         result = " ".join([str(part) for part in parts if part])
         if result:
             return result

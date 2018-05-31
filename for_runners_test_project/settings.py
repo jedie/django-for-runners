@@ -67,6 +67,7 @@ INSTALLED_APPS = (
     'treebeard', # https://github.com/django-treebeard/django-treebeard
     'sekizai', # https://github.com/ojii/django-sekizai
     'djangocms_text_ckeditor', # https://github.com/divio/djangocms-text-ckeditor
+    'filer', # https://github.com/divio/django-filer
 
     'dynamic_fixtures', # https://github.com/Peter-Slump/django-dynamic-fixtures
 

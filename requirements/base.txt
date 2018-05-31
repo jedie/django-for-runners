@@ -27,6 +27,10 @@ geotiler
 # http://matplotlib.org/
 matplotlib
 
+# https://pypi.org/project/svgwrite/
+# http://github.com/mozman/svgwrite.git
+svgwrite
+
 # https://pypi.org/project/geopy/
 # https://github.com/geopy/geopy
 geopy

@@ -99,6 +99,7 @@ class CalculateValuesView(generic.View):
 class GpxModelAdmin(admin.ModelAdmin):
     list_display = (
         # "image_tag",
+        "svg_tag",
         "event",
         "short_start_address",
         "start_time",
@@ -116,7 +117,9 @@ class GpxModelAdmin(admin.ModelAdmin):
         "short_start_address",
     )
     readonly_fields = (
+        "svg_tag_big",
         "image_tag",
+        "svg_tag",
         "start_time",
         "start_latitude",
         "start_longitude",
@@ -130,6 +133,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         (_("Event"), {
             "fields": (
                 "event",
+                ("track_svg", "svg_tag_big"),
                 ("map_image", "image_tag"),
             )
         }),
