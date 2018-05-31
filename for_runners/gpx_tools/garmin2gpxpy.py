@@ -1,8 +1,11 @@
 """
-
     Convert a Garmin connect GPX file to a gpxpy instance
 
     work-a-round until https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
+
+    created 30.05.2018 by Jens Diemer <opensource@jensdiemer.de>
+    :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
+    :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
 from pathlib import Path

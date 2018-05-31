@@ -26,3 +26,7 @@ geotiler
 # https://pypi.org/project/matplotlib/
 # http://matplotlib.org/
 matplotlib
+
+# https://pypi.org/project/geopy/
+# https://github.com/geopy/geopy
+geopy

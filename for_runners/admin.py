@@ -1,12 +1,20 @@
+"""
+    created 30.05.2018 by Jens Diemer <opensource@jensdiemer.de>
+    :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
+    :license: GNU GPL v3 or above, see LICENSE for more details.
+"""
 import io
 import logging
 
+from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
+from django.db import models
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
+# https://github.com/jedie/django-for-runners
 from for_runners.forms import UploadGpxFileForm
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
@@ -82,6 +90,7 @@ class CalculateValuesView(generic.View):
     def get(self, request, object_id):
         instance = GpxModel.objects.get(pk=object_id)
         instance.calculate_values()
+        instance.save()
         messages.success(request, "Values are calculated from GPX data")
         return HttpResponseRedirect("../")
 
@@ -91,24 +100,54 @@ class GpxModelAdmin(admin.ModelAdmin):
     list_display = (
         # "image_tag",
         "event",
+        "short_start_address",
+        "start_time",
         "human_length",
         "human_duration",
         "human_pace",
-        "start_time",
-        "end_time",
         "uphill",
         "downhill",
         "min_elevation",
         "max_elevation",
-        "createby"
+        "tracked_by"
     )
-    readonly_fields = ("image_tag",)
+    list_display_links = (
+        "event",
+        "short_start_address",
+    )
+    readonly_fields = (
+        "image_tag",
+        "start_time",
+        "start_latitude",
+        "start_longitude",
+        "finish_time",
+        "finish_latitude",
+        "finish_longitude",
+        "start_coordinate_html",
+    )
 
     fieldsets = (
         (_("Event"), {
             "fields": (
                 "event",
                 ("map_image", "image_tag"),
+            )
+        }),
+        (_("Start"), {
+            "fields": (
+                "start_time",
+                "short_start_address",
+                "full_start_address",
+                    "start_coordinate_html",
+                ("start_latitude", "start_longitude"),
+            )
+        }),
+        (_("Finish"), {
+            "fields": (
+                "finish_time",
+                "short_finish_address",
+                "full_finish_address",
+                ("finish_latitude", "finish_longitude"),
             )
         }),
         (_("GPX data"), {
@@ -120,12 +159,13 @@ class GpxModelAdmin(admin.ModelAdmin):
         (_("Values"), {
             "fields": (
                 ("length", "duration", "pace"),
-                ("start_time", "end_time"),
                 ("uphill", "downhill"),
                 ("min_elevation", "max_elevation"),
             )
         }),
     )
+    # FIXME: Made this in CSS ;)
+    formfield_overrides = {models.CharField: {'widget': forms.TextInput(attrs={'style': 'width:70%'})}}
 
     def get_urls(self):
         urls = super().get_urls()
