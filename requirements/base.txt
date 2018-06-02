@@ -12,8 +12,9 @@ django-tools
 django-cms-tools
 
 # https://github.com/tkrajina/gpxpy
-gpxpy
-#-e git+https://github.com/tkrajina/gpxpy.git@dev#egg=gpxpy
+#gpxpy
+# use branch for: https://github.com/tkrajina/gpxpy/issues/117
+-e git+https://github.com/tkrajina/gpxpy.git@ns-namespace#egg=gpxpy
 
 # https://pypi.org/project/Gpxity/
 # https://github.com/wrohdewald/Gpxity

@@ -12,7 +12,9 @@ import gpxpy
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 
-Identifier = collections.namedtuple('Identifier', ('start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon'))
+Identifier = collections.namedtuple(
+    'Identifier', ('start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon')
+)
 
 
 def get_identifier(gpxpy_instance):
@@ -36,9 +38,16 @@ def get_identifier(gpxpy_instance):
 
 
 def parse_gpx(content):
-    if 'creator="Garmin Connect"' in content:
-        # work-a-round until https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
-        return garmin2gpxpy(content)
+    # if 'creator="Garmin Connect"' in content:
+    #     # work-a-round until https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
+    #     return garmin2gpxpy(content)
 
-    temp = io.BytesIO(content)
-    return gpxpy.parse(temp)
+    return gpxpy.parse(content)
+
+
+def parse_gpx_file(filepath):
+    assert filepath.is_file(), "File not found: '%s'" % filepath
+    with filepath.open("r") as f:
+        content = f.read()
+
+    return parse_gpx(content)
