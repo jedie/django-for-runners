@@ -5,6 +5,7 @@
 """
 import io
 import logging
+import statistics
 
 from django.conf import settings
 from django.core.files import File
@@ -167,6 +168,7 @@ class GpxModel(UpdateTimeBaseModel):
         help_text=_("Downhill elevation descent in meters"),
         null=True, blank=True,
     )
+
     min_elevation = models.IntegerField(
         help_text=_("Minimum elevation in meters"),
         null=True, blank=True,
@@ -174,6 +176,19 @@ class GpxModel(UpdateTimeBaseModel):
     max_elevation = models.IntegerField(
         help_text=_("Maximum elevation in meters"),
         null=True, blank=True,
+    )
+
+    heart_rate_min = models.PositiveIntegerField(
+        help_text=_("Minimum heart rate."),
+        null=True, blank=True, editable=False
+    )
+    heart_rate_avg = models.PositiveIntegerField(
+        help_text=_("Average heart rate."),
+        null=True, blank=True, editable=False
+    )
+    heart_rate_max = models.PositiveIntegerField(
+        help_text=_("Maximum heart rate."),
+        null=True, blank=True, editable=False
     )
 
     map_image = models.ImageField(
@@ -314,6 +329,20 @@ class GpxModel(UpdateTimeBaseModel):
 
         # self.track_svg.save("gpx2svg", svg_string)
         self.track_svg = filer_image  #save("gpx2svg", svg_string)
+
+        heart_rates = []
+        for track in gpxpy_instance.tracks:
+            for segment in track.segments:
+                for point in segment.points:
+                    extensions = point.extensions
+                    hr = int(extensions[0].getchildren()[0].text.strip())
+                    # cad = extensions[0].getchildren()[1].text.strip() # TODO: use this value
+                    heart_rates.append(hr)
+
+        self.heart_rate_min = min(heart_rates)
+        self.heart_rate_avg = statistics.median(heart_rates)
+        self.heart_rate_max = max(heart_rates)
+
 
     def __str__(self):
         parts = [self.start_time, self.event, self.short_start_address]

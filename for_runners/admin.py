@@ -106,6 +106,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         "human_length",
         "human_duration",
         "human_pace",
+        "heart_rate_avg",
         "uphill",
         "downhill",
         "min_elevation",
@@ -117,16 +118,9 @@ class GpxModelAdmin(admin.ModelAdmin):
         "short_start_address",
     )
     readonly_fields = (
-        "svg_tag_big",
-        "image_tag",
-        "svg_tag",
-        "start_time",
-        "start_latitude",
-        "start_longitude",
-        "finish_time",
-        "finish_latitude",
-        "finish_longitude",
-        "start_coordinate_html",
+        "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
+        "finish_latitude", "finish_longitude", "start_coordinate_html", "heart_rate_min", "heart_rate_avg",
+        "heart_rate_max"
     )
 
     fieldsets = (
@@ -163,6 +157,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         (_("Values"), {
             "fields": (
                 ("length", "duration", "pace"),
+                ("heart_rate_min","heart_rate_avg","heart_rate_max"),
                 ("uphill", "downhill"),
                 ("min_elevation", "max_elevation"),
             )
