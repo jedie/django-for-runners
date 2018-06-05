@@ -20,6 +20,43 @@ It's currently experimental ... Pre-Alpha state...
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change GPX Track.png|for-runners v0.0.1 2018-5-30 change GPX Track.png}}
 
 
+== try-out
+
+e.g.:
+
+{{{
+# create a python virtualenv:
+~$ python3 -Im venv DjangoForRunnersEnv
+
+# activate the created virtualenv:
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+
+# Upgrate pip:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install --upgrade pip
+
+# install django-for-runners:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install -e git+https://github.com/jedie/django-for-runners.git@master#egg=django_for_runners
+
+# install dependencies:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements/dev.txt
+}}}
+
+
+start the development server, e.g.:
+
+{{{
+# activate the virtualenv:
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+
+# start server:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./run_test_project_dev_server.sh
+}}}
+
+
 == Django compatibility
 
 |= django-for-runners |= Django CMS |= django version |= python         |
