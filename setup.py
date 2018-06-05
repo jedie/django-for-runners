@@ -263,7 +263,10 @@ setup(
                  if c.strip() and not c.startswith('#')],
     packages=find_packages(),
     python_requires='>=3.5',
-    install_requires=["django", "django-cms"],
+
+    # Use last TLS versions:
+    install_requires=["django<2.0", "django-cms<3.5"],
+
     include_package_data=True,
     cmdclass={
         'test': TestCommand,
