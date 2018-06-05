@@ -22,6 +22,7 @@ It's currently experimental ... Pre-Alpha state...
 
 == try-out
 
+
 e.g.:
 
 {{{
@@ -54,6 +55,19 @@ start the development server, e.g.:
 # start server:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./run_test_project_dev_server.sh
+}}}
+
+
+import GPX files, e.g.:
+
+{{{
+# activate the virtualenv:
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+
+# import:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./manage.py import_gpx --username <username> ~/backups/gpx_files
 }}}
 
 
