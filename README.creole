@@ -89,7 +89,12 @@ import GPX files, e.g.:
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.0.3...master|compare v0.0.3...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.0.4...master|compare v0.0.4...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.0.3...v0.0.4|12.06.2018 - v0.0.4]]:
+** Better Events model
+** GPX error handling
+** more tests
+** Bugfix for Python 3.5 (Geotiler needs Python 3.6 or later)
 * [[https://github.com/jedie/django-for-runners/compare/v0.0.2...v0.0.3|12.06.2018 - v0.0.3]]:
 ** display min/average/max heart rate
 ** use autotask to generate the MAP in background
