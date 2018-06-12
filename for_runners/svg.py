@@ -1,7 +1,10 @@
 import io
+import logging
 
 import svgwrite
 from for_runners.exceptions import GpxDataError
+
+log = logging.getLogger(__name__)
 
 
 def gpx2svg(gpxpy_instance):
@@ -11,7 +14,7 @@ def gpx2svg(gpxpy_instance):
     for track in gpxpy_instance.tracks:
         for segment in track.segments:
             for point in segment.points:
-                # print('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
+                # log.debug('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
                 lat_list.append(point.latitude)
                 lon_list.append(point.longitude)
 
@@ -23,14 +26,7 @@ def gpx2svg(gpxpy_instance):
     lon_max = max(lon_list)
     lat_max = max(lat_list)
 
-    print(
-        "lon",
-        lon_min,
-        lon_max,
-        "lat",
-        lat_min,
-        lat_max,
-    )
+    log.debug("lon %s-%s lat %s-%s", lon_min, lon_max, lat_min, lat_max)
 
     lat_area = lat_max - lat_min
     lon_area = lon_max - lon_min
@@ -38,7 +34,7 @@ def gpx2svg(gpxpy_instance):
         aspect = lat_area / lon_area
     else:
         aspect = lon_area / lat_area
-    print("areas:", lat_area, lon_area, "aspect:", aspect)
+    log.debug("Areas: %s,%s Aspect: %s", lat_area, lon_area, aspect)
 
     ############################################################################################
 
@@ -50,7 +46,7 @@ def gpx2svg(gpxpy_instance):
     total_size_x = 100
     total_size_y = 100
 
-    print("total_size:", total_size_x, total_size_y)
+    log.debug("total_size: %ix%i", total_size_x, total_size_y)
 
     drawing = svgwrite.Drawing(size=(total_size_x, total_size_y), profile='tiny')
     drawing.add(drawing.rect(insert=(0, 0), size=(total_size_x, total_size_y), fill='#000000'))
@@ -59,20 +55,20 @@ def gpx2svg(gpxpy_instance):
 
     lines_size_x = total_size_x - (border * 2)
     lines_size_y = total_size_y - (border * 2)
-    print("lines_size:", lines_size_x, lines_size_y)
+    log.debug("lines_size: %ix%i", lines_size_x, lines_size_y)
 
     scale_x = lines_size_x / lon_area * aspect
     scale_y = lines_size_y / lat_area
 
-    print("scale:", scale_x, scale_y)
+    log.debug("scale: %ix%i", scale_x, scale_y)
 
     max_x = lon_area * scale_x
     max_y = lat_area * scale_y
-    print("max:", max_x, max_y)
+    log.debug("max: %ix%i", max_x, max_y)
 
     offset_x = border + ((lines_size_x - max_x) / 2)
     offset_y = border + ((lines_size_y - max_y) / 2)
-    print("offset:", offset_x, offset_y)
+    log.debug("offset: %ix%i", offset_x, offset_y)
 
     # x_list = []
     # y_list = []
@@ -98,7 +94,7 @@ def gpx2svg(gpxpy_instance):
         old_x = x
         old_y = y
 
-    # print(min(x_list), max(x_list), min(y_list), max(y_list))
+    # log.debug(min(x_list), max(x_list), min(y_list), max(y_list))
 
     return drawing
 
