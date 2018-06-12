@@ -10,7 +10,7 @@ from autotask.tasks import delayed_task
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
-from django.db import models, IntegrityError
+from django.db import IntegrityError, models
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -19,7 +19,7 @@ from for_runners.exceptions import GpxDataError
 from for_runners.forms import UploadGpxFileForm
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
-from for_runners.models import DisciplineModel, EventModel, GpxModel
+from for_runners.models import DisciplineModel, EventModel, GpxModel, EventLinkModel
 
 log = logging.getLogger(__name__)
 
@@ -28,10 +28,30 @@ log = logging.getLogger(__name__)
 class DisciplineModelAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(EventLinkModel)
+class EventLinkModelAdmin(admin.ModelAdmin):
+    pass
+
+
+class LinkModelInline(admin.TabularInline):
+    model = EventLinkModel
+    extra = 2
+    min_num = 1
+    max_num = None
+    fields = (
+        'url',
+        'text',
+        'title',
+    )
+
 
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("verbose_name", "links_html", "start_time", "discipline")
+    list_display_links = ("verbose_name",)
+    inlines = [
+        LinkModelInline,
+    ]
 
 
 class UploadGpxFileView(generic.FormView):
