@@ -1,12 +1,7 @@
 import io
-import math
-from pathlib import Path
 
 import svgwrite
-
-# https://github.com/jedie/django-for-runners
-# Django CMS Tools
-from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
+from for_runners.exceptions import GpxDataError
 
 
 def gpx2svg(gpxpy_instance):
@@ -20,8 +15,8 @@ def gpx2svg(gpxpy_instance):
                 lat_list.append(point.latitude)
                 lon_list.append(point.longitude)
 
-    # print(lat)
-    # print(lon)
+    if not lat_list or not lon_list:
+        raise GpxDataError("No track points in file!")
 
     lon_min = min(lon_list)
     lat_min = min(lat_list)
@@ -118,5 +113,3 @@ def gpx2svg_string(gpxpy_instance, pretty=False):
     fileobj = io.StringIO()
     drawing.write(fileobj, pretty=False)
     return fileobj.getvalue()
-
-

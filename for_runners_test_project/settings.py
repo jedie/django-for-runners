@@ -81,6 +81,10 @@ INSTALLED_APPS = (
 # https://bitbucket.org/kbr/autotask
 AUTOTASK_IS_ACTIVE = True
 
+# Download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
+# MAP_DOWNLOAD = True
+MAP_DOWNLOAD = False
+
 ROOT_URLCONF = 'for_runners_test_project.urls'
 WSGI_APPLICATION = 'for_runners_test_project.wsgi.application'
 

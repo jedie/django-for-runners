@@ -10,11 +10,12 @@ from autotask.tasks import delayed_task
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
-from django.db import models
+from django.db import models, IntegrityError
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 # https://github.com/jedie/django-for-runners
+from for_runners.exceptions import GpxDataError
 from for_runners.forms import UploadGpxFileForm
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
@@ -55,9 +56,18 @@ class UploadGpxFileView(generic.FormView):
                 content = content.decode("utf-8")
                 log.debug("decoded content..: %s", repr(content)[:100])
 
-                gpx = GpxModel.objects.create(gpx=content)
-                gpx.calculate_values()
-                messages.success(request, "Created: %s" % gpx)
+                try:
+                    try:
+                        gpx = GpxModel.objects.create(gpx=content)
+                    except IntegrityError as err:
+                        messages.error(request, "Error process GPX data: %s" % err)
+                        continue
+
+                    gpx.calculate_values()
+                except GpxDataError as err:
+                    messages.error(request, "Error process GPX data: %s" % err)
+                else:
+                    messages.success(request, "Created: %s" % gpx)
 
             return self.form_valid(form)
         else:

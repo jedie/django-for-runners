@@ -8,8 +8,8 @@ import io
 from pathlib import Path
 
 import gpxpy
-
 # https://github.com/jedie/django-for-runners
+from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 
 Identifier = collections.namedtuple(
@@ -23,13 +23,35 @@ def get_identifier(gpxpy_instance):
     """
     time_bounds = gpxpy_instance.get_time_bounds()
 
-    first_track = gpxpy_instance.tracks[0]
-    first_segment = first_track.segments[0]
-    first_point = first_segment.points[0]
+    try:
+        first_track = gpxpy_instance.tracks[0]
+    except IndexError:
+        raise GpxDataError("Can't get first track")
 
-    last_track = gpxpy_instance.tracks[-1]
-    last_segment = last_track.segments[-1]
-    last_point = last_segment.points[-1]
+    try:
+        first_segment = first_track.segments[0]
+    except IndexError:
+        raise GpxDataError("Can't get first segment")
+
+    try:
+        first_point = first_segment.points[0]
+    except IndexError:
+        raise GpxDataError("Can't get first segment point")
+
+    try:
+        last_track = gpxpy_instance.tracks[-1]
+    except IndexError:
+        raise GpxDataError("Can't get last track")
+
+    try:
+        last_segment = last_track.segments[-1]
+    except IndexError:
+        raise GpxDataError("Can't get last segment")
+
+    try:
+        last_point = last_segment.points[-1]
+    except IndexError:
+        raise GpxDataError("Can't get last segment point")
 
     return Identifier(
         time_bounds.start_time, first_point.latitude, first_point.longitude, time_bounds.end_time, last_point.latitude,
@@ -51,3 +73,32 @@ def parse_gpx_file(filepath):
         content = f.read()
 
     return parse_gpx(content)
+
+
+def get_extension_data(gpxpy_instance):
+    """
+    return a dict with all extension values from all track points.
+    """
+    extension_data = collections.defaultdict(list)
+
+    for track in gpxpy_instance.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                extensions = point.extensions
+                if not extensions:
+                    return None
+
+                for child in extensions[0].getchildren():
+                    tag = child.tag.rsplit("}", 1)[-1] # FIXME
+
+                    value = child.text
+                    try:
+                        if "." in value:
+                            value = float(value)
+                        else:
+                            value = int(value)
+                    except ValueError:
+                        pass
+                    extension_data[tag].append(value)
+
+    return extension_data

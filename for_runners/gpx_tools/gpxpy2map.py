@@ -4,9 +4,13 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 import asyncio
+import logging
 
 import geotiler  # https://wrobell.dcmod.org/geotiler/
 import matplotlib.pyplot as plt  # https://pypi.org/project/matplotlib/
+from django.conf import settings
+
+log = logging.getLogger(__name__)
 
 
 def generate_map(gpxpy_instance):
@@ -40,17 +44,23 @@ def generate_map(gpxpy_instance):
     size_y = int(round(size_x * aspect, 0))
     print(size_x, size_y)
 
-    map = geotiler.Map(extent=(lon_min, lat_min, lon_max, lat_max), size=(size_x, size_y))
-    lon_min2, lat_min2, lon_max2, lat_max2 = map.extent
-
-    print("Render map...")
-    asyncio.set_event_loop(asyncio.new_event_loop())  # Fix: There is no current event loop in thread 'Thread-1'.
-    image = geotiler.render_map(map)
-    print("OK")
-
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.imshow(image, extent=(lon_min2, lon_max2, lat_min2, lat_max2), aspect='auto', alpha=0.4)
+
+    if settings.MAP_DOWNLOAD:
+        log.info("Download map via geotiler...")
+        map = geotiler.Map(extent=(lon_min, lat_min, lon_max, lat_max), size=(size_x, size_y))
+        lon_min2, lat_min2, lon_max2, lat_max2 = map.extent
+
+        log.info("Render geotiler map...")
+        asyncio.set_event_loop(asyncio.new_event_loop())  # Fix: There is no current event loop in thread 'Thread-1'.
+        image = geotiler.render_map(map)
+        log.info("Geotiler map rendered, OK")
+
+        ax.imshow(image, extent=(lon_min2, lon_max2, lat_min2, lat_max2), aspect='auto', alpha=0.4)
+    else:
+        log.info("Skip downloading map via geotiler, because settings.MAP_DOWNLOAD != True")
+        image = None
 
     plt.plot(lon, lat, color="#000000", lw=0.5, alpha=0.9)
 

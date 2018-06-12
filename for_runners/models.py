@@ -18,7 +18,7 @@ from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
-from for_runners.gpx import get_identifier, parse_gpx
+from for_runners.gpx import get_identifier, parse_gpx, get_extension_data
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
@@ -197,10 +197,12 @@ class GpxModel(UpdateTimeBaseModel):
     def save(self, *args, **kwargs):
         if self.gpx:
             self.calculate_values()
-            if not self.map_image:
-                self.schedule_generate_map()
 
         super().save(*args, **kwargs)
+
+        if self.gpx and not self.map_image:
+            # We must call this after save because we need a primary key here ;)
+            self.schedule_generate_map()
 
     def svg_tag(self):
         if self.track_svg:
@@ -280,8 +282,12 @@ class GpxModel(UpdateTimeBaseModel):
         gpxpy_instance = self.get_gpxpy_instance()
         self.points_no = gpxpy_instance.get_points_no()
         self.length = gpxpy_instance.length_3d()
-        self.duration = gpxpy_instance.get_duration()
-        self.pace = (self.duration / 60) / (self.length / 1000)
+
+        # e.g: GPX without a track return 0
+        duration = gpxpy_instance.get_duration()
+        if duration:
+            self.duration = duration
+            self.pace = (self.duration / 60) / (self.length / 1000)
 
         uphill_downhill = gpxpy_instance.get_uphill_downhill()
         self.uphill = uphill_downhill.uphill
@@ -292,6 +298,7 @@ class GpxModel(UpdateTimeBaseModel):
         self.max_elevation = elevation_extremes.maximum
 
         identifier = get_identifier(gpxpy_instance)
+
         self.start_time = identifier.start_time
         self.finish_time = identifier.finish_time
         self.start_latitude = identifier.start_lat
@@ -319,6 +326,7 @@ class GpxModel(UpdateTimeBaseModel):
 
         # if not self.track_svg:
         log.debug("Create SVG from GPX...")
+
         svg_string = gpx2svg_string(gpxpy_instance)
 
         # import filer.models.imagemodels.Image
@@ -334,18 +342,14 @@ class GpxModel(UpdateTimeBaseModel):
         # self.track_svg.save("gpx2svg", svg_string)
         self.track_svg = filer_image  #save("gpx2svg", svg_string)
 
-        heart_rates = []
-        for track in gpxpy_instance.tracks:
-            for segment in track.segments:
-                for point in segment.points:
-                    extensions = point.extensions
-                    hr = int(extensions[0].getchildren()[0].text.strip())
-                    # cad = extensions[0].getchildren()[1].text.strip() # TODO: use this value
-                    heart_rates.append(hr)
-
-        self.heart_rate_min = min(heart_rates)
-        self.heart_rate_avg = statistics.median(heart_rates)
-        self.heart_rate_max = max(heart_rates)
+        # TODO: Handle other extensions, too.
+        # Garmin containes also 'cad'
+        extension_data=get_extension_data(gpxpy_instance)
+        if "hr" in extension_data:
+            heart_rates = extension_data["hr"]
+            self.heart_rate_min = min(heart_rates)
+            self.heart_rate_avg = statistics.median(heart_rates)
+            self.heart_rate_max = max(heart_rates)
 
     def __str__(self):
         parts = [self.start_time, self.event, self.short_start_address]

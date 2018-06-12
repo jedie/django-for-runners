@@ -19,3 +19,7 @@ from for_runners_test_project.settings import *
 #   ...
 # Failed: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
 AUTOTASK_IS_ACTIVE = False
+
+
+# Skip download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
+MAP_DOWNLOAD = False

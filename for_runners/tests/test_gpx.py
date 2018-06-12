@@ -22,3 +22,23 @@ class GpxTests(unittest.TestCase):
         self.assertEqual(1, len(extensions))
         self.assertEqual(extensions[0].getchildren()[0].text.strip(), "125")  # hr
         self.assertEqual(extensions[0].getchildren()[1].text.strip(), "75")  # cad
+
+    def test_parse_noi_track_gpx(self):
+        filepath = Path(BASE_PATH, "fixture_files/no_track_points.gpx")
+
+        gpxpy_instance = parse_gpx_file(filepath)
+        print(gpxpy_instance)
+        self.assertEqual(
+            repr(gpxpy_instance),
+            "GPX(waypoints=[GPXWaypoint(51.43788, 6.61701, name='Somewhere', description='foobar', symbol='Waypoint')])"
+        )
+
+    def test_parse_no_heart_rate_gpx(self):
+        filepath = Path(BASE_PATH, "fixture_files/garmin_no_heart_rate.gpx")
+
+        gpxpy_instance = parse_gpx_file(filepath)
+        print(gpxpy_instance)
+        self.assertEqual(
+            repr(gpxpy_instance),
+            "GPX(tracks=[GPXTrack(name='Foo Bar', segments=[GPXTrackSegment(points=[...])])])"
+        )
