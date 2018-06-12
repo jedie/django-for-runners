@@ -22,7 +22,7 @@ autotask
 
 # https://pypi.org/project/Gpxity/
 # https://github.com/wrohdewald/Gpxity
-Gpxity
+#Gpxity
 
 # https://wrobell.dcmod.org/geotiler/
 # https://pypi.org/project/geotiler/
