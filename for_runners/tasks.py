@@ -33,7 +33,9 @@ def generate_gpx_map_task(object_id):
     temp = io.BytesIO()
     plt.savefig(temp, bbox_inches="tight")
 
+    filename = "%s.png" % gpx_instance.get_short_slug()
+
     # Save gpx map file to model instance:
-    gpx_instance.map_image.save("gpx", temp)
+    gpx_instance.map_image.save(filename, temp)
 
     log.info("GPX data saved to %s, ok." % gpx_instance)

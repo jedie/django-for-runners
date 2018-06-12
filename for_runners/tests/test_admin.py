@@ -60,7 +60,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
                 '<p class="paginator">1 GPX Track</p>',
             ),
             messages=[
-                'Process garmin_connect_1.gpx...', 'Created: 2018-02-21 14:30:50 Moers Hülsdonk',
+                'Process garmin_connect_1.gpx...', 'Created: 2018-02-21 Moers Hülsdonk',
                 'Process no_track_points.gpx...', "Error process GPX data: Can't get first track"
             ],
             must_not_contain=('error', 'traceback'),

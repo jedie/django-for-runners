@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.files import File
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 # https://github.com/jedie/django-tools
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
@@ -444,12 +445,23 @@ class GpxModel(UpdateTimeBaseModel):
             self.heart_rate_avg = statistics.median(heart_rates)
             self.heart_rate_max = max(heart_rates)
 
-    def __str__(self):
-        parts = [self.start_time, self.event, self.short_start_address]
+    def short_name(self):
+        parts = [self.start_time.strftime("%Y-%m-%d")]
+        if self.event:
+            parts.append(self.event.name)
+        else:
+            parts.append(self.short_start_address)
         result = " ".join([str(part) for part in parts if part])
         if result:
             return result
         return "GPX Track ID:%s" % self.pk
+
+    def get_short_slug(self):
+        name = self.short_name()
+        return slugify(name)
+
+    def __str__(self):
+        return self.short_name()
 
     class Meta:
         verbose_name = _('GPX Track')
