@@ -48,7 +48,8 @@ def generate_map(gpxpy_instance):
     image = geotiler.render_map(map)
     print("OK")
 
-    ax = plt.subplot(111)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
     ax.imshow(image, extent=(lon_min2, lon_max2, lat_min2, lat_max2), aspect='auto', alpha=0.4)
 
     plt.plot(lon, lat, color="#000000", lw=0.5, alpha=0.9)
