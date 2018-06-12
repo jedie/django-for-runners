@@ -19,7 +19,7 @@ from for_runners.exceptions import GpxDataError
 from for_runners.forms import UploadGpxFileForm
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
-from for_runners.models import DisciplineModel, EventModel, GpxModel, EventLinkModel
+from for_runners.models import (DisciplineModel, EventLinkModel, EventModel, GpxModel)
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +27,7 @@ log = logging.getLogger(__name__)
 @admin.register(DisciplineModel)
 class DisciplineModelAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(EventLinkModel)
 class EventLinkModelAdmin(admin.ModelAdmin):
@@ -121,21 +122,12 @@ class CalculateValuesView(generic.View):
 @admin.register(GpxModel)
 class GpxModelAdmin(admin.ModelAdmin):
     search_fields = (
-        "full_start_address", "full_finish_address",
+        "full_start_address",
+        "full_finish_address",
     )
     list_display = (
-        "svg_tag",
-        "overview",
-        "start_time",
-        "human_length",
-        "human_duration",
-        "human_pace",
-        "heart_rate_avg",
-        "uphill",
-        "downhill",
-        "min_elevation",
-        "max_elevation",
-        "tracked_by"
+        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_display_links = (
         "svg_tag",

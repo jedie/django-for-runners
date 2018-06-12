@@ -34,9 +34,10 @@ class DisciplineModel(models.Model):
     def __str__(self):
         return self.name
 
+
 def human_url(url):
     scheme, netloc, url, params, query, fragment = urlparse(url)
-    text=netloc+url
+    text = netloc + url
     text = text.strip("/")
     if text.startswith("www."):
         text = text[4:]
@@ -63,13 +64,11 @@ class LinkModelBase(UpdateTimeBaseModel):
         return self.title or self.url
 
     def link_html(self):
-        return (
-            '<a href="{url}" title="{title}" target="_blank">'
-            '{text}'
-            '</a>'
-        ).format(
-            url=self.url, title=self.get_title(), text=self.get_text()
-        )
+        return ('<a href="{url}" title="{title}" target="_blank">'
+                '{text}'
+                '</a>').format(
+                    url=self.url, title=self.get_title(), text=self.get_text()
+                )
 
     link_html.short_description = _("Link")
     link_html.allow_tags = True
@@ -85,6 +84,7 @@ class LinkModelBase(UpdateTimeBaseModel):
 
     class Meta:
         abstract = True
+
 
 class EventModel(UpdateInfoBaseModel):
     """
@@ -320,7 +320,7 @@ class GpxModel(UpdateTimeBaseModel):
 
     def human_length(self):
         if self.length:
-            kilometers = round(self.length / 1000,1)
+            kilometers = round(self.length / 1000, 1)
             return "%.1f km" % kilometers
     human_length.short_description = _("Length")
     human_length.admin_order_field = "length"
