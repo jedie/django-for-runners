@@ -87,7 +87,12 @@ import GPX files, e.g.:
 
 == history
 
-* *dev* - [[https://github.com/jedie/django-for-runners/compare/v0.0.1...master|compare v0.0.1...master]]
+* [[https://github.com/jedie/django-for-runners/compare/v0.0.3...master|compare v0.0.3...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.0.2...v0.0.3|12.06.2018 - v0.0.3]]:
+** display min/average/max heart rate
+** use autotask to generate the MAP in background
+* [[https://github.com/jedie/django-for-runners/compare/v0.0.1...v0.0.2|31.05.2018 - v0.0.2]]:
+** generate SVG 'icon' from GPX track
 * v0.0.1 - 30.05.2018
 ** Just create a pre-alpha release to save the PyPi package name ;)
 
