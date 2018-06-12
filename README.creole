@@ -110,6 +110,19 @@ import GPX files, e.g.:
 * https://github.com/GoldenCheetah/GoldenCheetah/
 
 
+== credits ==
+
+The whole thing is based on many excellent projects. Especially the following:
+
+
+* [[https://pypi.org/project/gpxpy/|gpxpy]] GPX file parser
+* [[https://pypi.org/project/geotiler/|geotiler]] Generate streetmap images
+* [[https://pypi.org/project/geopy/|geopy]] Get geo location names of the GPX track start/end point
+* [[https://pypi.org/project/matplotlib/|matplotlib]] plotting 2D graphics
+* [[https://pypi.org/project/autotask/|autotask]] schedule background jobs
+* [[https://pypi.org/project/svgwrite/|svgwrite]] Generating SVG file
+
+
 == donation ==
 
 * [[https://www.paypal.me/JensDiemer|paypal.me/JensDiemer]]
