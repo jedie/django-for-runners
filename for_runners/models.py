@@ -12,19 +12,17 @@ from django.core.files import File
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
-from filer.fields.file import FilerFileField
-from filer.utils.loader import load_model
-
 # https://github.com/jedie/django-tools
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
-
+from filer.fields.file import FilerFileField
+from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import get_identifier, parse_gpx
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
+from for_runners.tasks import generate_gpx_map_task
 
 log = logging.getLogger(__name__)
 
@@ -139,8 +137,6 @@ class GpxModel(UpdateTimeBaseModel):
         on_delete=models.SET_NULL
     )
 
-
-
     points_no = models.PositiveIntegerField(
         help_text=_("Number of points in GPX"),
         null=True, blank=True,
@@ -201,6 +197,8 @@ class GpxModel(UpdateTimeBaseModel):
     def save(self, *args, **kwargs):
         if self.gpx:
             self.calculate_values()
+            if not self.map_image:
+                self.schedule_generate_map()
 
         super().save(*args, **kwargs)
 
@@ -272,6 +270,12 @@ class GpxModel(UpdateTimeBaseModel):
         gpxpy_instance = parse_gpx(content=self.gpx)
         return gpxpy_instance
 
+    def schedule_generate_map(self):
+        """
+        Create delayed task to generate the map of the GPX Track
+        """
+        generate_gpx_map_task(object_id=self.pk)
+
     def calculate_values(self):
         gpxpy_instance = self.get_gpxpy_instance()
         self.points_no = gpxpy_instance.get_points_no()
@@ -342,7 +346,6 @@ class GpxModel(UpdateTimeBaseModel):
         self.heart_rate_min = min(heart_rates)
         self.heart_rate_avg = statistics.median(heart_rates)
         self.heart_rate_max = max(heart_rates)
-
 
     def __str__(self):
         parts = [self.start_time, self.event, self.short_start_address]

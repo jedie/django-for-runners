@@ -11,6 +11,10 @@ django-tools
 # https://github.com/jedie/django-cms-tools
 django-cms-tools
 
+# https://pypi.org/project/autotask/
+# https://bitbucket.org/kbr/autotask
+autotask
+
 # https://github.com/tkrajina/gpxpy
 #gpxpy
 # use branch for: https://github.com/tkrajina/gpxpy/issues/117
@@ -35,3 +39,4 @@ svgwrite
 # https://pypi.org/project/geopy/
 # https://github.com/geopy/geopy
 geopy
+

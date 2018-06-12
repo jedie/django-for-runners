@@ -60,6 +60,8 @@ INSTALLED_APPS = (
 
     'debug_toolbar', # https://github.com/jazzband/django-debug-toolbar/
 
+    'autotask', # https://bitbucket.org/kbr/autotask
+
     'cms', # https://github.com/divio/django-cms
     'menus', # Part of Django-CMS
 
@@ -75,6 +77,9 @@ INSTALLED_APPS = (
 
     "for_runners_test_project.test_app",
 )
+
+# https://bitbucket.org/kbr/autotask
+AUTOTASK_IS_ACTIVE = True
 
 ROOT_URLCONF = 'for_runners_test_project.urls'
 WSGI_APPLICATION = 'for_runners_test_project.wsgi.application'
@@ -140,6 +145,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, "..", "test_project_db.sqlite3"),
         # 'NAME': ":memory:"
+        # https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errors
+        'timeout': 30,
     }
 }
 

@@ -6,6 +6,7 @@
 import io
 import logging
 
+from autotask.tasks import delayed_task
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
@@ -13,7 +14,6 @@ from django.db import models
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-
 # https://github.com/jedie/django-for-runners
 from for_runners.forms import UploadGpxFileForm
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
@@ -67,21 +67,14 @@ class UploadGpxFileView(generic.FormView):
 class ProcessGpxDataView(generic.View):
 
     def get(self, request, object_id):
-        instance = GpxModel.objects.get(pk=object_id)
-        log.debug("Process GPX %s" % instance)
+        """
+        Create delayed task to generate the map of the GPX Track
+        """
+        messages.info(request, "GPX Map will be generated in background")
 
-        content = instance.gpx
-        gpxpy_instance = garmin2gpxpy(content)
+        gpx_instance = GpxModel.objects.get(pk=object_id)
+        gpx_instance.schedule_generate_map()
 
-        image, plt = generate_map(gpxpy_instance)
-
-        temp = io.BytesIO()
-        plt.savefig(temp, bbox_inches="tight")
-
-        # Save gpx map file to model instance:
-        instance.map_image.save("gpx", temp)
-
-        messages.success(request, "GPX data saved to %s, ok." % instance)
         return HttpResponseRedirect("../")
 
 
