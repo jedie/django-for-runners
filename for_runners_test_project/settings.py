@@ -198,13 +198,17 @@ LANGUAGE_DICT = dict(LANGUAGES) # useful to get translated name by language code
 PARLER_DEFAULT_LANGUAGE_CODE = LANGUAGE_CODE
 
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+
+# https://docs.djangoproject.com/en/1.11/topics/i18n/timezones/
+# TODO: Use UTC and handle time zone
+TIME_ZONE = "Europe/Paris"
+USE_TZ = False
+# TIME_ZONE = 'UTC'
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
