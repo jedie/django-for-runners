@@ -78,6 +78,8 @@ import GPX files, e.g.:
 
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
 
+**Note:** Maps can't generated with Python 3.5 ([[https://github.com/wrobell/geotiler/issues/20|Geotiler needs Python 3.6 or later]])
+
 == TODO:
 
  * Add real tests
