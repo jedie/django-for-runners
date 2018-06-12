@@ -120,11 +120,12 @@ class CalculateValuesView(generic.View):
 
 @admin.register(GpxModel)
 class GpxModelAdmin(admin.ModelAdmin):
+    search_fields = (
+        "full_start_address", "full_finish_address",
+    )
     list_display = (
-        # "image_tag",
         "svg_tag",
-        "event",
-        "short_start_address",
+        "overview",
         "start_time",
         "human_length",
         "human_duration",
@@ -137,8 +138,8 @@ class GpxModelAdmin(admin.ModelAdmin):
         "tracked_by"
     )
     list_display_links = (
-        "event",
-        "short_start_address",
+        "svg_tag",
+        "overview",
     )
     readonly_fields = (
         "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
@@ -188,6 +189,17 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
     # FIXME: Made this in CSS ;)
     formfield_overrides = {models.CharField: {'widget': forms.TextInput(attrs={'style': 'width:70%'})}}
+
+    def overview(self, obj):
+        parts = []
+        if obj.event:
+            parts.append("<strong>%s</strong>" % obj.event)
+        parts.append(obj.start_end_address())
+        html = "<br>".join(parts)
+        return html
+
+    overview.short_description = _("Event")
+    overview.allow_tags = True
 
     def get_urls(self):
         urls = super().get_urls()

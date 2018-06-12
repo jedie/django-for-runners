@@ -311,10 +311,17 @@ class GpxModel(UpdateTimeBaseModel):
     image_tag.short_description = _("Map Image")
     image_tag.allow_tags = True
 
+    def start_end_address(self):
+        if self.short_start_address == self.short_finish_address:
+            return "\u27F3 %s" % self.short_start_address
+        return "%s<br>\u25BE<br>%s" % (self.short_start_address, self.short_finish_address)
+    start_end_address.short_description = _("Start/End Address")
+    start_end_address.allow_tags = True
+
     def human_length(self):
         if self.length:
-            kilometers = self.length / 1000
-            return "%.2f km" % kilometers
+            kilometers = round(self.length / 1000,1)
+            return "%.1f km" % kilometers
     human_length.short_description = _("Length")
     human_length.admin_order_field = "length"
 
