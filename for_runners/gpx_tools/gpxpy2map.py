@@ -6,7 +6,13 @@
 import asyncio
 import logging
 
-import geotiler  # https://wrobell.dcmod.org/geotiler/
+try:
+    import geotiler  # https://wrobell.dcmod.org/geotiler/
+except SyntaxError:
+    # geotiler needs Python 3.6 :(
+    # https://github.com/wrobell/geotiler/issues/20
+    geotiler = None
+
 import matplotlib.pyplot as plt  # https://pypi.org/project/matplotlib/
 from django.conf import settings
 
@@ -47,7 +53,10 @@ def generate_map(gpxpy_instance):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    if settings.MAP_DOWNLOAD:
+    image = None
+    if geotiler is None:
+        log.error("Can't use geotiler!")
+    elif settings.MAP_DOWNLOAD:
         log.info("Download map via geotiler...")
         map = geotiler.Map(extent=(lon_min, lat_min, lon_max, lat_max), size=(size_x, size_y))
         lon_min2, lat_min2, lon_max2, lat_max2 = map.extent
@@ -60,7 +69,6 @@ def generate_map(gpxpy_instance):
         ax.imshow(image, extent=(lon_min2, lon_max2, lat_min2, lat_max2), aspect='auto', alpha=0.4)
     else:
         log.info("Skip downloading map via geotiler, because settings.MAP_DOWNLOAD != True")
-        image = None
 
     plt.plot(lon, lat, color="#000000", lw=0.5, alpha=0.9)
 
