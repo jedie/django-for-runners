@@ -17,8 +17,8 @@ autotask
 
 # https://github.com/tkrajina/gpxpy
 #gpxpy
-# use branch for: https://github.com/tkrajina/gpxpy/issues/117
--e git+https://github.com/tkrajina/gpxpy.git@ns-namespace#egg=gpxpy
+# use editable until PyPi release >=v1.3.1: https://github.com/tkrajina/gpxpy/issues/120
+-e git+https://github.com/tkrajina/gpxpy.git@master#egg=gpxpy
 
 # https://pypi.org/project/Gpxity/
 # https://github.com/wrohdewald/Gpxity
