@@ -316,16 +316,19 @@ class GpxModel(UpdateTimeBaseModel):
             kilometers = self.length / 1000
             return "%.2f km" % kilometers
     human_length.short_description = _("Length")
+    human_length.admin_order_field = "length"
 
     def human_duration(self):
         if self.duration:
             return human_seconds(self.duration)
     human_duration.short_description = _("Duration")
+    human_duration.admin_order_field = "duration"
 
     def human_pace(self):
         if self.pace:
             return "%s min/km" % human_seconds(self.pace * 60)
     human_pace.short_description = _("Pace")
+    human_pace.admin_order_field = "pace"
 
     def _coordinate2link(self, lat, lon):
         return (
