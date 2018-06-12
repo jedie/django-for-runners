@@ -32,6 +32,12 @@ def reverse_geo(lat, lon):
     """
     Create short+full address string from given geo coordinates
 
+    >>> address = reverse_geo("51.6239133", "6.9749074")
+    >>> address.short
+    'Feldhausen, Bottrop'
+    >>> address.full
+    'Studio 7, The Old West, Feldhausen, Bottrop, Regierungsbezirk Münster, Nordrhein-Westfalen, 46244, Deutschland'
+
     :return: Address named tuple
         short : string
             The "sort" Address
