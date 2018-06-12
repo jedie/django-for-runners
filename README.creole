@@ -41,7 +41,7 @@ e.g.:
 
 # install dependencies:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements/dev.txt
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements/tests.txt
 }}}
 
 
