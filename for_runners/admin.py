@@ -67,9 +67,6 @@ class UploadGpxFileView(generic.FormView):
         if form.is_valid():
             log.debug("files: %r", files)
             for f in files:
-                if f.content_type != "application/gpx+xml":
-                    messages.error(request, "Ignore %r file %r!" % (f.content_type, f.name))
-                    continue
                 messages.info(request, "Process %s..." % f.name)
 
                 content = f.file.read()
