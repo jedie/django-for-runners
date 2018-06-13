@@ -135,8 +135,9 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
-        "finish_latitude", "finish_longitude", "start_coordinate_html", "heart_rate_min", "heart_rate_avg",
-        "heart_rate_max"
+        "finish_latitude", "finish_longitude",
+        "start_coordinate_html", "finish_coordinate_html",
+        "heart_rate_min", "heart_rate_avg", "heart_rate_max"
     )
 
     fieldsets = (
@@ -152,7 +153,7 @@ class GpxModelAdmin(admin.ModelAdmin):
                 "start_time",
                 "short_start_address",
                 "full_start_address",
-                    "start_coordinate_html",
+                "start_coordinate_html",
                 ("start_latitude", "start_longitude"),
             )
         }),
@@ -161,6 +162,7 @@ class GpxModelAdmin(admin.ModelAdmin):
                 "finish_time",
                 "short_finish_address",
                 "full_finish_address",
+                "finish_coordinate_html",
                 ("finish_latitude", "finish_longitude"),
             )
         }),

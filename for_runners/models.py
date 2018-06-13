@@ -342,25 +342,44 @@ class GpxModel(UpdateTimeBaseModel):
         return (
             '<a'
             ' href="https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"'
+            ' title="Reverse {lat},{lon} address with OpenStreepMap"'
             ' target="_blank"'
-            '>'
-            '{lat},{lon}'
-            '</a>'
+            '>reverse address</a>'
+            '<br>'
+            '<a'
+            ' href="https://www.openstreetmap.org/search?query={lat}%2C{lon}"'
+            ' title="OpenStreepMap at {lat},{lon}"'
+            ' target="_blank"'
+            '>map</a>'
         ).format(
             lat=lat, lon=lon
         )
 
     def start_coordinate_html(self):
         """
-        https://nominatim.openstreetmap.org/reverse?lat=51.20638179592788&lon=6.803598012775183&format=json&addressdetails=1
+        return HTML Links for start point.
         """
-        return self._coordinate2link(
-            lat=self.start_latitude,
-            lon=self.start_longitude,
-        )
+        if self.start_latitude and self.start_longitude:
+            return self._coordinate2link(
+                lat=self.start_latitude,
+                lon=self.start_longitude,
+            )
 
     start_coordinate_html.short_description = _("Start coordinates")
     start_coordinate_html.allow_tags = True
+    
+    def finish_coordinate_html(self):
+        """
+        return HTML Links for finish point.
+        """
+        if self.finish_latitude and self.finish_longitude:
+            return self._coordinate2link(
+                lat=self.finish_latitude,
+                lon=self.finish_longitude,
+            )
+
+    finish_coordinate_html.short_description = _("finish coordinates")
+    finish_coordinate_html.allow_tags = True
 
     def get_gpxpy_instance(self):
         gpxpy_instance = parse_gpx(content=self.gpx)
