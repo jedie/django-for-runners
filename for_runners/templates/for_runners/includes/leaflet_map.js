@@ -35,7 +35,7 @@ L.marker(
 
 {% for gpx_point, distance in km_gpx_points %}{# iterate over GPXTrackPoint instances #}
 L.marker([{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}], {title:"{{ forloop.counter }}km", opacity:0.5, riseOnHover:true}).addTo(map)
-    .bindPopup("<strong>{{ forloop.counter }}km</strong> ({{ distance|stringformat:".1f" }}m)<br>{{ gpx_point.time }}<br>{{ gpx_point }}");
+    .bindPopup("<strong>{{ forloop.counter }}km</strong> ({{ distance|stringformat:".1f" }}m)<br>{{ gpx_point.time }}");
 {% endfor %}
 
 var path = L.polyline(
