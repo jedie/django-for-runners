@@ -71,6 +71,39 @@ import GPX files, e.g.:
 }}}
 
 
+== run tests
+
+{{{
+# activate the virtualenv:
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+
+# import:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py test
+}}}
+
+
+**Note:**
+
+To run all tests, you need:
+
+* **Chromium Browser WebDriver** e.g.: {{{apt install chromium-chromedriver}}}
+* **Firefox Browser WebDriver** aka **geckodriver**
+
+install **geckodriver** e.g.:
+{{{
+~$ cd /tmp
+/tmp$ wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz -O geckodriver.tar.gz
+/tmp$ sudo sh -c 'tar -x geckodriver -zf geckodriver.tar.gz -O > /usr/bin/geckodriver'
+/tmp$ sudo chmod +x /usr/bin/geckodriver
+/tmp$ rm geckodriver.tar.gz
+/tmp$ geckodriver --version
+geckodriver 0.20.1
+...
+}}}
+
+
 == Django compatibility
 
 |= django-for-runners |= Django CMS |= django version |= python         |
