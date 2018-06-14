@@ -143,7 +143,6 @@ class GpxModelAdmin(admin.ModelAdmin):
         (_("Event"), {
             "fields": (
                 "event",
-                ("track_svg", "svg_tag_big"),
                 "leaflet_map_html",
                 ("map_image", "image_tag"),
             )
@@ -170,6 +169,7 @@ class GpxModelAdmin(admin.ModelAdmin):
             "classes": ("collapse",),
             "fields": (
                 ("gpx", "points_no"),
+                ("track_svg", "svg_tag_big"),
             )
         }),
         (_("Values"), {
