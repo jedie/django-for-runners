@@ -104,6 +104,27 @@ geckodriver 0.20.1
 }}}
 
 
+== some notes
+
+
+=== GPX storage
+
+Currently we store the unchanged GPX data in a TextField.
+
+
+=== Precision of coordinates
+
+GPX files from Garmin (can) contain:
+
+* latitude with 29 decimal places
+* longitude with 28 decimal places
+* elevation with 19 decimal places
+
+The route on OpenStreetMap does not look more detailed, with more than 5 decimal places.
+
+See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
+
+
 == Django compatibility
 
 |= django-for-runners |= Django CMS |= django version |= python         |
@@ -123,6 +144,7 @@ geckodriver 0.20.1
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.0.4...master|compare v0.0.4...master]] **dev**
+** Render interactive OpenStreetMap track map with Leaflet JS
 * [[https://github.com/jedie/django-for-runners/compare/v0.0.3...v0.0.4|12.06.2018 - v0.0.4]]:
 ** Better Events model
 ** GPX error handling
@@ -152,8 +174,8 @@ geckodriver 0.20.1
 
 The whole thing is based on many excellent projects. Especially the following:
 
-
 * [[https://pypi.org/project/gpxpy/|gpxpy]] GPX file parser
+* [[http://leafletjs.com|Leaflet JS]] A JS library for interactive maps used to render the track on [[https://openstreetmap.org/|OpenStreetMap]]
 * [[https://pypi.org/project/geotiler/|geotiler]] Generate streetmap images
 * [[https://pypi.org/project/geopy/|geopy]] Get geo location names of the GPX track start/end point
 * [[https://pypi.org/project/matplotlib/|matplotlib]] plotting 2D graphics

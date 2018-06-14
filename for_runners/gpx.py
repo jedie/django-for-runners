@@ -75,30 +75,54 @@ def parse_gpx_file(filepath):
     return parse_gpx(content)
 
 
+def iter_points(gpxpy_instance):
+    for track in gpxpy_instance.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                yield point
+
+
+def iter_coordinates(gpxpy_instance):
+    for point in iter_points(gpxpy_instance):
+        # log.debug('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
+        yield (point.latitude, point.longitude, point.elevation)
+
+
+def get_2d_coordinate_list(gpxpy_instance):
+    lat_list = []
+    lon_list = []
+    for latitude, longitude, elevation in iter_coordinates(gpxpy_instance):
+        lat_list.append(latitude)
+        lon_list.append(longitude)
+
+    if not lat_list or not lon_list:
+        raise GpxDataError("No track points in file!")
+
+    return (lat_list, lon_list)
+
+
 def get_extension_data(gpxpy_instance):
     """
     return a dict with all extension values from all track points.
     """
     extension_data = collections.defaultdict(list)
 
-    for track in gpxpy_instance.tracks:
-        for segment in track.segments:
-            for point in segment.points:
-                extensions = point.extensions
-                if not extensions:
-                    return None
+    for point in iter_points(gpxpy_instance):
+        extensions = point.extensions
+        if not extensions:
+            return None
 
-                for child in extensions[0].getchildren():
-                    tag = child.tag.rsplit("}", 1)[-1] # FIXME
+        for child in extensions[0].getchildren():
+            tag = child.tag.rsplit("}", 1)[-1]  # FIXME
 
-                    value = child.text
-                    try:
-                        if "." in value:
-                            value = float(value)
-                        else:
-                            value = int(value)
-                    except ValueError:
-                        pass
-                    extension_data[tag].append(value)
+            value = child.text
+            try:
+                if "." in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+            except ValueError:
+                pass
+            extension_data[tag].append(value)
 
     return extension_data

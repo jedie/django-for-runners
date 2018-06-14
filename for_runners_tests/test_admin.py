@@ -63,7 +63,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
 
 
 @unittest.skipUnless(chromium_available(), "Skip because Chromium is not available!")
-class ExampleChromiumTests(SeleniumChromiumTestCase):
+class AdminChromiumTests(SeleniumChromiumTestCase):
 
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
@@ -73,7 +73,7 @@ class ExampleChromiumTests(SeleniumChromiumTestCase):
 
 
 @unittest.skipUnless(firefox_available(), "Skip because Firefox is not available!")
-class ExampleFirefoxTests(SeleniumFirefoxTestCase):
+class AdminFirefoxTests(SeleniumFirefoxTestCase):
 
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")

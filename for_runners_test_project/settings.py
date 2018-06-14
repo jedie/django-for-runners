@@ -141,6 +141,19 @@ TEMPLATES = [
 ]
 
 
+if DEBUG:
+    # Disable caches:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+    # Disable CacheLoader:
+    TEMPLATES[0]["OPTIONS"]["loaders"] = (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )
+
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -227,10 +240,6 @@ from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
 # don't load jquery from ajax.googleapis.com, just use django's version:
 DEBUG_TOOLBAR_CONFIG["JQUERY_URL"] = STATIC_URL + "admin/js/vendor/jquery/jquery.min.js"
 
-
-PASSWORD_HASHERS = ( # Speedup tests
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-)
 
 # Basic Django CMS settings
 

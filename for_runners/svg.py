@@ -3,23 +3,14 @@ import logging
 
 import svgwrite
 from for_runners.exceptions import GpxDataError
+from for_runners.gpx import get_2d_coordinate_list
 
 log = logging.getLogger(__name__)
 
 
 def gpx2svg(gpxpy_instance):
-    lat_list = []
-    lon_list = []
 
-    for track in gpxpy_instance.tracks:
-        for segment in track.segments:
-            for point in segment.points:
-                # log.debug('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
-                lat_list.append(point.latitude)
-                lon_list.append(point.longitude)
-
-    if not lat_list or not lon_list:
-        raise GpxDataError("No track points in file!")
+    lat_list, lon_list = get_2d_coordinate_list(gpxpy_instance)
 
     lon_min = min(lon_list)
     lat_min = min(lat_list)

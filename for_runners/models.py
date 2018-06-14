@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.core.files import File
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -20,7 +21,7 @@ from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
-from for_runners.gpx import get_extension_data, get_identifier, parse_gpx
+from for_runners.gpx import get_extension_data, get_identifier, parse_gpx, get_2d_coordinate_list
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
@@ -380,6 +381,30 @@ class GpxModel(UpdateTimeBaseModel):
 
     finish_coordinate_html.short_description = _("finish coordinates")
     finish_coordinate_html.allow_tags = True
+
+    def leaflet_map_html(self):
+        gpxpy_instance = self.get_gpxpy_instance()
+        lat_list, lon_list = get_2d_coordinate_list(gpxpy_instance)
+
+        coordinates = zip(lat_list, lon_list)
+
+        context = {
+            "short_start_address": self.short_start_address,
+            "start_time": self.start_time,
+            "start_latitude": self.start_latitude,
+            "start_longitude": self.start_longitude,
+
+            "short_finish_address": self.short_finish_address,
+            "finish_time": self.finish_time,
+            "finish_latitude": self.finish_latitude,
+            "finish_longitude": self.finish_longitude,
+
+            "coordinates": coordinates,
+        }
+        return render_to_string(template_name="for_runners/leaflet_map.html", context=context)
+    
+    leaflet_map_html.short_description = _("Leaflet MAP")
+    leaflet_map_html.allow_tags = True
 
     def get_gpxpy_instance(self):
         gpxpy_instance = parse_gpx(content=self.gpx)

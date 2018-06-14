@@ -6,6 +6,10 @@
 import asyncio
 import logging
 
+import matplotlib.pyplot as plt  # https://pypi.org/project/matplotlib/
+from django.conf import settings
+from for_runners.gpx import get_2d_coordinate_list
+
 try:
     import geotiler  # https://wrobell.dcmod.org/geotiler/
 except SyntaxError:
@@ -13,22 +17,12 @@ except SyntaxError:
     # https://github.com/wrobell/geotiler/issues/20
     geotiler = None
 
-import matplotlib.pyplot as plt  # https://pypi.org/project/matplotlib/
-from django.conf import settings
-
 log = logging.getLogger(__name__)
 
 
 def generate_map(gpxpy_instance):
-    lat = []
-    lon = []
-    for track in gpxpy_instance.tracks:
-        for segment in track.segments:
-            for point in segment.points:
-                # print('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
-                lat.append(point.latitude)
-                lon.append(point.longitude)
 
+    lat, lon = get_2d_coordinate_list(gpxpy_instance)
     # print(lat)
     # print(lon)
 

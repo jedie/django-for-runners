@@ -123,7 +123,8 @@ class GpxModelAdmin(admin.ModelAdmin):
         "full_finish_address",
     )
     list_display = (
-        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "svg_tag",
+        "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
         "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_display_links = (
@@ -131,6 +132,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         "overview",
     )
     readonly_fields = (
+        "leaflet_map_html",
         "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
         "finish_latitude", "finish_longitude",
         "start_coordinate_html", "finish_coordinate_html",
@@ -142,6 +144,7 @@ class GpxModelAdmin(admin.ModelAdmin):
             "fields": (
                 "event",
                 ("track_svg", "svg_tag_big"),
+                "leaflet_map_html",
                 ("map_image", "image_tag"),
             )
         }),
