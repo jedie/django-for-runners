@@ -5,10 +5,10 @@
 -r base.txt
 
 django-filer
-flake8
-pydocstyle
-pylint
-Sphinx
+#flake8
+#pydocstyle
+#pylint
+#Sphinx
 tox
 wheel
 twine

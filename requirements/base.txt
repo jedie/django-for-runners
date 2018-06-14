@@ -6,7 +6,7 @@
 djangocms-text-ckeditor
 
 # https://github.com/jedie/django-tools
-django-tools
+django-tools>=0.40.0
 
 # https://github.com/jedie/django-cms-tools
 django-cms-tools

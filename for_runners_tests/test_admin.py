@@ -1,9 +1,11 @@
 # coding: utf-8
 
-
+import unittest
 
 import pytest
-
+from django_tools.unittest_utils.selenium_utils import (
+    SeleniumChromiumTestCase, SeleniumFirefoxTestCase, chromium_available, firefox_available
+)
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
@@ -14,6 +16,7 @@ class AdminAnonymousTests(BaseTestCase):
     """
     Anonymous will be redirected to the login page.
     """
+
     def test_login_en(self):
         response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
         self.assertRedirects(response, expected_url='http://testserver/en/admin/login/?next=/en/admin/')
@@ -28,14 +31,14 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
     """
     Some basics test with the django admin
     """
+
     def test_staff_admin_index(self):
         self.login(usertype='staff')
         response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
-        self.assertResponse(response,
+        self.assertResponse(
+            response,
             must_contain=(
-                'Django administration',
-                'staff_test_user',
-                'Site administration',
+                'Django administration', 'staff_test_user', 'Site administration',
                 'You don\'t have permission to edit anything.'
             ),
             must_not_contain=('error', 'traceback'),
@@ -45,7 +48,8 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
     def test_superuser_admin_index(self):
         self.login(usertype='superuser')
         response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
-        self.assertResponse(response,
+        self.assertResponse(
+            response,
             must_contain=(
                 'Django administration',
                 'superuser',
@@ -56,3 +60,23 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
             must_not_contain=('error', 'traceback'),
             template_name='admin/index.html',
         )
+
+
+@unittest.skipUnless(chromium_available(), "Skip because Chromium is not available!")
+class ExampleChromiumTests(SeleniumChromiumTestCase):
+
+    def test_admin_login_page(self):
+        self.driver.get(self.live_server_url + "/admin/login/")
+        self.assert_equal_page_title("Log in | Django site admin")
+        self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
+        self.assert_no_javascript_alert()
+
+
+@unittest.skipUnless(firefox_available(), "Skip because Firefox is not available!")
+class ExampleFirefoxTests(SeleniumFirefoxTestCase):
+
+    def test_admin_login_page(self):
+        self.driver.get(self.live_server_url + "/admin/login/")
+        self.assert_equal_page_title("Log in | Django site admin")
+        self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
+        self.assert_no_javascript_alert()
