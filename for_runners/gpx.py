@@ -11,6 +11,7 @@ import gpxpy
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
+from gpxpy.geo import distance as geo_distance
 
 Identifier = collections.namedtuple(
     'Identifier', ('start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon')
@@ -126,3 +127,46 @@ def get_extension_data(gpxpy_instance):
             extension_data[tag].append(value)
 
     return extension_data
+
+
+def iter_distance(gpxpy_instance, distance):
+    """
+    iterate over GPXTrackPoint() instances at intervals of <distance> in meters
+    """
+    iterator = iter_points(gpxpy_instance)
+
+    previous_point = next(iterator)
+    old_latitude, old_longitude, old_elevation = previous_point.latitude, previous_point.longitude, previous_point.elevation
+
+    count = 1
+    next_distance = distance
+    total_distance = 0
+    for point in iterator:
+        latitude, longitude, elevation = point.latitude, point.longitude, point.elevation
+
+        previous_total_distance = total_distance
+        total_distance += geo_distance(old_latitude, old_longitude, old_elevation, latitude, longitude, elevation)
+
+        old_latitude, old_longitude, old_elevation = latitude, longitude, elevation
+
+        if total_distance >= next_distance:
+
+            # Calculate the deviation from the ideal distance:
+            current_difference = total_distance - next_distance
+            previous_difference = abs(previous_total_distance - next_distance)
+
+            print(
+                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm" %
+                (count, previous_total_distance, previous_difference, total_distance, current_difference)
+            )
+
+            if previous_difference < current_difference:
+                # The deviation from the previous position is smaller:
+                yield previous_point, previous_total_distance
+            else:
+                yield point, total_distance
+
+            count += 1
+            next_distance = distance * count
+
+        previous_point = point

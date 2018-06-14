@@ -9,7 +9,12 @@ log = logging.getLogger(__name__)
 
 
 def gpx2svg(gpxpy_instance):
+    """
+    Optimize output with:
 
+        * simplify(max_distance)
+        * reduce_points(min_distance)
+    """
     lat_list, lon_list = get_2d_coordinate_list(gpxpy_instance)
 
     lon_min = min(lon_list)

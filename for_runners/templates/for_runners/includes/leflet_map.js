@@ -11,16 +11,32 @@
 
 var map = L.map('map');
 
+L.control.scale().addTo(map);
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
-    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 5,
+    maxZoom: 19,
 }).addTo(map);
 
-var marker = L.marker([{{ start_latitude|stringformat:".5f" }}, {{ start_longitude|stringformat:".5f" }}]).addTo(map);
-marker.bindPopup("<strong>start at {{ short_start_address }}</strong><br>{{ start_time }}").openPopup();
+L.marker(
+    [{{ start_latitude|stringformat:".5f" }}, {{ start_longitude|stringformat:".5f" }}],
+    {title:"start", riseOnHover:true}
+).addTo(map).bindPopup(
+    "<strong>start at {{ short_start_address }}</strong><br>{{ start_time }}"
+).openPopup();
 
-marker = L.marker([{{ finish_latitude|stringformat:".5f" }}, {{ finish_longitude|stringformat:".5f" }}]).addTo(map);
-marker.bindPopup("<strong>finish at {{ short_finish_address }}</strong><br>{{ finish_time }}").openPopup();
+L.marker(
+    [{{ finish_latitude|stringformat:".5f" }}, {{ finish_longitude|stringformat:".5f" }}],
+    {title:"finish", riseOnHover:true}
+).addTo(map).bindPopup(
+    "<strong>finish at {{ short_finish_address }}</strong><br>{{ finish_time }}"
+).openPopup();
+
+{% for gpx_point, distance in km_gpx_points %}{# iterate over GPXTrackPoint instances #}
+L.marker([{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}], {title:"{{ forloop.counter }}km", opacity:0.5, riseOnHover:true}).addTo(map)
+    .bindPopup("<strong>{{ forloop.counter }}km</strong> ({{ distance|stringformat:".1f" }}m)<br>{{ gpx_point.time }}<br>{{ gpx_point }}");
+{% endfor %}
 
 var path = L.polyline(
     [
