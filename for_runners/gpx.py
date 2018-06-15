@@ -133,6 +133,12 @@ def iter_distance(gpxpy_instance, distance):
     """
     iterate over GPXTrackPoint() instances at intervals of <distance> in meters
     """
+    def convert_distance_in_km(distance):
+        """
+        Calculate the rounded kilometers as integer from the current distance in meters.
+        """
+        return int(round(distance / 1000))
+
     iterator = iter_points(gpxpy_instance)
 
     previous_point = next(iterator)
@@ -160,11 +166,15 @@ def iter_distance(gpxpy_instance, distance):
                 (count, previous_total_distance, previous_difference, total_distance, current_difference)
             )
 
+            # We didn't use the >count< for resulting kilometers:
+            # Maybe the point density is very low and the real distance is greater than kilometers ;)
+            # Use convert_distance_in_km() and the real distance.
+
             if previous_difference < current_difference:
                 # The deviation from the previous position is smaller:
-                yield previous_point, previous_total_distance
+                yield previous_point, previous_total_distance, convert_distance_in_km(previous_total_distance)
             else:
-                yield point, total_distance
+                yield point, total_distance, convert_distance_in_km(total_distance)
 
             count += 1
             next_distance = distance * count

@@ -33,9 +33,9 @@ L.marker(
     "<strong>finish at {{ short_finish_address }}</strong><br>{{ finish_time }}"
 ).openPopup();
 
-{% for gpx_point, distance in km_gpx_points %}{# iterate over GPXTrackPoint instances #}
-L.marker([{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}], {title:"{{ forloop.counter }}km", opacity:0.5, riseOnHover:true}).addTo(map)
-    .bindPopup("<strong>{{ forloop.counter }}km</strong> ({{ distance|stringformat:".1f" }}m)<br>{{ gpx_point.time }}");
+{% for gpx_point, distance_m, distance_km in km_gpx_points %}{# iterate over GPXTrackPoint instances #}
+L.marker([{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}], {title:"{{ distance_km }}km", opacity:0.5, riseOnHover:true}).addTo(map)
+    .bindPopup("<strong>{{ distance_km }}km</strong> ({{ distance_m|stringformat:".1f" }}m)<br>{{ gpx_point.time }}");
 {% endfor %}
 
 var path = L.polyline(
