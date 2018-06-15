@@ -127,6 +127,9 @@ class GpxModelAdmin(admin.ModelAdmin):
         "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
         "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
+    list_filter = (
+        "tracked_by",
+    )
     list_display_links = (
         "svg_tag",
         "overview",
