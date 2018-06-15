@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg baseProfile="tiny" height="100" version="1.2" width="100" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs/>
+  <rect fill="#000000" height="100" width="100" x="0" y="0"/>
+  <rect fill="#ffffff" height="98" width="98" x="1" y="1"/>
+  <g fill="none" stroke="blue" stroke-width="1">
+    <line x1="59.3089" x2="78.1288" y1="5.0" y2="74.6252"/>
+    <line x1="78.1288" x2="21.8712" y1="74.6252" y2="95.0"/>
+  </g>
+</svg>

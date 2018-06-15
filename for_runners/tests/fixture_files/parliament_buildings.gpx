@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Wikipedia"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+ <!-- Based on data from https://de.wikipedia.org/wiki/GPS_Exchange_Format -->
+ <trk>
+  <name>Parliament buildings</name>
+  <desc>Parliament buildings of Germany, Austria and Switzerland</desc>
+  <trkseg>
+   <trkpt lat="52.518611" lon="13.376111">
+    <ele>36.0</ele>
+    <time>2011-01-13T01:01:01Z</time>
+   </trkpt>
+   <trkpt lat="48.208031" lon="16.358128">
+    <ele>180</ele>
+    <time>2011-01-14T01:59:01Z</time>
+   </trkpt>
+   <trkpt lat="46.9466" lon="7.44412">
+    <ele>987.654</ele>
+    <time>2011-01-15T23:59:01Z</time>
+   </trkpt>
+  </trkseg>
+ </trk>
+</gpx>

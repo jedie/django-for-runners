@@ -14,6 +14,9 @@ def gpx2svg(gpxpy_instance):
 
         * simplify(max_distance)
         * reduce_points(min_distance)
+
+    FIXME:
+        * Use correct World Geodetic System: WGS 84 calculations ;)
     """
     lat_list, lon_list = get_2d_coordinate_list(gpxpy_instance)
 
@@ -103,5 +106,5 @@ def gpx2svg_file(gpxpy_instance, svg_filename, pretty=False):
 def gpx2svg_string(gpxpy_instance, pretty=False):
     drawing = gpx2svg(gpxpy_instance)
     fileobj = io.StringIO()
-    drawing.write(fileobj, pretty=False)
-    return fileobj.getvalue()
+    drawing.write(fileobj, pretty=pretty)
+    return fileobj.getvalue().strip()
