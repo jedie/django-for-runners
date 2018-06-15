@@ -408,8 +408,9 @@ class GpxModel(UpdateTimeBaseModel):
     leaflet_map_html.allow_tags = True
 
     def get_gpxpy_instance(self):
-        gpxpy_instance = parse_gpx(content=self.gpx)
-        return gpxpy_instance
+        if self.gpx:
+            gpxpy_instance = parse_gpx(content=self.gpx)
+            return gpxpy_instance
 
     def schedule_generate_map(self):
         """
@@ -418,6 +419,9 @@ class GpxModel(UpdateTimeBaseModel):
         generate_gpx_map_task(object_id=self.pk)
 
     def calculate_values(self):
+        if not self.gpx:
+            return
+
         gpxpy_instance = self.get_gpxpy_instance()
         self.points_no = gpxpy_instance.get_points_no()
         self.length = gpxpy_instance.length_3d()
@@ -491,6 +495,9 @@ class GpxModel(UpdateTimeBaseModel):
             self.heart_rate_max = max(heart_rates)
 
     def short_name(self):
+        if self.pk is None:
+            return "new, unsaved GPX Track"
+
         parts = [self.start_time.strftime("%Y-%m-%d")]
         if self.event:
             parts.append(self.event.name)
