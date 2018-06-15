@@ -488,7 +488,7 @@ class GpxModel(UpdateTimeBaseModel):
         # TODO: Handle other extensions, too.
         # Garmin containes also 'cad'
         extension_data = get_extension_data(gpxpy_instance)
-        if "hr" in extension_data:
+        if extension_data is not None and "hr" in extension_data:
             heart_rates = extension_data["hr"]
             self.heart_rate_min = min(heart_rates)
             self.heart_rate_avg = statistics.median(heart_rates)
