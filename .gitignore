@@ -3,9 +3,9 @@
 !.travis.yml
 !.coveralls.yml
 
-# from for_runners_test_project
-static/
-media/
+# from test projects:
+for_runners_test_project/static/
+for_runners_test_project/media/
 test_project_db.sqlite3
 
 # Byte-compiled / optimized / DLL files
