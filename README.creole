@@ -147,8 +147,10 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.1.1...master|compare v0.1.1...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.2.0...master|compare v0.2.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.1.1...v0.2.0|21.06.2018 - v0.2.0]]:
 ** Display elevations, heart_rates and cadence_values if available
+** Add kilometer markers to OpenStreetMap
 * [[https://github.com/jedie/django-for-runners/compare/v0.1.0...v0.1.1|15.06.2018 - v0.1.1]]:
 ** a few bugfixes
 * [[https://github.com/jedie/django-for-runners/compare/v0.0.4...v0.1.0|15.06.2018 - v0.1.0]]:

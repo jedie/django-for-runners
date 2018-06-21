@@ -4,4 +4,4 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-__version__ = '0.1.1'
+__version__ = '0.2.0'
