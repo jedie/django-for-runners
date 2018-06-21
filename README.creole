@@ -148,6 +148,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.1.1...master|compare v0.1.1...master]] **dev**
+** Display elevations, heart_rates and cadence_values if available
 * [[https://github.com/jedie/django-for-runners/compare/v0.1.0...v0.1.1|15.06.2018 - v0.1.1]]:
 ** a few bugfixes
 * [[https://github.com/jedie/django-for-runners/compare/v0.0.4...v0.1.0|15.06.2018 - v0.1.0]]:
@@ -174,7 +175,13 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 === alternatives (OpenSource only) ==
 
-* https://github.com/GoldenCheetah/GoldenCheetah/
+* https://github.com/pytrainer/pytrainer (Desktop Program)
+* https://github.com/GoldenCheetah/GoldenCheetah/ (Desktop Program)
+
+Online tools:
+
+* https://www.gpsies.com
+* https://www.j-berkemeier.de/ShowGPX.html (de)
 
 
 == credits ==

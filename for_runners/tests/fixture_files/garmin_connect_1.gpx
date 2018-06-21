@@ -19,8 +19,8 @@
         <time>2018-02-21T14:30:50.000Z</time>
         <extensions>
           <ns3:TrackPointExtension>
-            <ns3:hr>125</ns3:hr>
-            <ns3:cad>75</ns3:cad>
+            <ns3:hr>120</ns3:hr>
+            <ns3:cad>70</ns3:cad>
           </ns3:TrackPointExtension>
         </extensions>
       </trkpt>
@@ -29,7 +29,7 @@
         <time>2018-02-21T14:30:51.000Z</time>
         <extensions>
           <ns3:TrackPointExtension>
-            <ns3:hr>123</ns3:hr>
+            <ns3:hr>125</ns3:hr>
             <ns3:cad>75</ns3:cad>
           </ns3:TrackPointExtension>
         </extensions>
@@ -39,8 +39,8 @@
         <time>2018-02-21T14:30:52.000Z</time>
         <extensions>
           <ns3:TrackPointExtension>
-            <ns3:hr>124</ns3:hr>
-            <ns3:cad>75</ns3:cad>
+            <ns3:hr>130</ns3:hr>
+            <ns3:cad>80</ns3:cad>
           </ns3:TrackPointExtension>
         </extensions>
       </trkpt>

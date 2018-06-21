@@ -16,12 +16,14 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 # https://github.com/jedie/django-tools
+from django_tools.decorators import display_admin_error
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
-from for_runners.gpx import (get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, parse_gpx)
+from for_runners.gpx import (get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, parse_gpx,
+    iter_distances, iter_points, add_extension_data)
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
@@ -407,6 +409,40 @@ class GpxModel(UpdateTimeBaseModel):
     leaflet_map_html.short_description = _("Leaflet MAP")
     leaflet_map_html.allow_tags = True
 
+    @display_admin_error
+    def chartjs_html(self):
+        gpxpy_instance = self.get_gpxpy_instance()
+
+        labels=[]
+        elevations=[]
+        heart_rates=[]
+        cadence_values = []
+
+        for point in iter_points(gpxpy_instance):
+            add_extension_data(point)
+            labels.append(point.time)
+            elevations.append(point.elevation)
+            try:
+                heart_rates.append(point.extension_data["hr"])
+            except KeyError:
+                pass
+            try:
+                cadence_values.append(point.extension_data["cad"])
+            except KeyError:
+                pass
+
+        context = {
+            "instance": self,
+            "labels": labels,
+            "elevations": elevations,
+            "heart_rates": heart_rates,
+            "cadence_values": cadence_values,
+        }
+        return render_to_string(template_name="for_runners/chartjs.html", context=context)
+
+    chartjs_html.short_description = _("chartjs MAP")
+    chartjs_html.allow_tags = True
+
     def get_gpxpy_instance(self):
         if self.gpx:
             gpxpy_instance = parse_gpx(content=self.gpx)
@@ -430,7 +466,11 @@ class GpxModel(UpdateTimeBaseModel):
         duration = gpxpy_instance.get_duration()
         if duration:
             self.duration = duration
-            self.pace = (self.duration / 60) / (self.length / 1000)
+            pace = (self.duration / 60) / (self.length / 1000)
+            if pace>99 or pace<0:
+                log.error("Pace out of range: %f", pace)
+            else:
+                self.pace = pace
 
         uphill_downhill = gpxpy_instance.get_uphill_downhill()
         self.uphill = uphill_downhill.uphill

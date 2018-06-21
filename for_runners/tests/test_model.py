@@ -33,6 +33,6 @@ class GpxTests(TestUserMixin, TestCase):
         self.assertEqual(round(instance.length, 3), 4.718)
         self.assertEqual(instance.duration, 2)
         self.assertEqual(round(instance.pace, 3), 7.065)
-        self.assertEqual(instance.heart_rate_avg, 124)
+        self.assertEqual(instance.heart_rate_avg, 125)
 
         self.assertEqual(instance.get_short_slug(), "2018-02-21-moers-hulsdonk")

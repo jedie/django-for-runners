@@ -136,6 +136,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         "leaflet_map_html",
+        "chartjs_html",
         "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
         "finish_latitude", "finish_longitude",
         "start_coordinate_html", "finish_coordinate_html",
@@ -147,6 +148,7 @@ class GpxModelAdmin(admin.ModelAdmin):
             "fields": (
                 "event",
                 "leaflet_map_html",
+                "chartjs_html",
                 ("map_image", "image_tag"),
             )
         }),
