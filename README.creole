@@ -14,14 +14,12 @@ It's currently experimental ... Pre-Alpha state...
 == Screenshots
 
 
-== v0.1.1 2018-6-15 ==
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners%20v0.1.1%202018-6-15%20GPX%20Track.png|for-runners v0.1.1 2018-6-15 GPX Track.png}}
+== for-runners v0.2.0 2018-6-21 Change GPX Track.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.2.0 2018-6-21 Change GPX Track.png|for-runners v0.2.0 2018-6-21 Change GPX Track.png}}
 
 
 == v0.0.1 2018-5-30 ==
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change list.png|for-runners v0.0.1 2018-5-30 change list.png}}
-
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change GPX Track.png|for-runners v0.0.1 2018-5-30 change GPX Track.png}}
 
 
 == try-out
