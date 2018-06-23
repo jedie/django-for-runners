@@ -36,6 +36,7 @@ class Command(BaseCommand):
             sys.exit(-1)
 
         path = Path(options.get("path"))
+        path = path.expanduser()
         if not path.is_dir():
             print("ERROR: Given path '%s' is not a existing directory!" % path)
             sys.exit(-1)
