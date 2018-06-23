@@ -12,6 +12,14 @@ Store your GPX tracks of your running (or other sports activity) in django.
 The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: http://rvier.fr/#forrunners
 
 
+We collect some JavaScript files, for easier startup. These files are:
+
+|= Project |= License |= storage directory
+| [[http://leafletjs.com|Leaflet JS]] | [[https://github.com/Leaflet/Leaflet/blob/master/LICENSE|BSD]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/leaflet|for_runners/static/leaflet/]]
+| [[http://www.chartjs.org/|Chart.js]] | [[https://github.com/chartjs/Chart.js/blob/master/LICENSE.md|MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/chartjs|for_runners/static/chartjs/]]
+
+
+
 == Screenshots
 
 
@@ -153,6 +161,9 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.2.0...master|compare v0.2.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.2.0...v0.3.0|23.06.2018 - v0.3.0]]:
+** Start adding statistics (See screenshot above)
+** add weather information from [[https://www.metaweather.com/|metaweather.com]] to every track
 * [[https://github.com/jedie/django-for-runners/compare/v0.1.1...v0.2.0|21.06.2018 - v0.2.0]]:
 ** Display elevations, heart_rates and cadence_values if available
 ** Add kilometer markers to OpenStreetMap
@@ -197,6 +208,7 @@ The whole thing is based on many excellent projects. Especially the following:
 
 * [[https://pypi.org/project/gpxpy/|gpxpy]] GPX file parser
 * [[http://leafletjs.com|Leaflet JS]] A JS library for interactive maps used to render the track on [[https://openstreetmap.org/|OpenStreetMap]]
+* [[http://www.chartjs.org/|Chart.js]] HTML5 Charts
 * [[https://pypi.org/project/geotiler/|geotiler]] Generate streetmap images
 * [[https://pypi.org/project/geopy/|geopy]] Get geo location names of the GPX track start/end point
 * [[https://pypi.org/project/matplotlib/|matplotlib]] plotting 2D graphics
