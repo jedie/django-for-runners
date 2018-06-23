@@ -42,7 +42,7 @@ class Command(BaseCommand):
             sys.exit(-1)
 
         gpx_files = path.glob('**/*.gpx')
-        for gpx_file in gpx_files:
+        for gpx_file in sorted(gpx_files):
             with gpx_file.open("r") as f:
                 gpx_content = f.read()
 
@@ -51,4 +51,5 @@ class Command(BaseCommand):
             except IntegrityError as err:
                 print("Skip .gpx file: %s" % err)
             else:
-                print(instance)
+                if instance:
+                    print("Add new track:", instance)

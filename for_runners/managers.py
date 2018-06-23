@@ -6,7 +6,6 @@
 import logging
 
 from django.db import IntegrityError, models
-
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx import get_identifier, parse_gpx
 
@@ -15,11 +14,11 @@ log = logging.getLogger(__name__)
 
 class GpxModelQuerySet(models.QuerySet):
 
-    def filter_by_identifier(self, identifier):
+    def get_by_identifier(self, identifier):
         """
         :param identifier: 'Identifier' namedtuple created here: for_runners.gpx.get_identifier
         """
-        return self.filter(
+        return self.get(
             start_time=identifier.start_time,
             finish_time=identifier.finish_time,
             start_latitude=identifier.start_lat,
@@ -43,21 +42,21 @@ class BaseGpxModelManager(models.Manager):
         """
         gpxpy_instance = parse_gpx(gpx_content)
         identifier = get_identifier(gpxpy_instance)
-        qs = self.get_queryset().filter_by_identifier(identifier)
-        if qs.exists():
-            log.warning("Track with same start time, latitude, longitude already exists!")
-            qs = qs.filter(tracked_by=user)
-            if qs.exists():
-                gpx = qs.get()
-                raise IntegrityError(
-                    "GPX track already exists: %s" % gpx
-                )
 
-        instance = self.create(
-            gpx=gpx_content,
-            tracked_by=user,
-        )
-        return instance
+        qs = self.get_queryset()
+
+        try:
+            instance = qs.get_by_identifier(identifier)
+        except self.model.DoesNotExist:
+            log.debug("Create new track for user: %s", user)
+            instance = self.create(
+                gpx=gpx_content,
+                tracked_by=user,
+            )
+            return instance
+        else:
+            log.info("Skip existing track: %s", instance)
+            return
 
 
 GpxModelManager = BaseGpxModelManager.from_queryset(GpxModelQuerySet)

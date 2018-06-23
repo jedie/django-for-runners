@@ -77,6 +77,8 @@ import GPX files, e.g.:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./manage.py import_gpx --username <username> ~/backups/gpx_files
 }}}
 
+**Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
+
 
 == run tests
 
