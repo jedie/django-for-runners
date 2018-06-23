@@ -3,20 +3,25 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
+import collections
 import io
 import logging
+import math
+from pprint import pprint
 
 from autotask.tasks import delayed_task
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.db import IntegrityError, models
+from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
-from django.views import generic
+from django.views import View, generic
 # https://github.com/jedie/django-for-runners
+from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import UploadGpxFileForm
+from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
 from for_runners.models import (DisciplineModel, EventLinkModel, EventModel, GpxModel)
@@ -92,6 +97,100 @@ class UploadGpxFileView(generic.FormView):
             return self.form_invalid(form)
 
 
+class DistancePaceStatisticsView(TemplateView):
+    template_name = "for_runners/distance_pace_statistics.html"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        log.info("Filter tracks by: %s", user)
+        tracks = GpxModel.objects.filter(tracked_by=user)
+        tracks = tracks.order_by("length")
+        context = {
+            "tracks": tracks,
+            "track_count": tracks.count(),
+            "title": _("Distance/Pace Statistics"),
+            "user": user,
+            "opts": GpxModel._meta,
+        }
+        return context
+
+
+class DistanceStatisticsView(generic.FormView):
+    template_name = "for_runners/distance_statistics.html"
+    form_class = DistanceStatisticsForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        form = context["form"]
+        if form.is_valid():
+            distance = form.cleaned_data["distance"]
+        else:
+            distance = INITIAL_DISTANCE
+
+        distance_m = distance * 1000
+
+        user = self.request.user
+        tracks = GpxModel.objects.filter(tracked_by=user)
+        # log.info("Found %i tracks from: %s", tracks.count(), user)
+        tracks = tracks.order_by("length")
+
+        length_statistics = tracks.aggregate(Min('length'), Avg("length"), Max('length'))
+        min_length = length_statistics["length__min"]
+        max_length = length_statistics["length__max"]
+
+        current_distance_from = math.floor(min_length/1000)*1000
+        current_distance_to = current_distance_from + distance_m
+
+        group_data = collections.Counter()
+        for track in tracks:
+            length = track.length
+            # print("%.1fkm" % round(length/1000,1))
+            if length>current_distance_to:
+                while True:
+                    current_distance_from += distance_m
+                    current_distance_to += distance_m
+                    if length>current_distance_to:
+                        group_data[(current_distance_from, current_distance_to)] += 0
+                    else:
+                        break
+
+            group_data[(current_distance_from, current_distance_to)] += 1
+
+        # pprint(group_data)
+
+        track_data = []
+        total_tracks = 0
+        for distances, quantity in sorted(group_data.items()):
+            total_tracks += quantity
+            distance_from, distance_to = distances
+            track_data.append(
+                (round(distance_from/1000,1), round(distance_to/1000,1), quantity)
+            )
+        # print("total track counts:", total_tracks)
+        # pprint(track_data)
+
+        context.update({
+            "tracks": tracks,
+            "track_count": tracks.count(),
+            "min_length_km": round(min_length / 1000),
+            "avg_length_km": round(length_statistics["length__avg"] / 1000),
+            "max_length_km": round(max_length / 1000),
+            "track_data": track_data,
+
+            "title": _("Distance Statistics"),
+            "user": user,
+            "opts": GpxModel._meta,
+
+        })
+        # pprint(context)
+        return context
+
+    def form_valid(self, form):
+        # Don't redirect, if form is valid ;)
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 class ProcessGpxDataView(generic.View):
 
     def get(self, request, object_id):
@@ -123,25 +222,18 @@ class GpxModelAdmin(admin.ModelAdmin):
         "full_finish_address",
     )
     list_display = (
-        "svg_tag",
-        "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg", "human_weather",
-        "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
+        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
-    list_filter = (
-        "tracked_by",
-    )
+    list_filter = ("tracked_by",)
     list_display_links = (
         "svg_tag",
         "overview",
     )
     readonly_fields = (
-        "leaflet_map_html",
-        "chartjs_html",
-        "svg_tag_big", "image_tag", "svg_tag",
-        "start_time", "start_latitude", "start_longitude",
-        "finish_time", "finish_latitude", "finish_longitude",
-        "start_coordinate_html", "finish_coordinate_html",
-        "heart_rate_min", "heart_rate_avg", "heart_rate_max"
+        "leaflet_map_html", "chartjs_html", "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude",
+        "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
+        "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
     )
 
     fieldsets = (
@@ -206,6 +298,16 @@ class GpxModelAdmin(admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
             url(r"^upload/$", self.admin_site.admin_view(UploadGpxFileView.as_view()), name="upload-gpx-file"),
+            url(
+                r"^distance-statistics/$",
+                self.admin_site.admin_view(DistanceStatisticsView.as_view()),
+                name="distance-statistics"
+            ),
+            url(
+                r"^distance-pace-statistics/$",
+                self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
+                name="distance-pace-statistics"
+            ),
             url(
                 r"^(.+)/process/$",
                 self.admin_site.admin_view(ProcessGpxDataView.as_view()),
