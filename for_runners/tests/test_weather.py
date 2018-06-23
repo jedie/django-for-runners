@@ -25,7 +25,9 @@ class WeatherTest(BaseTestCase):
 
         # Essen City on 21.06.2018
         # https://www.metaweather.com/de/648820/2018/6/20/
-        temperature, weather_state = meta_weather_com.coordinates2weather(lat, lon, date=date, max_seconds=12*60*60)
+        temperature, weather_state = meta_weather_com.coordinates2weather(
+            lat, lon, date=date, max_seconds=12 * 60 * 60
+        )
 
         self.assert_equal_rounded(temperature, 25.41, decimal_places=2)
         self.assertEqual(weather_state, "Light Cloud/Showers")

@@ -369,7 +369,7 @@ class GpxModel(UpdateTimeBaseModel):
     def human_weather(self):
         if not self.start_temperature:
             return "-"
-        return "%s°C<br/>%s" % (round(self.start_temperature,1), self.start_weather_state)
+        return "%s°C<br/>%s" % (round(self.start_temperature, 1), self.start_weather_state)
     human_weather.short_description = _("Weather")
     human_weather.admin_order_field = "start_temperature"
     human_weather.allow_tags = True

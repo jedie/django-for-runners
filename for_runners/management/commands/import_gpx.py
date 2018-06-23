@@ -6,11 +6,9 @@
 import sys
 from pathlib import Path
 
+from cms.models import User
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-
-from cms.models import User
-
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
 
