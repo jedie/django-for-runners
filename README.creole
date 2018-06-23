@@ -15,6 +15,10 @@ The name **Django-ForRunners** has the origin from the great Android tracking ap
 == Screenshots
 
 
+== for-runners v0.3.0 2018-6-23 Distance Statistics.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.3.0 2018-6-23 Distance Statistics.png|for-runners v0.3.0 2018-6-23 Distance Statistics.png}}
+
+
 == for-runners v0.2.0 2018-6-21 Change GPX Track.png ==
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.2.0 2018-6-21 Change GPX Track.png|for-runners v0.2.0 2018-6-21 Change GPX Track.png}}
 
