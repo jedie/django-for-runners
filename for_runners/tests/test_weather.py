@@ -11,7 +11,7 @@
 import datetime
 
 from for_runners.tests.base import BaseTestCase
-from for_runners.weather import meta_weather_com
+from for_runners.weather import NoWeatherData, meta_weather_com
 
 
 class WeatherTest(BaseTestCase):
@@ -40,3 +40,19 @@ class WeatherTest(BaseTestCase):
 
         self.assert_equal_rounded(temperature, 27.94, decimal_places=2)
         self.assertEqual(weather_state, "Light Cloud")
+
+    def test_no_json_data(self):
+        """
+        Request weather for Essen City on 11.02.2017 will raise into 500 - Server error:
+            https://www.metaweather.com/de/648820/2017/2/11/
+
+        The API Request will return []:
+            https://www.metaweather.com/api/location/648820/2017/2/11/
+
+        MetaWeatherCom().location_day() will raise NoWeatherData
+        """
+        lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
+        date = datetime.datetime(year=2017, month=2, day=10, hour=12, minute=00)
+
+        with self.assertRaises(NoWeatherData):
+            temperature, weather_state = meta_weather_com.coordinates2weather(lat, lon, date=date)

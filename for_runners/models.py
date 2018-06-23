@@ -30,7 +30,7 @@ from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
 from for_runners.tasks import generate_gpx_map_task
-from for_runners.weather import meta_weather_com
+from for_runners.weather import NoWeatherData, meta_weather_com
 
 log = logging.getLogger(__name__)
 
@@ -523,18 +523,26 @@ class GpxModel(UpdateTimeBaseModel):
         self.finish_longitude = identifier.finish_lon
 
         if not self.start_temperature:
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration
-            )
-            self.start_temperature = temperature
-            self.start_weather_state = weather_state
+            try:
+                temperature, weather_state = meta_weather_com.coordinates2weather(
+                    self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration
+                )
+            except NoWeatherData:
+                log.error("No weather data for start.")
+            else:
+                self.start_temperature = temperature
+                self.start_weather_state = weather_state
 
         if not self.finish_temperature:
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration
-            )
-            self.finish_temperature = temperature
-            self.finish_weather_state = weather_state
+            try:
+                temperature, weather_state = meta_weather_com.coordinates2weather(
+                    self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration
+                )
+            except NoWeatherData:
+                log.error("No weather data for finish.")
+            else:
+                self.finish_temperature = temperature
+                self.finish_weather_state = weather_state
 
         try:
             start_address = reverse_geo(self.start_latitude, self.start_longitude)

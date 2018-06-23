@@ -23,6 +23,9 @@ from urllib.error import URLError
 
 log = logging.getLogger(__name__)
 
+class NoWeatherData(ValueError):
+    pass
+
 
 def request_json(url, timeout=3, user_agent="python"):
     request = urllib.request.Request(url)
@@ -115,6 +118,10 @@ class MetaWeatherCom:
             self._location_day_cache[url] = json_data
         else:
             log.debug("Fetch %s from cache!", url)
+
+        if not json_data:
+            log.error("json response is empty")
+            raise NoWeatherData("json response is empty")
 
         # pprint(json_data)
         # [{'air_pressure': 1005.36,
