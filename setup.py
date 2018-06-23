@@ -251,7 +251,7 @@ Topic :: Internet
 setup(
     name='django-for-runners',
     version=__version__,
-    description='',
+    description='Store your GPX tracks of your running (or other sports activity) in django.',
     long_description=long_description,
     author='Jens Diemer',
     author_email='django-for-runners@jensdiemer.de',
