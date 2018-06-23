@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | Django-ForRunners {{ version_string }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Django-ForRunners {{ version_string }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

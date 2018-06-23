@@ -15,6 +15,7 @@
     https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+
 print("Use settings:", __file__)
 
 
@@ -135,6 +136,8 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'django.template.context_processors.static',
                 'cms.context_processors.cms_settings',
+                
+                "for_runners.context_processors.for_runners_version_string",
             ],
         },
     },
