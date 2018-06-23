@@ -8,6 +8,7 @@ from django_tools.unittest_utils.BrowserDebug import debug_response
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 from for_runners.models import GpxModel
+from for_runners.version import __version__
 
 BASE_PATH = Path(__file__).parent
 
@@ -50,7 +51,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
         self.assertResponse(
             response,
             must_contain=(
-                '<title>Select GPX Track to change | Django site admin</title>',
+                '<title>Select GPX Track to change | Django-ForRunners v%s</title>' % __version__,
 
                 # "Process garmin_connect_1.gpx...",
                 # "Created: 2018-02-21 14:30:50 Moers Hülsdonk",
@@ -75,7 +76,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
         self.assertResponse(
             response,
             must_contain=(
-                '<title>Add GPX Track | Django site admin</title>',
+                '<title>Add GPX Track | Django-ForRunners v%s</title>' % __version__,
                 '<textarea name="gpx" cols="40" rows="10" class="vLargeTextField" required id="id_gpx"></textarea>',
             ),
             messages=[],
@@ -112,7 +113,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
         self.assertResponse(
             response,
             must_contain=(
-                '<title>Change GPX Track | Django site admin</title>',
+                '<title>Change GPX Track | Django-ForRunners v%s</title>' % __version__,
                 '<label>Start time:</label>',
                 '<div class="readonly">Feb. 21, 2018, 2:30 p.m.</div>',
                 '<input type="text" name="short_start_address" value="Moers Hülsdonk" style="width:70%" maxlength="255" id="id_short_start_address" />',

@@ -9,6 +9,7 @@ from django_tools.unittest_utils.selenium_utils import (
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
+from for_runners.version import __version__
 
 
 @pytest.mark.django_db
@@ -38,7 +39,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
         self.assertResponse(
             response,
             must_contain=(
-                'Django administration', 'staff_test_user', 'Site administration',
+                'Django-ForRunners', 'staff_test_user', 'Site administration',
                 'You don\'t have permission to edit anything.'
             ),
             must_not_contain=('error', 'traceback'),
@@ -51,7 +52,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
         self.assertResponse(
             response,
             must_contain=(
-                'Django administration',
+                'Django-ForRunners',
                 'superuser',
                 'Site administration',
                 '/admin/auth/group/add/',
@@ -67,7 +68,7 @@ class AdminChromiumTests(SeleniumChromiumTestCase):
 
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
-        self.assert_equal_page_title("Log in | Django site admin")
+        self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)
         self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
         self.assert_no_javascript_alert()
 
@@ -77,6 +78,6 @@ class AdminFirefoxTests(SeleniumFirefoxTestCase):
 
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
-        self.assert_equal_page_title("Log in | Django site admin")
+        self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)
         self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
         self.assert_no_javascript_alert()
