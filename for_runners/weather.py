@@ -37,7 +37,7 @@ def request_json(url, timeout=3, user_agent="python"):
             json_data = f.read()
     except (URLError, socket.timeout) as err:
         print("ERROR: %s (url: %r)" % (err, url))
-        raise
+        raise NoWeatherData
     else:
         response_time_ms = round((time.time() - start_time) * 1000, 1)
         print("Response in: %.1fms (url: %r)" % (response_time_ms, url))
