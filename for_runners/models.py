@@ -22,12 +22,15 @@ from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
-from for_runners.gpx import (get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, parse_gpx,
-    iter_distances, iter_points, add_extension_data)
+from for_runners.gpx import (
+    add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, iter_distances,
+    iter_points, parse_gpx
+)
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
 from for_runners.tasks import generate_gpx_map_task
+from for_runners.weather import meta_weather_com
 
 log = logging.getLogger(__name__)
 
@@ -170,6 +173,17 @@ class GpxModel(UpdateTimeBaseModel):
     start_longitude = models.FloatField(editable=False,
         help_text=_("Longitude of the first recorded point from the *.gpx file"),
     )
+    start_temperature = models.FloatField(editable=True,
+        null=True,
+        blank=True,
+        help_text=_("Temperature at start."),
+    )
+    start_weather_state = models.CharField(
+        max_length=127,
+        null=True,
+        blank=True,
+        help_text="Weather state at start.",
+    )
     short_start_address = models.CharField(
         max_length=255,
         null=True,
@@ -191,6 +205,17 @@ class GpxModel(UpdateTimeBaseModel):
     )
     finish_longitude = models.FloatField(editable=False,
         help_text=_("Longitude of the finish point"),
+    )
+    finish_temperature = models.FloatField(editable=True,
+        null=True,
+        blank=True,
+        help_text=_("Temperature at finish."),
+    )
+    finish_weather_state = models.CharField(
+        max_length=127,
+        null=True,
+        blank=True,
+        help_text="Weather state at finish.",
     )
     short_finish_address = models.CharField(
         max_length=255,
@@ -341,6 +366,14 @@ class GpxModel(UpdateTimeBaseModel):
     human_pace.short_description = _("Pace")
     human_pace.admin_order_field = "pace"
 
+    def human_weather(self):
+        if not self.start_temperature:
+            return "-"
+        return "%s°C<br/>%s" % (round(self.start_temperature,1), self.start_weather_state)
+    human_weather.short_description = _("Weather")
+    human_weather.admin_order_field = "start_temperature"
+    human_weather.allow_tags = True
+
     def _coordinate2link(self, lat, lon):
         return (
             '<a'
@@ -413,9 +446,9 @@ class GpxModel(UpdateTimeBaseModel):
     def chartjs_html(self):
         gpxpy_instance = self.get_gpxpy_instance()
 
-        labels=[]
-        elevations=[]
-        heart_rates=[]
+        labels = []
+        elevations = []
+        heart_rates = []
         cadence_values = []
 
         for point in iter_points(gpxpy_instance):
@@ -467,7 +500,7 @@ class GpxModel(UpdateTimeBaseModel):
         if duration:
             self.duration = duration
             pace = (self.duration / 60) / (self.length / 1000)
-            if pace>99 or pace<0:
+            if pace > 99 or pace < 0:
                 log.error("Pace out of range: %f", pace)
             else:
                 self.pace = pace
@@ -488,6 +521,20 @@ class GpxModel(UpdateTimeBaseModel):
         self.start_longitude = identifier.start_lon
         self.finish_latitude = identifier.finish_lat
         self.finish_longitude = identifier.finish_lon
+
+        if not self.start_temperature:
+            temperature, weather_state = meta_weather_com.coordinates2weather(
+                self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration
+            )
+            self.start_temperature = temperature
+            self.start_weather_state = weather_state
+
+        if not self.finish_temperature:
+            temperature, weather_state = meta_weather_com.coordinates2weather(
+                self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration
+            )
+            self.finish_temperature = temperature
+            self.finish_weather_state = weather_state
 
         try:
             start_address = reverse_geo(self.start_latitude, self.start_longitude)

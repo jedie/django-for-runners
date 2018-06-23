@@ -124,7 +124,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
     list_display = (
         "svg_tag",
-        "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg", "human_weather",
         "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_filter = (
@@ -137,8 +137,9 @@ class GpxModelAdmin(admin.ModelAdmin):
     readonly_fields = (
         "leaflet_map_html",
         "chartjs_html",
-        "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude", "start_longitude", "finish_time",
-        "finish_latitude", "finish_longitude",
+        "svg_tag_big", "image_tag", "svg_tag",
+        "start_time", "start_latitude", "start_longitude",
+        "finish_time", "finish_latitude", "finish_longitude",
         "start_coordinate_html", "finish_coordinate_html",
         "heart_rate_min", "heart_rate_avg", "heart_rate_max"
     )
@@ -154,7 +155,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         }),
         (_("Start"), {
             "fields": (
-                "start_time",
+                ("start_time", "start_temperature", "start_weather_state"),
                 "short_start_address",
                 "full_start_address",
                 "start_coordinate_html",
@@ -163,7 +164,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         }),
         (_("Finish"), {
             "fields": (
-                "finish_time",
+                ("finish_time", "finish_temperature", "finish_weather_state"),
                 "short_finish_address",
                 "full_finish_address",
                 "finish_coordinate_html",
