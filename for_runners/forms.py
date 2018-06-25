@@ -3,6 +3,7 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
+
 from django import forms
 
 
@@ -25,3 +26,6 @@ class DistanceStatisticsForm(forms.Form):
         initial=INITIAL_DISTANCE,
         help_text="Gradation in kilometers to summarize the data."
     )
+
+
+
