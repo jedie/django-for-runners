@@ -7,6 +7,7 @@ import collections
 import io
 import logging
 import math
+import statistics
 from pprint import pprint
 
 from autotask.tasks import delayed_task
@@ -131,48 +132,62 @@ class DistanceStatisticsView(generic.FormView):
         distance_m = distance * 1000
 
         user = self.request.user
-        tracks = GpxModel.objects.filter(tracked_by=user)
-        # log.info("Found %i tracks from: %s", tracks.count(), user)
-        tracks = tracks.order_by("length")
+        qs = GpxModel.objects.filter(tracked_by=user)
+        # log.info("Found %i tracks from: %s", qs.count(), user)
+        qs = qs.order_by("length")
 
-        length_statistics = tracks.aggregate(Min('length'), Avg("length"), Max('length'))
+        length_statistics = qs.aggregate(Min('length'), Avg("length"), Max('length'))
         min_length = length_statistics["length__min"]
         max_length = length_statistics["length__max"]
 
-        current_distance_from = math.floor(min_length/1000)*1000
+        current_distance_from = math.floor(min_length / 1000) * 1000
         current_distance_to = current_distance_from + distance_m
 
-        group_data = collections.Counter()
-        for track in tracks:
+        group_data = collections.defaultdict(list)
+        for track in qs:
             length = track.length
             # print("%.1fkm" % round(length/1000,1))
-            if length>current_distance_to:
+            if length > current_distance_to:
                 while True:
                     current_distance_from += distance_m
                     current_distance_to += distance_m
-                    if length>current_distance_to:
-                        group_data[(current_distance_from, current_distance_to)] += 0
+                    if length > current_distance_to:
+                        group_data[(current_distance_from, current_distance_to)] = []
                     else:
                         break
 
-            group_data[(current_distance_from, current_distance_to)] += 1
+            group_data[(current_distance_from, current_distance_to)].append(track)
 
-        # pprint(group_data)
+        print("group_data:")
+        pprint(group_data)
 
         track_data = []
         total_tracks = 0
-        for distances, quantity in sorted(group_data.items()):
-            total_tracks += quantity
+        for distances, tracks in sorted(group_data.items()):
+            track_count = len(tracks)
+            total_tracks += track_count
             distance_from, distance_to = distances
-            track_data.append(
-                (round(distance_from/1000,1), round(distance_to/1000,1), quantity)
-            )
-        # print("total track counts:", total_tracks)
-        # pprint(track_data)
+
+            if tracks:
+                paces = [track.pace for track in tracks]
+                min_paces = "%.2f" % min(paces)
+                avg_paces = "%.2f" % statistics.median(paces)
+                max_paces = "%.2f" % max(paces)
+            else:
+                min_paces = "null"
+                avg_paces = "null"
+                max_paces = "null"
+
+            track_data.append((
+                round(distance_from / 1000, 1), round(distance_to / 1000, 1), track_count, min_paces, avg_paces,
+                max_paces
+            ))
+        print("total track counts:", total_tracks)
+        pprint(track_data)
 
         context.update({
-            "tracks": tracks,
-            "track_count": tracks.count(),
+            "tracks": qs,
+            "track_count": total_tracks,
             "min_length_km": round(min_length / 1000),
             "avg_length_km": round(length_statistics["length__avg"] / 1000),
             "max_length_km": round(max_length / 1000),
