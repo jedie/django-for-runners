@@ -29,7 +29,6 @@ from for_runners.gpx import (
 from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
-from for_runners.tasks import generate_gpx_map_task
 from for_runners.weather import NoWeatherData, meta_weather_com
 
 log = logging.getLogger(__name__)
@@ -305,11 +304,6 @@ class GpxModel(UpdateTimeBaseModel):
         null=True, blank=True, editable=False
     )
 
-    map_image = models.ImageField(
-        null=True,
-        blank=True,
-    )
-
     objects = GpxModelManager()
 
     def save(self, *args, **kwargs):
@@ -318,9 +312,10 @@ class GpxModel(UpdateTimeBaseModel):
 
         super().save(*args, **kwargs)
 
-        if self.gpx and not self.map_image:
-            # We must call this after save because we need a primary key here ;)
-            self.schedule_generate_map()
+        # TODO: schedule request weather info, if not set
+        # if self.gpx and not self.map_image:
+        #     # We must call this after save because we need a primary key here ;)
+        #     self.schedule_generate_map()
 
     def svg_tag(self):
         if self.track_svg:
@@ -337,14 +332,6 @@ class GpxModel(UpdateTimeBaseModel):
 
     svg_tag_big.short_description = _("SVG")
     svg_tag_big.allow_tags = True
-
-    def image_tag(self):
-        if self.map_image:
-            return '<img src="%s" />' % self.map_image.url
-        return ""
-
-    image_tag.short_description = _("Map Image")
-    image_tag.allow_tags = True
 
     def start_end_address(self):
         if self.short_start_address == self.short_finish_address:

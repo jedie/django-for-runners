@@ -27,8 +27,6 @@ from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
-from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
-from for_runners.gpx_tools.gpxpy2map import generate_map
 from for_runners.models import (DisciplineModel, EventLinkModel, EventModel, GpxModel)
 
 log = logging.getLogger(__name__)
@@ -363,7 +361,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         "overview",
     )
     readonly_fields = (
-        "leaflet_map_html", "chartjs_html", "svg_tag_big", "image_tag", "svg_tag", "start_time", "start_latitude",
+        "leaflet_map_html", "chartjs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
         "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
         "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
     )
@@ -374,7 +372,6 @@ class GpxModelAdmin(admin.ModelAdmin):
                 "event",
                 "leaflet_map_html",
                 "chartjs_html",
-                ("map_image", "image_tag"),
             )
         }),
         (_("Start"), {

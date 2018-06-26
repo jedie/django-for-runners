@@ -149,7 +149,6 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
 
-**Note:** Maps can't generated with Python 3.5 ([[https://github.com/wrobell/geotiler/issues/20|Geotiler needs Python 3.6 or later]])
 
 == TODO:
 
@@ -165,6 +164,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 ** NEW: GPX info (See length, point count and Average distance in meters between the points)
 ** NEW: Display GPX metadata
 ** Add 'creator' to every track and use it as changelist filter
+** remove Streetmap image generated via [[https://pypi.org/project/geotiler/|geotiler]]
 ** Speedup by using a cache for gpxpy instances
 * [[https://github.com/jedie/django-for-runners/compare/v0.2.0...v0.3.0|23.06.2018 - v0.3.0]]:
 ** Start adding statistics (See screenshot above)
@@ -214,7 +214,6 @@ The whole thing is based on many excellent projects. Especially the following:
 * [[https://pypi.org/project/gpxpy/|gpxpy]] GPX file parser
 * [[http://leafletjs.com|Leaflet JS]] A JS library for interactive maps used to render the track on [[https://openstreetmap.org/|OpenStreetMap]]
 * [[http://www.chartjs.org/|Chart.js]] HTML5 Charts
-* [[https://pypi.org/project/geotiler/|geotiler]] Generate streetmap images
 * [[https://pypi.org/project/geopy/|geopy]] Get geo location names of the GPX track start/end point
 * [[https://pypi.org/project/matplotlib/|matplotlib]] plotting 2D graphics
 * [[https://pypi.org/project/autotask/|autotask]] schedule background jobs

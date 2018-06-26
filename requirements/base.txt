@@ -24,10 +24,6 @@ autotask
 # https://github.com/wrohdewald/Gpxity
 #Gpxity
 
-# https://wrobell.dcmod.org/geotiler/
-# https://pypi.org/project/geotiler/
-geotiler
-
 # https://pypi.org/project/matplotlib/
 # http://matplotlib.org/
 matplotlib
