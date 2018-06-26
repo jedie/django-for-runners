@@ -186,6 +186,9 @@ class MetaWeatherCom:
         # )
 
     def coordinates2weather(self, lat, lon, date, max_seconds=12):
+        if date is None:
+            raise NoWeatherData("Can't get weather if date is None!")
+
         nearest_woeid, woe_data, json_data = self.lat_lon2woeid(lat, lon)
         log.info("Use nearest WOEID: %i (%r)", nearest_woeid, woe_data)
         temperature, weather_state = self.location_day(woeid=nearest_woeid, date=date, max_seconds=max_seconds)
