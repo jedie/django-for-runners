@@ -163,6 +163,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 * [[https://github.com/jedie/django-for-runners/compare/v0.3.0...master|compare v0.3.0...master]] **dev**
 ** combine track filters with statistic views
 ** NEW: GPX info (See length, point count and Average distance in meters between the points)
+** Speedup by using a cache for gpxpy instances
 * [[https://github.com/jedie/django-for-runners/compare/v0.2.0...v0.3.0|23.06.2018 - v0.3.0]]:
 ** Start adding statistics (See screenshot above)
 ** add weather information from [[https://www.metaweather.com/|metaweather.com]] to every track

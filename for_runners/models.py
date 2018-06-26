@@ -485,10 +485,16 @@ class GpxModel(UpdateTimeBaseModel):
             density = self.length / self.points_no
             return density
 
+    _GPXPY_CACHE={}
     def get_gpxpy_instance(self):
-        if self.gpx:
-            gpxpy_instance = parse_gpx(content=self.gpx)
-            return gpxpy_instance
+        try:
+            return self._GPXPY_CACHE[self.pk]
+        except KeyError:
+            if self.gpx:
+                gpxpy_instance = parse_gpx(content=self.gpx)
+                if self.pk is not None:
+                    self._GPXPY_CACHE[self.pk] = gpxpy_instance
+                return gpxpy_instance
 
     def schedule_generate_map(self):
         """
