@@ -295,7 +295,7 @@ class CalculateValuesView(generic.View):
 
 class StatisticsListFilter(admin.SimpleListFilter):
     title = _('statistics')
-    template = 'admin/filter.html'  # TODO: Use own template and change output
+    template = 'admin/for_runners/gpxmodel/filter.html'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = constants.STATISTICS_PARAMETER_NAME
