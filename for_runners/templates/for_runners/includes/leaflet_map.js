@@ -19,23 +19,31 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
 }).addTo(map);
 
+var icon_size=[15,15];
+var icon_start = L.divIcon({className: "leaflet-marker-start", html: "S", iconSize: icon_size});
+var icon_finish = L.divIcon({className: "leaflet-marker-finish", html: "F", iconSize: icon_size});
+
 L.marker(
-    [{{ start_latitude|stringformat:".5f" }}, {{ start_longitude|stringformat:".5f" }}],
-    {title:"start", riseOnHover:true}
+    [{{ start_latitude|stringformat:".5f" }}, {{ start_longitude|stringformat:".5f" }}], {icon: icon_start}
 ).addTo(map).bindPopup(
     "<strong>start at {{ short_start_address }}</strong><br>{{ start_time }}"
 ).openPopup();
 
 L.marker(
-    [{{ finish_latitude|stringformat:".5f" }}, {{ finish_longitude|stringformat:".5f" }}],
-    {title:"finish", riseOnHover:true}
+    [{{ finish_latitude|stringformat:".5f" }}, {{ finish_longitude|stringformat:".5f" }}], {icon: icon_finish}
 ).addTo(map).bindPopup(
     "<strong>finish at {{ short_finish_address }}</strong><br>{{ finish_time }}"
 ).openPopup();
 
+
+
 {% for gpx_point, distance_m, distance_km in km_gpx_points %}{# iterate over GPXTrackPoint instances #}
-L.marker([{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}], {title:"{{ distance_km }}km", opacity:0.5, riseOnHover:true}).addTo(map)
-    .bindPopup("<strong>{{ distance_km }}km</strong> ({{ distance_m|stringformat:".1f" }}m)<br>{{ gpx_point.time }}");
+L.marker(
+    [{{ gpx_point.latitude|stringformat:".5f" }}, {{ gpx_point.longitude|stringformat:".5f" }}],
+    {title:"{{ distance_km }}km", icon: L.divIcon({className: "leaflet-marker-kilometers", html: "{{ distance_km }}", iconSize: icon_size})}
+).addTo(map).bindPopup(
+    "<strong>{{ distance_km }}km</strong> ({{ distance_m|stringformat:".1f" }}m)<br>{{ gpx_point.time }}"
+);
 {% endfor %}
 
 var path = L.polyline(

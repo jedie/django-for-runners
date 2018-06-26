@@ -1,8 +1,28 @@
 <div id="map" style="height: 500px;">
-   <noscript><strong>Please enable JavaScript!</strong></noscript>
+    <noscript><strong>Please enable JavaScript!</strong></noscript>
 </div>
 
-<link rel="stylesheet" href="/static/leaflet/leaflet.css" />
+<link rel="stylesheet" href="/static/leaflet/leaflet.css"/>
 <script src="/static/leaflet/leaflet.js"></script>
-
+<style>
+#map .leaflet-marker-icon {
+    font-weight: bold;
+    color: white;
+    font-size: 0.9em;
+    border: 1.5px solid white;
+    border-radius: 1em;
+    line-height: 1.5em;
+    text-align: center;
+    vertical-align: middle;
+}
+#map .leaflet-marker-start {
+    background-color: green;
+}
+#map .leaflet-marker-kilometers {
+    background-color: blue;
+}
+#map .leaflet-marker-finish {
+    background-color: red;
+}
+</style>
 <script>{% include "for_runners/includes/leaflet_map.js" %}</script>
