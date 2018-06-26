@@ -23,16 +23,13 @@ We collect some JavaScript files, for easier startup. These files are:
 == Screenshots
 
 
-== for-runners v0.3.0 2018-6-23 Distance Statistics.png ==
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.3.0 2018-6-23 Distance Statistics.png|for-runners v0.3.0 2018-6-23 Distance Statistics.png}}
+== for-runners v0.4.0 2018-6-26 GPX info.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.4.0 2018-6-26 GPX info.png|for-runners v0.4.0 2018-6-26 GPX info.png}}
 
 
-== for-runners v0.2.0 2018-6-21 Change GPX Track.png ==
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.2.0 2018-6-21 Change GPX Track.png|for-runners v0.2.0 2018-6-21 Change GPX Track.png}}
+== for-runners v0.4.0 2018-6-26 Change GPX Track.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.4.0 2018-6-26 Change GPX Track.png|for-runners v0.4.0 2018-6-26 Change GPX Track.png}}
 
-
-== v0.0.1 2018-5-30 ==
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.0.1 2018-5-30 change list.png|for-runners v0.0.1 2018-5-30 change list.png}}
 
 
 == try-out
@@ -159,7 +156,8 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.3.0...master|compare v0.3.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.4.0...master|compare v0.4.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.3.0...v0.4.0|26.06.2018 - v0.4.0]]:
 ** combine track filters with statistic views
 ** NEW: GPX info (See length, point count and Average distance in meters between the points)
 ** NEW: Display GPX metadata
