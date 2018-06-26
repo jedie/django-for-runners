@@ -159,6 +159,12 @@ class GpxModel(UpdateTimeBaseModel):
     )
 
     gpx = models.TextField(help_text="The raw gpx file content",)
+    creator = models.CharField(
+        help_text="Used device to create this track",
+        max_length=511,
+        null=True,
+        blank=True,
+    )
     track_svg = FilerFileField(verbose_name=_("Track SVG"), related_name="+",
         null=True,
         blank=True,
@@ -633,6 +639,9 @@ class GpxModel(UpdateTimeBaseModel):
             self.heart_rate_min = min(heart_rates)
             self.heart_rate_avg = statistics.median(heart_rates)
             self.heart_rate_max = max(heart_rates)
+
+        if not self.creator:
+            self.creator = gpxpy_instance.creator
 
     def short_name(self):
         if self.pk is None:

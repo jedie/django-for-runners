@@ -347,6 +347,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     search_fields = (
         "full_start_address",
         "full_finish_address",
+        "creator",
     )
     list_display = (
         "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
@@ -356,6 +357,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         StatisticsListFilter,
         "tracked_by",
         "start_time",
+        "creator",
     )
     list_per_page = 50
     list_display_links = (

@@ -7,6 +7,7 @@
         <th>{% trans "Avg. Pace" %}</th>
         <th>{% trans "Point count" %}</th>
         <th>{% trans "Avg. distance *" %}</th>
+        <th>{% trans "creator" %}</th>
     </tr>
     {% for track in tracks %}
     <tr>
@@ -15,6 +16,7 @@
         <td>{{ track.human_pace }}</td>
         <td>{{ track.points_no }} points</td>
         <td>{{ track.point_density|stringformat:".1f" }} {% trans "Meter/Point" %}</td>
+        <td>{{ track.creator }}</td>
     </tr>
     {% endfor %}
 </table>
