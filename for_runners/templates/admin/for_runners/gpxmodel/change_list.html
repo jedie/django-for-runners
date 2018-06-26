@@ -1,7 +1,5 @@
-{% extends "admin/change_list.html" %}
+{% extends "admin/for_runners/change_list.html" %}
 {% load i18n admin_urls %}
-
-
 
 {% block object-tools %}
     <ul class="object-tools">
@@ -12,4 +10,3 @@
     </ul>
     {{ cl.statistics }}
 {% endblock %}
-
