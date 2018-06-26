@@ -1,0 +1,22 @@
+{% load i18n  %}
+
+<table>
+    <tr>
+        <th>{% trans "Track" %}</th>
+        <th>{% trans "Length" %}</th>
+        <th>{% trans "Metadata" %}</th>
+    </tr>
+    {% for track in tracks %}
+    <tr>
+        <td>{{ track }}</td>
+        <td>{{ track.human_length }}</td>
+        <td>
+            <table>
+            {% for key, value in track.gpx_meta %}
+                <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+            {% endfor %}
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

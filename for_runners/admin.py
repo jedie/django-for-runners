@@ -39,6 +39,7 @@ STATISTICS_CHOICES=(
     (constants.DISPLAY_DISTANCE_PACE_KEY, _('Distance/Pace')),
     (constants.DISPLAY_PACE_DURATION, _('Pace/Duration')),
     (constants.DISPLAY_GPX_INFO, _('GPX info')),
+    (constants.DISPLAY_GPX_METADATA, _('GPX metadata')),
 )
 assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
 
@@ -255,6 +256,21 @@ class GpxInfoView(BaseChangelistView):
         return context
 
 
+class GpxMetadataView(BaseChangelistView):
+    template_name = "for_runners/gpx_metadata.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
+
+            "title": _("GPX Metadata"),
+            "user": self.request.user,
+            "opts": GpxModel._meta,
+        })
+        return context
+
+
 class ProcessGpxDataView(generic.View):
 
     def get(self, request, object_id):
@@ -300,6 +316,7 @@ class GpxModelChangeList(ChangeList):
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
             constants.DISPLAY_PACE_DURATION: DistancePaceStatisticsView,
             constants.DISPLAY_GPX_INFO: GpxInfoView,
+            constants.DISPLAY_GPX_METADATA: GpxMetadataView,
         }
         super().__init__(*args, **kwargs)
 

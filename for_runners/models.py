@@ -485,7 +485,37 @@ class GpxModel(UpdateTimeBaseModel):
             density = self.length / self.points_no
             return density
 
-    _GPXPY_CACHE={}
+    def gpx_meta(self):
+        gpxpy_instance = self.get_gpxpy_instance()
+        attr_names = (
+            "version",
+            "creator",
+            "name",
+            "description",
+            "author_name",
+            "author_email",
+            "author_link",
+            "author_link_text",
+            "author_link_type",
+            "copyright_author",
+            "copyright_year",
+            "copyright_license",
+            "link",
+            "link_text",
+            "link_type",
+            "time",
+            "keywords",
+        )
+        result = []
+        for attr_name in attr_names:
+            value = getattr(gpxpy_instance, attr_name, None)
+            if value:
+                result.append((attr_name, value))
+
+        return result
+
+    _GPXPY_CACHE = {}
+
     def get_gpxpy_instance(self):
         try:
             return self._GPXPY_CACHE[self.pk]
