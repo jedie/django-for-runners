@@ -80,6 +80,7 @@ class UploadGpxFileView(generic.FormView):
     success_url = "../"  # FIXME
 
     def post(self, request, *args, **kwargs):
+        user = request.user
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         files = request.FILES.getlist("gpx_files")
@@ -95,7 +96,7 @@ class UploadGpxFileView(generic.FormView):
 
                 try:
                     try:
-                        gpx = GpxModel.objects.create(gpx=content)
+                        gpx = GpxModel.objects.create(gpx=content, tracked_by=user)
                     except IntegrityError as err:
                         messages.error(request, "Error process GPX data: %s" % err)
                         continue
