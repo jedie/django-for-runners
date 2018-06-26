@@ -106,11 +106,11 @@ var myChart = new Chart(ctx, {
             }
             ],
         },
-        elements: {
-            line: {
-                tension: 0, // disables bezier curves
-            }
-        },
+//        elements: {
+//            line: {
+//                tension: 0, // disables bezier curves
+//            }
+//        },
         animation: {
             duration: 0, // general animation time
         },
