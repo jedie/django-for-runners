@@ -476,6 +476,15 @@ class GpxModel(UpdateTimeBaseModel):
     chartjs_html.short_description = _("chartjs MAP")
     chartjs_html.allow_tags = True
 
+    def point_density(self):
+        """
+        Calculate the "density" of the GPX signal:
+        :return: float - Meters/point count
+        """
+        if self.length>0:
+            density = self.length / self.points_no
+            return density
+
     def get_gpxpy_instance(self):
         if self.gpx:
             gpxpy_instance = parse_gpx(content=self.gpx)

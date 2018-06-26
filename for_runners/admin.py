@@ -26,12 +26,10 @@ from django.views import View, generic
 from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm,
-                               UploadGpxFileForm)
+from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from for_runners.gpx_tools.gpxpy2map import generate_map
-from for_runners.models import (DisciplineModel, EventLinkModel, EventModel,
-                                GpxModel)
+from for_runners.models import (DisciplineModel, EventLinkModel, EventModel, GpxModel)
 
 log = logging.getLogger(__name__)
 
@@ -40,8 +38,10 @@ log = logging.getLogger(__name__)
 STATISTICS_CHOICES=(
     (constants.DISPLAY_DISTANCE_PACE_KEY, _('Distance/Pace')),
     (constants.DISPLAY_PACE_DURATION, _('Pace/Duration')),
+    (constants.DISPLAY_GPX_INFO, _('GPX info')),
 )
-assert len(dict(STATISTICS_CHOICES))==len(STATISTICS_CHOICES), "Double keys?!?"
+assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
+
 
 @admin.register(DisciplineModel)
 class DisciplineModelAdmin(admin.ModelAdmin):
@@ -112,22 +112,36 @@ class UploadGpxFileView(generic.FormView):
             return self.form_invalid(form)
 
 
-class ChangelistStatisticsView(generic.FormView):
+class ChangelistViewMixin:
+
     def dispatch(self, request, change_list, *args, **kwargs):
         self.change_list = change_list
         return super().dispatch(request, *args, **kwargs)
+
+
+class BaseChangelistView(ChangelistViewMixin, TemplateView):
+    """
+    Baseclass for chnagelist views without forms.
+    """
+    pass
+
+
+class BaseFormChangelistView(ChangelistViewMixin, generic.FormView):
+    """
+    Baseclass for chnagelist views with forms.
+    """
+    form_class = None
 
     def form_valid(self, form):
         # Don't redirect, if form is valid ;)
         return self.render_to_response(self.get_context_data(form=form))
 
 
-
-class DistancePaceStatisticsView(ChangelistStatisticsView):
+class DistancePaceStatisticsView(BaseChangelistView):
     template_name = "for_runners/distance_pace_statistics.html"
 
     def get_context_data(self, **kwargs):
-        qs = self.change_list.queryset # get the filteres queryset form GpxModelChangeList
+        qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
         context = {
             "tracks":qs,
@@ -139,8 +153,7 @@ class DistancePaceStatisticsView(ChangelistStatisticsView):
         return context
 
 
-
-class DistanceStatisticsView(ChangelistStatisticsView):
+class DistanceStatisticsView(BaseFormChangelistView):
     template_name = "for_runners/distance_statistics.html"
     form_class = DistanceStatisticsForm
 
@@ -155,7 +168,7 @@ class DistanceStatisticsView(ChangelistStatisticsView):
 
         distance_m = distance * 1000
 
-        qs = self.change_list.queryset # get the filteres queryset form GpxModelChangeList
+        qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
 
         length_statistics = qs.aggregate(Min('length'), Avg("length"), Max('length'))
@@ -225,6 +238,21 @@ class DistanceStatisticsView(ChangelistStatisticsView):
         return context
 
 
+class GpxInfoView(BaseChangelistView):
+    template_name = "for_runners/gpx_info.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
+
+        context.update({
+            "tracks": qs,
+
+            "title": _("GPX Infomation"),
+            "user": self.request.user,
+            "opts": GpxModel._meta,
+        })
+        return context
 
 
 class ProcessGpxDataView(generic.View):
@@ -251,11 +279,9 @@ class CalculateValuesView(generic.View):
         return HttpResponseRedirect("../")
 
 
-
-
 class StatisticsListFilter(admin.SimpleListFilter):
     title = _('statistics')
-    template = 'admin/filter.html' # TODO: Use own template and change output
+    template = 'admin/filter.html'  # TODO: Use own template and change output
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = constants.STATISTICS_PARAMETER_NAME
@@ -270,19 +296,20 @@ class StatisticsListFilter(admin.SimpleListFilter):
 class GpxModelChangeList(ChangeList):
 
     def __init__(self, *args, **kwargs):
-        self.startistics_mapping={
+        self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
             constants.DISPLAY_PACE_DURATION: DistancePaceStatisticsView,
+            constants.DISPLAY_GPX_INFO: GpxInfoView,
         }
         super().__init__(*args, **kwargs)
 
     def get_results(self, request):
         super(GpxModelChangeList, self).get_results(request)
 
-        self.statistics=""
+        self.statistics = ""
 
         if constants.STATISTICS_PARAMETER_NAME in request.GET:
-            if self.result_count==0:
+            if self.result_count == 0:
                 log.debug("No tracks: no statistics.")
                 return
 
@@ -295,9 +322,7 @@ class GpxModelChangeList(ChangeList):
                 view = ViewClass.as_view()
                 response = view(request, self)
                 assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
-                self.statistics=response.rendered_content
-
-
+                self.statistics = response.rendered_content
 
 
 @admin.register(GpxModel)
@@ -311,7 +336,9 @@ class GpxModelAdmin(admin.ModelAdmin):
         "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_filter = (
-        StatisticsListFilter, "tracked_by", "start_time",
+        StatisticsListFilter,
+        "tracked_by",
+        "start_time",
     )
     list_per_page = 50
     list_display_links = (
@@ -409,14 +436,11 @@ class GpxModelAdmin(admin.ModelAdmin):
         ] + urls
         return urls
 
-
-
     def get_changelist(self, request, **kwargs):
         """
         Returns the ChangeList class for use on the changelist page.
         """
         return GpxModelChangeList
-
 
     # def changelist_view(self, request, extra_context=None):
     #     if extra_context is None:
