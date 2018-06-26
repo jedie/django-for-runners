@@ -487,7 +487,7 @@ class GpxModel(UpdateTimeBaseModel):
         Calculate the "density" of the GPX signal:
         :return: float - Meters/point count
         """
-        if self.length>0:
+        if self.length > 0:
             density = self.length / self.points_no
             return density
 

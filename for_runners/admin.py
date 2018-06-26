@@ -244,10 +244,8 @@ class GpxInfoView(BaseChangelistView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
-
         context.update({
-            "tracks": qs,
+            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
 
             "title": _("GPX Infomation"),
             "user": self.request.user,
