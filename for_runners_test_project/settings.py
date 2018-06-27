@@ -276,6 +276,20 @@ CMS_PLACEHOLDER_CONF = {
 }
 
 
+# https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html#debug-toolbar-config
+from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
+
+# Disable some more panels that will slow down the page:
+DEBUG_TOOLBAR_CONFIG["DISABLE_PANELS"].add('debug_toolbar.panels.sql.SQLPanel')
+DEBUG_TOOLBAR_CONFIG["DISABLE_PANELS"].add('debug_toolbar.panels.cache.CachePanel')
+
+# don't load jquery from ajax.googleapis.com, just use django's version:
+DEBUG_TOOLBAR_CONFIG["JQUERY_URL"] = "/static/admin/js/vendor/jquery/jquery.min.js"
+
+DEBUG_TOOLBAR_CONFIG["SHOW_COLLAPSED"] = True # Show toolbar collapsed by default.
+
+
+
 #_____________________________________________________________________________
 # cut 'pathname' in log output
 

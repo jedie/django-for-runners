@@ -157,6 +157,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.4.0...master|compare v0.4.0...master]] **dev**
+** speedup by deactivating some django debug toolbar panels
 * [[https://github.com/jedie/django-for-runners/compare/v0.3.0...v0.4.0|26.06.2018 - v0.4.0]]:
 ** combine track filters with statistic views
 ** NEW: GPX info (See length, point count and Average distance in meters between the points)
