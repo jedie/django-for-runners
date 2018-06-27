@@ -267,20 +267,6 @@ class GpxMetadataView(BaseChangelistView):
         return context
 
 
-class ProcessGpxDataView(generic.View):
-
-    def get(self, request, object_id):
-        """
-        Create delayed task to generate the map of the GPX Track
-        """
-        messages.info(request, "GPX Map will be generated in background")
-
-        gpx_instance = GpxModel.objects.get(pk=object_id)
-        gpx_instance.schedule_generate_map()
-
-        return HttpResponseRedirect("../")
-
-
 class CalculateValuesView(generic.View):
 
     def get(self, request, object_id):
@@ -436,11 +422,6 @@ class GpxModelAdmin(admin.ModelAdmin):
                 r"^distance-pace-statistics/$",
                 self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
                 name="distance-pace-statistics"
-            ),
-            url(
-                r"^(.+)/process/$",
-                self.admin_site.admin_view(ProcessGpxDataView.as_view()),
-                name="%s_%s_process-gpx-data" % info
             ),
             url(
                 r"^(.+)/calculate_values/$",

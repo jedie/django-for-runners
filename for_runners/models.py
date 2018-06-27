@@ -313,9 +313,6 @@ class GpxModel(UpdateTimeBaseModel):
         super().save(*args, **kwargs)
 
         # TODO: schedule request weather info, if not set
-        # if self.gpx and not self.map_image:
-        #     # We must call this after save because we need a primary key here ;)
-        #     self.schedule_generate_map()
 
     def svg_tag(self):
         if self.track_svg:
@@ -518,12 +515,6 @@ class GpxModel(UpdateTimeBaseModel):
                 if self.pk is not None:
                     self._GPXPY_CACHE[self.pk] = gpxpy_instance
                 return gpxpy_instance
-
-    def schedule_generate_map(self):
-        """
-        Create delayed task to generate the map of the GPX Track
-        """
-        generate_gpx_map_task(object_id=self.pk)
 
     def calculate_values(self):
         if not self.gpx:
