@@ -10,7 +10,7 @@
 
 var ctx = document.getElementById("chart").getContext('2d');
 
-var labels = [{% for track in tracks %}"{{ track.human_length }}",{% endfor %}]
+var labels = [{% for track in tracks %}"{{ track.human_ideal_length }}",{% endfor %}]
 
 var dataset_elevations = {
     label: 'pace',
@@ -22,7 +22,7 @@ var dataset_elevations = {
     yAxisID: 'y-axis-1',
 }
 
-var dataset_heart_rates = {
+var dataset_duration = {
     label: 'duration',
     pointRadius: 0,
     borderColor: "rgb(255, 159, 64, 0.8)",
@@ -38,7 +38,7 @@ var myChart = new Chart(ctx, {
         labels: labels,
         datasets: [
             dataset_elevations,
-            dataset_heart_rates,
+            dataset_duration,
         ],
     },
     options: {

@@ -26,12 +26,77 @@ from for_runners.gpx import (
     add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, iter_distances,
     iter_points, parse_gpx
 )
-from for_runners.gpx_tools.humanize import human_seconds
+from for_runners.gpx_tools.humanize import human_seconds, human_distance
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
 
 log = logging.getLogger(__name__)
+
+
+class DistanceModel(models.Model):
+    distance_km = models.DecimalField(
+        help_text=_("The ideal track length in kilometer."),
+        unique=True,
+        max_digits=7, decimal_places=4, # store numbers up to 999 with a resolution of 4 decimal places
+    )
+    variance = models.PositiveSmallIntegerField(
+        help_text=_("Maximum (+/-) deviation in percent to match this distance."),
+        default=5
+    )
+    min_distance_m = models.PositiveIntegerField(
+        editable=False, blank=True, null=True,
+    )
+    max_distance_m = models.PositiveIntegerField(
+        editable=False, blank=True, null=True,
+    )
+
+    def _set_min_max(self):
+        distance_m = self.distance_km * 1000
+        variance_m = self.get_variance_m()
+        self.min_distance_m = round(distance_m - variance_m)
+        self.max_distance_m = round(distance_m + variance_m)
+
+    def save(self, *args, **kwargs):
+        self._set_min_max()
+        log.debug("Save: %s", self)
+        super().save(*args, **kwargs)
+
+    def get_variance_m(self):
+        variance_km = self.distance_km/100*self.variance
+        return variance_km * 1000
+
+    def get_human_distance(self):
+        return human_distance(self.distance_km)
+
+    get_human_distance.short_description = _("Distance")
+    get_human_distance.admin_order_field = "distance_km"
+
+    def get_human_variance(self):
+        return "%i %%" % self.variance
+
+    get_human_variance.short_description = _("Variance")
+
+    def get_human_variance_as_length(self):
+        return human_distance(self.get_variance_m()/1000)
+
+    get_human_variance_as_length.short_description = _("Variance")
+
+    def get_human_min_max(self):
+        return "%s - %s" % (
+            human_distance(self.min_distance_m/1000),
+            human_distance(self.max_distance_m/1000)
+        )
+
+    get_human_min_max.short_description = _("Min/Max")
+
+    def __str__(self):
+        return self.get_human_distance()
+
+    class Meta:
+        verbose_name = _('Distance')
+        verbose_name_plural = _('Distances')
+        ordering = ('-distance_km',)
 
 
 class DisciplineModel(models.Model):
@@ -263,6 +328,12 @@ class GpxModel(UpdateTimeBaseModel):
         help_text=_("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"),
         null=True, blank=True,
     )
+    ideal_distance = models.ForeignKey(
+        to=DistanceModel, on_delete=models.SET_NULL, related_name="tracks",
+        help_text=_("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"),
+        null=True, blank=True,
+    )
+
     duration = models.PositiveIntegerField(
         help_text=_("Duration in seconds"),
         null=True, blank=True,
@@ -337,22 +408,90 @@ class GpxModel(UpdateTimeBaseModel):
     start_end_address.short_description = _("Start/End Address")
     start_end_address.allow_tags = True
 
+    def get_ideal_ratio(self):
+        if self.ideal_distance:
+            ratio = (float(self.ideal_distance.distance_km)*1000) / self.length
+            return ratio
+
+    def get_ideal_duration(self):
+        ratio = self.get_ideal_ratio()
+        if ratio:
+            return self.duration * ratio
+
+    def get_ideal_pace(self):
+        ratio = self.get_ideal_ratio()
+        if ratio:
+            return self.pace * ratio
+
+    def get_ideal_distance_diff_m(self):
+        if self.ideal_distance:
+            distance_diff_m = (float(self.ideal_distance.distance_km)*1000) - self.length
+            return distance_diff_m
+
+    def human_ideal_length(self):
+        """
+        used as labels in chart.js
+        """
+        if self.ideal_distance:
+            return self.ideal_distance.get_human_distance()
+        return human_distance(self.length / 1000)
+
     def human_length(self):
         if self.length:
-            kilometers = round(self.length / 1000, 1)
-            return "%.1f km" % kilometers
+            length_km = self.length / 1000
+            html = (
+                '<span title="real distance">%s</span>'
+            ) % human_distance(length_km)
+
+            if self.ideal_distance:
+                diff_km = abs(self.get_ideal_distance_diff_m() / 1000)
+                html = (
+                    '<span title="standardized distance">%s</span>'
+                    '<br>'
+                    '(%s)'
+                    '<br>'
+                    'diff: %s'
+                ) % (
+                    self.ideal_distance.get_human_distance(),
+                    html,
+                    human_distance(diff_km)
+                )
+
+            return html
     human_length.short_description = _("Length")
+    human_length.allow_tags = True
     human_length.admin_order_field = "length"
 
     def human_duration(self):
         if self.duration:
-            return human_seconds(self.duration)
+            html = (
+                '<span title="real duration">%s</span>'
+            ) % human_seconds(self.duration)
+
+            ideal_duration = self.get_ideal_duration()
+            if ideal_duration:
+                duration_diff = self.duration - ideal_duration
+                html = (
+                    '<span title="standardized duration">%s</span>'
+                    '<br>'
+                    '(%s)'
+                    '<br>'
+                    'diff: %s'
+                ) % (
+                    human_seconds(ideal_duration),
+                    html,
+                    human_seconds(duration_diff),
+                )
+
+            return html
     human_duration.short_description = _("Duration")
+    human_duration.allow_tags = True
     human_duration.admin_order_field = "duration"
 
     def human_pace(self):
         if self.pace:
             return "%s min/km" % human_seconds(self.pace * 60)
+
     human_pace.short_description = _("Pace")
     human_pace.admin_order_field = "pace"
 
@@ -523,6 +662,16 @@ class GpxModel(UpdateTimeBaseModel):
         gpxpy_instance = self.get_gpxpy_instance()
         self.points_no = gpxpy_instance.get_points_no()
         self.length = gpxpy_instance.length_3d()
+
+        try:
+            self.ideal_distance = DistanceModel.objects.get(
+                min_distance_m__lte=self.length,
+                max_distance_m__gte=self.length,
+            )
+        except DistanceModel.DoesNotExist:
+            pass
+        else:
+            log.debug("Set ideal distance to %s", self.ideal_distance)
 
         # e.g: GPX without a track return 0
         duration = gpxpy_instance.get_duration()

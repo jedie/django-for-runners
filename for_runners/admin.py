@@ -26,8 +26,10 @@ from django.views import View, generic
 from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
-from for_runners.models import (DisciplineModel, EventLinkModel, EventModel, GpxModel)
+from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm,
+                               UploadGpxFileForm)
+from for_runners.models import (DisciplineModel, DistanceModel, EventLinkModel,
+                                EventModel, GpxModel)
 
 log = logging.getLogger(__name__)
 
@@ -40,6 +42,12 @@ STATISTICS_CHOICES=(
     (constants.DISPLAY_GPX_METADATA, _('GPX metadata')),
 )
 assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
+
+
+@admin.register(DistanceModel)
+class DistanceModelAdmin(admin.ModelAdmin):
+    list_display = ("get_human_distance", "get_human_variance", "get_human_variance_as_length", "get_human_min_max")
+    list_display_links = ("get_human_distance",)
 
 
 @admin.register(DisciplineModel)
@@ -332,13 +340,15 @@ class GpxModelAdmin(admin.ModelAdmin):
         "creator",
     )
     list_display = (
-        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "svg_tag", "overview", "start_time", "human_length",
+        "human_duration", "human_pace", "heart_rate_avg",
         "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_filter = (
         StatisticsListFilter,
         "tracked_by",
         "start_time",
+        "ideal_distance",
         "creator",
     )
     list_per_page = 50
@@ -387,7 +397,8 @@ class GpxModelAdmin(admin.ModelAdmin):
         }),
         (_("Values"), {
             "fields": (
-                ("length", "duration", "pace"),
+                ("length", "ideal_distance"),
+                ("duration", "pace"),
                 ("heart_rate_min","heart_rate_avg","heart_rate_max"),
                 ("uphill", "downhill"),
                 ("min_elevation", "max_elevation"),
