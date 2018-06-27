@@ -41,6 +41,8 @@ def request_json(url, timeout=3, user_agent="python"):
     else:
         response_time_ms = round((time.time() - start_time) * 1000, 1)
         print("Response in: %.1fms (url: %r)" % (response_time_ms, url))
+        if isinstance(json_data, bytes):
+            json_data = json_data.decode("utf-8")
         data = json.loads(json_data)
         return data
 
