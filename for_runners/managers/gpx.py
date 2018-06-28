@@ -5,15 +5,13 @@
 """
 import logging
 
-from django.db import IntegrityError, models
-# https://github.com/jedie/django-for-runners
+from django.db import models
 from for_runners.gpx import get_identifier, parse_gpx
 
 log = logging.getLogger(__name__)
 
 
 class GpxModelQuerySet(models.QuerySet):
-
     def get_by_identifier(self, identifier):
         """
         :param identifier: 'Identifier' namedtuple created here: for_runners.gpx.get_identifier
@@ -29,7 +27,6 @@ class GpxModelQuerySet(models.QuerySet):
 
 
 class BaseGpxModelManager(models.Manager):
-
     def get_queryset(self):
         return GpxModelQuerySet(self.model, using=self._db)
 
