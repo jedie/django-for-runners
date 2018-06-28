@@ -3,8 +3,10 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
+import datetime
 import decimal
 import math
+
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -36,7 +38,6 @@ def human_seconds(duration):
 
     return ":".join(parts)
 
-
 def human_duration(t):
     """
     Converts a time duration into a friendly text representation.
@@ -44,31 +45,34 @@ def human_duration(t):
     >>> human_duration("type error")
     Traceback (most recent call last):
         ...
-    TypeError: human_duration() argument must be timedelta, integer or float)
+    decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]
 
 
     >>> human_duration(datetime.timedelta(microseconds=1000))
-    u'1.0 ms'
+    '1.0 ms'
     >>> human_duration(0.01)
-    u'10.0 ms'
+    '10.0 ms'
     >>> human_duration(0.9)
-    u'900.0 ms'
+    '900.0 ms'
     >>> human_duration(datetime.timedelta(seconds=1))
-    u'1.0 sec'
+    '1.0 sec'
     >>> human_duration(65.5)
-    u'1.1 min'
-    >>> human_duration((60 * 60)-1)
-    u'59.0 min'
+    '1.1 min'
+    >>> human_duration(59.1 * 60)
+    '59.1 min'
     >>> human_duration(60*60)
-    u'1.0 hours'
-    >>> human_duration(1.05*60*60)
-    u'1.1 hours'
+    '1.0 hours'
+    >>> human_duration(1.06*60*60)
+    '1.1 hours'
     >>> human_duration(datetime.timedelta(hours=24))
-    u'1.0 days'
+    '1.0 days'
     >>> human_duration(2.54 * 60 * 60 * 24 * 365)
-    u'2.5 years'
+    '2.5 years'
     """
-    assert isinstance(t, decimal.Decimal)
+    if isinstance(t, datetime.timedelta):
+        t = decimal.Decimal(t.total_seconds())
+    elif not isinstance(t, decimal.Decimal):
+        t = decimal.Decimal(t)
 
     chunks = (
       (decimal.Decimal(60 * 60 * 24 * 365), _('years')),
