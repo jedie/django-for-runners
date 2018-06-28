@@ -33,21 +33,21 @@ from for_runners.models import (DisciplineModel, DistanceModel, EventLinkModel,
 
 log = logging.getLogger(__name__)
 
-
-
-STATISTICS_CHOICES=(
+STATISTICS_CHOICES = (
     (constants.DISPLAY_DISTANCE_PACE_KEY, _('Distance/Pace')),
     (constants.DISPLAY_PACE_DURATION, _('Pace/Duration')),
     (constants.DISPLAY_GPX_INFO, _('GPX info')),
     (constants.DISPLAY_GPX_METADATA, _('GPX metadata')),
 )
-assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
+assert len(
+    dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
 
 
 @admin.register(DistanceModel)
 class DistanceModelAdmin(admin.ModelAdmin):
-    list_display = ("get_human_distance", "get_human_variance", "get_human_variance_as_length", "get_human_min_max")
-    list_display_links = ("get_human_distance",)
+    list_display = ("get_human_distance", "get_human_variance",
+                    "get_human_variance_as_length", "get_human_min_max")
+    list_display_links = ("get_human_distance", )
 
 
 @admin.register(DisciplineModel)
@@ -75,7 +75,7 @@ class LinkModelInline(admin.TabularInline):
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
     list_display = ("verbose_name", "links_html", "start_time", "discipline")
-    list_display_links = ("verbose_name",)
+    list_display_links = ("verbose_name", )
     inlines = [
         LinkModelInline,
     ]
@@ -103,9 +103,11 @@ class UploadGpxFileView(generic.FormView):
 
                 try:
                     try:
-                        gpx = GpxModel.objects.create(gpx=content, tracked_by=user)
+                        gpx = GpxModel.objects.create(
+                            gpx=content, tracked_by=user)
                     except IntegrityError as err:
-                        messages.error(request, "Error process GPX data: %s" % err)
+                        messages.error(request,
+                                       "Error process GPX data: %s" % err)
                         continue
 
                     gpx.calculate_values()
@@ -120,7 +122,6 @@ class UploadGpxFileView(generic.FormView):
 
 
 class ChangelistViewMixin:
-
     def dispatch(self, request, change_list, *args, **kwargs):
         self.change_list = change_list
         return super().dispatch(request, *args, **kwargs)
@@ -151,7 +152,7 @@ class DistancePaceStatisticsView(BaseChangelistView):
         qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
         context = {
-            "tracks":qs,
+            "tracks": qs,
             "track_count": qs.count(),
             "title": _("Distance/Pace Statistics"),
             "user": self.request.user,
@@ -178,7 +179,8 @@ class DistanceStatisticsView(BaseFormChangelistView):
         qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
 
-        length_statistics = qs.aggregate(Min('length'), Avg("length"), Max('length'))
+        length_statistics = qs.aggregate(
+            Min('length'), Avg("length"), Max('length'))
 
         min_length = length_statistics["length__min"]
         max_length = length_statistics["length__max"]
@@ -195,11 +197,13 @@ class DistanceStatisticsView(BaseFormChangelistView):
                     current_distance_from += distance_m
                     current_distance_to += distance_m
                     if length > current_distance_to:
-                        group_data[(current_distance_from, current_distance_to)] = []
+                        group_data[(current_distance_from,
+                                    current_distance_to)] = []
                     else:
                         break
 
-            group_data[(current_distance_from, current_distance_to)].append(track)
+            group_data[(current_distance_from,
+                        current_distance_to)].append(track)
 
         print("group_data:")
         pprint(group_data)
@@ -221,25 +225,31 @@ class DistanceStatisticsView(BaseFormChangelistView):
                 avg_paces = "null"
                 max_paces = "null"
 
-            track_data.append((
-                round(distance_from / 1000, 1), round(distance_to / 1000, 1), track_count, min_paces, avg_paces,
-                max_paces
-            ))
+            track_data.append((round(distance_from / 1000, 1),
+                               round(distance_to / 1000, 1), track_count,
+                               min_paces, avg_paces, max_paces))
         print("total track counts:", total_tracks)
         pprint(track_data)
 
         context.update({
-            "tracks": qs,
-            "track_count": total_tracks,
-            "min_length_km": round(min_length / 1000),
-            "avg_length_km": round(length_statistics["length__avg"] / 1000),
-            "max_length_km": round(max_length / 1000),
-            "track_data": track_data,
-
-            "title": _("Distance Statistics"),
-            "user": self.request.user,
-            "opts": GpxModel._meta,
-
+            "tracks":
+            qs,
+            "track_count":
+            total_tracks,
+            "min_length_km":
+            round(min_length / 1000),
+            "avg_length_km":
+            round(length_statistics["length__avg"] / 1000),
+            "max_length_km":
+            round(max_length / 1000),
+            "track_data":
+            track_data,
+            "title":
+            _("Distance Statistics"),
+            "user":
+            self.request.user,
+            "opts":
+            GpxModel._meta,
         })
         # pprint(context)
         return context
@@ -251,8 +261,8 @@ class GpxInfoView(BaseChangelistView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
-
+            "tracks": self.change_list.
+            queryset,  # get the filteres queryset form GpxModelChangeList,
             "title": _("GPX Infomation"),
             "user": self.request.user,
             "opts": GpxModel._meta,
@@ -266,8 +276,8 @@ class GpxMetadataView(BaseChangelistView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
-
+            "tracks": self.change_list.
+            queryset,  # get the filteres queryset form GpxModelChangeList,
             "title": _("GPX Metadata"),
             "user": self.request.user,
             "opts": GpxModel._meta,
@@ -276,7 +286,6 @@ class GpxMetadataView(BaseChangelistView):
 
 
 class CalculateValuesView(generic.View):
-
     def get(self, request, object_id):
         instance = GpxModel.objects.get(pk=object_id)
         instance.calculate_values()
@@ -300,7 +309,6 @@ class StatisticsListFilter(admin.SimpleListFilter):
 
 
 class GpxModelChangeList(ChangeList):
-
     def __init__(self, *args, **kwargs):
         self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
@@ -328,7 +336,9 @@ class GpxModelChangeList(ChangeList):
             else:
                 view = ViewClass.as_view()
                 response = view(request, self)
-                assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
+                assert isinstance(
+                    response, TemplateResponse
+                ), "Method %s didn't return a TemplateResponse!" % view
                 self.statistics = response.rendered_content
 
 
@@ -356,11 +366,10 @@ class GpxModelAdmin(admin.ModelAdmin):
         "full_finish_address",
         "creator",
     )
-    list_display = (
-        "svg_tag", "overview", "start_time", "human_length",
-        "human_duration", "human_pace", "heart_rate_avg",
-        "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
-    )
+    list_display = ("svg_tag", "overview", "start_time", "human_length",
+                    "human_duration", "human_pace", "heart_rate_avg",
+                    "human_weather", "uphill", "downhill", "min_elevation",
+                    "max_elevation", "tracked_by")
     list_filter = (
         StatisticsListFilter,
         HasNetDurationFilter,
@@ -374,11 +383,12 @@ class GpxModelAdmin(admin.ModelAdmin):
         "svg_tag",
         "overview",
     )
-    readonly_fields = (
-        "leaflet_map_html", "chartjs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
-        "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
-        "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
-    )
+    readonly_fields = ("leaflet_map_html", "chartjs_html", "svg_tag_big",
+                       "svg_tag", "start_time", "start_latitude",
+                       "start_longitude", "finish_time", "finish_latitude",
+                       "finish_longitude", "start_coordinate_html",
+                       "finish_coordinate_html", "heart_rate_min",
+                       "heart_rate_avg", "heart_rate_max")
 
     fieldsets = (
         (_("Event"), {
@@ -407,7 +417,7 @@ class GpxModelAdmin(admin.ModelAdmin):
             )
         }),
         (_("GPX data"), {
-            "classes": ("collapse",),
+            "classes": ("collapse", ),
             "fields": (
                 ("gpx", "points_no"),
                 ("track_svg", "svg_tag_big"),
@@ -417,14 +427,18 @@ class GpxModelAdmin(admin.ModelAdmin):
             "fields": (
                 ("length", "ideal_distance"),
                 ("duration", "pace"),
-                ("heart_rate_min","heart_rate_avg","heart_rate_max"),
+                ("heart_rate_min", "heart_rate_avg", "heart_rate_max"),
                 ("uphill", "downhill"),
                 ("min_elevation", "max_elevation"),
             )
         }),
     )
     # FIXME: Made this in CSS ;)
-    formfield_overrides = {models.CharField: {'widget': forms.TextInput(attrs={'style': 'width:70%'})}}
+    formfield_overrides = {
+        models.CharField: {
+            'widget': forms.TextInput(attrs={'style': 'width:70%'})
+        }
+    }
 
     def overview(self, obj):
         parts = []
@@ -441,22 +455,19 @@ class GpxModelAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            url(r"^upload/$", self.admin_site.admin_view(UploadGpxFileView.as_view()), name="upload-gpx-file"),
-            url(
-                r"^distance-statistics/$",
+            url(r"^upload/$",
+                self.admin_site.admin_view(UploadGpxFileView.as_view()),
+                name="upload-gpx-file"),
+            url(r"^distance-statistics/$",
                 self.admin_site.admin_view(DistanceStatisticsView.as_view()),
-                name="distance-statistics"
-            ),
-            url(
-                r"^distance-pace-statistics/$",
-                self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
-                name="distance-pace-statistics"
-            ),
-            url(
-                r"^(.+)/calculate_values/$",
+                name="distance-statistics"),
+            url(r"^distance-pace-statistics/$",
+                self.admin_site.admin_view(
+                    DistancePaceStatisticsView.as_view()),
+                name="distance-pace-statistics"),
+            url(r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),
-                name="%s_%s_calculate-values" % info
-            ),
+                name="%s_%s_calculate-values" % info),
         ] + urls
         return urls
 
