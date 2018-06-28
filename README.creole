@@ -54,6 +54,9 @@ e.g.:
 # install dependencies:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements/tests.txt
+
+# create base data:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./manage.py fill_basedata
 }}}
 
 
@@ -92,7 +95,7 @@ import GPX files, e.g.:
 ~$ cd DjangoForRunnersEnv/
 ~/DjangoForRunnersEnv$ source bin/activate
 
-# import:
+# run the tests:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py test
 }}}
@@ -158,6 +161,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.4.0...master|compare v0.4.0...master]] **dev**
 ** Add 'net duration' field, for the officially measured time and use it for calculations if available.
+** Create django manage command to fill some base data: {{{$ ./manage.py fill_basedata}}}
 ** speedup by deactivating some django debug toolbar panels
 * [[https://github.com/jedie/django-for-runners/compare/v0.3.0...v0.4.0|26.06.2018 - v0.4.0]]:
 ** combine track filters with statistic views

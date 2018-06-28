@@ -5,33 +5,6 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.db.models.deletion
 
-
-
-def set_distance(apps, schema_editor):
-
-    # FIXME: We need the "real" model, because the code in save() must be executed!
-    # GpxModel = apps.get_model('for_runners', 'GpxModel')
-    # DistanceModel = apps.get_model('for_runners', 'DistanceModel')
-    from for_runners.models import GpxModel
-    from for_runners.models import DistanceModel
-
-    DistanceModel.objects.create(distance_km=0.4)
-    DistanceModel.objects.create(distance_km=0.8)
-    DistanceModel.objects.create(distance_km=5.0)
-    DistanceModel.objects.create(distance_km=6.5)
-    DistanceModel.objects.create(distance_km=7.5)
-    DistanceModel.objects.create(distance_km=8.5)
-    DistanceModel.objects.create(distance_km=10.0)
-    DistanceModel.objects.create(distance_km=21.0975)
-    DistanceModel.objects.create(distance_km=42.195)
-
-    for track in GpxModel.objects.all():
-        track.save()
-        print(".", end="", flush=True)
-    print()
-
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -59,5 +32,4 @@ class Migration(migrations.Migration):
             name='ideal_distance',
             field=models.ForeignKey(blank=True, help_text='Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tracks', to='for_runners.DistanceModel'),
         ),
-        migrations.RunPython(set_distance, reverse_code=migrations.RunPython.noop),
     ]

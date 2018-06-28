@@ -3,20 +3,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from for_runners.gpx import parse_gpx
-
-
-def set_creator(apps, schema_editor):
-    print("Set creator")
-    GpxModel = apps.get_model('for_runners', 'gpxmodel')
-    for track in GpxModel.objects.all():
-
-        gpxpy_instance = parse_gpx(content=track.gpx)
-
-        track.creator = gpxpy_instance.creator
-        track.save()
-        print(".", end="", flush=True)
-    print()
 
 
 class Migration(migrations.Migration):
@@ -33,5 +19,4 @@ class Migration(migrations.Migration):
                 blank=True, help_text='Used device to create this track', max_length=511, null=True
             ),
         ),
-        migrations.RunPython(set_creator, reverse_code=migrations.RunPython.noop),
     ]

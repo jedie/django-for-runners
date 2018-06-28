@@ -80,6 +80,8 @@ INSTALLED_APPS = (
     "for_runners_test_project.test_app",
 )
 
+from for_runners.app_settings import *  # @UnusedWildImport
+
 # https://bitbucket.org/kbr/autotask
 AUTOTASK_IS_ACTIVE = True
 
@@ -137,7 +139,7 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'django.template.context_processors.static',
                 'cms.context_processors.cms_settings',
-                
+
                 "for_runners.context_processors.for_runners_version_string",
             ],
         },
