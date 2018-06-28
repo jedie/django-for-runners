@@ -22,11 +22,10 @@ from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
-from for_runners.gpx import (
-    add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, iter_distances,
-    iter_points, parse_gpx
-)
-from for_runners.gpx_tools.humanize import human_seconds, human_distance
+from for_runners.gpx import (add_extension_data, get_2d_coordinate_list,
+                             get_extension_data, get_identifier, iter_distance,
+                             iter_distances, iter_points, parse_gpx)
+from for_runners.gpx_tools.humanize import human_distance, human_seconds
 from for_runners.managers import GpxModelManager
 from for_runners.svg import gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
@@ -338,6 +337,11 @@ class GpxModel(UpdateTimeBaseModel):
         help_text=_("Duration in seconds"),
         null=True, blank=True,
     )
+    net_duration = models.TimeField(
+        verbose_name=_("Net Duration"),
+        help_text=_("The officially measured time (e.g. from the official timekeeping of a running event.)"),
+        null=True, blank=True,
+    )
     pace = models.DecimalField(
         help_text=_("Min/km (number of minutes it takes to cover a kilometer)"),
         max_digits=4, decimal_places=2, # store numbers up to 99 with a resolution of 2 decimal places
@@ -413,6 +417,17 @@ class GpxModel(UpdateTimeBaseModel):
             ratio = (float(self.ideal_distance.distance_km)*1000) / self.length
             return ratio
 
+    def get_net_duration_s(self):
+        """
+        :return: net duration in seconds
+        """
+        if self.net_duration:
+            # FIXME: Is there really no easier way to do this?
+            duration = self.net_duration.second
+            duration += (self.net_duration.minute * 60)
+            duration += (self.net_duration.hour * 60  *60)
+            return duration
+
     def get_ideal_duration(self):
         ratio = self.get_ideal_ratio()
         if ratio:
@@ -462,11 +477,28 @@ class GpxModel(UpdateTimeBaseModel):
     human_length.admin_order_field = "length"
 
     def human_duration(self):
+        # TODO: use a template for this
+        html="-"
         if self.duration:
             html = (
                 '<span title="real duration">%s</span>'
             ) % human_seconds(self.duration)
 
+        if self.net_duration:
+            net_duration_s = self.get_net_duration_s()
+            duration_diff = self.duration - net_duration_s
+            html = (
+                '<span title="Official net duration">%s</span>'
+                '<br>'
+                '(%s)'
+                '<br>'
+                'diff: %s'
+            ) % (
+                human_seconds(net_duration_s),
+                html,
+                human_seconds(duration_diff),
+            )
+        else:
             ideal_duration = self.get_ideal_duration()
             if ideal_duration:
                 duration_diff = self.duration - ideal_duration
@@ -482,13 +514,14 @@ class GpxModel(UpdateTimeBaseModel):
                     human_seconds(duration_diff),
                 )
 
-            return html
+        return html
     human_duration.short_description = _("Duration")
     human_duration.allow_tags = True
     human_duration.admin_order_field = "duration"
 
     def human_pace(self):
         if self.pace:
+
             return "%s min/km" % human_seconds(self.pace * 60)
 
     human_pace.short_description = _("Pace")
@@ -654,6 +687,26 @@ class GpxModel(UpdateTimeBaseModel):
                     self._GPXPY_CACHE[self.pk] = gpxpy_instance
                 return gpxpy_instance
 
+    def calc_pace(self):
+        duration_s = self.get_net_duration_s()
+        if not duration_s:
+            duration_s = self.get_ideal_duration()
+        if not duration_s:
+            duration_s = self.duration
+        if not duration_s:
+            return None
+
+        if self.ideal_distance:
+            distance_km = int(self.ideal_distance.distance_km)
+        else:
+            distance_km = self.length / 1000
+
+        pace = (duration_s / 60) / distance_km
+        if pace > 99 or pace < 0:
+            log.error("Pace out of range: %f", pace)
+        else:
+            self.pace = pace
+
     def calculate_values(self):
         if not self.gpx:
             return
@@ -676,11 +729,7 @@ class GpxModel(UpdateTimeBaseModel):
         duration = gpxpy_instance.get_duration()
         if duration:
             self.duration = duration
-            pace = (self.duration / 60) / (self.length / 1000)
-            if pace > 99 or pace < 0:
-                log.error("Pace out of range: %f", pace)
-            else:
-                self.pace = pace
+            self.calc_pace()
 
         uphill_downhill = gpxpy_instance.get_uphill_downhill()
         self.uphill = uphill_downhill.uphill

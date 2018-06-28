@@ -365,7 +365,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     fieldsets = (
         (_("Event"), {
             "fields": (
-                "event",
+                ("event", "net_duration"),
                 "leaflet_map_html",
                 "chartjs_html",
             )
