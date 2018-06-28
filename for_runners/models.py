@@ -721,23 +721,25 @@ class GpxModel(UpdateTimeBaseModel):
                 self.finish_temperature = temperature
                 self.finish_weather_state = weather_state
 
-        try:
-            start_address = reverse_geo(self.start_latitude, self.start_longitude)
-        except Exception as err:
-            # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
-        else:
-            self.short_start_address = start_address.short
-            self.full_start_address = start_address.full
+        if not self.full_start_address:
+            try:
+                start_address = reverse_geo(self.start_latitude, self.start_longitude)
+            except Exception as err:
+                # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
+                log.error("Can't reverse geo: %s" % err)
+            else:
+                self.short_start_address = start_address.short
+                self.full_start_address = start_address.full
 
-        try:
-            finish_address = reverse_geo(self.finish_latitude, self.finish_longitude)
-        except Exception as err:
-            # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
-        else:
-            self.short_finish_address = finish_address.short
-            self.full_finish_address = finish_address.full
+        if not self.full_finish_address:
+            try:
+                finish_address = reverse_geo(self.finish_latitude, self.finish_longitude)
+            except Exception as err:
+                # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
+                log.error("Can't reverse geo: %s" % err)
+            else:
+                self.short_finish_address = finish_address.short
+                self.full_finish_address = finish_address.full
 
         # if not self.track_svg:
         log.debug("Create SVG from GPX...")
