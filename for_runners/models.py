@@ -165,7 +165,7 @@ class EventModel(UpdateInfoBaseModel):
         * createby
         * lastupdateby
     """
-    no = models.IntegerField(
+    no = models.PositiveIntegerField(
         help_text=_("Sequential number of the event"),
         null=True, blank=True,
     )
