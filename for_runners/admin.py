@@ -63,7 +63,7 @@ class EventLinkModelAdmin(admin.ModelAdmin):
 class LinkModelInline(admin.TabularInline):
     model = EventLinkModel
     extra = 2
-    min_num = 1
+    min_num = 0
     max_num = None
     fields = (
         'url',
