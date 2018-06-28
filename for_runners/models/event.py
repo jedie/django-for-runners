@@ -81,8 +81,8 @@ class EventModel(UpdateInfoBaseModel):
         blank=True,
     )
     name = models.CharField(max_length=255, help_text=_("Name of the event"))
-    start_time = models.DateTimeField(
-        help_text=_("Start date/time of the run"),
+    start_date = models.DateField(
+        help_text=_("Start date of the run"),
         null=True,
         blank=True,
     )
@@ -93,13 +93,15 @@ class EventModel(UpdateInfoBaseModel):
         if self.no:
             parts.append("%i." % self.no)
         parts.append(self.name)
-        year = self.start_time.strftime("%Y")
-        if year not in self.name:
-            parts.append(year)
+        if self.start_date:
+            year = self.start_date.strftime("%Y")
+            if year not in self.name:
+                parts.append(year)
         result = " ".join([part for part in parts if part])
         return result
 
-    verbose_name.short_description = _("Verbose Name")
+    verbose_name.short_description = _("Event Name")
+    verbose_name.admin_order_field = "name"
 
     def links_html(self):
         links = []
@@ -111,13 +113,12 @@ class EventModel(UpdateInfoBaseModel):
     links_html.allow_tags = True
 
     def __str__(self):
-        return "%i. %s %s" % (self.no, self.name,
-                              self.start_time.strftime("%Y"))
+        return self.verbose_name()
 
     class Meta:
         verbose_name = _('Event')
         verbose_name_plural = _('Events')
-        ordering = ('-start_time', '-pk')
+        ordering = ('-start_date', '-pk')
 
 
 class EventLinkModel(LinkModelBase):

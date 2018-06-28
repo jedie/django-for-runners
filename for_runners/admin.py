@@ -74,7 +74,7 @@ class LinkModelInline(admin.TabularInline):
 
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
-    list_display = ("verbose_name", "links_html", "start_time", "discipline")
+    list_display = ("verbose_name", "links_html", "start_date", "discipline")
     list_display_links = ("verbose_name", )
     inlines = [
         LinkModelInline,
