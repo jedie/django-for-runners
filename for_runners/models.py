@@ -741,23 +741,24 @@ class GpxModel(UpdateTimeBaseModel):
                 self.short_finish_address = finish_address.short
                 self.full_finish_address = finish_address.full
 
-        # if not self.track_svg:
-        log.debug("Create SVG from GPX...")
 
-        svg_string = gpx2svg_string(gpxpy_instance)
+        if not self.track_svg:
+            log.debug("Create SVG from GPX...")
 
-        # import filer.models.imagemodels.Image
-        Image = load_model(settings.FILER_IMAGE_MODEL)
+            svg_string = gpx2svg_string(gpxpy_instance)
 
-        temp = io.BytesIO(bytes(svg_string, "utf-8"))
-        django_file_obj = File(temp, name="gpx.svg")
-        filer_image = Image.objects.create(
-            owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
-        )
-        filer_image.save()
+            # import filer.models.imagemodels.Image
+            Image = load_model(settings.FILER_IMAGE_MODEL)
 
-        # self.track_svg.save("gpx2svg", svg_string)
-        self.track_svg = filer_image  #save("gpx2svg", svg_string)
+            temp = io.BytesIO(bytes(svg_string, "utf-8"))
+            django_file_obj = File(temp, name="gpx.svg")
+            filer_image = Image.objects.create(
+                owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
+            )
+            filer_image.save()
+
+            # self.track_svg.save("gpx2svg", svg_string)
+            self.track_svg = filer_image  #save("gpx2svg", svg_string)
 
         # TODO: Handle other extensions, too.
         # Garmin containes also 'cad'
