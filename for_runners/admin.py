@@ -332,6 +332,23 @@ class GpxModelChangeList(ChangeList):
                 self.statistics = response.rendered_content
 
 
+class HasNetDurationFilter(admin.SimpleListFilter):
+    title = _('has net duration')
+    parameter_name = "net_duration"
+
+    def lookups(self, request, model_admin):
+        return (
+            ('y', _('yes')),
+            ('n', _('no')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'y':
+            return queryset.exclude(net_duration__isnull=True)
+        if self.value() == 'n':
+            return queryset.filter(net_duration__isnull=True)
+
+
 @admin.register(GpxModel)
 class GpxModelAdmin(admin.ModelAdmin):
     search_fields = (
@@ -346,6 +363,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
     list_filter = (
         StatisticsListFilter,
+        HasNetDurationFilter,
         "tracked_by",
         "start_time",
         "ideal_distance",
