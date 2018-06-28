@@ -19,10 +19,11 @@ from django_tools.models import UpdateTimeBaseModel
 from filer.fields.file import FilerFileField
 from filer.utils.loader import load_model
 from for_runners.geo import reverse_geo
-from for_runners.gpx import (add_extension_data, get_2d_coordinate_list,
-                             get_extension_data, get_identifier, iter_distance,
-                             iter_points, parse_gpx)
-from for_runners.gpx_tools.humanize import human_distance, human_seconds
+from for_runners.gpx import (
+    add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, iter_points,
+    parse_gpx
+)
+from for_runners.gpx_tools.humanize import (human_distance, human_duration, human_seconds)
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.models import DistanceModel, EventModel
 from for_runners.svg import gpx2svg_string
@@ -44,7 +45,7 @@ class GpxModel(UpdateTimeBaseModel):
         on_delete=models.SET_NULL,
     )
 
-    gpx = models.TextField(help_text="The raw gpx file content", )
+    gpx = models.TextField(help_text="The raw gpx file content",)
     creator = models.CharField(
         help_text="Used device to create this track",
         max_length=511,
@@ -141,7 +142,8 @@ class GpxModel(UpdateTimeBaseModel):
         null=True,
         blank=True,
         help_text="The user that tracked this gpx entry",
-        on_delete=models.SET_NULL)
+        on_delete=models.SET_NULL
+    )
     lastupdateby = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         editable=False,
@@ -149,7 +151,8 @@ class GpxModel(UpdateTimeBaseModel):
         null=True,
         blank=True,
         help_text="User as last edit this entry",
-        on_delete=models.SET_NULL)
+        on_delete=models.SET_NULL
+    )
 
     points_no = models.PositiveIntegerField(
         help_text=_("Number of points in GPX"),
@@ -248,8 +251,7 @@ class GpxModel(UpdateTimeBaseModel):
 
     def svg_tag(self):
         if self.track_svg:
-            return '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(
-                self.track_svg.url)
+            return '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(self.track_svg.url)
         return ""
 
     svg_tag.short_description = _("SVG")
@@ -257,8 +259,7 @@ class GpxModel(UpdateTimeBaseModel):
 
     def svg_tag_big(self):
         if self.track_svg:
-            return '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(
-                self.track_svg.url)
+            return '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(self.track_svg.url)
         return ""
 
     svg_tag_big.short_description = _("SVG")
@@ -267,16 +268,14 @@ class GpxModel(UpdateTimeBaseModel):
     def start_end_address(self):
         if self.short_start_address == self.short_finish_address:
             return "\u27F3 %s" % self.short_start_address
-        return "%s<br>\u25BE<br>%s" % (self.short_start_address,
-                                       self.short_finish_address)
+        return "%s<br>\u25BE<br>%s" % (self.short_start_address, self.short_finish_address)
 
     start_end_address.short_description = _("Start/End Address")
     start_end_address.allow_tags = True
 
     def get_ideal_ratio(self):
         if self.ideal_distance:
-            ratio = (
-                float(self.ideal_distance.distance_km) * 1000) / self.length
+            ratio = (float(self.ideal_distance.distance_km) * 1000) / self.length
             return ratio
 
     def get_net_duration_s(self):
@@ -302,8 +301,7 @@ class GpxModel(UpdateTimeBaseModel):
 
     def get_ideal_distance_diff_m(self):
         if self.ideal_distance:
-            distance_diff_m = (
-                float(self.ideal_distance.distance_km) * 1000) - self.length
+            distance_diff_m = (float(self.ideal_distance.distance_km) * 1000) - self.length
             return distance_diff_m
 
     def human_ideal_length(self):
@@ -388,8 +386,7 @@ class GpxModel(UpdateTimeBaseModel):
     def human_weather(self):
         if not self.start_temperature:
             return "-"
-        return "%s°C<br/>%s" % (round(self.start_temperature, 1),
-                                self.start_weather_state)
+        return "%s°C<br/>%s" % (round(self.start_temperature, 1), self.start_weather_state)
 
     human_weather.short_description = _("Weather")
     human_weather.admin_order_field = "start_temperature"
@@ -407,8 +404,10 @@ class GpxModel(UpdateTimeBaseModel):
             ' href="https://www.openstreetmap.org/search?query={lat}%2C{lon}"'
             ' title="OpenStreepMap at {lat},{lon}"'
             ' target="_blank"'
-            '>map</a>').format(
-                lat=lat, lon=lon)
+            '>map</a>'
+        ).format(
+            lat=lat, lon=lon
+        )
 
     def start_coordinate_html(self):
         """
@@ -456,8 +455,7 @@ class GpxModel(UpdateTimeBaseModel):
             "coordinates": coordinates,
             "km_gpx_points": km_gpx_points,
         }
-        return render_to_string(
-            template_name="for_runners/leaflet_map.html", context=context)
+        return render_to_string(template_name="for_runners/leaflet_map.html", context=context)
 
     leaflet_map_html.short_description = _("Leaflet MAP")
     leaflet_map_html.allow_tags = True
@@ -491,8 +489,7 @@ class GpxModel(UpdateTimeBaseModel):
             "heart_rates": heart_rates,
             "cadence_values": cadence_values,
         }
-        return render_to_string(
-            template_name="for_runners/chartjs.html", context=context)
+        return render_to_string(template_name="for_runners/chartjs.html", context=context)
 
     chartjs_html.short_description = _("chartjs MAP")
     chartjs_html.allow_tags = True
@@ -611,10 +608,8 @@ class GpxModel(UpdateTimeBaseModel):
         if not self.start_temperature:
             try:
                 temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.start_latitude,
-                    self.start_longitude,
-                    date=self.start_time,
-                    max_seconds=self.duration)
+                    self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration
+                )
             except NoWeatherData:
                 log.error("No weather data for start.")
             else:
@@ -624,10 +619,8 @@ class GpxModel(UpdateTimeBaseModel):
         if not self.finish_temperature:
             try:
                 temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.finish_latitude,
-                    self.finish_longitude,
-                    date=self.finish_time,
-                    max_seconds=self.duration)
+                    self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration
+                )
             except NoWeatherData:
                 log.error("No weather data for finish.")
             else:
@@ -636,8 +629,7 @@ class GpxModel(UpdateTimeBaseModel):
 
         if not self.full_start_address:
             try:
-                start_address = reverse_geo(self.start_latitude,
-                                            self.start_longitude)
+                start_address = reverse_geo(self.start_latitude, self.start_longitude)
             except Exception as err:
                 # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
                 log.error("Can't reverse geo: %s" % err)
@@ -647,8 +639,7 @@ class GpxModel(UpdateTimeBaseModel):
 
         if not self.full_finish_address:
             try:
-                finish_address = reverse_geo(self.finish_latitude,
-                                             self.finish_longitude)
+                finish_address = reverse_geo(self.finish_latitude, self.finish_longitude)
             except Exception as err:
                 # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
                 log.error("Can't reverse geo: %s" % err)
@@ -667,10 +658,8 @@ class GpxModel(UpdateTimeBaseModel):
             temp = io.BytesIO(bytes(svg_string, "utf-8"))
             django_file_obj = File(temp, name="gpx.svg")
             filer_image = Image.objects.create(
-                owner=self.tracked_by,
-                original_filename="gpx.svg",
-                file=django_file_obj,
-                folder=None)
+                owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
+            )
             filer_image.save()
 
             # self.track_svg.save("gpx2svg", svg_string)
@@ -712,7 +701,7 @@ class GpxModel(UpdateTimeBaseModel):
     class Meta:
         verbose_name = _('GPX Track')
         verbose_name_plural = _('GPX Tracks')
-        unique_together = (("start_time", "start_latitude", "start_longitude",
-                            "finish_time", "finish_latitude",
-                            "finish_longitude"), )
+        unique_together = ((
+            "start_time", "start_latitude", "start_longitude", "finish_time", "finish_latitude", "finish_longitude"
+        ),)
         ordering = ('-start_time', '-pk')
