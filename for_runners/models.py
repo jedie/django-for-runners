@@ -457,9 +457,8 @@ class GpxModel(UpdateTimeBaseModel):
                     human_distance(diff_km)
                 )
 
-            return html
+            return mark_safe(html)
     human_length.short_description = _("Length")
-    human_length.allow_tags = True
     human_length.admin_order_field = "length"
 
     def human_duration(self):
