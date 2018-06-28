@@ -359,6 +359,23 @@ class HasNetDurationFilter(admin.SimpleListFilter):
             return queryset.filter(net_duration__isnull=True)
 
 
+class HasEventFilter(admin.SimpleListFilter):
+    title = _('has event')
+    parameter_name = "event"
+
+    def lookups(self, request, model_admin):
+        return (
+            ('y', _('yes')),
+            ('n', _('no')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'y':
+            return queryset.exclude(event__isnull=True)
+        if self.value() == 'n':
+            return queryset.filter(event__isnull=True)
+
+
 @admin.register(GpxModel)
 class GpxModelAdmin(admin.ModelAdmin):
     search_fields = (
@@ -373,6 +390,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     list_filter = (
         StatisticsListFilter,
         HasNetDurationFilter,
+        HasEventFilter,
         "tracked_by",
         "start_time",
         "ideal_distance",
