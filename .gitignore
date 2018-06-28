@@ -1,6 +1,7 @@
 .*
 !.gitignore
-!.travis.yml
+!/.travis.yml
+!/.style.yapf
 !.coveralls.yml
 
 # from test projects:
@@ -56,5 +57,4 @@ docs/_build/
 
 # PyBuilder
 target/
-!/.travis.yml
-!/.style.yapf
+
