@@ -317,18 +317,21 @@ class GpxModel(UpdateTimeBaseModel):
     def human_length(self):
         if self.length:
             length_km = self.length / 1000
-            html = ('<span title="real distance">%s</span>'
-                    ) % human_distance(length_km)
 
             if self.ideal_distance:
                 diff_km = abs(self.get_ideal_distance_diff_m() / 1000)
-                html = ('<span title="standardized distance">%s</span>'
-                        '<br>'
-                        '(%s)'
-                        '<br>'
-                        'diff: %s') % (
-                            self.ideal_distance.get_human_distance(), html,
-                            human_distance(diff_km))
+                html = (
+                    '<span'
+                    ' title="{ideal} is the standardized distance'
+                    ' - GPX-Track: {gpx} (diff: {diff})"'
+                    '>{ideal}</span>'
+                ).format(
+                    ideal=self.ideal_distance.get_human_distance(),
+                    gpx=human_distance(length_km),
+                    diff=human_distance(diff_km)
+                )
+            else:
+                html = ('<span title="real distance">%s</span>') % human_distance(length_km)
 
             return mark_safe(html)
 
@@ -336,39 +339,39 @@ class GpxModel(UpdateTimeBaseModel):
     human_length.admin_order_field = "length"
 
     def human_duration(self):
-        # TODO: use a template for this
-        html = "-"
-        if self.duration:
-            html = ('<span title="real duration">%s</span>') % human_seconds(
-                self.duration)
-
         if self.net_duration:
             net_duration_s = self.get_net_duration_s()
             duration_diff = self.duration - net_duration_s
-            html = ('<span title="Official net duration">%s</span>'
-                    '<br>'
-                    '(%s)'
-                    '<br>'
-                    'diff: %s') % (
-                        human_seconds(net_duration_s),
-                        html,
-                        human_seconds(duration_diff),
-                    )
-        else:
-            ideal_duration = self.get_ideal_duration()
-            if ideal_duration:
-                duration_diff = self.duration - ideal_duration
-                html = ('<span title="standardized duration">%s</span>'
-                        '<br>'
-                        '(%s)'
-                        '<br>'
-                        'diff: %s') % (
-                            human_seconds(ideal_duration),
-                            html,
-                            human_seconds(duration_diff),
-                        )
+            html = (
+                '<span'
+                ' title="{net} is the official net duration'
+                ' - GPX-Track: {gpx} (diff: {diff})"'
+                '>{net}</span>'
+            ).format(
+                net=human_seconds(net_duration_s),
+                gpx=human_seconds(self.duration),
+                diff=human_duration(duration_diff),
+            )
+            return html
 
-        return html
+        ideal_duration = self.get_ideal_duration()
+        if ideal_duration:
+            duration_diff = self.duration - ideal_duration
+            html = (
+                '<span'
+                ' title="{ideal} is the standardized duration'
+                ' - GPX-Track: {gpx} (diff: {diff})"'
+                '>{ideal}</span>'
+            ).format(
+                ideal=human_seconds(ideal_duration),
+                gpx=human_seconds(self.duration),
+                diff=human_duration(duration_diff),
+            )
+            return html
+
+        if self.duration:
+            html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration)
+            return html
 
     human_duration.short_description = _("Duration")
     human_duration.allow_tags = True
