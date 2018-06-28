@@ -47,6 +47,7 @@ INTERNAL_IPS = FnMatchIps(["localhost", "127.0.0.1", "::1", "172.*.*.*", "192.16
 
 ALLOWED_HOSTS = INTERNAL_IPS
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5000000
 
 # Application definition
 
