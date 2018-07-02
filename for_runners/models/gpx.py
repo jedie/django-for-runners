@@ -40,6 +40,7 @@ class GpxModel(UpdateTimeBaseModel):
     """
     event = models.ForeignKey(
         EventModel,
+        related_name="tracks",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

@@ -72,9 +72,31 @@ class LinkModelInline(admin.TabularInline):
     )
 
 
+class HasTracksFilter(admin.SimpleListFilter):
+    title = _('has GPX tracks')
+    parameter_name = "tracks"
+
+    def lookups(self, request, model_admin):
+        return (
+            ('y', _('yes')),
+            ('n', _('no')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'y':
+            return queryset.exclude(tracks__isnull=True)
+        if self.value() == 'n':
+            return queryset.filter(tracks__isnull=True)
+
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
-    list_display = ("verbose_name", "links_html", "start_date", "discipline")
+    def track_count(self, obj):
+        return obj.tracks.count()
+
+    list_display = ("verbose_name", "track_count", "links_html", "start_date", "discipline")
+    list_filter = (
+        HasTracksFilter,
+    )
     list_display_links = ("verbose_name", )
     inlines = [
         LinkModelInline,
