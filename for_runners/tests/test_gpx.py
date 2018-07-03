@@ -75,10 +75,10 @@ class GpxTests(BaseTestCase):
                            (51.437847297638655, 6.6170057002455)]
         )
 
-        self.assert_equal_rounded(gpxpy_instance.length_3d(), 4.71811430037482)
-        self.assert_equal_rounded(total_distance, 4.71811430037482)
+        self.assert_equal_rounded(gpxpy_instance.length_3d(), 4.726553499192461)
+        self.assert_equal_rounded(total_distance, 4.726553499192461)
 
-        self.assertEqual(distances, [0, 2.408703900785011, 2.3094103597382065])
+        self.assertEqual(distances, [0, 2.413028183109784, 2.313525316082677])
 
 
 class GpxMedianTests(BaseTestCase):
@@ -86,7 +86,7 @@ class GpxMedianTests(BaseTestCase):
     def test_garmin_connect_1_gpx(self):
         # containes 3 points:
         filepath = Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")
-        total_distance = 4.718114260523217
+        total_distance = 4.726553499192461
 
         gpxpy_instance = parse_gpx_file(filepath)
 
@@ -95,7 +95,7 @@ class GpxMedianTests(BaseTestCase):
 
         distances = tuple(gpx_median.iter_section_distance())
         self.assertEqual(reduce(operator.add, distances), total_distance)
-        self.assertEqual(distances, (0, 2.408703900785011, 2.3094103597382065))
+        self.assertEqual(distances, (0, 2.413028183109784, 2.313525316082677))
 
     def test_iter_extension_data(self):
         gpx_median = GpxMedian(
@@ -117,7 +117,7 @@ class GpxMedianTests(BaseTestCase):
         gpxpy_instance.tracks[0].segments.append(GPXTrackSegment())
         points = gpxpy_instance.tracks[0].segments[0].points
 
-        longitude_distance_km = 111.19492664455873
+        longitude_distance_km = 111.31949079327357
 
         self.assertEqual(lon2kilometers(lon_count=1), longitude_distance_km)
         self.assertEqual(kilometers2lon_count(longitude_distance_km), 1)
