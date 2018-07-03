@@ -64,14 +64,11 @@ INSTALLED_APPS = (
 
     'autotask', # https://bitbucket.org/kbr/autotask
 
-    'cms', # https://github.com/divio/django-cms
-    'menus', # Part of Django-CMS
-
-    'easy_thumbnails', # https://github.com/SmileyChris/easy-thumbnails
-    'treebeard', # https://github.com/django-treebeard/django-treebeard
-    'sekizai', # https://github.com/ojii/django-sekizai
-    'djangocms_text_ckeditor', # https://github.com/divio/djangocms-text-ckeditor
-    'filer', # https://github.com/divio/django-filer
+    # 'easy_thumbnails', # https://github.com/SmileyChris/easy-thumbnails
+    # 'treebeard', # https://github.com/django-treebeard/django-treebeard
+    # 'sekizai', # https://github.com/ojii/django-sekizai
+    # 'djangocms_text_ckeditor', # https://github.com/divio/djangocms-text-ckeditor
+    # 'filer', # https://github.com/divio/django-filer
 
     'dynamic_fixtures', # https://github.com/Peter-Slump/django-dynamic-fixtures
 
@@ -96,20 +93,14 @@ MIDDLEWARE = (
     # https://github.com/jazzband/django-debug-toolbar/
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
-    'cms.middleware.utils.ApphookReloadMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
 
     'django_tools.middlewares.ThreadLocal.ThreadLocalMiddleware',
 )
@@ -136,9 +127,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.tz',
-                'sekizai.context_processors.sekizai',
                 'django.template.context_processors.static',
-                'cms.context_processors.cms_settings',
 
                 "for_runners.context_processors.for_runners_version_string",
             ],
@@ -209,9 +198,6 @@ PARLER_LANGUAGES = {
 LANGUAGES = tuple([(d["code"], d["name"]) for d in PARLER_LANGUAGES[1]])
 
 LANGUAGE_DICT = dict(LANGUAGES) # useful to get translated name by language code
-
-# http://docs.django-cms.org/en/latest/reference/configuration.html#std:setting-CMS_LANGUAGES
-# CMS_LANGUAGES = PARLER_LANGUAGES
 
 # http://django-parler.readthedocs.org/en/latest/quickstart.html#configuration
 PARLER_DEFAULT_LANGUAGE_CODE = LANGUAGE_CODE

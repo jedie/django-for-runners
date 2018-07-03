@@ -108,3 +108,8 @@ def gpx2svg_string(gpxpy_instance, pretty=False):
     fileobj = io.StringIO()
     drawing.write(fileobj, pretty=pretty)
     return fileobj.getvalue().strip()
+
+
+def gpx2svg_file(gpxpy_instance, fileobj, pretty=False):
+    drawing = gpx2svg(gpxpy_instance)
+    drawing.write(fileobj, pretty=pretty)

@@ -2,14 +2,8 @@
 # basic requirements
 #
 
-# https://github.com/divio/djangocms-text-ckeditor
-djangocms-text-ckeditor
-
 # https://github.com/jedie/django-tools
 django-tools>=0.40.0
-
-# https://github.com/jedie/django-cms-tools
-django-cms-tools
 
 # https://pypi.org/project/autotask/
 # https://bitbucket.org/kbr/autotask

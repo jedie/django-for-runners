@@ -4,6 +4,7 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 import collections
+import hashlib
 import io
 import statistics
 from pathlib import Path
@@ -59,6 +60,37 @@ def get_identifier(gpxpy_instance):
         time_bounds.start_time, first_point.latitude, first_point.longitude, time_bounds.end_time, last_point.latitude,
         last_point.longitude
     )
+
+
+class GpxIdentifier:
+    HASHER_NAME = "sha512"
+    HASH_LENGTH = 6
+
+    def __init__(self, gpxpy_instance):
+        self.identifier = get_identifier(gpxpy_instance)
+        self.hasher = hashlib.new(self.HASHER_NAME)
+
+    def _identifier_string(self):
+        data = []
+        data.append(self.identifier.start_time.strftime("%Y%m%d%H%M%S"))
+        data.append("%.25f" % self.identifier.start_lat)
+        data.append("%.25f" % self.identifier.start_lon)
+        data.append(self.identifier.finish_time.strftime("%Y%m%d%H%M%S"))
+        data.append("%.25f" % self.identifier.finish_lat)
+        data.append("%.25f" % self.identifier.finish_lon)
+        return "_".join(data)
+
+    def _prefix(self):
+        return self.identifier.start_time.strftime("%Y%m%d_%H%M")
+
+    def get_prefix_id(self):
+        identifier_string = self._identifier_string()
+        self.hasher.update(identifier_string.encode("ASCII"))
+        hex_digest = self.hasher.hexdigest()
+        hex_digest_cut = hex_digest[:self.HASH_LENGTH]
+        prefix = self._prefix()
+        result = "%s_%s" % (prefix, hex_digest_cut)
+        return result
 
 
 def parse_gpx(content):
@@ -324,5 +356,3 @@ class GpxMedian:
             max_value = section.get_extension_max(key)
             avg_value = section.get_extension_avg(key)
             yield section.extension_data[key], min_value, max_value, avg_value
-
-

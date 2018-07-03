@@ -20,16 +20,15 @@ from django.db import IntegrityError, models
 from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import View, generic
 # https://github.com/jedie/django-for-runners
 from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm,
-                               UploadGpxFileForm)
-from for_runners.models import (DisciplineModel, DistanceModel, EventLinkModel,
-                                EventModel, GpxModel)
+from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
+from for_runners.models import (DisciplineModel, DistanceModel, EventLinkModel, EventModel, GpxModel)
 
 log = logging.getLogger(__name__)
 
@@ -39,15 +38,13 @@ STATISTICS_CHOICES = (
     (constants.DISPLAY_GPX_INFO, _('GPX info')),
     (constants.DISPLAY_GPX_METADATA, _('GPX metadata')),
 )
-assert len(
-    dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
+assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
 
 
 @admin.register(DistanceModel)
 class DistanceModelAdmin(admin.ModelAdmin):
-    list_display = ("get_human_distance", "get_human_variance",
-                    "get_human_variance_as_length", "get_human_min_max")
-    list_display_links = ("get_human_distance", )
+    list_display = ("get_human_distance", "get_human_variance", "get_human_variance_as_length", "get_human_min_max")
+    list_display_links = ("get_human_distance",)
 
 
 @admin.register(DisciplineModel)
@@ -88,16 +85,16 @@ class HasTracksFilter(admin.SimpleListFilter):
         if self.value() == 'n':
             return queryset.filter(tracks__isnull=True)
 
+
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
+
     def track_count(self, obj):
         return obj.tracks.count()
 
     list_display = ("verbose_name", "track_count", "links_html", "start_date", "discipline")
-    list_filter = (
-        HasTracksFilter,
-    )
-    list_display_links = ("verbose_name", )
+    list_filter = (HasTracksFilter,)
+    list_display_links = ("verbose_name",)
     inlines = [
         LinkModelInline,
     ]
@@ -125,11 +122,9 @@ class UploadGpxFileView(generic.FormView):
 
                 try:
                     try:
-                        gpx = GpxModel.objects.create(
-                            gpx=content, tracked_by=user)
+                        gpx = GpxModel.objects.create(gpx=content, tracked_by=user)
                     except IntegrityError as err:
-                        messages.error(request,
-                                       "Error process GPX data: %s" % err)
+                        messages.error(request, "Error process GPX data: %s" % err)
                         continue
 
                     gpx.calculate_values()
@@ -144,6 +139,7 @@ class UploadGpxFileView(generic.FormView):
 
 
 class ChangelistViewMixin:
+
     def dispatch(self, request, change_list, *args, **kwargs):
         self.change_list = change_list
         return super().dispatch(request, *args, **kwargs)
@@ -201,8 +197,7 @@ class DistanceStatisticsView(BaseFormChangelistView):
         qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
 
-        length_statistics = qs.aggregate(
-            Min('length'), Avg("length"), Max('length'))
+        length_statistics = qs.aggregate(Min('length'), Avg("length"), Max('length'))
 
         min_length = length_statistics["length__min"]
         max_length = length_statistics["length__max"]
@@ -219,13 +214,11 @@ class DistanceStatisticsView(BaseFormChangelistView):
                     current_distance_from += distance_m
                     current_distance_to += distance_m
                     if length > current_distance_to:
-                        group_data[(current_distance_from,
-                                    current_distance_to)] = []
+                        group_data[(current_distance_from, current_distance_to)] = []
                     else:
                         break
 
-            group_data[(current_distance_from,
-                        current_distance_to)].append(track)
+            group_data[(current_distance_from, current_distance_to)].append(track)
 
         print("group_data:")
         pprint(group_data)
@@ -247,9 +240,10 @@ class DistanceStatisticsView(BaseFormChangelistView):
                 avg_paces = "null"
                 max_paces = "null"
 
-            track_data.append((round(distance_from / 1000, 1),
-                               round(distance_to / 1000, 1), track_count,
-                               min_paces, avg_paces, max_paces))
+            track_data.append((
+                round(distance_from / 1000, 1), round(distance_to / 1000, 1), track_count, min_paces, avg_paces,
+                max_paces
+            ))
         print("total track counts:", total_tracks)
         pprint(track_data)
 
@@ -308,6 +302,7 @@ class GpxMetadataView(BaseChangelistView):
 
 
 class CalculateValuesView(generic.View):
+
     def get(self, request, object_id):
         instance = GpxModel.objects.get(pk=object_id)
         instance.calculate_values()
@@ -331,6 +326,7 @@ class StatisticsListFilter(admin.SimpleListFilter):
 
 
 class GpxModelChangeList(ChangeList):
+
     def __init__(self, *args, **kwargs):
         self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
@@ -358,9 +354,7 @@ class GpxModelChangeList(ChangeList):
             else:
                 view = ViewClass.as_view()
                 response = view(request, self)
-                assert isinstance(
-                    response, TemplateResponse
-                ), "Method %s didn't return a TemplateResponse!" % view
+                assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
                 self.statistics = response.rendered_content
 
 
@@ -405,10 +399,10 @@ class GpxModelAdmin(admin.ModelAdmin):
         "full_finish_address",
         "creator",
     )
-    list_display = ("svg_tag", "overview", "start_time", "human_length",
-                    "human_duration", "human_pace", "heart_rate_avg",
-                    "human_weather", "uphill", "downhill", "min_elevation",
-                    "max_elevation", "tracked_by")
+    list_display = (
+        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
+    )
     list_filter = (
         StatisticsListFilter,
         HasNetDurationFilter,
@@ -423,12 +417,11 @@ class GpxModelAdmin(admin.ModelAdmin):
         "svg_tag",
         "overview",
     )
-    readonly_fields = ("leaflet_map_html", "chartjs_html", "svg_tag_big",
-                       "svg_tag", "start_time", "start_latitude",
-                       "start_longitude", "finish_time", "finish_latitude",
-                       "finish_longitude", "start_coordinate_html",
-                       "finish_coordinate_html", "heart_rate_min",
-                       "heart_rate_avg", "heart_rate_max")
+    readonly_fields = (
+        "leaflet_map_html", "chartjs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
+        "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
+        "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
+    )
 
     fieldsets = (
         (_("Event"), {
@@ -474,11 +467,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         }),
     )
     # FIXME: Made this in CSS ;)
-    formfield_overrides = {
-        models.CharField: {
-            'widget': forms.TextInput(attrs={'style': 'width:70%'})
-        }
-    }
+    formfield_overrides = {models.CharField: {'widget': forms.TextInput(attrs={'style': 'width:70%'})}}
 
     def overview(self, obj):
         parts = []
@@ -486,28 +475,30 @@ class GpxModelAdmin(admin.ModelAdmin):
             parts.append("<strong>%s</strong>" % obj.event)
         parts.append(obj.start_end_address())
         html = "<br>".join(parts)
-        return html
+        return mark_safe(html)
 
     overview.short_description = _("Event")
-    overview.allow_tags = True
 
     def get_urls(self):
         urls = super().get_urls()
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            url(r"^upload/$",
-                self.admin_site.admin_view(UploadGpxFileView.as_view()),
-                name="upload-gpx-file"),
-            url(r"^distance-statistics/$",
+            url(r"^upload/$", self.admin_site.admin_view(UploadGpxFileView.as_view()), name="upload-gpx-file"),
+            url(
+                r"^distance-statistics/$",
                 self.admin_site.admin_view(DistanceStatisticsView.as_view()),
-                name="distance-statistics"),
-            url(r"^distance-pace-statistics/$",
-                self.admin_site.admin_view(
-                    DistancePaceStatisticsView.as_view()),
-                name="distance-pace-statistics"),
-            url(r"^(.+)/calculate_values/$",
+                name="distance-statistics"
+            ),
+            url(
+                r"^distance-pace-statistics/$",
+                self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
+                name="distance-pace-statistics"
+            ),
+            url(
+                r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),
-                name="%s_%s_calculate-values" % info),
+                name="%s_%s_calculate-values" % info
+            ),
         ] + urls
         return urls
 

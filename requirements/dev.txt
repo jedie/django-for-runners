@@ -4,7 +4,7 @@
 
 -r base.txt
 
-django-filer
+pip-tools
 #flake8
 #pydocstyle
 #pylint
@@ -19,3 +19,8 @@ django-debug-toolbar
 
 # https://github.com/Peter-Slump/django-dynamic-fixtures
 django-dynamic-fixtures
+
+pytest
+pytest-django
+pytest-cov
+selenium

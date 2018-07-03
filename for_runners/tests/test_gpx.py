@@ -13,13 +13,12 @@ from pathlib import Path
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
 
+from for_runners.gpx import (GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file)
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.utils import generate_gpx_track, lon2kilometers, kilometers2lon_count, earth_circumference
-from for_runners.gpx import GpxMedian, iter_distances, parse_gpx_file
+from for_runners.tests.utils import (earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers)
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
 
 BASE_PATH = Path(__file__).parent
-
 
 class GpxTests(BaseTestCase):
 
@@ -145,3 +144,28 @@ class GpxMedianTests(BaseTestCase):
 
         # 20015.08679602057
         # 20015.086796020572
+
+
+class GpxIdentifierTests(BaseTestCase):
+
+    def setUp(self):
+        gpxpy_instance = parse_gpx_file(Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx"))
+        self.gi = GpxIdentifier(gpxpy_instance)
+
+    def test_identifier_string(self):
+        self.assertEqual(
+            self.gi._identifier_string(), (
+                "20180221143050"
+                "_51.4378892909735441207885742"
+                "_6.6170126572251319885253906"
+                "_20180221143052"
+                "_51.4378472976386547088623047"
+                "_6.6170057002454996109008789"
+            )
+        )
+
+    def test_prefix(self):
+        self.assertEqual(self.gi._prefix(), "20180221_1430")
+
+    def test_prefix_id(self):
+        self.assertEqual(self.gi.get_prefix_id(), "20180221_1430_a307a8")

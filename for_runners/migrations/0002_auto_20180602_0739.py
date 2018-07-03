@@ -5,6 +5,12 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 
 
+def save_files(apps, schema_editor):
+    MyModel = apps.get_model('for_runners', 'GpxModel')
+    for row in MyModel.objects.all():
+        row.uuid = uuid.uuid4()
+        row.save(update_fields=['uuid'])
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -27,4 +33,5 @@ class Migration(migrations.Migration):
             name='heart_rate_min',
             field=models.PositiveIntegerField(blank=True, editable=False, help_text='Minimum heart rate.', null=True),
         ),
+        migrations.RunPython(save_files, reverse_code=migrations.RunPython.noop),
     ]
