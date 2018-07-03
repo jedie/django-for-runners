@@ -20,11 +20,11 @@ class AdminAnonymousTests(BaseTestCase):
 
     def test_login_en(self):
         response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
-        self.assertRedirects(response, expected_url='http://testserver/en/admin/login/?next=/en/admin/')
+        self.assertRedirects(response, expected_url='/en/admin/login/?next=/en/admin/')
 
     def test_login_de(self):
         response = self.client.get('/de/admin/', HTTP_ACCEPT_LANGUAGE='de')
-        self.assertRedirects(response, expected_url='http://testserver/de/admin/login/?next=/de/admin/')
+        self.assertRedirects(response, expected_url='/de/admin/login/?next=/de/admin/')
 
 
 @pytest.mark.django_db
