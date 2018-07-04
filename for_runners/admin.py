@@ -24,7 +24,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View, generic
 from django.views.generic.base import TemplateResponseMixin, TemplateView
 
-
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
@@ -401,7 +400,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         "creator",
     )
     list_display = (
-        "svg_tag", "overview", "start_time", "human_length", "human_duration", "human_pace", "heart_rate_avg",
+        "svg_tag", "overview", "start_time", "human_length_html", "human_duration_html", "human_pace", "heart_rate_avg",
         "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_filter = (

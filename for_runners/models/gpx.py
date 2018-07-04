@@ -329,6 +329,17 @@ class GpxModel(UpdateTimeBaseModel):
 
     def human_length(self):
         if self.length:
+            if self.ideal_distance:
+                return self.ideal_distance.get_human_distance()
+            else:
+                return human_distance(self.length / 1000)
+
+    def human_length_html(self):
+        """
+        Enhanced version of self.human_length()
+        with more information via <span title="...">
+        """
+        if self.length:
             length_km = self.length / 1000
 
             if self.ideal_distance:
@@ -348,10 +359,25 @@ class GpxModel(UpdateTimeBaseModel):
 
             return mark_safe(html)
 
-    human_length.short_description = _("Length")
-    human_length.admin_order_field = "length"
+    human_length_html.short_description = _("Length")
+    human_length_html.admin_order_field = "length"
 
     def human_duration(self):
+        if self.net_duration:
+            return human_seconds(self.get_net_duration_s())
+
+        ideal_duration = self.get_ideal_duration()
+        if ideal_duration:
+            return human_seconds(ideal_duration)
+
+        if self.duration:
+            return human_seconds(self.duration)
+
+    def human_duration_html(self):
+        """
+        Enhanced version of self.human_duration()
+        with more information via <span title="...">
+        """
         if self.net_duration:
             net_duration_s = self.get_net_duration_s()
             duration_diff = self.duration - net_duration_s
@@ -386,8 +412,8 @@ class GpxModel(UpdateTimeBaseModel):
             html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration)
             return mark_safe(html)
 
-    human_duration.short_description = _("Duration")
-    human_duration.admin_order_field = "duration"
+    human_duration_html.short_description = _("Duration")
+    human_duration_html.admin_order_field = "duration"
 
     def human_pace(self):
         if self.pace:
