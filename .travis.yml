@@ -26,6 +26,7 @@ matrix:
           python: 3.7
 
         - env: TOXENV=pypy3
+          dist: trusty
           python: pypy3
 
 before_install:
