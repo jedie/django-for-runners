@@ -36,7 +36,7 @@ def reverse_geo(lat, lon):
     >>> address.short
     'Feldhausen, Bottrop'
     >>> address.full
-    'Studio 7, The Old West, Feldhausen, Bottrop, Regierungsbezirk Münster, Nordrhein-Westfalen, 46244, Deutschland'
+    'Horrorattraktion, 1, Warner Allee, Kuhberg, Feldhausen, Bottrop, Regierungsbezirk Münster, Nordrhein-Westfalen, 46244, Deutschland'
 
     >>> reverse_geo("52.518611", "13.376111").short
     'Berlin Tiergarten'

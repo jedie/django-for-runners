@@ -1,0 +1,41 @@
+# http://editorconfig.org
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+end_of_line = lf
+
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+
+[{Makefile,**.mk}]
+indent_style = tab
+
+[LICENSE]
+insert_final_newline = false
+
+[*.py]
+# Configuring isort
+# https://github.com/timothycrosley/isort/wiki/isort-Settings
+atomic = true
+# max-line-length = 119 from django, see: https://github.com/django/django/blob/master/setup.cfg
+line_length = 119
+# 5 - Hanging Grid Grouped
+multi_line_output = 5
+
+known_external=pytest
+known_django=django
+
+import_heading_djangotools=https://github.com/jedie/django-tools
+known_djangotools=django_tools
+
+import_heading_for_runners=https://github.com/jedie/django-for-runners
+known_for_runners=for_runners
+
+default_section=THIRDPARTY
+sections=FUTURE,STDLIB,EXTERNAL,django,THIRDPARTY,djangotools,for_runners,FIRSTPARTY,LOCALFOLDER

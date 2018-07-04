@@ -13,13 +13,12 @@ from pathlib import Path
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
 
+from for_runners.gpx import (GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file)
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.utils import generate_gpx_track, lon2kilometers, kilometers2lon_count, earth_circumference
-from for_runners.gpx import GpxMedian, iter_distances, parse_gpx_file
+from for_runners.tests.utils import (earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers)
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
 
 BASE_PATH = Path(__file__).parent
-
 
 class GpxTests(BaseTestCase):
 
@@ -76,10 +75,10 @@ class GpxTests(BaseTestCase):
                            (51.437847297638655, 6.6170057002455)]
         )
 
-        self.assert_equal_rounded(gpxpy_instance.length_3d(), 4.71811430037482)
-        self.assert_equal_rounded(total_distance, 4.71811430037482)
+        self.assert_equal_rounded(gpxpy_instance.length_3d(), 4.726553499192461)
+        self.assert_equal_rounded(total_distance, 4.726553499192461)
 
-        self.assertEqual(distances, [0, 2.408703900785011, 2.3094103597382065])
+        self.assertEqual(distances, [0, 2.413028183109784, 2.313525316082677])
 
 
 class GpxMedianTests(BaseTestCase):
@@ -87,7 +86,7 @@ class GpxMedianTests(BaseTestCase):
     def test_garmin_connect_1_gpx(self):
         # containes 3 points:
         filepath = Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")
-        total_distance = 4.718114260523217
+        total_distance = 4.726553499192461
 
         gpxpy_instance = parse_gpx_file(filepath)
 
@@ -96,7 +95,7 @@ class GpxMedianTests(BaseTestCase):
 
         distances = tuple(gpx_median.iter_section_distance())
         self.assertEqual(reduce(operator.add, distances), total_distance)
-        self.assertEqual(distances, (0, 2.408703900785011, 2.3094103597382065))
+        self.assertEqual(distances, (0, 2.413028183109784, 2.313525316082677))
 
     def test_iter_extension_data(self):
         gpx_median = GpxMedian(
@@ -118,7 +117,7 @@ class GpxMedianTests(BaseTestCase):
         gpxpy_instance.tracks[0].segments.append(GPXTrackSegment())
         points = gpxpy_instance.tracks[0].segments[0].points
 
-        longitude_distance_km = 111.19492664455873
+        longitude_distance_km = 111.31949079327357
 
         self.assertEqual(lon2kilometers(lon_count=1), longitude_distance_km)
         self.assertEqual(kilometers2lon_count(longitude_distance_km), 1)
@@ -145,3 +144,28 @@ class GpxMedianTests(BaseTestCase):
 
         # 20015.08679602057
         # 20015.086796020572
+
+
+class GpxIdentifierTests(BaseTestCase):
+
+    def setUp(self):
+        gpxpy_instance = parse_gpx_file(Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx"))
+        self.gi = GpxIdentifier(gpxpy_instance)
+
+    def test_identifier_string(self):
+        self.assertEqual(
+            self.gi._identifier_string(), (
+                "20180221143050"
+                "_51.4378892909735441207885742"
+                "_6.6170126572251319885253906"
+                "_20180221143052"
+                "_51.4378472976386547088623047"
+                "_6.6170057002454996109008789"
+            )
+        )
+
+    def test_prefix(self):
+        self.assertEqual(self.gi._prefix(), "20180221_1430")
+
+    def test_prefix_id(self):
+        self.assertEqual(self.gi.get_prefix_id(), "20180221_1430_a307a8")

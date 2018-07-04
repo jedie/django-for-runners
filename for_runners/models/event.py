@@ -8,6 +8,7 @@ import logging
 from urllib.parse import urlparse
 
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 from for_runners.models import DisciplineModel
@@ -46,13 +47,14 @@ class LinkModelBase(UpdateTimeBaseModel):
         return self.title or self.url
 
     def link_html(self):
-        return ('<a href="{url}" title="{title}" target="_blank">'
+        html = ('<a href="{url}" title="{title}" target="_blank">'
                 '{text}'
                 '</a>').format(
-                    url=self.url, title=self.get_title(), text=self.get_text())
+                    url=self.url, title=self.get_title(), text=self.get_text()
+                )
+        return mark_safe(html)
 
     link_html.short_description = _("Link")
-    link_html.allow_tags = True
 
     def save(self, *args, **kwargs):
         if self.text is None:
@@ -86,7 +88,7 @@ class EventModel(UpdateInfoBaseModel):
         null=True,
         blank=True,
     )
-    discipline = models.ForeignKey(DisciplineModel)
+    discipline = models.ForeignKey(DisciplineModel, on_delete=models.SET_NULL, null=True)
 
     def verbose_name(self):
         parts = []
@@ -107,10 +109,10 @@ class EventModel(UpdateInfoBaseModel):
         links = []
         for link in self.links.all():
             links.append(link.link_html())
-        return "<br />".join(links)
+        html = "<br />".join(links)
+        return mark_safe(html)
 
     links_html.short_description = _("Links")
-    links_html.allow_tags = True
 
     def __str__(self):
         return self.verbose_name()
@@ -122,4 +124,4 @@ class EventModel(UpdateInfoBaseModel):
 
 
 class EventLinkModel(LinkModelBase):
-    event = models.ForeignKey(EventModel, related_name="links")
+    event = models.ForeignKey(EventModel, related_name="links", on_delete=models.CASCADE)

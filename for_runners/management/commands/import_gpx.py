@@ -6,7 +6,7 @@
 import sys
 from pathlib import Path
 
-from cms.models import User
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 # https://github.com/jedie/django-for-runners

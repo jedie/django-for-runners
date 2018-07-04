@@ -6,30 +6,39 @@
 import io
 import logging
 import statistics
+from pathlib import Path
 
 from django.conf import settings
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+
+# https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
 from django_tools.models import UpdateTimeBaseModel
-from filer.fields.file import FilerFileField
-from filer.utils.loader import load_model
+
+# https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import (
-    add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance, iter_points,
-    parse_gpx
+    GpxIdentifier, add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance,
+    iter_points, parse_gpx
 )
-from for_runners.gpx_tools.humanize import (human_distance, human_duration, human_seconds)
+from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.models import DistanceModel, EventModel
-from for_runners.svg import gpx2svg_string
+from for_runners.svg import gpx2svg_file, gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
 
 log = logging.getLogger(__name__)
+
+
+def svg_upload_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return instance.get_svg_upload_path(filename)
 
 
 class GpxModel(UpdateTimeBaseModel):
@@ -53,9 +62,9 @@ class GpxModel(UpdateTimeBaseModel):
         null=True,
         blank=True,
     )
-    track_svg = FilerFileField(
+    track_svg = models.FileField(
         verbose_name=_("Track SVG"),
-        related_name="+",
+        upload_to=svg_upload_path,
         null=True,
         blank=True,
     )
@@ -196,8 +205,7 @@ class GpxModel(UpdateTimeBaseModel):
         help_text=_(
             "Min/km (number of minutes it takes to cover a kilometer)"),
         max_digits=4,
-        decimal_places=
-        2,  # store numbers up to 99 with a resolution of 2 decimal places
+        decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
         null=True,
         blank=True,
     )
@@ -250,29 +258,35 @@ class GpxModel(UpdateTimeBaseModel):
 
         # TODO: schedule request weather info, if not set
 
+    def get_svg_upload_path(self, filename):
+        date_prefix = self.start_time.strftime("%Y_%m")
+        svg_upload_path = "track_svg_%s/%s.svg" % (date_prefix, self.get_prefix_id())
+        log.debug("Ignore source filename: %r upload to: %r", filename, svg_upload_path)
+        return svg_upload_path
+
     def svg_tag(self):
         if self.track_svg:
-            return '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(self.track_svg.url)
+            html = '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(self.track_svg.url)
+            return mark_safe(html)
         return ""
 
     svg_tag.short_description = _("SVG")
-    svg_tag.allow_tags = True
 
     def svg_tag_big(self):
         if self.track_svg:
-            return '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(self.track_svg.url)
+            html = '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(self.track_svg.url)
+            return mark_safe(html)
         return ""
 
     svg_tag_big.short_description = _("SVG")
-    svg_tag_big.allow_tags = True
 
     def start_end_address(self):
         if self.short_start_address == self.short_finish_address:
             return "\u27F3 %s" % self.short_start_address
-        return "%s<br>\u25BE<br>%s" % (self.short_start_address, self.short_finish_address)
+        html = "%s<br>\u25BE<br>%s" % (self.short_start_address, self.short_finish_address)
+        return mark_safe(html)
 
     start_end_address.short_description = _("Start/End Address")
-    start_end_address.allow_tags = True
 
     def get_ideal_ratio(self):
         if self.ideal_distance:
@@ -315,6 +329,17 @@ class GpxModel(UpdateTimeBaseModel):
 
     def human_length(self):
         if self.length:
+            if self.ideal_distance:
+                return self.ideal_distance.get_human_distance()
+            else:
+                return human_distance(self.length / 1000)
+
+    def human_length_html(self):
+        """
+        Enhanced version of self.human_length()
+        with more information via <span title="...">
+        """
+        if self.length:
             length_km = self.length / 1000
 
             if self.ideal_distance:
@@ -334,10 +359,25 @@ class GpxModel(UpdateTimeBaseModel):
 
             return mark_safe(html)
 
-    human_length.short_description = _("Length")
-    human_length.admin_order_field = "length"
+    human_length_html.short_description = _("Length")
+    human_length_html.admin_order_field = "length"
 
     def human_duration(self):
+        if self.net_duration:
+            return human_seconds(self.get_net_duration_s())
+
+        ideal_duration = self.get_ideal_duration()
+        if ideal_duration:
+            return human_seconds(ideal_duration)
+
+        if self.duration:
+            return human_seconds(self.duration)
+
+    def human_duration_html(self):
+        """
+        Enhanced version of self.human_duration()
+        with more information via <span title="...">
+        """
         if self.net_duration:
             net_duration_s = self.get_net_duration_s()
             duration_diff = self.duration - net_duration_s
@@ -351,7 +391,7 @@ class GpxModel(UpdateTimeBaseModel):
                 gpx=human_seconds(self.duration),
                 diff=human_duration(duration_diff),
             )
-            return html
+            return mark_safe(html)
 
         ideal_duration = self.get_ideal_duration()
         if ideal_duration:
@@ -366,15 +406,14 @@ class GpxModel(UpdateTimeBaseModel):
                 gpx=human_seconds(self.duration),
                 diff=human_duration(duration_diff),
             )
-            return html
+            return mark_safe(html)
 
         if self.duration:
             html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration)
-            return html
+            return mark_safe(html)
 
-    human_duration.short_description = _("Duration")
-    human_duration.allow_tags = True
-    human_duration.admin_order_field = "duration"
+    human_duration_html.short_description = _("Duration")
+    human_duration_html.admin_order_field = "duration"
 
     def human_pace(self):
         if self.pace:
@@ -387,14 +426,14 @@ class GpxModel(UpdateTimeBaseModel):
     def human_weather(self):
         if not self.start_temperature:
             return "-"
-        return "%s°C<br/>%s" % (round(self.start_temperature, 1), self.start_weather_state)
+        html = "%s°C<br/>%s" % (round(self.start_temperature, 1), self.start_weather_state)
+        return mark_safe(html)
 
     human_weather.short_description = _("Weather")
     human_weather.admin_order_field = "start_temperature"
-    human_weather.allow_tags = True
 
     def _coordinate2link(self, lat, lon):
-        return (
+        html = (
             '<a'
             ' href="https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"'
             ' title="Reverse {lat},{lon} address with OpenStreepMap"'
@@ -409,6 +448,7 @@ class GpxModel(UpdateTimeBaseModel):
         ).format(
             lat=lat, lon=lon
         )
+        return mark_safe(html)
 
     def start_coordinate_html(self):
         """
@@ -421,7 +461,6 @@ class GpxModel(UpdateTimeBaseModel):
             )
 
     start_coordinate_html.short_description = _("Start coordinates")
-    start_coordinate_html.allow_tags = True
 
     def finish_coordinate_html(self):
         """
@@ -434,7 +473,6 @@ class GpxModel(UpdateTimeBaseModel):
             )
 
     finish_coordinate_html.short_description = _("finish coordinates")
-    finish_coordinate_html.allow_tags = True
 
     def leaflet_map_html(self):
         gpxpy_instance = self.get_gpxpy_instance()
@@ -459,7 +497,6 @@ class GpxModel(UpdateTimeBaseModel):
         return render_to_string(template_name="for_runners/leaflet_map.html", context=context)
 
     leaflet_map_html.short_description = _("Leaflet MAP")
-    leaflet_map_html.allow_tags = True
 
     @display_admin_error
     def chartjs_html(self):
@@ -493,7 +530,6 @@ class GpxModel(UpdateTimeBaseModel):
         return render_to_string(template_name="for_runners/chartjs.html", context=context)
 
     chartjs_html.short_description = _("chartjs MAP")
-    chartjs_html.allow_tags = True
 
     def point_density(self):
         """
@@ -650,21 +686,15 @@ class GpxModel(UpdateTimeBaseModel):
 
         if not self.track_svg:
             log.debug("Create SVG from GPX...")
-
             svg_string = gpx2svg_string(gpxpy_instance)
+            content = ContentFile(svg_string)
 
-            # import filer.models.imagemodels.Image
-            Image = load_model(settings.FILER_IMAGE_MODEL)
-
-            temp = io.BytesIO(bytes(svg_string, "utf-8"))
-            django_file_obj = File(temp, name="gpx.svg")
-            filer_image = Image.objects.create(
-                owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
+            # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
+            self.track_svg.save(
+                name="temp.svg",  # real file path will be set in self.get_svg_upload_path()
+                content=content,
+                save=False
             )
-            filer_image.save()
-
-            # self.track_svg.save("gpx2svg", svg_string)
-            self.track_svg = filer_image  #save("gpx2svg", svg_string)
 
         # TODO: Handle other extensions, too.
         # Garmin containes also 'cad'
@@ -696,7 +726,13 @@ class GpxModel(UpdateTimeBaseModel):
         name = self.short_name()
         return slugify(name)
 
+    def get_prefix_id(self):
+        gpxpy_instance = self.get_gpxpy_instance()
+        prefix_id = GpxIdentifier(gpxpy_instance).get_prefix_id()
+        return prefix_id
+
     def __str__(self):
+        # return self.get_prefix_id()
         return self.short_name()
 
     class Meta:
