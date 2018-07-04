@@ -148,14 +148,15 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == Django compatibility
 
 |= django-for-runners |= django version |= python         |
-| v0.4.x              | 2.0             | 3.5, 3.6, 3.7   |
+| v0.5.x              | 2.0             | 3.5, 3.6, 3.7   |
 
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
 
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.4.0...master|compare v0.4.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.5.0...master|compare v0.5.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.4.0...v0.5.0|04.07.2018 - v0.5.0]]:
 ** remove Django-CMS
 ** update to Django v2.0
 ** NOTE: The migrations are simply replaced! So you must delete your database, e.g.: {{{src/django-for-runners$ rm test_project_db.sqlite3}}}
