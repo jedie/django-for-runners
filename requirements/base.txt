@@ -3,7 +3,7 @@
 #
 
 # https://github.com/jedie/django-tools
-django-tools>=0.40.0
+django-tools>=0.40.2
 
 # https://pypi.org/project/autotask/
 # https://bitbucket.org/kbr/autotask
