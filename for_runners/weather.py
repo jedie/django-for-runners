@@ -23,6 +23,7 @@ from urllib.error import URLError
 
 log = logging.getLogger(__name__)
 
+
 class NoWeatherData(ValueError):
     pass
 
@@ -47,7 +48,6 @@ def request_json(url, timeout=3, user_agent="python"):
         return data
 
 
-
 class MetaWeatherCom:
 
     API_URL = "https://www.metaweather.com/api"
@@ -58,6 +58,7 @@ class MetaWeatherCom:
         return data
 
     _lat_lon2woeid_cache = {}
+
     def lat_lon2woeid(self, lat, lon, decimal_places=2):
         """
         lat/lon coordinates to WOEID (Where On Earth ID)
@@ -107,6 +108,7 @@ class MetaWeatherCom:
         return result
 
     _location_day_cache = {}
+
     def location_day(self, woeid, date, max_seconds=60):
 
         url = "/location/{woeid}/{year}/{month}/{day}/".format(
@@ -153,7 +155,7 @@ class MetaWeatherCom:
         temperatures = []
         weather_state_counter = collections.Counter()
         for delta_seconds, result in sorted(data.items()):
-            if len(temperatures)>0 and delta_seconds > max_seconds:
+            if len(temperatures) > 0 and delta_seconds > max_seconds:
                 # Skip if "created" date time is more than max_seconds, but collect at least one result
                 continue
 
@@ -168,9 +170,10 @@ class MetaWeatherCom:
         temperature = statistics.median(temperatures)
 
         # print(weather_state_counter) # e.g.: Counter({'Light Cloud': 5, 'Showers': 2, 'Heavy Cloud': 1})
-        weather_states = [item[0] for item in weather_state_counter.most_common()] # e.g.: ['Light Cloud', 'Showers', 'Heavy Cloud']
+        weather_states = [item[0] for item in weather_state_counter.most_common()
+                         ]  # e.g.: ['Light Cloud', 'Showers', 'Heavy Cloud']
         # print(weather_states)
-        weather_state = "/".join(weather_states[:2]) # e.g.: Light Cloud/Showers
+        weather_state = "/".join(weather_states[:2])  # e.g.: Light Cloud/Showers
 
         log.info("Result: %.1f°C %r", temperature, weather_state)
 
@@ -199,7 +202,6 @@ class MetaWeatherCom:
 
 meta_weather_com = MetaWeatherCom()
 
-
 if __name__ == "__main__":
     # Duisburg:
     # https://www.metaweather.com/api/location/search/?lattlong=51.4109,6.7828
@@ -213,7 +215,15 @@ if __name__ == "__main__":
 
     # Essen City on 21.06.2018
     # https://www.metaweather.com/de/648820/2018/6/20/
-    temperature, weather_state = meta_weather_com.coordinates2weather(51.4109,6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30))
-    temperature, weather_state = meta_weather_com.coordinates2weather(51.4109,6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=13, minute=30))
-    temperature, weather_state = meta_weather_com.coordinates2weather(51.4109,6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=4, minute=30))
-    temperature, weather_state = meta_weather_com.coordinates2weather(51.4109,6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30))
+    temperature, weather_state = meta_weather_com.coordinates2weather(
+        51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
+    )
+    temperature, weather_state = meta_weather_com.coordinates2weather(
+        51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=13, minute=30)
+    )
+    temperature, weather_state = meta_weather_com.coordinates2weather(
+        51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=4, minute=30)
+    )
+    temperature, weather_state = meta_weather_com.coordinates2weather(
+        51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
+    )

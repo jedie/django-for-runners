@@ -16,14 +16,18 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+
+# https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
 from django_tools.models import UpdateTimeBaseModel
+
+# https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import (
     GpxIdentifier, add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance,
     iter_points, parse_gpx
 )
-from for_runners.gpx_tools.humanize import (human_distance, human_duration, human_seconds)
+from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.models import DistanceModel, EventModel
 from for_runners.svg import gpx2svg_file, gpx2svg_string
