@@ -24,7 +24,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View, generic
 from django.views.generic.base import TemplateResponseMixin, TemplateView
 
-from autotask.tasks import delayed_task
 
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
