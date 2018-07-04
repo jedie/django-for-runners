@@ -11,7 +11,6 @@ import statistics
 from datetime import date
 from pprint import pprint
 
-from autotask.tasks import delayed_task
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
@@ -23,12 +22,15 @@ from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import View, generic
-# https://github.com/jedie/django-for-runners
 from django.views.generic.base import TemplateResponseMixin, TemplateView
+
+from autotask.tasks import delayed_task
+
+# https://github.com/jedie/django-for-runners
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import (INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm)
-from for_runners.models import (DisciplineModel, DistanceModel, EventLinkModel, EventModel, GpxModel)
+from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
+from for_runners.models import DisciplineModel, DistanceModel, EventLinkModel, EventModel, GpxModel
 
 log = logging.getLogger(__name__)
 
