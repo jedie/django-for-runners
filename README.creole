@@ -49,7 +49,7 @@ e.g.:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install --upgrade pip
 
 # install django-for-runners:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install -e git+https://github.com/jedie/django-for-runners.git@master#egg=django_for_runners
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install django-for-runners
 
 # install dependencies:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
