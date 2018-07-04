@@ -10,6 +10,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -31,9 +32,9 @@ from for_runners.weather import NoWeatherData, meta_weather_com
 log = logging.getLogger(__name__)
 
 
-def upload_path(instance, filename):
+def svg_upload_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return instance.get_upload_path(filename)
+    return instance.get_svg_upload_path(filename)
 
 
 class GpxModel(UpdateTimeBaseModel):
@@ -50,10 +51,7 @@ class GpxModel(UpdateTimeBaseModel):
         on_delete=models.SET_NULL,
     )
 
-    gpx = models.FileField(
-        verbose_name=_("GPX Track"),
-        upload_to=upload_path,
-    )
+    gpx = models.TextField(help_text="The raw gpx file content",)
     creator = models.CharField(
         help_text="Used device to create this track",
         max_length=511,
@@ -62,7 +60,7 @@ class GpxModel(UpdateTimeBaseModel):
     )
     track_svg = models.FileField(
         verbose_name=_("Track SVG"),
-        upload_to=upload_path,
+        upload_to=svg_upload_path,
         null=True,
         blank=True,
     )
@@ -203,8 +201,7 @@ class GpxModel(UpdateTimeBaseModel):
         help_text=_(
             "Min/km (number of minutes it takes to cover a kilometer)"),
         max_digits=4,
-        decimal_places=
-        2,  # store numbers up to 99 with a resolution of 2 decimal places
+        decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
         null=True,
         blank=True,
     )
@@ -257,8 +254,11 @@ class GpxModel(UpdateTimeBaseModel):
 
         # TODO: schedule request weather info, if not set
 
-    def get_upload_path(self, filename):
-        return "%s_%s" % (self.get_prefix_id(), filename)
+    def get_svg_upload_path(self, filename):
+        date_prefix = self.start_time.strftime("%Y_%m")
+        svg_upload_path = "track_svg_%s/%s.svg" % (date_prefix, self.get_prefix_id())
+        log.debug("Ignore source filename: %r upload to: %r", filename, svg_upload_path)
+        return svg_upload_path
 
     def svg_tag(self):
         if self.track_svg:
@@ -546,10 +546,7 @@ class GpxModel(UpdateTimeBaseModel):
             return self._GPXPY_CACHE[self.pk]
         except KeyError:
             if self.gpx:
-                with self.gpx.open("rb") as f:
-                    content_bytes = f.read()
-                content = content_bytes.decode("UTF-8")
-                gpxpy_instance = parse_gpx(content=content)
+                gpxpy_instance = parse_gpx(content=self.gpx)
                 if self.pk is not None:
                     self._GPXPY_CACHE[self.pk] = gpxpy_instance
                 return gpxpy_instance
@@ -659,32 +656,15 @@ class GpxModel(UpdateTimeBaseModel):
 
         if not self.track_svg:
             log.debug("Create SVG from GPX...")
-
-            # svg_filename = upload_path(instance=self, filename=) q
-
-            # temp = io.BytesIO()
-            # gpx2svg_file(gpxpy_instance, fileobj=temp)
-
             svg_string = gpx2svg_string(gpxpy_instance)
+            content = ContentFile(svg_string)
 
             # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
-            self.track_svg.save(self.gpx.name + ".svg", svg_string, save=False)
-
-            #
-            #
-            # # import filer.models.imagemodels.Image
-            # Image = load_model(settings.FILER_IMAGE_MODEL)
-            #
-            # temp = io.BytesIO(bytes(svg_string, "utf-8"))
-            # django_file_obj = File(temp, name="gpx.svg")
-
-            # filer_image = Image.objects.create(
-            #     owner=self.tracked_by, original_filename="gpx.svg", file=django_file_obj, folder=None
-            # )
-            # filer_image.save()
-            #
-            # # self.track_svg.save("gpx2svg", svg_string)
-            # self.track_svg = filer_image  #save("gpx2svg", svg_string)
+            self.track_svg.save(
+                name="temp.svg",  # real file path will be set in self.get_svg_upload_path()
+                content=content,
+                save=False
+            )
 
         # TODO: Handle other extensions, too.
         # Garmin containes also 'cad'
@@ -722,7 +702,8 @@ class GpxModel(UpdateTimeBaseModel):
         return prefix_id
 
     def __str__(self):
-        return self.get_prefix_id()
+        # return self.get_prefix_id()
+        return self.short_name()
 
     class Meta:
         verbose_name = _('GPX Track')

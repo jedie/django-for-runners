@@ -30,9 +30,9 @@ class GpxTests(TestUserMixin, TestCase):
         self.assertEqual(repr(instance), "<GpxModel: 2018-02-21 Moers Hülsdonk>")
 
         self.assertEqual(instance.points_no, 3)
-        self.assertEqual(round(instance.length, 3), 4.718)
+        self.assertEqual(round(instance.length, 3), 4.727)
         self.assertEqual(instance.duration, 2)
-        self.assertEqual(round(instance.pace, 3), 7.065)
+        self.assertEqual(round(instance.pace, 3), 7.052)
         self.assertEqual(instance.heart_rate_avg, 125)
 
         self.assertEqual(instance.get_short_slug(), "2018-02-21-moers-hulsdonk")
