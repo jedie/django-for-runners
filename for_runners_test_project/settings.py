@@ -62,7 +62,8 @@ INSTALLED_APPS = (
 
     'debug_toolbar', # https://github.com/jazzband/django-debug-toolbar/
 
-    'autotask', # https://bitbucket.org/kbr/autotask
+    # FIXME: https://bitbucket.org/kbr/autotask/pull-requests/3/
+    # 'autotask', # https://bitbucket.org/kbr/autotask
 
     # 'easy_thumbnails', # https://github.com/SmileyChris/easy-thumbnails
     # 'treebeard', # https://github.com/django-treebeard/django-treebeard
