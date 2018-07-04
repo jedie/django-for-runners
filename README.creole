@@ -98,6 +98,9 @@ import GPX files, e.g.:
 # run the tests:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py test
+
+# run text via tox:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py tox
 }}}
 
 
@@ -144,22 +147,18 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == Django compatibility
 
-|= django-for-runners |= Django CMS |= django version |= python         |
-| v0.x.x            | 3.4.x TLS   | 1.11 TLS        | 3.5, 3.6   |
+|= django-for-runners |= django version |= python         |
+| v0.4.x              | 2.0             | 3.5, 3.6, 3.7   |
 
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
-
-
-== TODO:
-
- * Add real tests
- * Support Django CMS v3.5 and run tests against these versions.
- * Support Django v2.0 and run tests against these versions.
 
 
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.4.0...master|compare v0.4.0...master]] **dev**
+** remove Django-CMS
+** update to Django v2.0
+** NOTE: The migrations are simply replaced! So you must delete your database, e.g.: {{{src/django-for-runners$ rm test_project_db.sqlite3}}}
 ** Add 'net duration' field, for the officially measured time and use it for calculations if available.
 ** Create django manage command to fill some base data: {{{$ ./manage.py fill_basedata}}}
 ** speedup by deactivating some django debug toolbar panels
