@@ -156,6 +156,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.5.0...master|compare v0.5.0...master]] **dev**
+** WIP: event participation
 * [[https://github.com/jedie/django-for-runners/compare/v0.4.0...v0.5.0|04.07.2018 - v0.5.0]]:
 ** remove Django-CMS
 ** update to Django v2.0

@@ -29,6 +29,7 @@ from for_runners import constants
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
 from for_runners.models import DisciplineModel, DistanceModel, EventLinkModel, EventModel, GpxModel
+from for_runners.models.event import CostModel, ParticipationModel
 
 log = logging.getLogger(__name__)
 
@@ -97,6 +98,20 @@ class EventModelAdmin(admin.ModelAdmin):
     list_display_links = ("verbose_name",)
     inlines = [
         LinkModelInline,
+    ]
+
+
+class CostModelInline(admin.TabularInline):
+    model = CostModel
+    extra = 2
+    min_num = 0
+    max_num = None
+
+
+@admin.register(ParticipationModel)
+class ParticipationModelAdmin(admin.ModelAdmin):
+    inlines = [
+        CostModelInline,
     ]
 
 
@@ -400,8 +415,8 @@ class GpxModelAdmin(admin.ModelAdmin):
         "creator",
     )
     list_display = (
-        "svg_tag", "overview", "start_time", "human_length_html", "human_duration_html", "human_pace", "heart_rate_avg",
-        "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
+        "svg_tag", "overview", "start_time", "human_length_html", "human_duration_html", "human_pace",
+        "heart_rate_avg", "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
     )
     list_filter = (
         StatisticsListFilter,

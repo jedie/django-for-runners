@@ -7,10 +7,16 @@
 import logging
 from urllib.parse import urlparse
 
+from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
+# https://github.com/jedie/django-tools
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
+
+# https://github.com/jedie/django-for-runners
+from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.models import DisciplineModel
 
 log = logging.getLogger(__name__)
@@ -26,6 +32,11 @@ def human_url(url):
 
 
 class LinkModelBase(UpdateTimeBaseModel):
+    """
+    inherit and automatically set from UpdateTimeBaseModel:
+     * createtime
+     * lastupdatetime
+    """
     url = models.URLField(help_text=_("Link URL"))
     text = models.CharField(
         max_length=127,
@@ -125,3 +136,96 @@ class EventModel(UpdateInfoBaseModel):
 
 class EventLinkModel(LinkModelBase):
     event = models.ForeignKey(EventModel, related_name="links", on_delete=models.CASCADE)
+
+
+class ParticipationModel(UpdateTimeBaseModel):
+    """
+    inherit and automatically set from UpdateTimeBaseModel:
+     * createtime
+     * lastupdatetime
+    """
+    event = models.ForeignKey(EventModel, related_name="participations", on_delete=models.CASCADE)
+    person = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="+",
+        help_text="The person who participated to this competition.",
+        on_delete=models.CASCADE,
+    )
+    distance = models.ForeignKey(
+        to="for_runners.DistanceModel",
+        on_delete=models.CASCADE,
+        related_name="event_participations",
+        help_text=_("Length in meters of your event participation")
+    )
+    duration = models.TimeField(
+        verbose_name=_("Duration"),
+        help_text=_("You officially measured finisher time"),
+        null=True, blank=True,
+    )
+    start_number = models.CharField(max_length=15,
+        help_text=_("Your start number"),
+        null=True, blank=True
+    )
+    finisher_count = models.PositiveIntegerField(
+        help_text=_("Number of participants who have finished in your discipline"),
+        null=True, blank=True
+    )
+
+    def get_duration_s(self):
+        """
+        :return: duration in seconds
+        """
+        if self.duration:
+            # FIXME: Is there really no easier way to do this?
+            duration = self.duration.second
+            duration += (self.duration.minute * 60)
+            duration += (self.duration.hour * 60 * 60)
+            return duration
+
+    def human_duration(self):
+        if self.duration:
+            return human_seconds(self.get_duration_s())
+
+    def verbose_name(self):
+        parts = [
+            self.event.verbose_name(),
+            "-",
+            self.person.username,
+            "-",
+            self.distance.get_human_distance(),
+        ]
+        if self.duration:
+            parts.append("in %s" % self.human_duration())
+
+        result = " ".join([part for part in parts if part])
+        return result
+
+    verbose_name.short_description = _("Event Name")
+    verbose_name.admin_order_field = "name"
+
+    def __str__(self):
+        return self.verbose_name()
+
+    class Meta:
+        verbose_name = _('Event Participation')
+        verbose_name_plural = _('Event Participations')
+
+
+class CostModel(UpdateTimeBaseModel):
+    """
+    inherit and automatically set from UpdateTimeBaseModel:
+     * createtime
+     * lastupdatetime
+    """
+    participation = models.ForeignKey(ParticipationModel, related_name="costs", on_delete=models.CASCADE)
+    name = models.CharField(max_length=15,
+        help_text=_("Your start number"),
+    )
+    amount = models.DecimalField(
+        help_text=_("How much did you pay for this?"),
+        max_digits=8, decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
+    )
+
+    class Meta:
+        verbose_name = _('Participation Cost')
+        verbose_name_plural = _('Participation Costs')
