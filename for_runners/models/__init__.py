@@ -5,5 +5,5 @@
 """
 from for_runners.models.discipline import DisciplineModel
 from for_runners.models.distance import DistanceModel
-from for_runners.models.event import EventLinkModel, EventModel
+from for_runners.models.event import EventLinkModel, EventModel, ParticipationModel
 from for_runners.models.gpx import GpxModel

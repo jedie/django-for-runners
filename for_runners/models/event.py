@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
 # https://github.com/jedie/django-for-runners
-from for_runners.gpx_tools.humanize import human_seconds
+from for_runners.gpx_tools.humanize import human_distance
 from for_runners.models import DisciplineModel
 
 log = logging.getLogger(__name__)
@@ -140,9 +140,9 @@ class EventLinkModel(LinkModelBase):
 
 class ParticipationModel(UpdateTimeBaseModel):
     """
-    inherit and automatically set from UpdateTimeBaseModel:
-     * createtime
-     * lastupdatetime
+    inherit from UpdateTimeBaseModel:
+        * createtime
+        * lastupdatetime
     """
     event = models.ForeignKey(EventModel, related_name="participations", on_delete=models.CASCADE)
     person = models.ForeignKey(
@@ -151,11 +151,11 @@ class ParticipationModel(UpdateTimeBaseModel):
         help_text="The person who participated to this competition.",
         on_delete=models.CASCADE,
     )
-    distance = models.ForeignKey(
-        to="for_runners.DistanceModel",
-        on_delete=models.CASCADE,
-        related_name="event_participations",
-        help_text=_("Length in meters of your event participation")
+    distance_km = models.DecimalField(
+        help_text=_("Official track length in kilometer."),
+        # store numbers up to 999 with a resolution of 4 decimal places
+        max_digits=7,
+        decimal_places=4,
     )
     duration = models.TimeField(
         verbose_name=_("Duration"),
@@ -171,6 +171,12 @@ class ParticipationModel(UpdateTimeBaseModel):
         null=True, blank=True
     )
 
+    def get_human_distance(self):
+        return human_distance(self.distance_km)
+
+    get_human_distance.short_description = _("Distance")
+    get_human_distance.admin_order_field = "distance_km"
+
     def get_duration_s(self):
         """
         :return: duration in seconds
@@ -182,9 +188,13 @@ class ParticipationModel(UpdateTimeBaseModel):
             duration += (self.duration.hour * 60 * 60)
             return duration
 
-    def human_duration(self):
+    def get_pace_s(self):
         if self.duration:
-            return human_seconds(self.get_duration_s())
+            pace = (self.get_duration_s() / 60) / float(self.distance_km)
+            if pace > 99 or pace < 0:
+                log.error("Pace out of range: %f", pace)
+            else:
+                return pace * 60
 
     def verbose_name(self):
         parts = [
@@ -192,7 +202,7 @@ class ParticipationModel(UpdateTimeBaseModel):
             "-",
             self.person.username,
             "-",
-            self.distance.get_human_distance(),
+            self.get_human_distance(),
         ]
         if self.duration:
             parts.append("in %s" % self.human_duration())
@@ -209,6 +219,7 @@ class ParticipationModel(UpdateTimeBaseModel):
     class Meta:
         verbose_name = _('Event Participation')
         verbose_name_plural = _('Event Participations')
+        ordering = ('-event__start_date', 'person')
 
 
 class CostModel(UpdateTimeBaseModel):

@@ -28,6 +28,7 @@ from django.views.generic.base import TemplateResponseMixin, TemplateView
 from for_runners import constants
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
+from for_runners.gpx_tools.humanize import human_seconds
 from for_runners.models import DisciplineModel, DistanceModel, EventLinkModel, EventModel, GpxModel
 from for_runners.models.event import CostModel, ParticipationModel
 
@@ -90,10 +91,18 @@ class HasTracksFilter(admin.SimpleListFilter):
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
 
-    def track_count(self, obj):
-        return obj.tracks.count()
+    def participations(self, obj):
+        html = []
+        participations = obj.participations.all()
+        for participation in participations:
+            html.append(participation.person.username)
+        html = "<br>".join(html)
+        html = mark_safe(html)
+        return html
+    participations.short_description = _("Participations")
 
-    list_display = ("verbose_name", "track_count", "links_html", "start_date", "discipline")
+    list_display = ("verbose_name", "participations", "links_html", "start_date", "discipline")
+    date_hierarchy = "start_date"
     list_filter = (HasTracksFilter,)
     list_display_links = ("verbose_name",)
     inlines = [
@@ -110,6 +119,27 @@ class CostModelInline(admin.TabularInline):
 
 @admin.register(ParticipationModel)
 class ParticipationModelAdmin(admin.ModelAdmin):
+
+    def human_duration(self, obj):
+        if obj.duration:
+            return human_seconds(obj.get_duration_s())
+    human_duration.short_description = _("Duration")
+    human_duration.admin_order_field = "duration"
+
+    def pace(self, obj):
+        pace_s = obj.get_pace_s()
+        if pace_s:
+            return "%s min/km" % human_seconds(pace_s)
+    pace.short_description = _("Pace")
+
+    list_display = ("event", "distance_km", "finisher_count", "person", "start_number", "human_duration", "pace")
+    list_filter = ("person", "distance_km")
+    date_hierarchy = "event__start_date"
+    search_fields = (
+        "person__username",
+        "event__name",
+        "event__start_date",
+    )
     inlines = [
         CostModelInline,
     ]
@@ -441,7 +471,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     fieldsets = (
         (_("Event"), {
             "fields": (
-                ("event", "net_duration"),
+                ("participation", "net_duration"),
                 "leaflet_map_html",
                 "chartjs_html",
             )
@@ -486,8 +516,9 @@ class GpxModelAdmin(admin.ModelAdmin):
 
     def overview(self, obj):
         parts = []
-        if obj.event:
-            parts.append("<strong>%s</strong>" % obj.event)
+        if obj.participation:
+            event = obj.participation.event
+            parts.append("<strong>%s</strong>" % event)
         parts.append(obj.start_end_address())
         html = "<br>".join(parts)
         return mark_safe(html)

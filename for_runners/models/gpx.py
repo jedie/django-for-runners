@@ -29,7 +29,7 @@ from for_runners.gpx import (
 )
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
-from for_runners.models import DistanceModel, EventModel
+from for_runners.models import DistanceModel, ParticipationModel
 from for_runners.svg import gpx2svg_file, gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
 
@@ -47,8 +47,8 @@ class GpxModel(UpdateTimeBaseModel):
         * createtime
         * lastupdatetime
     """
-    event = models.ForeignKey(
-        EventModel,
+    participation = models.ForeignKey(
+        ParticipationModel,
         related_name="tracks",
         null=True,
         blank=True,
@@ -417,7 +417,6 @@ class GpxModel(UpdateTimeBaseModel):
 
     def human_pace(self):
         if self.pace:
-
             return "%s min/km" % human_seconds(self.pace * 60)
 
     human_pace.short_description = _("Pace")
@@ -610,14 +609,26 @@ class GpxModel(UpdateTimeBaseModel):
         self.length = gpxpy_instance.length_3d()
 
         try:
-            self.ideal_distance = DistanceModel.objects.get(
+            ideal_distances_qs = DistanceModel.objects.filter(
                 min_distance_m__lte=self.length,
                 max_distance_m__gte=self.length,
             )
         except DistanceModel.DoesNotExist:
             pass
         else:
-            log.debug("Set ideal distance to %s", self.ideal_distance)
+            ideal_distance_count = ideal_distances_qs.count()
+            if ideal_distance_count>1:
+                log.error("Found more the one ideal distances for %i Meters", self.length)
+                ideal_distances_qs = ideal_distances_qs.order_by("distance_km")
+                ideal_distance = ideal_distances_qs[0]
+            elif ideal_distance_count==1:
+                ideal_distance = ideal_distances_qs.get()
+            else:
+                ideal_distance = None
+
+            if ideal_distance:
+                self.ideal_distance = ideal_distance
+                log.debug("Set ideal distance to %s", self.ideal_distance)
 
         # e.g: GPX without a track return 0
         duration = gpxpy_instance.get_duration()
@@ -713,8 +724,8 @@ class GpxModel(UpdateTimeBaseModel):
             return "new, unsaved GPX Track"
 
         parts = [self.start_time.strftime("%Y-%m-%d")]
-        if self.event:
-            parts.append(self.event.name)
+        if self.participation:
+            parts.append(self.participation.event.name)
         else:
             parts.append(self.short_start_address)
         result = " ".join([str(part) for part in parts if part])
