@@ -234,7 +234,7 @@ class CostModel(UpdateTimeBaseModel):
     """
     participation = models.ForeignKey(ParticipationModel, related_name="costs", on_delete=models.CASCADE)
     name = models.CharField(max_length=15,
-        help_text=_("Your start number"),
+        help_text=_("The name of the item you dis pay for"),
     )
     amount = models.DecimalField(
         help_text=_("How much did you pay for this?"),
