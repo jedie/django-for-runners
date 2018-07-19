@@ -23,6 +23,9 @@ We collect some JavaScript files, for easier startup. These files are:
 == Screenshots
 
 
+(All screenshots are here: [[https://github.com/jedie/jedie.github.io/tree/master/screenshots/django-for-runners|github.com/jedie/jedie.github.io/tree/master/screenshots/django-for-runners]])
+
+
 == for-runners v0.4.0 2018-6-26 GPX info.png ==
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.4.0 2018-6-26 GPX info.png|for-runners v0.4.0 2018-6-26 GPX info.png}}
 
@@ -33,6 +36,7 @@ We collect some JavaScript files, for easier startup. These files are:
 
 == for-runners v0.6.0 2018-07-19 Event Costs.png ==
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.6.0 2018-07-19 Event Costs.png|for-runners v0.6.0 2018-07-19 Event Costs.png}}
+
 
 
 == try-out
