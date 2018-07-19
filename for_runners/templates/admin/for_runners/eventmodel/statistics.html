@@ -1,0 +1,10 @@
+{% load i18n  %}
+
+{% for person, data in person_data.items %}
+    <h3>{{ person }}</h3>
+    <table>
+    {% for key, value in data.items %}
+            <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+    {% endfor %}
+    </table>
+{% endfor %}

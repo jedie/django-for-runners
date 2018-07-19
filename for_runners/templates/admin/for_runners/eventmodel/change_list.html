@@ -1,0 +1,7 @@
+{% extends "admin/for_runners/change_list.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools %}
+    {{ block.super }}
+    {{ cl.statistics }}
+{% endblock %}

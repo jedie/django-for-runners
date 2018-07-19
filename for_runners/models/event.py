@@ -241,6 +241,9 @@ class CostModel(UpdateTimeBaseModel):
         max_digits=8, decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
     )
 
+    def __str__(self):
+        return "%s: %s" % (self.name, self.amount)
+
     class Meta:
         verbose_name = _('Participation Cost')
         verbose_name_plural = _('Participation Costs')

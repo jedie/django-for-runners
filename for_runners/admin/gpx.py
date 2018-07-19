@@ -20,10 +20,10 @@ from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from django.views.generic.base import TemplateView
 
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
+from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
 from for_runners.models import GpxModel
@@ -75,31 +75,6 @@ class UploadGpxFileView(generic.FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
-
-class ChangelistViewMixin:
-
-    def dispatch(self, request, change_list, *args, **kwargs):
-        self.change_list = change_list
-        return super().dispatch(request, *args, **kwargs)
-
-
-class BaseChangelistView(ChangelistViewMixin, TemplateView):
-    """
-    Baseclass for chnagelist views without forms.
-    """
-    pass
-
-
-class BaseFormChangelistView(ChangelistViewMixin, generic.FormView):
-    """
-    Baseclass for chnagelist views with forms.
-    """
-    form_class = None
-
-    def form_valid(self, form):
-        # Don't redirect, if form is valid ;)
-        return self.render_to_response(self.get_context_data(form=form))
 
 
 class DistancePaceStatisticsView(BaseChangelistView):
@@ -231,8 +206,7 @@ class GpxMetadataView(BaseChangelistView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            "tracks": self.change_list.
-            queryset,  # get the filteres queryset form GpxModelChangeList,
+            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList
             "title": _("GPX Metadata"),
             "user": self.request.user,
             "opts": GpxModel._meta,
