@@ -31,6 +31,9 @@ We collect some JavaScript files, for easier startup. These files are:
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.4.0 2018-6-26 Change GPX Track.png|for-runners v0.4.0 2018-6-26 Change GPX Track.png}}
 
 
+== for-runners v0.6.0 2018-07-19 Event Costs.png ==
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.6.0 2018-07-19 Event Costs.png|for-runners v0.6.0 2018-07-19 Event Costs.png}}
+
 
 == try-out
 
