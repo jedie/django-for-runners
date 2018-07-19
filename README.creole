@@ -155,8 +155,11 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.5.0...master|compare v0.5.0...master]] **dev**
-** WIP: event participation
+* [[https://github.com/jedie/django-for-runners/compare/v0.6.0...master|compare v0.6.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.5.0...v0.6.0|19.07.2018 - v0.6.0]]:
+** NEW: event participation
+** NEW: costs of event participation (e.g.: entry fee for the competition, cost of a T-Shirt etc.)
+** NEW: Display statistics of events/costs per user and total
 * [[https://github.com/jedie/django-for-runners/compare/v0.4.0...v0.5.0|04.07.2018 - v0.5.0]]:
 ** remove Django-CMS
 ** update to Django v2.0
