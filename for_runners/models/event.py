@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
 # https://github.com/jedie/django-for-runners
-from for_runners.gpx_tools.humanize import human_distance
+from for_runners.gpx_tools.humanize import human_distance, human_seconds
 from for_runners.models import DisciplineModel
 
 log = logging.getLogger(__name__)
@@ -187,6 +187,10 @@ class ParticipationModel(UpdateTimeBaseModel):
             duration += (self.duration.minute * 60)
             duration += (self.duration.hour * 60 * 60)
             return duration
+
+    def human_duration(self):
+        if self.duration:
+            return human_seconds(self.get_duration_s())
 
     def get_pace_s(self):
         if self.duration:
