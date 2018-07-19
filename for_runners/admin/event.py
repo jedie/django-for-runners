@@ -7,6 +7,7 @@ import collections
 import logging
 from pprint import pprint
 
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.db import models
@@ -16,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # https://github.com/jedie/django-for-runners
 from for_runners.admin.utils import BaseChangelistView
-from for_runners.gpx_tools.humanize import human_seconds
+from for_runners.gpx_tools.humanize import human_distance, human_seconds, human_duration, convert_cash_values
 from for_runners.models import EventLinkModel, EventModel
 from for_runners.models.event import CostModel, ParticipationModel
 
@@ -57,7 +58,79 @@ class HasTracksFilter(admin.SimpleListFilter):
             return queryset.filter(participations__tracks__isnull=True)  # FIXME!
 
 
+class EventStatistics:
+    KEY_DISTANCE = "_distance"
+    KEY_DURATION = "_duration"
+
+    def __init__(self):
+        self.convert_map = {
+            self.KEY_DISTANCE: human_distance,
+            self.KEY_DURATION: human_duration,
+        }
+
+    def get(self, events):
+        raw_person_data = collections.defaultdict(collections.Counter)
+
+        for event in events:
+            # print(event)
+            for participation in event.participations.all():
+                # print(participation.person)
+                participation_data = {
+                    "_count": 1,
+                    self.KEY_DISTANCE: participation.distance_km or 0,
+                    self.KEY_DURATION: participation.get_duration_s() or 0,
+                }
+
+                for cost in participation.costs.all():
+                    # print(cost)
+                    participation_data[cost.name] = cost.amount
+
+                raw_person_data[participation.person.username] += collections.Counter(participation_data)
+
+        # turn defaultdict and counter to normal dict and convert some values:
+
+        total_costs = collections.Counter()
+
+        # pprint(raw_person_data)
+        person_data = {}
+        for username, counter_data in raw_person_data.items():
+            user_data = []
+            counter_data = dict(counter_data)
+            for key, value in sorted(counter_data.items()):
+                try:
+                    func = self.convert_map[key]
+                except KeyError:
+                    pass
+                else:
+                    value = func(value)
+
+                if key.startswith("_"):
+                    # internal key
+                    key = key[1:]
+                else:
+                    # costs item
+                    # collect total costs:
+                    total_costs += collections.Counter({"total": value, key: value})
+                    # convert decimal field:
+                    value = convert_cash_values(value)
+
+                user_data.append((key, value))
+            person_data[username] = user_data
+
+        total_costs = dict(total_costs)
+        total = total_costs.pop("total") # add total as lates item
+        total_costs = [(name, convert_cash_values(amount)) for name, amount in sorted(total_costs.items())]
+        total_costs.append(
+            (_("total"), convert_cash_values(total))
+        )
+
+        # pprint(person_data)
+        # pprint(total_costs)
+        return person_data, total_costs
+
+
 class StatisticsView(BaseChangelistView):
+
     template_name = "admin/for_runners/eventmodel/statistics.html"
 
     def get_context_data(self, **kwargs):
@@ -66,31 +139,12 @@ class StatisticsView(BaseChangelistView):
         events = self.change_list.queryset  # filtered EventModel queryset form GpxModelChangeList
         # print("Events:", events.count())
 
-        person_data = collections.defaultdict(collections.Counter)
-
-        for event in events:
-            # print(event)
-            for participation in event.participations.all():
-                # print(participation.person)
-                participation_data = {
-                    "count": 1,
-                    "distance_km": participation.distance_km or 0,
-                    "duration": participation.get_duration_s() or 0,
-                }
-
-                for cost in participation.costs.all():
-                    # print(cost)
-                    participation_data[cost.name] = cost.amount
-
-                person_data[participation.person.username] += collections.Counter(participation_data)
-
-        # turn defaultdict and counter to normal dict:
-        person_data = dict([(key, dict(value)) for key, value in person_data.items()])
-        # pprint(person_data)
+        person_data, total_costs = EventStatistics().get(events)
 
         context.update({
             "title": _("Event Statistics"),
             "person_data": person_data,
+            "total_costs": total_costs,
             "user": self.request.user,
             "opts": EventModel._meta,
         })

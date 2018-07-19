@@ -7,6 +7,7 @@ import datetime
 import decimal
 import math
 
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -125,3 +126,22 @@ def human_distance(km):
     txt = "%.4f" % km
     txt = txt.rstrip("0")
     return "%s km" % txt
+
+
+
+def convert_cash_values(value, round_value=True):
+    """
+    >>> convert_cash_values(10.60)
+    '11 €'
+    >>> convert_cash_values(10.60, round_value=False)
+    '10.60 €'
+    """
+    if round_value:
+        return "%i %s" % (
+            round(value), settings.FOR_RUNNERS_CURRENCY_SYMBOL
+        )
+    else:
+        return "%.2f %s" % (
+            value, settings.FOR_RUNNERS_CURRENCY_SYMBOL
+        )
+

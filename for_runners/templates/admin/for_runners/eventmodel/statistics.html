@@ -3,8 +3,15 @@
 {% for person, data in person_data.items %}
     <h3>{{ person }}</h3>
     <table>
-    {% for key, value in data.items %}
+    {% for key, value in data %}
             <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
     {% endfor %}
     </table>
 {% endfor %}
+
+<h3>{% trans "Total Costs" %}</h3>
+<table>
+{% for key, value in total_costs %}
+        <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+{% endfor %}
+</table>
