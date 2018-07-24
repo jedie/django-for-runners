@@ -497,39 +497,6 @@ class GpxModel(UpdateTimeBaseModel):
 
     leaflet_map_html.short_description = _("Leaflet MAP")
 
-    @display_admin_error
-    def chartjs_html(self):
-        gpxpy_instance = self.get_gpxpy_instance()
-
-        labels = []
-        elevations = []
-        heart_rates = []
-        cadence_values = []
-
-        for point in iter_points(gpxpy_instance):
-            add_extension_data(point)
-            labels.append(point.time)
-            elevations.append(point.elevation)
-            try:
-                heart_rates.append(point.extension_data["hr"])
-            except KeyError:
-                pass
-            try:
-                cadence_values.append(point.extension_data["cad"])
-            except KeyError:
-                pass
-
-        context = {
-            "instance": self,
-            "labels": labels,
-            "elevations": elevations,
-            "heart_rates": heart_rates,
-            "cadence_values": cadence_values,
-        }
-        return render_to_string(template_name="for_runners/chartjs.html", context=context)
-
-    chartjs_html.short_description = _("chartjs MAP")
-
     def point_density(self):
         """
         Calculate the "density" of the GPX signal:

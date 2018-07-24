@@ -16,16 +16,21 @@ from django.contrib.admin.views.main import ChangeList
 from django.db import IntegrityError, models
 from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+
+# https://github.com/jedie/django-tools
+from django_tools.decorators import display_admin_error
 
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
 from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
+from for_runners.gpx import add_extension_data, iter_distance, iter_points
 from for_runners.models import GpxModel
 
 log = logging.getLogger(__name__)
@@ -307,6 +312,78 @@ class HasEventFilter(admin.SimpleListFilter):
 
 @admin.register(GpxModel)
 class GpxModelAdmin(admin.ModelAdmin):
+
+    @display_admin_error
+    def dygraphs_html(self, obj):
+        """
+        Use dygraphs array format:
+            http://dygraphs.com/data.html#array
+        """
+        gpxpy_instance = obj.get_gpxpy_instance()
+
+        times = []
+
+        has_hr = None
+        has_cad = None
+
+        elevation_label = _("Elevation")
+
+        labels = [_("Date"), elevation_label]
+        columns = []
+
+        time2coordinates = {}
+
+        for point in iter_points(gpxpy_instance):
+            add_extension_data(point)
+
+            timestamp = point.time.timestamp() * 1000
+
+            time2coordinates[timestamp]=(point.latitude, point.longitude)
+
+            row = ["new Date(%i)" % timestamp, point.elevation]
+
+            if has_hr is None or has_hr == True:
+                try:
+                    row.append(point.extension_data["hr"])
+                except KeyError:
+                    has_hr = False
+                else:
+                    if has_hr is None:
+                        has_hr = True
+                        labels.append(_("heart rate"))
+
+            if has_cad is None or has_cad == True:
+                try:
+                    row.append(point.extension_data["cad"])
+                except KeyError:
+                    has_cad = False
+                else:
+                    if has_cad is None:
+                        has_cad = True
+                        labels.append(_("cadence"))
+
+            columns.append(",".join([str(i) for i in row]))
+
+        km_points = []
+        for point, distance_m, distance_km in iter_distance(gpxpy_instance, distance=1000):
+            km_points.append({
+                "x": "%i" % (point.time.timestamp() * 1000),
+                "distance_m": distance_m,
+                "distance_km": distance_km,
+            })
+
+        context = {
+            "instance": obj,
+            "labels": labels,
+            "columns": columns,
+            "elevation_label": elevation_label,
+            "km_points": km_points,
+            "time2coordinates": time2coordinates,
+        }
+        return render_to_string(template_name="admin/for_runners/gpxmodel/dygraphs.html", context=context)
+
+    dygraphs_html.short_description = _("dygraphs MAP")
+
     search_fields = (
         "full_start_address",
         "full_finish_address",
@@ -331,7 +408,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         "overview",
     )
     readonly_fields = (
-        "leaflet_map_html", "chartjs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
+        "leaflet_map_html", "dygraphs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
         "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
         "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
     )
@@ -341,7 +418,7 @@ class GpxModelAdmin(admin.ModelAdmin):
             "fields": (
                 ("participation", "net_duration"),
                 "leaflet_map_html",
-                "chartjs_html",
+                "dygraphs_html",
             )
         }),
         (_("Start"), {
