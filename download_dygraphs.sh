@@ -4,12 +4,13 @@
 # Update dygraphs (MIT License)
 #
 # http://dygraphs.com/
+# http://dygraphs.com/versions.html
 #
 
 set -ex
 
-mkdir -p for_runners/static/dygraph
-cd for_runners/static/dygraph
+mkdir -p for_runners/static/dygraphs
+cd for_runners/static/dygraphs
 
 #
 # download link from:
