@@ -338,7 +338,7 @@ class GpxModelAdmin(admin.ModelAdmin):
 
             timestamp = point.time.timestamp() * 1000
 
-            time2coordinates[timestamp]=(point.latitude, point.longitude)
+            time2coordinates[timestamp] = (point.latitude, point.longitude)
 
             row = ["new Date(%i)" % timestamp, point.elevation]
 
@@ -408,15 +408,30 @@ class GpxModelAdmin(admin.ModelAdmin):
         "overview",
     )
     readonly_fields = (
-        "leaflet_map_html", "dygraphs_html", "svg_tag_big", "svg_tag", "start_time", "start_latitude",
-        "start_longitude", "finish_time", "finish_latitude", "finish_longitude", "start_coordinate_html",
-        "finish_coordinate_html", "heart_rate_min", "heart_rate_avg", "heart_rate_max"
+        "leaflet_map_html",
+        "dygraphs_html",
+        "svg_tag_big",
+        "svg_tag",
+        "start_time",
+        "start_latitude",
+        "start_longitude",
+        "finish_time",
+        "finish_latitude",
+        "finish_longitude",
+        "start_coordinate_html",
+        "finish_coordinate_html",
+        "heart_rate_min",
+        "heart_rate_avg",
+        "heart_rate_max",
+        "human_length_html",
+        "human_duration_html",
+        "human_pace",
     )
 
     fieldsets = (
         (_("Event"), {
             "fields": (
-                ("participation", "net_duration"),
+                "participation",
                 "leaflet_map_html",
                 "dygraphs_html",
             )
@@ -448,8 +463,8 @@ class GpxModelAdmin(admin.ModelAdmin):
         }),
         (_("Values"), {
             "fields": (
-                ("length", "ideal_distance"),
-                ("duration", "pace"),
+                ("human_length_html", "ideal_distance"),
+                ("human_duration_html", "human_pace"),
                 ("heart_rate_min", "heart_rate_avg", "heart_rate_max"),
                 ("uphill", "downhill"),
                 ("min_elevation", "max_elevation"),

@@ -172,7 +172,7 @@ class GpxModel(UpdateTimeBaseModel):
 
     length = models.PositiveIntegerField(
         help_text=
-        _("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"
+        _("Length in meters (calculated from GPX track 3-dimensional used latitude, longitude, and elevation)"
           ),
         null=True,
         blank=True,
@@ -188,16 +188,9 @@ class GpxModel(UpdateTimeBaseModel):
         blank=True,
     )
 
-    duration = models.PositiveIntegerField(
-        help_text=_("Duration in seconds"),
-        null=True,
-        blank=True,
-    )
-    net_duration = models.TimeField(
-        verbose_name=_("Net Duration"),
-        help_text=
-        _("The officially measured time (e.g. from the official timekeeping of a running event.)"
-          ),
+    duration_s = models.PositiveIntegerField(
+        help_text=_("Duration in seconds (from the GPX track)"),
+        editable=False,
         null=True,
         blank=True,
     )
@@ -293,21 +286,10 @@ class GpxModel(UpdateTimeBaseModel):
             ratio = (float(self.ideal_distance.distance_km) * 1000) / self.length
             return ratio
 
-    def get_net_duration_s(self):
-        """
-        :return: net duration in seconds
-        """
-        if self.net_duration:
-            # FIXME: Is there really no easier way to do this?
-            duration = self.net_duration.second
-            duration += (self.net_duration.minute * 60)
-            duration += (self.net_duration.hour * 60 * 60)
-            return duration
-
-    def get_ideal_duration(self):
+    def get_ideal_duration_s(self):
         ratio = self.get_ideal_ratio()
         if ratio:
-            return self.duration * ratio
+            return self.duration_s * ratio
 
     def get_ideal_pace(self):
         ratio = self.get_ideal_ratio()
@@ -362,25 +344,32 @@ class GpxModel(UpdateTimeBaseModel):
     human_length_html.short_description = _("Length")
     human_length_html.admin_order_field = "length"
 
+    def get_net_duration_s(self):
+        if self.participation:
+            # Use net duration from event participation
+            return self.participation.get_duration_s()
+
     def human_duration(self):
-        if self.net_duration:
-            return human_seconds(self.get_net_duration_s())
+        # Use net duration from event participation
+        net_duration_s = self.get_net_duration_s()
+        if net_duration_s is not None:
+            return human_seconds(net_duration_s)
 
-        ideal_duration = self.get_ideal_duration()
-        if ideal_duration:
-            return human_seconds(ideal_duration)
+        ideal_duration_s = self.get_ideal_duration_s()
+        if ideal_duration_s:
+            return human_seconds(ideal_duration_s)
 
-        if self.duration:
-            return human_seconds(self.duration)
+        if self.duration_s:
+            return human_seconds(self.duration_s)
 
     def human_duration_html(self):
         """
         Enhanced version of self.human_duration()
         with more information via <span title="...">
         """
-        if self.net_duration:
-            net_duration_s = self.get_net_duration_s()
-            duration_diff = self.duration - net_duration_s
+        net_duration_s = self.get_net_duration_s()
+        if net_duration_s is not None:
+            duration_diff = self.duration_s - net_duration_s
             html = (
                 '<span'
                 ' title="{net} is the official net duration'
@@ -388,32 +377,32 @@ class GpxModel(UpdateTimeBaseModel):
                 '>{net}</span>'
             ).format(
                 net=human_seconds(net_duration_s),
-                gpx=human_seconds(self.duration),
+                gpx=human_seconds(self.duration_s),
                 diff=human_duration(duration_diff),
             )
             return mark_safe(html)
 
-        ideal_duration = self.get_ideal_duration()
-        if ideal_duration:
-            duration_diff = self.duration - ideal_duration
+        ideal_duration_s = self.get_ideal_duration_s()
+        if ideal_duration_s:
+            duration_diff = self.duration_s - ideal_duration_s
             html = (
                 '<span'
                 ' title="{ideal} is the standardized duration'
                 ' - GPX-Track: {gpx} (diff: {diff})"'
                 '>{ideal}</span>'
             ).format(
-                ideal=human_seconds(ideal_duration),
-                gpx=human_seconds(self.duration),
+                ideal=human_seconds(ideal_duration_s),
+                gpx=human_seconds(self.duration_s),
                 diff=human_duration(duration_diff),
             )
             return mark_safe(html)
 
-        if self.duration:
-            html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration)
+        if self.duration_s:
+            html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration_s)
             return mark_safe(html)
 
     human_duration_html.short_description = _("Duration")
-    human_duration_html.admin_order_field = "duration"
+    human_duration_html.admin_order_field = "duration_s"
 
     def human_pace(self):
         if self.pace:
@@ -550,9 +539,9 @@ class GpxModel(UpdateTimeBaseModel):
     def calc_pace(self):
         duration_s = self.get_net_duration_s()
         if not duration_s:
-            duration_s = self.get_ideal_duration()
+            duration_s = self.get_ideal_duration_s()
         if not duration_s:
-            duration_s = self.duration
+            duration_s = self.duration_s
         if not duration_s:
             return None
 
@@ -600,7 +589,7 @@ class GpxModel(UpdateTimeBaseModel):
         # e.g: GPX without a track return 0
         duration = gpxpy_instance.get_duration()
         if duration:
-            self.duration = duration
+            self.duration_s = duration
             self.calc_pace()
 
         uphill_downhill = gpxpy_instance.get_uphill_downhill()
@@ -623,7 +612,7 @@ class GpxModel(UpdateTimeBaseModel):
         if not self.start_temperature:
             try:
                 temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration
+                    self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration_s
                 )
             except NoWeatherData:
                 log.error("No weather data for start.")
@@ -634,7 +623,7 @@ class GpxModel(UpdateTimeBaseModel):
         if not self.finish_temperature:
             try:
                 temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration
+                    self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration_s
                 )
             except NoWeatherData:
                 log.error("No weather data for finish.")

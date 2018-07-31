@@ -31,7 +31,7 @@ class GpxTests(TestUserMixin, TestCase):
 
         self.assertEqual(instance.points_no, 3)
         self.assertEqual(round(instance.length, 3), 4.727)
-        self.assertEqual(instance.duration, 2)
+        self.assertEqual(instance.duration_s, 2)
         self.assertEqual(round(instance.pace, 3), 7.052)
         self.assertEqual(instance.heart_rate_avg, 125)
 
