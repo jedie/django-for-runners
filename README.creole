@@ -16,6 +16,7 @@ We collect some JavaScript files, for easier startup. These files are:
 
 |= Project |= License |= storage directory
 | [[http://leafletjs.com|Leaflet JS]] | [[https://github.com/Leaflet/Leaflet/blob/master/LICENSE|BSD]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/leaflet|for_runners/static/leaflet/]]
+| [[http://dygraphs.com|dygraphs]] | [[https://github.com/danvk/dygraphs/blob/master/LICENSE.txt|MIT]] | [[hhttps://github.com/jedie/django-for-runners/tree/master/for_runners/static/dygraphs|for_runners/static/dygraphs/]]
 | [[http://www.chartjs.org/|Chart.js]] | [[https://github.com/chartjs/Chart.js/blob/master/LICENSE.md|MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/chartjs|for_runners/static/chartjs/]]
 
 
@@ -227,8 +228,9 @@ Online tools:
 The whole thing is based on many excellent projects. Especially the following:
 
 * [[https://pypi.org/project/gpxpy/|gpxpy]] GPX file parser
-* [[http://leafletjs.com|Leaflet JS]] A JS library for interactive maps used to render the track on [[https://openstreetmap.org/|OpenStreetMap]]
-* [[http://www.chartjs.org/|Chart.js]] HTML5 Charts
+* [[https://leafletjs.com|Leaflet JS]] A JS library for interactive maps used to render the track on [[https://openstreetmap.org/|OpenStreetMap]]
+* [[http://dygraphs.com/|dygraphs]] open source JavaScript charting library
+* [[https://www.chartjs.org/|Chart.js]] HTML5 Charts
 * [[https://pypi.org/project/geopy/|geopy]] Get geo location names of the GPX track start/end point
 * [[https://pypi.org/project/matplotlib/|matplotlib]] plotting 2D graphics
 * [[https://pypi.org/project/autotask/|autotask]] schedule background jobs
