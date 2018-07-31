@@ -9,19 +9,15 @@
 {% endcomment %}
 
 var time2coordinates={
-    {% for timestamp, coordinates in time2coordinates.items %}
-        {{ timestamp|stringformat:"i" }}: [{{ coordinates.0|stringformat:".5f" }},{{ coordinates.1|stringformat:".5f" }}],
-    {% endfor %}
+    {% for timestamp, coordinates in time2coordinates.items %}{{ timestamp|stringformat:"i" }}:[{{ coordinates.0|stringformat:".5f" }},{{ coordinates.1|stringformat:".5f" }}],{% endfor %}
 }
 
-var leaflet_marker = L.marker(
-        [0,0], //{icon: icon_start}
-    ).addTo(map);
+var leaflet_marker = L.marker([0,0]).addTo(map);
 
 function graph2map(event, timestamp, pts, row) {
-    console.log("graph2map", timestamp);
+//    console.log("graph2map", timestamp);
     var coordinates=time2coordinates[timestamp];
-    console.log("coordinates", coordinates);
+//    console.log("coordinates", coordinates);
 
     var newLatLng = new L.LatLng(coordinates[0], coordinates[1]);
     leaflet_marker.setLatLng(newLatLng);
