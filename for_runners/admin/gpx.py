@@ -30,7 +30,7 @@ from for_runners import constants
 from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
-from for_runners.gpx import add_extension_data, iter_distance, iter_points
+from for_runners.gpx import add_extension_data, iter_distance, iter_points, get_2d_coordinate_list
 from for_runners.models import GpxModel
 
 log = logging.getLogger(__name__)
@@ -314,6 +314,31 @@ class HasEventPartricipationFilter(admin.SimpleListFilter):
 class GpxModelAdmin(admin.ModelAdmin):
 
     @display_admin_error
+    def leaflet_map_html(self, obj):
+        gpxpy_instance = obj.get_gpxpy_instance()
+
+        lat_list, lon_list = get_2d_coordinate_list(gpxpy_instance)
+        coordinates = zip(lat_list, lon_list)
+
+        km_gpx_points = iter_distance(gpxpy_instance, distance=1000)
+
+        context = {
+            "short_start_address": obj.short_start_address,
+            "start_time": obj.start_time,
+            "start_latitude": obj.start_latitude,
+            "start_longitude": obj.start_longitude,
+            "short_finish_address": obj.short_finish_address,
+            "finish_time": obj.finish_time,
+            "finish_latitude": obj.finish_latitude,
+            "finish_longitude": obj.finish_longitude,
+            "coordinates": coordinates,
+            "km_gpx_points": km_gpx_points,
+        }
+        return render_to_string(template_name="admin/for_runners/gpxmodel/leaflet_map.html", context=context)
+
+    leaflet_map_html.short_description = _("Route")
+
+    @display_admin_error
     def dygraphs_html(self, obj):
         """
         Use dygraphs array format:
@@ -382,7 +407,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         }
         return render_to_string(template_name="admin/for_runners/gpxmodel/dygraphs.html", context=context)
 
-    dygraphs_html.short_description = _("dygraphs MAP")
+    dygraphs_html.short_description = _("Graphs")
 
     search_fields = (
         "full_start_address",
@@ -429,11 +454,15 @@ class GpxModelAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
+        (_("Map / Graphs"), {
+            "fields": (
+                "leaflet_map_html",
+                "dygraphs_html",
+            )
+        }),
         (_("Event"), {
             "fields": (
                 "participation",
-                "leaflet_map_html",
-                "dygraphs_html",
             )
         }),
         (_("Start"), {

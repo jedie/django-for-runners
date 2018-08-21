@@ -1,6 +1,6 @@
 {% comment%}
     include from template:
-        "django-for-runners/for_runners/templates/for_runners/leaflet_map.html"
+        "django-for-runners/for_runners/templates/admin/for_runners/gpxmodel/leaflet_map.html"
 
     Note:
         The route on OpenStreetMap does not look more detailed, with more than 5 decimal places ;)

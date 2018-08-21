@@ -1,0 +1,10 @@
+{% load i18n static %}
+<div id="map" style="height: 500px;">
+    <noscript><strong>{% trans "Please enable JavaScript!" %}</strong></noscript>
+</div>
+
+<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
+<script src="{% static 'leaflet/leaflet.js' %}"></script>
+
+<style>{% include "admin/for_runners/gpxmodel/include/leaflet_map.css" %}</style>
+<script>{% include "admin/for_runners/gpxmodel/include/leaflet_map.js" %}</script>

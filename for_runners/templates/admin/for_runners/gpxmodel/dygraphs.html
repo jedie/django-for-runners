@@ -1,13 +1,12 @@
 {% load i18n static %}
-<noscript><strong>Please enable JavaScript!</strong></noscript>
-
 <link rel="stylesheet" href="{% static 'dygraphs/dygraph.min.css' %}" />
 
 <div style="width: 100%;">
-  <div id="dygraph_gpx_track" style="width: 100%; height: 500px;"></div>
+  <div id="dygraph_gpx_track" style="width: 100%; height: 500px;">
+      <noscript><strong>{% trans "Please enable JavaScript!" %}</strong></noscript>
+  </div>
   <p style="text-align:center;">{% trans "Zoom: click-drag, Pan: shift-click-drag, Restore: double-click" %}</p>
 </div>
 
 <script src="{% static 'dygraphs/dygraph.min.js' %}"></script>
-
 <script>{% include "admin/for_runners/gpxmodel/include/dygraphs.js" %}</script>

@@ -30,7 +30,8 @@ var g = new Dygraph(
     ],
     {
         // http://dygraphs.com/options.html
-        title: "{{ instance }} {{ instance.human_length }} {{ instance.human_duration }} {{ instance.human_pace }}",
+        // title: "{{ instance }} {{ instance.human_length }} {{ instance.human_duration }} {{ instance.human_pace }}",
+        title: false,
         labels: [{% for label in labels %}"{{ label }}",{% endfor %}],
         legend: 'always',
         animatedZooms: true,
