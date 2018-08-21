@@ -2,7 +2,7 @@
 {% load i18n admin_urls %}
 
 {% block pretitle %}
-    <h1>{{ original }} - {{ original.human_length }} - {{ original.human_duration }} - {{ original.human_pace }}</h1>
+    <h1>{{ original.tracked_by }} - <strong>{{ original }}</strong> - {{ original.human_length }} - {{ original.human_duration }} - {{ original.human_pace }}</h1>
 {% endblock %}
 
 {% block content_title %}
