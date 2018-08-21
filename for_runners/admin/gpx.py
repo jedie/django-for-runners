@@ -288,9 +288,9 @@ class HasNetDurationFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'y':
-            return queryset.exclude(net_duration__isnull=True)
+            return queryset.exclude(participation__duration__isnull=True)
         if self.value() == 'n':
-            return queryset.filter(net_duration__isnull=True)
+            return queryset.filter(participation__duration__isnull=True)
 
 
 class HasEventFilter(admin.SimpleListFilter):
