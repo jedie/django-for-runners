@@ -21,7 +21,6 @@ django-debug-toolbar
 # https://github.com/Peter-Slump/django-dynamic-fixtures
 django-dynamic-fixtures
 
-pytest
 pytest-django
 pytest-cov
 selenium
