@@ -6,12 +6,17 @@
 import logging
 
 from django.db import models
+
+from gpxpy.gpx import GPXException
+
+# https://github.com/jedie/django-for-runners
 from for_runners.gpx import get_identifier, parse_gpx
 
 log = logging.getLogger(__name__)
 
 
 class GpxModelQuerySet(models.QuerySet):
+
     def get_by_identifier(self, identifier):
         """
         :param identifier: 'Identifier' namedtuple created here: for_runners.gpx.get_identifier
@@ -27,6 +32,7 @@ class GpxModelQuerySet(models.QuerySet):
 
 
 class BaseGpxModelManager(models.Manager):
+
     def get_queryset(self):
         return GpxModelQuerySet(self.model, using=self._db)
 
@@ -37,7 +43,12 @@ class BaseGpxModelManager(models.Manager):
         :param gpx_content: String content of the new gpx file
         :return: GpxModel instance
         """
-        gpxpy_instance = parse_gpx(gpx_content)
+        try:
+            gpxpy_instance = parse_gpx(gpx_content)
+        except GPXException as err:
+            log.exception("Invalid GPX Data: %s" % err)
+            return
+
         identifier = get_identifier(gpxpy_instance)
 
         qs = self.get_queryset()
