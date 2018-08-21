@@ -409,24 +409,58 @@ class GpxModelAdmin(admin.ModelAdmin):
 
     dygraphs_html.short_description = _("Graphs")
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.list_display = [
+            "tracked_by",
+            "svg_tag",
+            "overview",
+            "start_time",
+            "human_length_html",
+            "human_duration_html",
+            "human_pace",
+            "heart_rate_avg",
+            "human_weather",
+            "uphill",
+            "downhill",
+            "min_elevation",
+            "max_elevation",
+        ]
+        self.list_filter = [
+            StatisticsListFilter,
+            HasNetDurationFilter,
+            HasEventPartricipationFilter,
+            "tracked_by",
+            "start_time",
+            "ideal_distance",
+            "creator",
+        ]
+
+        # FIXME: This will only evaluate on start-up !
+
+        qs = GpxModel.objects.all().only("tracked_by").order_by("tracked_by")
+
+        try:
+            user_count = qs.distinct("tracked_by").count()
+        except NotImplementedError:
+            # e.g.: sqlite has no distinct :(
+            qs = qs.values_list("tracked_by__id", flat=True)
+            user_count = len(set(qs))
+
+        print("count:", user_count)
+        if user_count <= 1:
+            # display user names only if there are tracks from more than one user ;)
+            self.list_display.remove("tracked_by")
+            self.list_filter.remove("tracked_by")
+
     search_fields = (
         "full_start_address",
         "full_finish_address",
         "creator",
     )
-    list_display = (
-        "svg_tag", "overview", "start_time", "human_length_html", "human_duration_html", "human_pace",
-        "heart_rate_avg", "human_weather", "uphill", "downhill", "min_elevation", "max_elevation", "tracked_by"
-    )
-    list_filter = (
-        StatisticsListFilter,
-        HasNetDurationFilter,
-        HasEventPartricipationFilter,
-        "tracked_by",
-        "start_time",
-        "ideal_distance",
-        "creator",
-    )
+
     list_per_page = 50
     list_display_links = (
         "svg_tag",
