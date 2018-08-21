@@ -13,7 +13,7 @@ from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
-from django.db import IntegrityError, models
+from django.db import IntegrityError, models, NotSupportedError
 from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -457,7 +457,7 @@ class GpxModelAdmin(admin.ModelAdmin):
 
         try:
             user_count = qs.distinct("tracked_by").count()
-        except NotImplementedError:
+        except (NotImplementedError, NotSupportedError):
             # e.g.: sqlite has no distinct :(
             qs = qs.values_list("tracked_by__id", flat=True)
             user_count = len(set(qs))
