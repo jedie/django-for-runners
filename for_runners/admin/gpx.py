@@ -293,9 +293,9 @@ class HasNetDurationFilter(admin.SimpleListFilter):
             return queryset.filter(participation__duration__isnull=True)
 
 
-class HasEventFilter(admin.SimpleListFilter):
-    title = _('has event')
-    parameter_name = "event"
+class HasEventPartricipationFilter(admin.SimpleListFilter):
+    title = _('has event participation')
+    parameter_name = "participation"
 
     def lookups(self, request, model_admin):
         return (
@@ -305,9 +305,9 @@ class HasEventFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'y':
-            return queryset.exclude(event__isnull=True)
+            return queryset.exclude(participation__isnull=True)
         if self.value() == 'n':
-            return queryset.filter(event__isnull=True)
+            return queryset.filter(participation__isnull=True)
 
 
 @admin.register(GpxModel)
@@ -396,7 +396,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     list_filter = (
         StatisticsListFilter,
         HasNetDurationFilter,
-        HasEventFilter,
+        HasEventPartricipationFilter,
         "tracked_by",
         "start_time",
         "ideal_distance",
