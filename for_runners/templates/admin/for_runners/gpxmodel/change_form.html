@@ -1,6 +1,14 @@
 {% extends "admin/change_form.html" %}
 {% load i18n admin_urls %}
 
+{% block pretitle %}
+    <h1>{{ original }} - {{ original.human_length }} - {{ original.human_duration }} - {{ original.human_pace }}</h1>
+{% endblock %}
+
+{% block content_title %}
+    {# Deactivate default Django title: {% if title %}<h2>{{ title }}</h2>{% endif %} #}
+{% endblock %}
+
 {% block object-tools-items %}
     <li>
         <a href="{% url opts|admin_urlname:'calculate-values' original.pk|admin_urlquote %}">{% trans "Calculate Values" %}</a>
