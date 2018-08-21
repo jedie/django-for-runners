@@ -30,7 +30,7 @@ from for_runners import constants
 from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
-from for_runners.gpx import add_extension_data, iter_distance, iter_points, get_2d_coordinate_list
+from for_runners.gpx import add_extension_data, get_2d_coordinate_list, iter_distance, iter_points
 from for_runners.models import GpxModel
 
 log = logging.getLogger(__name__)
@@ -409,6 +409,19 @@ class GpxModelAdmin(admin.ModelAdmin):
 
     dygraphs_html.short_description = _("Graphs")
 
+    def participation_links(self, obj):
+        if not obj.participation:
+            return "-"
+
+        event = obj.participation.event
+        gpx_tracks = GpxModel.objects.all().filter(participation__event=event).exclude(pk=obj.pk)
+
+        context = {
+            "event": event,
+            "gpx_tracks": gpx_tracks,
+        }
+        return render_to_string(template_name="admin/for_runners/gpxmodel/participation_links.html", context=context)
+    participation_links.short_description = _("Links")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -469,6 +482,7 @@ class GpxModelAdmin(admin.ModelAdmin):
     readonly_fields = (
         "leaflet_map_html",
         "dygraphs_html",
+        "participation_links",
         "svg_tag_big",
         "svg_tag",
         "start_time",
@@ -497,6 +511,7 @@ class GpxModelAdmin(admin.ModelAdmin):
         (_("Event"), {
             "fields": (
                 "participation",
+                "participation_links",
             )
         }),
         (_("Start"), {

@@ -29,6 +29,7 @@ from for_runners.gpx import (
 )
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
+from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
 from for_runners.svg import gpx2svg_file, gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
@@ -41,8 +42,11 @@ def svg_upload_path(instance, filename):
     return instance.get_svg_upload_path(filename)
 
 
-class GpxModel(UpdateTimeBaseModel):
+class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     """
+    inherit from ModelAdminUrlMixin:
+        * get_admin_change_url()
+
     inherit from UpdateTimeBaseModel:
         * createtime
         * lastupdatetime
@@ -549,11 +553,11 @@ class GpxModel(UpdateTimeBaseModel):
             pass
         else:
             ideal_distance_count = ideal_distances_qs.count()
-            if ideal_distance_count>1:
+            if ideal_distance_count > 1:
                 log.error("Found more the one ideal distances for %i Meters", self.length)
                 ideal_distances_qs = ideal_distances_qs.order_by("distance_km")
                 ideal_distance = ideal_distances_qs[0]
-            elif ideal_distance_count==1:
+            elif ideal_distance_count == 1:
                 ideal_distance = ideal_distances_qs.get()
             else:
                 ideal_distance = None

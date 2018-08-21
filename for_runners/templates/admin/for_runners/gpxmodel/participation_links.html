@@ -1,0 +1,17 @@
+{% load i18n %}
+<p>
+    {% trans "go to event:" %}
+    <a href="{{ event.get_admin_change_url }}" title="{% trans 'Go to event' %}">{{ event }}</a>
+</p>
+{% if gpx_tracks %}
+    <p>
+        {% trans "Go to tracks other users who participated in the same event:" %}
+    </p>
+    <ul>
+    {% for gpx_track in gpx_tracks %}
+        <li>
+            {{ gpx_track.tracked_by }}: <a href="{{ gpx_track.get_admin_change_url }}" title="{% trans 'Go to track' %}">{{ gpx_track }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}

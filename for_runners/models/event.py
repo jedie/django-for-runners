@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,6 +18,7 @@ from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.humanize import human_distance, human_seconds
+from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DisciplineModel
 
 log = logging.getLogger(__name__)
@@ -80,8 +82,11 @@ class LinkModelBase(UpdateTimeBaseModel):
         abstract = True
 
 
-class EventModel(UpdateInfoBaseModel):
+class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
     """
+    inherit from ModelAdminUrlMixin:
+        * get_admin_change_url()
+
     inherit from UpdateInfoBaseModel:
         * createtime
         * lastupdatetime
@@ -138,8 +143,11 @@ class EventLinkModel(LinkModelBase):
     event = models.ForeignKey(EventModel, related_name="links", on_delete=models.CASCADE)
 
 
-class ParticipationModel(UpdateTimeBaseModel):
+class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     """
+    inherit from ModelAdminUrlMixin:
+        * get_admin_change_url()
+
     inherit from UpdateTimeBaseModel:
         * createtime
         * lastupdatetime
