@@ -77,6 +77,9 @@ class UploadGpxFileView(generic.FormView):
                 else:
                     messages.success(request, "Created: %s" % gpx)
 
+                    # redirect to change view:
+                    self.success_url = gpx.get_admin_change_url()
+
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
