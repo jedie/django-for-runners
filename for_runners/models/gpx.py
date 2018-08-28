@@ -530,11 +530,16 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         else:
             distance_km = self.length / 1000
 
-        pace = (duration_s / 60) / distance_km
-        if pace > 99 or pace < 0:
-            log.error("Pace out of range: %f", pace)
+        try:
+            pace = (duration_s / 60) / distance_km
+        except ZeroDivisionError:
+            # FIXME
+            log.exception("Error calculate pace with duration %rsec and distance %skm!" % (duration_s, distance_km))
         else:
-            self.pace = pace
+            if pace > 99 or pace < 0:
+                log.error("Pace out of range: %f", pace)
+            else:
+                self.pace = pace
 
     def calculate_values(self):
         if not self.gpx:
