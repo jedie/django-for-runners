@@ -38,9 +38,13 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
             )
             # debug_response(response)
 
+        tracks = GpxModel.objects.all()
+        self.assertEqual(tracks.count(), 1)
+        new_track = tracks[0]
+
         self.assertRedirects(
             response,
-            expected_url="/en/admin/for_runners/gpxmodel/",
+            expected_url="/en/admin/for_runners/gpxmodel/%i/change/" % new_track.pk,
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=False
