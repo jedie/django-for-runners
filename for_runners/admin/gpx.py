@@ -68,6 +68,8 @@ class UploadGpxFileView(generic.FormView):
                     try:
                         gpx = GpxModel.objects.create(gpx=content, tracked_by=user)
                     except IntegrityError as err:
+                        # catch: UNIQUE constraint failed
+                        # give a better error message
                         messages.error(request, "Error process GPX data: %s" % err)
                         continue
 
