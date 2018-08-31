@@ -53,22 +53,19 @@ e.g.:
 ~$ cd DjangoForRunnersEnv/
 ~/DjangoForRunnersEnv$ source bin/activate
 
-# Upgrate pip:
+# Upgrade pip:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install --upgrade pip
 
-# install django-for-runners:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install django-for-runners
+# clone django-for-runners:
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ git clone https://github.com/jedie/django-for-runners.git
 
 # install dependencies:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements.txt
-
-# create base data:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./manage.py fill_basedata
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/django-for-runners$ pip install -r requirements.txt
 }}}
 
 
-start the development server, e.g.:
+start the development server with the test project, e.g.:
 
 {{{
 # activate the virtualenv:
@@ -76,8 +73,8 @@ start the development server, e.g.:
 ~/DjangoForRunnersEnv$ source bin/activate
 
 # start server:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./run_test_project_dev_server.sh
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/django-for-runners$ ./run_test_project_dev_server.sh
 }}}
 
 
@@ -104,11 +101,11 @@ import GPX files, e.g.:
 ~/DjangoForRunnersEnv$ source bin/activate
 
 # run the tests:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py test
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd django-for-runners/
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/django-for-runners$ ./setup.py test
 
 # run text via tox:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py tox
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/django-for-runners$ ./setup.py tox
 }}}
 
 
