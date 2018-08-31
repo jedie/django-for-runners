@@ -18,6 +18,7 @@ from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -456,23 +457,6 @@ class GpxModelAdmin(admin.ModelAdmin):
             "creator",
         ]
 
-        # FIXME: This will only evaluate on start-up !
-
-        qs = GpxModel.objects.all().only("tracked_by").order_by("tracked_by")
-
-        try:
-            user_count = qs.distinct("tracked_by").count()
-        except (NotImplementedError, NotSupportedError):
-            # e.g.: sqlite has no distinct :(
-            qs = qs.values_list("tracked_by__id", flat=True)
-            user_count = len(set(qs))
-
-        print("count:", user_count)
-        if user_count <= 1:
-            # display user names only if there are tracks from more than one user ;)
-            self.list_display.remove("tracked_by")
-            self.list_filter.remove("tracked_by")
-
     search_fields = (
         "full_start_address",
         "full_finish_address",
@@ -590,6 +574,39 @@ class GpxModelAdmin(admin.ModelAdmin):
             ),
         ] + urls
         return urls
+
+
+    @cached_property
+    def user_count(self):
+        qs = GpxModel.objects.all().only("tracked_by").order_by("tracked_by")
+
+        try:
+            user_count = qs.distinct("tracked_by").count()
+        except (NotImplementedError, NotSupportedError):
+            # e.g.: sqlite has no distinct :(
+            qs = qs.values_list("tracked_by__id", flat=True)
+            user_count = len(set(qs))
+
+        return user_count
+
+
+    def get_list_display(self, request):
+        list_display = super(GpxModelAdmin, self).get_list_display(request).copy()
+
+        if self.user_count <= 1 and 'tracked_by' in list_display:
+            list_display.remove("tracked_by")
+
+        return list_display
+
+
+    def get_list_filter(self, request):
+        list_filter = super(GpxModelAdmin, self).get_list_filter(request).copy()
+
+        if self.user_count <= 1 and 'tracked_by' in list_filter:
+            list_filter.remove("tracked_by")
+
+        return list_filter
+
 
     def get_changelist(self, request, **kwargs):
         """
