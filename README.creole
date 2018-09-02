@@ -53,11 +53,11 @@ e.g.:
 ~$ cd DjangoForRunnersEnv/
 ~/DjangoForRunnersEnv$ source bin/activate
 
-# Upgrate pip:
+# Upgrade pip:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install --upgrade pip
 
 # install django-for-runners:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install django-for-runners
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install git+https://github.com/jedie/django-for-runners.git@egg=django-for-runners
 
 # install dependencies:
 (DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
@@ -68,7 +68,7 @@ e.g.:
 }}}
 
 
-start the development server, e.g.:
+start the development server with the test project, e.g.:
 
 {{{
 # activate the virtualenv:
