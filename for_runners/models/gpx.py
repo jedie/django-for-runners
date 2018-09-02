@@ -51,9 +51,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         * createtime
         * lastupdatetime
     """
-    participation = models.ForeignKey(
+    participation = models.OneToOneField(
         ParticipationModel,
-        related_name="tracks",
+        related_name="track",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
