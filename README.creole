@@ -163,7 +163,9 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.6.0...master|compare v0.6.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.7.0...master|compare v0.7.0...master]] **dev**
+** TBD
+* [[https://github.com/jedie/django-for-runners/compare/v0.6.0...v0.7.0|02.09.2018 - v0.7.0]]:
 ** Use dygraphs in GPX Track change admin view
 ** Sync mouse over from Elevation/Headrate/Cadence dygraphs to leaflet open streep map
 ** Fix "try-out" section in README ([[https://github.com/jedie/django-for-runners/pull/1|Thanks adsworth for reporting]]
