@@ -183,6 +183,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 == Django compatibility
 
 |= django-for-runners |= django version |= python         |
+| >=v0.7.1            | 2.1             | 3.5, 3.6, 3.7   |
 | v0.5.x              | 2.0             | 3.5, 3.6, 3.7   |
 
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
@@ -190,8 +191,11 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.7.0...master|compare v0.7.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.7.1...master|compare v0.7.1...master]] **dev**
 ** TBD
+* [[https://github.com/jedie/django-for-runners/compare/v0.7.0...v0.7.1|02.09.2018 - v0.7.1]]:
+** Update to Django 2.1
+** Bugfix Tests
 * [[https://github.com/jedie/django-for-runners/compare/v0.6.0...v0.7.0|02.09.2018 - v0.7.0]]:
 ** Use dygraphs in GPX Track change admin view
 ** Sync mouse over from Elevation/Headrate/Cadence dygraphs to leaflet open streep map
