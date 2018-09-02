@@ -3,12 +3,15 @@
 import unittest
 
 import pytest
+
+# https://github.com/jedie/django-tools
 from django_tools.unittest_utils.selenium_utils import (
     SeleniumChromiumTestCase, SeleniumFirefoxTestCase, chromium_available, firefox_available
 )
-# https://github.com/jedie/django-tools
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
+
+# https://github.com/jedie/django-for-runners
 from for_runners.version import __version__
 
 
@@ -42,12 +45,17 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
                 "<title>Site administration | Django-ForRunners v%s</title>" % __version__,
                 "<h1>Site administration</h1>",
                 "<strong>staff_test_user</strong>",
-                "<p>You don't have permission to edit anything.</p>",
             ),
             must_not_contain=('error', 'traceback'),
             template_name='admin/index.html',
             messages=[],
             html=True
+        )
+        self.assertResponse(
+            response,
+            must_contain=("have permission to edit anything.",),
+            must_not_contain=("/add/", "/change/"),
+            html=False
         )
 
     def test_superuser_admin_index(self):
