@@ -3,22 +3,39 @@
 Store your GPX tracks of your running (or other sports activity) in django.
 
 
+The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: http://rvier.fr/#forrunners
+
 | {{https://travis-ci.org/jedie/django-for-runners.svg|Build Status on travis-ci.org}} | [[https://travis-ci.org/jedie/django-for-runners/|travis-ci.org/jedie/django-for-runners]] |
 | {{https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg|Coverage Status on codecov.io}} | [[https://codecov.io/gh/jedie/django-for-runners|codecov.io/gh/jedie/django-for-runners]] |
 | {{https://coveralls.io/repos/jedie/django-for-runners/badge.svg|Coverage Status on coveralls.io}} | [[https://coveralls.io/r/jedie/django-for-runners|coveralls.io/r/jedie/django-for-runners]] |
 | {{https://landscape.io/github/jedie/django-for-runners/master/landscape.svg|Status on landscape.io}} | [[https://landscape.io/github/jedie/django-for-runners/master|landscape.io/github/jedie/django-for-runners/master]] |
 
+== Features:
 
-The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: http://rvier.fr/#forrunners
-
-
-We collect some JavaScript files, for easier startup. These files are:
-
-|= Project Homepage |= License |= storage directory
-| [[http://leafletjs.com|leafletjs.com]] | [[https://github.com/Leaflet/Leaflet/blob/master/LICENSE|Leaflet licensed under BSD]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/leaflet|for_runners/static/leaflet/]]
-| [[http://dygraphs.com|dygraphs.com]] | [[https://github.com/danvk/dygraphs/blob/master/LICENSE.txt|dygraphs licensed under MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/dygraphs|for_runners/static/dygraphs/]]
-| [[http://www.chartjs.org|chartjs.org]] | [[https://github.com/chartjs/Chart.js/blob/master/LICENSE.md|Chart.js licensed under MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/chartjs|for_runners/static/chartjs/]]
-
+* GPX track management:
+** Upload GPX tracks
+** Import GPX tracks from commandline
+** Track analysis:
+*** basics: Track length / Duration / Pace / Hart rate Up-/Downhill
+*** Display route on OpenStreetMap map
+*** Graphs with elevation / heart rate / cadence (if available in GPX data)
+** Data that is automatically extracted from the web:
+*** Start/finish Address from OpenStreetMap
+*** Start/finish weather information from metaweather.com
+** Store additional data:
+*** Ideal track distance (for easier grouping/filtering tracks)
+* sports competitions Management:
+** Create a List of Sport Events
+*** Add participation to a event
+*** link GPX track with a event participation
+*** Store you event participation:
+**** official track length
+**** measured finisher time
+**** Number of participants who have finished in your discipline
+*** Add links to webpages relatet to this event
+*** Record costs (entry fee, T-shirt etc.)
+* common
+** Multiple user support (However: no rights management and currently only suitable for a handful of users)
 
 
 == Screenshots
@@ -138,6 +155,16 @@ geckodriver 0.20.1
 === GPX storage
 
 Currently we store the unchanged GPX data in a TextField.
+
+
+=== static files
+
+We collect some JavaScript files, for easier startup. These files are:
+
+|= Project Homepage |= License |= storage directory
+| [[http://leafletjs.com|leafletjs.com]] | [[https://github.com/Leaflet/Leaflet/blob/master/LICENSE|Leaflet licensed under BSD]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/leaflet|for_runners/static/leaflet/]]
+| [[http://dygraphs.com|dygraphs.com]] | [[https://github.com/danvk/dygraphs/blob/master/LICENSE.txt|dygraphs licensed under MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/dygraphs|for_runners/static/dygraphs/]]
+| [[http://www.chartjs.org|chartjs.org]] | [[https://github.com/chartjs/Chart.js/blob/master/LICENSE.md|Chart.js licensed under MIT]] | [[https://github.com/jedie/django-for-runners/tree/master/for_runners/static/chartjs|for_runners/static/chartjs/]]
 
 
 === Precision of coordinates
