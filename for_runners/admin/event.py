@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # https://github.com/jedie/django-for-runners
 from for_runners.admin.utils import BaseChangelistView
-from for_runners.gpx_tools.humanize import human_distance, human_seconds, human_duration, convert_cash_values
+from for_runners.gpx_tools.humanize import convert_cash_values, human_distance, human_duration, human_seconds
 from for_runners.models import EventLinkModel, EventModel
 from for_runners.models.event import CostModel, ParticipationModel
 
@@ -118,7 +118,7 @@ class EventStatistics:
             person_data[username] = user_data
 
         total_costs = dict(total_costs)
-        total = total_costs.pop("total") # add total as lates item
+        total = total_costs.pop("total")  # add total as lates item
         total_costs = [(name, convert_cash_values(amount)) for name, amount in sorted(total_costs.items())]
         total_costs.append(
             (_("total"), convert_cash_values(total))
@@ -165,20 +165,89 @@ class EventModelChangeList(ChangeList):
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
 
+    def gpx_tracks_change_form_links(self, obj):
+        """
+        Link to GPX Tracks in object change view
+        """
+        html = []
+        participations = obj.participations.all()
+        for participation in participations:
+            gpx_track = participation.track
+            if gpx_track:
+                change_url = gpx_track.get_admin_change_url()
+                html.append(
+                    '{username}: <a href="{url}">{length} <strong>{duration}</strong> {pace}</a>'.format(
+                        username=participation.person.username,
+                        url=change_url,
+                        length=gpx_track.human_length_html(),
+                        duration=gpx_track.human_duration_html(),
+                        pace=gpx_track.human_pace(),
+                    )
+                )
+
+        html = "<br>".join(html)
+        html = mark_safe(html)
+        return html
+
+    gpx_tracks_change_form_links.short_description = _("GPX Tracks")
+
+    def gpx_tracks_change_list_links(self, obj):
+        """
+        Link to GPX Tracks in admin change list
+        """
+        html = []
+        participations = obj.participations.all()
+        for participation in participations:
+            gpx_track = participation.track
+            if gpx_track:
+                change_url = gpx_track.get_admin_change_url()
+                html.append(
+                    '<a href="{url}">{length} <strong>{duration}</strong> {pace}</a>'.format(
+                        url=change_url,
+                        length=gpx_track.human_length_html(),
+                        duration=gpx_track.human_duration_html(),
+                        pace=gpx_track.human_pace(),
+                    )
+                )
+
+        html = "<br>".join(html)
+        html = mark_safe(html)
+        return html
+
+    gpx_tracks_change_list_links.short_description = _("GPX Tracks")
+
     def participations(self, obj):
         html = []
         participations = obj.participations.all()
         for participation in participations:
-            html.append("%s (%s)" % (
-                participation.person.username,
-                participation.get_human_distance(),
-            ))
+            change_url = participation.get_admin_change_url()
+            html.append(
+                '<a href="{url}">{username} ({distance})</a>'.format(
+                    url=change_url,
+                    username=participation.person.username,
+                    distance=participation.get_human_distance(),
+                )
+            )
+
         html = "<br>".join(html)
         html = mark_safe(html)
         return html
     participations.short_description = _("Participations")
 
-    list_display = ("verbose_name", "participations", "links_html", "start_date", "discipline")
+    readonly_fields = ("gpx_tracks_change_form_links",)
+    fieldsets = (
+        (_("Event Name"), {
+            "fields": (
+                ("no", "name", "start_date"),
+                "discipline",
+                "gpx_tracks_change_form_links",
+            )
+        }),
+    )
+
+    list_display = (
+        "verbose_name", "participations", "gpx_tracks_change_list_links", "links_html", "start_date", "discipline"
+    )
     date_hierarchy = "start_date"
     list_filter = (HasTracksFilter, "participations__person")
     list_display_links = ("verbose_name",)
