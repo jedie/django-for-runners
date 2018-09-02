@@ -45,17 +45,12 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
                 "<title>Site administration | Django-ForRunners v%s</title>" % __version__,
                 "<h1>Site administration</h1>",
                 "<strong>staff_test_user</strong>",
+                "<p>You don't have permission to view or edit anything.</p>",
             ),
-            must_not_contain=('error', 'traceback'),
+            must_not_contain=('error', 'traceback', "/add/", "/change/"),
             template_name='admin/index.html',
             messages=[],
             html=True
-        )
-        self.assertResponse(
-            response,
-            must_contain=("have permission to edit anything.",),
-            must_not_contain=("/add/", "/change/"),
-            html=False
         )
 
     def test_superuser_admin_index(self):

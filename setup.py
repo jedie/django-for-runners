@@ -243,7 +243,7 @@ Programming Language :: Python :: 3.5
 Programming Language :: Python :: 3.6
 Programming Language :: Python :: 3 :: Only
 Framework :: Django
-Framework :: Django :: 1.11
+Framework :: Django :: 2.1
 Topic :: Internet
 """
 
@@ -262,7 +262,7 @@ setup(
     packages=find_packages(),
     python_requires='>=3.5',
 
-    install_requires=["django>2.0",],
+    install_requires=["django>2.1",],
 
     include_package_data=True,
     cmdclass={
