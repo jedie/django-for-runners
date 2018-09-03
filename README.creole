@@ -43,7 +43,7 @@ The name **Django-ForRunners** has the origin from the great Android tracking ap
 Just:
 
  # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]]
- # call boot_django_for_runners.sh
+ # run {{{boot_django_for_runners.sh}}}
 
 e.g.:
 
