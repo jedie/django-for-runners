@@ -83,6 +83,12 @@ class BootTest(unittest.TestCase):
             cache_dir_inner.symlink_to(cache_dir, target_is_directory=True)
             self.assertTrue(cache_dir_inner.exists(), "Don't exists: %s" % cache_dir_inner)
 
+
+            if "TRAVIS" in os.environ:
+                # work-a-round for Travic-CI #8589, see:
+                # https://github.com/travis-ci/travis-ci/issues/8589#issuecomment-372947199
+                env["PATH"] = "/opt/python/3.6/bin/:%s" % env["PATH"]
+
             env["HOME"] = temp_path
             env["TERM"] = "dumb"
             # pprint(env)
