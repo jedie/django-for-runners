@@ -54,6 +54,6 @@ fi
 
     pip3 install -r ${DESTINATION}/src/django-for-runners/requirements.txt
 
-    cd ${DESTINATION}/src/django-for-runners/
-    ./run_test_project_dev_server.sh
+    cd ${DESTINATION}/bin/
+    ./for_runners --version
 )

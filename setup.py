@@ -270,7 +270,7 @@ setup(
         'tox': ToxTestCommand,
     },
     entry_points={'console_scripts': [
-        'run_dev_server = for_runners.cli:run_dev_server',
+        'for_runners = for_runners.cli:main',
         'manage = for_runners.cli:manage',
     ]},
 )

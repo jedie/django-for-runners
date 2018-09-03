@@ -45,9 +45,10 @@ def manage():
     execute_from_command_line(sys.argv)
 
 
-def run_dev_server():
+def main():
     """
-    entry points used in setup.py to start the dev server
+    entry points used in setup.py
+    start the dev server
     """
     if "--version" in sys.argv:
         print(__version__)
@@ -77,4 +78,4 @@ def run_dev_server():
 
 
 if __name__ == "__main__":
-    run_dev_server()
+    main()
