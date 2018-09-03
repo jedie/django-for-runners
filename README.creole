@@ -40,15 +40,10 @@ The name **Django-ForRunners** has the origin from the great Android tracking ap
 
 == try-out
 
-
-We created a shell script to create a python virtual environment and install all needed requirements in you home directory, here:
-
- * ~/Django-ForRunners
-
 Just:
 
- 1. Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]]
- 2. call boot_django_for_runners.sh
+ # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]]
+ # run {{{boot_django_for_runners.sh}}}
 
 e.g.:
 
@@ -58,7 +53,10 @@ e.g.:
 ~$ ./boot_django_for_runners.sh
 }}}
 
+The shell script creates a python virtual environment and install all needed requirements in you home directory, here:
 
+ * {{{~/Django-ForRunners}}}
+ 
 The setup routine will install two commands:
 
 * {{{ ~/Django-ForRunners/bin/run_dev_server }}} - Start the web server to use Django-ForRunners
@@ -71,8 +69,12 @@ start the development server with the test project, e.g.:
 ~$ ~/DjangoForRunnersEnv/bin/run_dev_server
 }}}
 
+You can also just double click on {{{ ~/Django-ForRunners/bin/run_dev_server }}} in your file manage ;)
 
-import GPX files, e.g.:
+
+=== import GPX files
+
+e.g.:
 
 {{{
 ~$ ~/Django-ForRunners/bin/manage import_gpx --username <username> ~/backups/gpx_files
