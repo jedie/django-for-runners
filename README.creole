@@ -181,8 +181,10 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.8.0...master|compare v0.8.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
 ** TBD
+* [[https://github.com/jedie/django-for-runners/compare/v0.8.0...v0.8.1|03.09.2018 - v0.8.1]]:
+** Fix "try-out" section in README, again ;(
 * [[https://github.com/jedie/django-for-runners/compare/v0.7.1...v0.8.0|03.09.2018 - v0.8.0]]:
 ** NEW: shell script for easier boot/install, see above
 * [[https://github.com/jedie/django-for-runners/compare/v0.7.0...v0.7.1|02.09.2018 - v0.7.1]]:
@@ -191,7 +193,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 * [[https://github.com/jedie/django-for-runners/compare/v0.6.0...v0.7.0|02.09.2018 - v0.7.0]]:
 ** Use dygraphs in GPX Track change admin view
 ** Sync mouse over from Elevation/Headrate/Cadence dygraphs to leaflet open streep map
-** Fix "try-out" section in README ([[https://github.com/jedie/django-for-runners/pull/1|Thanks adsworth for reporting]]
+** Fix "try-out" section in README ([[https://github.com/jedie/django-for-runners/pull/1|Thanks adsworth for reporting]])
 ** Add links from gpx tracks to other admin change view
 ** Bugfixes
 ** internals:
