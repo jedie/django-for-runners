@@ -67,17 +67,17 @@ class BootTest(unittest.TestCase):
     def test_boot(self):
         env = os.environ.copy()
 
-        # We make the pip cache directory permanent.
-        # Actually only important when developing, if the test runs more often ;)
-        #
-        #  - create e.g.: /tmp/.cache
-        #  - symlink the .cache directory into e.g.: /tmp/for_runners_test_boot_XXXXX/.cache
-        #
-        temp_dir = tempfile.gettempdir()
-        cache_dir = Path(temp_dir, ".cache")
-        cache_dir.mkdir(mode=0o777, parents=True, exist_ok=True)
+        cache_dir = Path("/home/travis/.cache/pip") # reuse pip cache from Travis CI
+        if not cache_dir.is_dir():
+            # Not on travis CI: Actually only important when developing,
+            # we make the pip cache directory "permanent" if tests runs often ;)
+            temp_dir = tempfile.gettempdir()
+            cache_dir = Path(temp_dir, ".cache")
+            cache_dir.mkdir(mode=0o777, parents=True, exist_ok=True)
 
         with tempfile.TemporaryDirectory(prefix="for_runners_test_boot_") as temp_path:
+
+            # symlink the .cache directory into e.g.: /tmp/for_runners_test_boot_XXXXX/.cache
             cache_dir_inner = Path(temp_path, ".cache")
             self.assertFalse(cache_dir_inner.is_dir(), "Already exists: %s" % cache_dir_inner)
             cache_dir_inner.symlink_to(cache_dir, target_is_directory=True)
