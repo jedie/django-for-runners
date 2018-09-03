@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.management.commands.runserver import Command as RunServerCommand
 from django.core.management import call_command
 
+# https://github.com/jedie/django-for-runners
+from for_runners.models import DistanceModel
+
 print("sys.real_prefix:", getattr(sys, "real_prefix", "-"))
 print("sys.prefix:", sys.prefix)
 
@@ -46,8 +49,10 @@ class Command(RunServerCommand):
             if qs.count() == 0:
                 self.verbose_call("createsuperuser")
 
-            # create_anchor_test_page(delete_first=delete_first)
-            # create_landing_page_test_page(delete_first=delete_first)
+            distance_model_count = DistanceModel.objects.all().count()
+            if distance_model_count == 0:
+                # call: for_runners.management.commands.fill_basedata.Command
+                self.verbose_call("fill_basedata")
 
         options["insecure_serving"] = True
         super(Command, self).handle(*args, **options)
