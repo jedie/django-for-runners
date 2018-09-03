@@ -38,6 +38,50 @@ The name **Django-ForRunners** has the origin from the great Android tracking ap
 ** Multiple user support (However: no rights management and currently only suitable for a handful of users)
 
 
+== try-out
+
+
+We created a shell script to create a python virtual environment and install all needed requirements in you home directory, here:
+
+ * ~/Django-ForRunners
+
+Just:
+
+ 1. Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]]
+ 2. call boot_django_for_runners.sh
+
+e.g.:
+
+{{{
+~$ curl https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh -o boot_django_for_runners.sh
+~$ chmod +x boot_django_for_runners.sh
+~$ ./boot_django_for_runners.sh
+}}}
+
+
+The setup routine will install two commands:
+
+* {{{ ~/Django-ForRunners/bin/run_dev_server }}} - Start the web server to use Django-ForRunners
+* {{{ ~/Django-ForRunners/bin/manage }}} - Run django manage commands with Django-ForRunners settings
+
+
+start the development server with the test project, e.g.:
+
+{{{
+~$ ~/DjangoForRunnersEnv/bin/run_dev_server
+}}}
+
+
+import GPX files, e.g.:
+
+{{{
+~$ ~/Django-ForRunners/bin/manage import_gpx --username <username> ~/backups/gpx_files
+}}}
+
+**Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
+
+
+
 == Screenshots
 
 
@@ -55,59 +99,6 @@ The name **Django-ForRunners** has the origin from the great Android tracking ap
 == for-runners v0.6.0 2018-07-19 Event Costs.png ==
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.6.0 2018-07-19 Event Costs.png|for-runners v0.6.0 2018-07-19 Event Costs.png}}
 
-
-
-== try-out
-
-
-e.g.:
-
-{{{
-# create a python virtualenv:
-~$ python3 -Im venv DjangoForRunnersEnv
-
-# activate the created virtualenv:
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
-
-# Upgrade pip:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install --upgrade pip
-
-# install django-for-runners:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ pip3 install -e git+https://github.com/jedie/django-for-runners.git@master#egg=django-for-runners
-
-# install dependencies:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ pip install -r requirements.txt
-}}}
-
-
-start the development server with the test project, e.g.:
-
-{{{
-# activate the virtualenv:
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
-
-# start server:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./run_test_project_dev_server.sh
-}}}
-
-
-import GPX files, e.g.:
-
-{{{
-# activate the virtualenv:
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
-
-# import:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./manage.py import_gpx --username <username> ~/backups/gpx_files
-}}}
-
-**Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
 
 
 == run tests

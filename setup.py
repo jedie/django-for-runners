@@ -268,5 +268,9 @@ setup(
     cmdclass={
         'test': TestCommand,
         'tox': ToxTestCommand,
-    }
+    },
+    entry_points={'console_scripts': [
+        'run_dev_server = for_runners.cli:run_dev_server',
+        'manage = for_runners.cli:manage',
+    ]},
 )
