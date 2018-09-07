@@ -45,23 +45,15 @@ Just:
  # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]]
  # run {{{boot_django_for_runners.sh}}}
 
-e.g.:
+All in one step, e.g.:
 
 {{{
-~$ curl https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh -o boot_django_for_runners.sh
-~$ chmod +x boot_django_for_runners.sh
-~$ ./boot_django_for_runners.sh
+~$ bash <(curl -s https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh)
 }}}
 
-The shell script creates a python virtual environment and install all needed requirements in you home directory, here:
+The shell script creates a python virtual environment and install all needed requirements into:
 
  * {{{~/Django-ForRunners}}}
- 
-The setup routine will install two commands:
-
-* {{{ ~/Django-ForRunners/bin/for_runners }}} - CLI to start the web server to use Django-ForRunners
-* {{{ ~/Django-ForRunners/bin/manage }}} - Run django manage commands with Django-ForRunners project settings
-
 
 start the development server with the test project, e.g.:
 
@@ -72,12 +64,19 @@ start the development server with the test project, e.g.:
 You can also just double click on {{{ ~/Django-ForRunners/bin/for_runners }}} in your file manage ;)
 
 
+Only for info: The setup routine will install two commands:
+
+* {{{ ~/Django-ForRunners/bin/for_runners }}} - CLI to start the web server to use Django-ForRunners
+* {{{ ~/Django-ForRunners/bin/manage }}} - Run django manage commands with Django-ForRunners project settings
+
+
+
 === import GPX files
 
 e.g.:
 
 {{{
-~$ ~/Django-ForRunners/bin/manage import_gpx --username <username> ~/backups/gpx_files
+~$ ~/Django-ForRunners/bin/manage import_gpx --username <django_username> ~/backups/gpx_files
 }}}
 
 **Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
@@ -139,6 +138,7 @@ geckodriver 0.20.1
 }}}
 
 
+
 == some notes
 
 
@@ -179,10 +179,33 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 (See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/.travis.yml|.travis.yml]] and [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]])
 
 
+
+== Backwards-incompatible changes
+
+
+=== v0.9
+
+* The SQlite database was moved.
+
+If you would like to migrate, move/rename this file
+
+{{{~/DjangoForRunnersEnv/src/django-for-runners/test_project_db.sqlite3}}}
+
+to:
+
+{{{~/DjangoForRunnersEnv/Django-ForRunners-database.sqlite3}}}
+
+
+
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
-** TBD
+** Move the SQlite database to virtualenv root dir, e.g.: {{{~/DjangoForRunnersEnv/Django-ForRunners-database.sqlite3}}}
+** refactor the startup process:
+*** auto loop the server process
+*** open web browser on first start
+*** enable autotask
+** rename {{{for_runners_test_project}}} to {{{for_runners_project}}}
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.0...v0.8.1|03.09.2018 - v0.8.1]]:
 ** Fix "try-out" section in README, again ;(
 * [[https://github.com/jedie/django-for-runners/compare/v0.7.1...v0.8.0|03.09.2018 - v0.8.0]]:
