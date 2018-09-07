@@ -1,26 +1,71 @@
-# coding: utf-8
-
-import os
+import shutil
+from pathlib import Path
 from unittest import TestCase
 
-import for_runners_test_project
+from django import __version__ as django_version
+
+# https://github.com/jedie/django-tools
+from django_tools.unittest_utils.assertments import assert_endswith
 from django_tools.unittest_utils.django_command import DjangoCommandMixin
 
-MANAGE_DIR = os.path.abspath(os.path.dirname(for_runners_test_project.__file__))
+# https://github.com/jedie/django-for-runners
+from for_runners.version import __version__ as for_runners_version
 
 
 class CheckTestEnvironment(DjangoCommandMixin, TestCase):
 
-    def call_manage_py(self, *args, **kwargs):
-        return super(CheckTestEnvironment, self).call_manage_py(args, manage_dir=MANAGE_DIR, **kwargs)
+    @classmethod
+    def setUpClass(cls):
+        # installed via setup.py entry points !
+        cls.for_runners_bin = shutil.which("for_runners")
+        cls.manage_bin = shutil.which("manage")
 
-    def test_help(self):
-        output = self.call_manage_py("--help")
+    def test_for_runners_path(self):
+        assert_endswith(text=self.for_runners_bin, suffix="/bin/for_runners")
+
+    def test_manage_bin(self):
+        assert_endswith(text=self.manage_bin, suffix="/bin/manage")
+
+    def _call_for_runners(self, cmd):
+        for_runners_path = Path(self.for_runners_bin)
+        return self.call_manage_py(
+            cmd=cmd,
+            manage_dir=for_runners_path.parent,
+            manage_py=for_runners_path.name,
+        )
+
+    def test_for_runners_version(self):
+        self.assertEqual(self._call_for_runners(["--version"]), for_runners_version)
+
+    def test_for_runners_help(self):
+        self.assertEqual(
+            self._call_for_runners(["--help"]), "Just start this file without any arguments to run the dev. server"
+        )
+
+    def _call_manage(self, cmd):
+        manage_path = Path(self.manage_bin)
+        return self.call_manage_py(
+            cmd=cmd,
+            manage_dir=manage_path.parent,
+            manage_py=manage_path.name,
+        )
+
+    def test_manage_version(self):
+        output = self._call_manage(["--version"])
         print(output)
-        self.assertNotIn("ERROR", output)
-        self.assertIn("[django]", output)
-        self.assertIn("Type 'manage.py help <subcommand>' for help on a specific subcommand.", output)
+        self.assertIn(django_version, output)
 
-    def test_django_check(self):
-        output = self.call_manage_py("check")
+    def test_manage_help(self):
+        output = self._call_manage(["--help"])
+        print(output)
+        self.assertIn("Available subcommands:", output)
+        self.assertIn("[django]", output)
+        self.assertIn("[for_runners]", output)
+        self.assertIn("import_gpx", output)
+        self.assertIn("[for_runners_helper_app]", output)
+        self.assertIn("run_server", output)
+
+    def test_manage_check(self):
+        output = self._call_manage(["check"])
+        print(output)
         self.assertIn("System check identified no issues (0 silenced).", output)

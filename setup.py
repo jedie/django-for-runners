@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, print_function, unicode_literals
 
+import distutils
 import os
 import shutil
-import sys
-import distutils
 import subprocess
+import sys
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 def read(*args):
@@ -18,8 +18,12 @@ def read(*args):
 
 class BaseCommand(distutils.cmd.Command):
     user_options = []
-    def initialize_options(self): pass
-    def finalize_options(self): pass
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
 
 
 class ToxTestCommand(BaseCommand):
@@ -42,12 +46,10 @@ class TestCommand(BaseCommand):
         sys.exit(returncode)
 
 
-__version__="<unknown>"
+__version__ = "<unknown>"
 exec(read('for_runners', 'version.py'))
 
-
 PACKAGE_ROOT = os.path.os.path.dirname(os.path.abspath(__file__))
-
 
 #_____________________________________________________________________________
 # convert creole to ReSt on-the-fly, see also:
@@ -63,7 +65,6 @@ for arg in ("test", "check", "register", "sdist", "--long-description"):
             long_description = get_long_description(PACKAGE_ROOT)
         break
 #----------------------------------------------------------------------------
-
 
 if "publish" in sys.argv:
     """
@@ -178,27 +179,28 @@ if "publish" in sys.argv:
         print("OK")
 
     print("\nCleanup old builds:")
+
     def rmtree(path):
         path = os.path.abspath(path)
         if os.path.isdir(path):
             print("\tremove tree:", path)
             shutil.rmtree(path)
+
     rmtree("./dist")
     rmtree("./build")
 
     print("\nbuild but don't upload...")
-    log_filename="build.log"
+    log_filename = "build.log"
     with open(log_filename, "a") as log:
         call_info, output = verbose_check_output(
-            sys.executable or "python",
-            "setup.py", "sdist", "bdist_wheel", "bdist_egg"
+            sys.executable or "python", "setup.py", "sdist", "bdist_wheel", "bdist_egg"
         )
         print("\t%s" % call_info)
         log.write(call_info)
         log.write(output)
     print("Build output is in log file: %r" % log_filename)
 
-    git_tag="v%s" % __version__
+    git_tag = "v%s" % __version__
 
     print("\ncheck git tag")
     call_info, output = verbose_check_output("git", "log", "HEAD..origin/master", "--oneline")
@@ -225,7 +227,6 @@ if "publish" in sys.argv:
 
     sys.exit(0)
 
-
 # https://pypi.org/classifiers/
 classifiers = """
 Development Status :: 3 - Alpha
@@ -247,7 +248,6 @@ Framework :: Django :: 2.1
 Topic :: Internet
 """
 
-
 setup(
     name='django-for-runners',
     version=__version__,
@@ -257,20 +257,26 @@ setup(
     author_email='django-for-runners@jensdiemer.de',
     url='https://github.com/jedie/django-for-runners',
     license="GNU General Public License v3.0 or above",
-    classifiers=[c.strip() for c in classifiers.splitlines()
-                 if c.strip() and not c.startswith('#')],
+    classifiers=[c.strip() for c in classifiers.splitlines() if c.strip() and not c.startswith('#')],
     packages=find_packages(),
     python_requires='>=3.5',
-
-    install_requires=["django>2.1",],
-
+    install_requires=[
+        "django>2.1",
+    ],
     include_package_data=True,
     cmdclass={
         'test': TestCommand,
         'tox': ToxTestCommand,
     },
-    entry_points={'console_scripts': [
-        'for_runners = for_runners.cli:main',
-        'manage = for_runners.cli:manage',
-    ]},
+    # scripts=["for_runners_project/manage.py"],
+    entry_points={
+        'console_scripts': [
+
+            # run the dev. server:
+            'for_runners = for_runners_project.cli:run_dev_server',
+
+            # run manage commands:
+            'manage = for_runners_project.cli:manage',
+        ]
+    },
 )

@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.views.generic import RedirectView
 from django.urls import path
 # https://github.com/jedie/django-for-runners
-from for_runners_test_project import settings
+from for_runners_project import settings
 
 admin.autodiscover()
 

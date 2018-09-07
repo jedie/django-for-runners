@@ -15,18 +15,24 @@
     https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-
 print("Use settings:", __file__)
 
-
+import logging
 import os
+import sys as __sys
 
 from django.utils.translation import ugettext_lazy as _
 
+from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
+
+# https://github.com/jedie/django-tools
+from django_tools.settings_utils import FnMatchIps
+
+# https://github.com/jedie/django-for-runners
+from for_runners.app_settings import *  # @UnusedWildImport
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -37,10 +43,7 @@ SECRET_KEY = 'Only for the tests ;)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-SITE_ID=1
-
-
-from django_tools.settings_utils import FnMatchIps
+SITE_ID = 1
 
 # Required for the debug toolbar to be displayed:
 INTERNAL_IPS = FnMatchIps(["localhost", "127.0.0.1", "::1", "172.*.*.*", "192.168.*.*", "10.0.*.*"])
@@ -59,41 +62,42 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'debug_toolbar',  # https://github.com/jazzband/django-debug-toolbar/
 
-    'debug_toolbar', # https://github.com/jazzband/django-debug-toolbar/
-
-    # FIXME: https://bitbucket.org/kbr/autotask/pull-requests/3/
-    # 'autotask', # https://bitbucket.org/kbr/autotask
+    'autotask', # https://bitbucket.org/kbr/autotask
 
     # 'easy_thumbnails', # https://github.com/SmileyChris/easy-thumbnails
     # 'treebeard', # https://github.com/django-treebeard/django-treebeard
     # 'sekizai', # https://github.com/ojii/django-sekizai
     # 'djangocms_text_ckeditor', # https://github.com/divio/djangocms-text-ckeditor
     # 'filer', # https://github.com/divio/django-filer
+    'dynamic_fixtures',  # https://github.com/Peter-Slump/django-dynamic-fixtures
 
-    'dynamic_fixtures', # https://github.com/Peter-Slump/django-dynamic-fixtures
-
+    # Django-ForRunners
     'for_runners',
-
-    "for_runners_test_project.test_app",
+    "for_runners_project.for_runners_helper_app",
 )
 
-from for_runners.app_settings import *  # @UnusedWildImport
+# work-a-round for https://bitbucket.org/kbr/autotask/pull-requests/3/
+if "run_test_project_dev_server" in __sys.argv:
+    # Activate autotask only if our server command runs
+    # for_runners_project.for_runners_helper_app.management.commands.run_server.Command
+    print("Set: 'AUTOTASK_IS_ACTIVE = True'")
+    AUTOTASK_IS_ACTIVE = True
+else:
+    AUTOTASK_IS_ACTIVE = False
 
-# https://bitbucket.org/kbr/autotask
-AUTOTASK_IS_ACTIVE = True
 
 # Download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
 MAP_DOWNLOAD = True
 # MAP_DOWNLOAD = False
 
-ROOT_URLCONF = 'for_runners_test_project.urls'
-WSGI_APPLICATION = 'for_runners_test_project.wsgi.application'
+ROOT_URLCONF = 'for_runners_project.urls'
+WSGI_APPLICATION = 'for_runners_project.wsgi.application'
 
 MIDDLEWARE = (
     # https://github.com/jazzband/django-debug-toolbar/
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,7 +106,6 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
     'django_tools.middlewares.ThreadLocal.ThreadLocalMiddleware',
 )
 
@@ -114,10 +117,12 @@ TEMPLATES = [
         ],
         'OPTIONS': {
             'loaders': [
-                ('django.template.loaders.cached.Loader', (
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                )),
+                (
+                    'django.template.loaders.cached.Loader', (
+                        'django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                    )
+                ),
             ],
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -129,13 +134,11 @@ TEMPLATES = [
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.tz',
                 'django.template.context_processors.static',
-
                 "for_runners.context_processors.for_runners_version_string",
             ],
         },
     },
 ]
-
 
 if DEBUG:
     # Disable caches:
@@ -153,16 +156,19 @@ if DEBUG:
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+print("sys.real_prefix:", getattr(__sys, "real_prefix", "-"))
+print("sys.prefix:", __sys.prefix)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, "..", "test_project_db.sqlite3"),
+        'NAME': os.path.join(__sys.prefix, "Django-ForRunners-database.sqlite3"),
         # 'NAME': ":memory:"
         # https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errors
         'timeout': 30,
     }
 }
-
+print("Use Database: %r" % DATABASES["default"]["NAME"])
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -193,21 +199,18 @@ PARLER_LANGUAGES = {
     },
 }
 
-
 # https://docs.djangoproject.com/en/1.8/ref/settings/#languages
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGES = tuple([(d["code"], d["name"]) for d in PARLER_LANGUAGES[1]])
 
-LANGUAGE_DICT = dict(LANGUAGES) # useful to get translated name by language code
+LANGUAGE_DICT = dict(LANGUAGES)  # useful to get translated name by language code
 
 # http://django-parler.readthedocs.org/en/latest/quickstart.html#configuration
 PARLER_DEFAULT_LANGUAGE_CODE = LANGUAGE_CODE
 
-
 USE_I18N = True
 
 USE_L10N = True
-
 
 # https://docs.djangoproject.com/en/1.11/topics/i18n/timezones/
 # TODO: Use UTC and handle time zone
@@ -215,7 +218,6 @@ TIME_ZONE = "Europe/Paris"
 USE_TZ = False
 # TIME_ZONE = 'UTC'
 # USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -226,20 +228,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
-# https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html#debug-toolbar-config
-from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
-
 # don't load jquery from ajax.googleapis.com, just use django's version:
 DEBUG_TOOLBAR_CONFIG["JQUERY_URL"] = STATIC_URL + "admin/js/vendor/jquery/jquery.min.js"
 
-
 # Basic Django CMS settings
 
-CMS_TEMPLATES = (
-    ('base.html', 'Basic Page'),
-    # ('tests/plugin_test.html', "Add CMS-Plugin test template")
-)
+CMS_TEMPLATES = (('base.html', 'Basic Page'),
+                 # ('tests/plugin_test.html', "Add CMS-Plugin test template")
+                )
 CMS_PERMISSION = True
 
 # Basic Placeholder config
@@ -265,10 +261,6 @@ CMS_PLACEHOLDER_CONF = {
     },
 }
 
-
-# https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html#debug-toolbar-config
-from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
-
 # Disable some more panels that will slow down the page:
 DEBUG_TOOLBAR_CONFIG["DISABLE_PANELS"].add('debug_toolbar.panels.sql.SQLPanel')
 DEBUG_TOOLBAR_CONFIG["DISABLE_PANELS"].add('debug_toolbar.panels.cache.CachePanel')
@@ -276,22 +268,18 @@ DEBUG_TOOLBAR_CONFIG["DISABLE_PANELS"].add('debug_toolbar.panels.cache.CachePane
 # don't load jquery from ajax.googleapis.com, just use django's version:
 DEBUG_TOOLBAR_CONFIG["JQUERY_URL"] = "/static/admin/js/vendor/jquery/jquery.min.js"
 
-DEBUG_TOOLBAR_CONFIG["SHOW_COLLAPSED"] = True # Show toolbar collapsed by default.
-
-
+DEBUG_TOOLBAR_CONFIG["SHOW_COLLAPSED"] = True  # Show toolbar collapsed by default.
 
 #_____________________________________________________________________________
 # cut 'pathname' in log output
-
-import logging
 
 old_factory = logging.getLogRecordFactory()
 
 
 def cut_path(pathname, max_length):
-    if len(pathname)<=max_length:
+    if len(pathname) <= max_length:
         return pathname
-    return "...%s" % pathname[-(max_length-3):]
+    return "...%s" % pathname[-(max_length - 3):]
 
 
 def record_factory(*args, **kwargs):
@@ -302,9 +290,7 @@ def record_factory(*args, **kwargs):
 
 logging.setLogRecordFactory(record_factory)
 
-
 # -----------------------------------------------------------------------------
-
 
 # https://docs.python.org/3/library/logging.html#logging-levels
 LOGGING = {

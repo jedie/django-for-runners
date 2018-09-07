@@ -5,9 +5,11 @@ import unittest
 from pathlib import Path
 from pprint import pprint
 
+from for_runners_project import cli
+
 # https://github.com/jedie/django-for-runners
 import for_runners
-from for_runners import __version__, cli
+from for_runners import __version__
 
 
 def subprocess_output(*args, **kwargs):
@@ -67,7 +69,7 @@ class BootTest(unittest.TestCase):
     def test_boot(self):
         env = os.environ.copy()
 
-        cache_dir = Path("/home/travis/.cache/pip") # reuse pip cache from Travis CI
+        cache_dir = Path("/home/travis/.cache/pip")  # reuse pip cache from Travis CI
         if not cache_dir.is_dir():
             # Not on travis CI: Actually only important when developing,
             # we make the pip cache directory "permanent" if tests runs often ;)
@@ -82,7 +84,6 @@ class BootTest(unittest.TestCase):
             self.assertFalse(cache_dir_inner.is_dir(), "Already exists: %s" % cache_dir_inner)
             cache_dir_inner.symlink_to(cache_dir, target_is_directory=True)
             self.assertTrue(cache_dir_inner.exists(), "Don't exists: %s" % cache_dir_inner)
-
 
             if "TRAVIS" in os.environ:
                 # work-a-round for Travic-CI #8589, see:

@@ -3,7 +3,7 @@
     Django settings used while pytest run
 """
 
-from for_runners_test_project.settings import *
+from for_runners_project.settings import *
 
 
 # https://bitbucket.org/kbr/autotask

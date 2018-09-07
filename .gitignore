@@ -6,8 +6,8 @@
 !.coveralls.yml
 
 # from test projects:
-for_runners_test_project/static/
-for_runners_test_project/media/
+for_runners_project/static/
+for_runners_project/media/
 test_project_db.sqlite3
 
 # Byte-compiled / optimized / DLL files
