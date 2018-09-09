@@ -1,9 +1,15 @@
 {% extends "admin/base.html" %}
+{% load i18n static %}
 
 {% block title %}{{ title }} | Django-ForRunners {{ version_string }}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">Django-ForRunners {{ version_string }}</a></h1>
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'Django-ForRunners.svg' %}" alt="Logo" height="40px"/>
+        Django-ForRunners {{ version_string }}
+    </a>
+</h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
