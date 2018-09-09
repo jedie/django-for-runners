@@ -65,7 +65,9 @@ You can also just double click on {{{ ~/Django-ForRunners/bin/for_runners }}} in
 
 or create a starter/launcher with {{{ x-terminal-emulator -e ~/Django-ForRunners/bin/for_runners }}}
 
+e.g.:
 
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/2018-09-09 Launcher.png|2018-09-09 Launcher.png}}
 
 Only for info: The setup routine will install two commands:
 
