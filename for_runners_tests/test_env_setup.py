@@ -30,7 +30,7 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         for_runners_path = Path(self.for_runners_bin)
         return self.call_manage_py(
             cmd=cmd,
-            manage_dir=for_runners_path.parent,
+            manage_dir=str(for_runners_path.parent),  # Python 3.5 needs str()
             manage_py=for_runners_path.name,
         )
 
@@ -46,7 +46,7 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         manage_path = Path(self.manage_bin)
         return self.call_manage_py(
             cmd=cmd,
-            manage_dir=manage_path.parent,
+            manage_dir=str(manage_path.parent),  # Python 3.5 needs str()
             manage_py=manage_path.name,
         )
 
