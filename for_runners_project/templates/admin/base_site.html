@@ -1,6 +1,10 @@
 {% extends "admin/base.html" %}
 {% load i18n static %}
 
+{% block extrahead %}{{ block.super }}
+    <link rel="icon" type="image/svg" href="{% static 'Django-ForRunners.svg' %}" />
+{% endblock %}
+
 {% block title %}{{ title }} | Django-ForRunners {{ version_string }}{% endblock %}
 
 {% block branding %}
