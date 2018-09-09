@@ -63,6 +63,9 @@ start the development server with the test project, e.g.:
 
 You can also just double click on {{{ ~/Django-ForRunners/bin/for_runners }}} in your file manage ;)
 
+or create a starter/launcher with {{{ x-terminal-emulator -e ~/Django-ForRunners/bin/for_runners }}}
+
+
 
 Only for info: The setup routine will install two commands:
 
