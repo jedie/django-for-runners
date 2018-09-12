@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import os
+import sys
+import traceback
+from pathlib import Path
 from threading import Timer
 
 from django.contrib.auth import get_user_model
@@ -36,7 +39,12 @@ class Command(RunServerCommand):
             # work-a-round: We call it in the shell script
 
             # django.contrib.staticfiles.management.commands.collectstatic.Command
-            self.verbose_call("collectstatic", interactive=False, link=True)
+            if sys.platform in ('win32', 'cygwin'):
+                # fix: CommandError: symbolic link privilege not held
+                link = False
+            else:
+                link = True
+            self.verbose_call("collectstatic", interactive=False, link=link)
 
             User = get_user_model()
             qs = User.objects.filter(is_active=True, is_superuser=True)
@@ -69,4 +77,19 @@ class Command(RunServerCommand):
 
             Timer(1, open_webbrowser).start()
 
-        super().run(**options)
+        self.stderr.write("_" * 79)
+        self.stderr.write("Start web server...")
+
+        if sys.platform in ('win32', 'cygwin'):
+            # Bugfix for:
+            # can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners': [Errno 2] No such file or directory
+            executable = Path(Path(sys.argv[0]).parent, "for_runners-script.py")
+            print("Patch executeable to: %s" % executable)
+            assert executable.is_file(), "Executeable not found here: %s" % executable
+            sys.argv[0] = str(executable)
+
+        try:
+            super().run(**options)
+        except Exception:
+            traceback.print_last()
+            raise
