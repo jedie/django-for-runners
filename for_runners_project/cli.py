@@ -57,7 +57,14 @@ def verbose_subprocess(command):
     print("\n" * 3)
     print("_" * 79, file=sys.stderr, flush=True)
 
-    args = [sys.executable, sys.argv[0], command]
+    if sys.platform in ('win32', 'cygwin'):
+        executable = "%s.exe" % sys.argv[0]
+        args = [executable]
+        # args == e.g.: ["C:\Program Files\Django-ForRunners\Scripts\for_runners.exe"]
+    else:
+        args = [sys.executable, sys.argv[0]]
+
+    args.append(command)
     print("subprocess call %r\n" % args, flush=True)
 
     subprocess.check_call(args)
