@@ -8,8 +8,11 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 from setuptools import find_packages, setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
 
 
 def read(*args):
@@ -227,6 +230,52 @@ if "publish" in sys.argv:
 
     sys.exit(0)
 
+
+
+def after_install_callback(bin_dir):
+    """
+    :param bin_dir: e.g.: /home/<username>/DjangoForRunnersEnv/bin
+
+    Note: print outputs can only be seen in "--verbose" mode!
+    """
+    print("\nafter_install_callback()", file=sys.stderr)
+
+    print("*** bin_dir:", bin_dir)
+
+    bin_path = Path(bin_dir) #/ "not found test"
+    assert bin_path.is_dir(), "Script/bin directory not found here: '%s'" % bin_path
+    
+    env_path = bin_path.parent
+    print("*** env_path:", env_path)
+
+    from for_runners_project.starter import create_starter
+    try:
+        create_starter()
+    except NotImplementedError:
+        # TODO: Windows ;)
+        pass
+
+
+
+class CustomInstallCommand(install):
+    """
+    e.g.: ./setup.py install --verbose
+    """
+
+    def run(self):
+        super().run()
+        after_install_callback(self.install_scripts)
+
+
+class CustomDevelopCommand(develop):
+    """
+    e.g.: pip install --verbose -e .
+    """
+    def run(self):
+        super().run()
+        after_install_callback(self.script_dir)
+
+
 # https://pypi.org/classifiers/
 classifiers = """
 Development Status :: 3 - Alpha
@@ -262,21 +311,26 @@ setup(
     python_requires='>=3.5',
     install_requires=[
         "django>2.1",
+        "click", # http://click.pocoo.org/
+        "colorama", # Console colors under windows: https://pypi.org/project/colorama/
     ],
     include_package_data=True,
     cmdclass={
         'test': TestCommand,
         'tox': ToxTestCommand,
+        'install': CustomInstallCommand,  # normal install e.g.: ./setup.py install
+        'develop': CustomDevelopCommand,  # setuptools "develop mode" e.g.: pip install -e .
     },
     # scripts=["for_runners_project/manage.py"],
     entry_points={
         'console_scripts': [
 
             # run the dev. server:
-            'for_runners = for_runners_project.cli:run_dev_server',
+            'for_runners = for_runners_project.cli:cli',
 
             # run manage commands:
-            'manage = for_runners_project.cli:manage',
+            'manage = for_runners_project.__main__:manage',
+
         ]
     },
 )

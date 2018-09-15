@@ -47,11 +47,13 @@ class CLITest(unittest.TestCase):
 
     def test_version(self):
         output = subprocess_output(["%s" % self.cli_file_path, "--version"])
-        self.assertEqual(output, "%s\n" % __version__)
+        self.assertIn("version %s" % __version__, output)
 
     def test_help(self):
         output = subprocess_output(["%s" % self.cli_file_path, "--help"])
-        self.assertIn("Just start this file without any arguments to run the dev. server", output)
+        self.assertIn("Usage: cli.py [OPTIONS] COMMAND [ARGS]...", output)
+        self.assertIn("create_starter", output)
+        self.assertIn("run_server", output)
 
 
 class BootTest(unittest.TestCase):

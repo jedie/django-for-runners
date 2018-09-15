@@ -39,10 +39,13 @@
 
 == try-out
 
+
 === Linux
 
  # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]] (right click and use "save under...")
  # run {{{boot_django_for_runners.sh}}}
+ # double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}}
+ # insert user name/password in terminal
 
 All in one step, e.g.:
 
@@ -50,30 +53,33 @@ All in one step, e.g.:
 ~$ bash <(curl -s https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh)
 }}}
 
+just double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}} in your file manager ;)
+
+More details:
+
 The shell script creates a python virtual environment and install all needed requirements into:
 
  * {{{~/Django-ForRunners}}}
 
-start the development server with the test project, e.g.:
-
-{{{
-~$ ~/DjangoForRunnersEnv/bin/for_runners
-}}}
-
-You can also just double click on {{{ ~/Django-ForRunners/bin/for_runners }}} in your file manage ;)
-
-or create a starter/launcher with {{{ x-terminal-emulator -e ~/Django-ForRunners/bin/for_runners }}}
-
-e.g.:
-
-{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/2018-09-09 Launcher.png|2018-09-09 Launcher.png}}
-
-Only for info: The setup routine will install two commands:
+The setup routine will install two commands:
 
 * {{{ ~/Django-ForRunners/bin/for_runners }}} - CLI to start the web server to use Django-ForRunners
 * {{{ ~/Django-ForRunners/bin/manage }}} - Run django manage commands with Django-ForRunners project settings
 
+e.g.:
+{{{
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ for_runners --help
+...
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ manage --help
+...
+}}}
+
+
 === Windows
+
+TODO: Create shortcut (via pywin32?)
 
  # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.cmd|boot_django_for_runners.cmd]] (right click and use "save under...")
  # run {{{boot_django_for_runners.cmd}}}
@@ -219,6 +225,7 @@ to:
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
 ** Move the SQlite database to virtualenv root dir, e.g.: {{{~/DjangoForRunnersEnv/Django-ForRunners-database.sqlite3}}}
+** Create xdg-open desktop starter under linux here: {{{~/DjangoForRunnersEnv/Django-ForRunners}}}
 ** refactor the startup process:
 *** auto loop the server process
 *** open web browser on first start

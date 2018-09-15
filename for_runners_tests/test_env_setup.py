@@ -9,7 +9,7 @@ from django_tools.unittest_utils.assertments import assert_endswith
 from django_tools.unittest_utils.django_command import DjangoCommandMixin
 
 # https://github.com/jedie/django-for-runners
-from for_runners.version import __version__ as for_runners_version
+from for_runners.version import __version__
 
 
 class CheckTestEnvironment(DjangoCommandMixin, TestCase):
@@ -35,12 +35,13 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         )
 
     def test_for_runners_version(self):
-        self.assertEqual(self._call_for_runners(["--version"]), for_runners_version)
+        self.assertEqual(self._call_for_runners(["--version"]), "for_runners, version %s" % __version__)
 
     def test_for_runners_help(self):
-        self.assertEqual(
-            self._call_for_runners(["--help"]), "Just start this file without any arguments to run the dev. server"
-        )
+        output = self._call_for_runners(["--help"])
+        self.assertIn("Usage: for_runners [OPTIONS] COMMAND [ARGS]...", output)
+        self.assertIn("create_starter", output)
+        self.assertIn("run_server", output)
 
     def _call_manage(self, cmd):
         manage_path = Path(self.manage_bin)

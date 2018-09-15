@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import subprocess
 import sys
 import time
+
+import click
 
 # https://github.com/jedie/django-for-runners
 from for_runners.version import __version__
@@ -31,46 +34,33 @@ if sys.version_info < (3, 5):
     sys.exit(101)
 
 
-def verbose_call(command):
-    print("\n" * 3)
-
-    print(repr(print))
-    print("_" * 79, file=sys.stderr, flush=True)
-    print("call command %r\n" % command, flush=True)
-    call_command(command)
-
-
-def manage():
-    """
-    entry points used in setup.py for run django manage commands
-    e.g.:
-        ~$ ~/Django-ForRunners/bin/manage --version
-    """
-    from django.core.management import execute_from_command_line
-    execute_from_command_line(sys.argv)
-
-
-def verbose_subprocess(command):
+def verbose_subprocess(*args):
     """
     Call this script via subprocess, but with a "command" argument
     """
     print("\n" * 3)
     print("_" * 79, file=sys.stderr, flush=True)
-
-    if sys.platform in ('win32', 'cygwin'):
-        executable = "%s.exe" % sys.argv[0]
-        args = [executable]
-        # args == e.g.: ["C:\Program Files\Django-ForRunners\Scripts\for_runners.exe"]
-    else:
-        args = [sys.executable, sys.argv[0]]
-
-    args.append(command)
-    print("subprocess call %r\n" % args, flush=True)
-
+    click.echo("subprocess call '%s'\n" % click.style(" ".join(args), fg="green"))
     subprocess.check_call(args)
 
 
-def run_dev_server():
+def subprocess_manage(*args):
+    """
+    Call django manage command via:
+        for_runners_project/__main__.py
+    """
+    args = [sys.executable, "-m", "for_runners_project"] + list(args)
+    verbose_subprocess(*args)
+
+
+@click.group()
+@click.version_option(__version__)
+def cli():
+    pass
+
+
+@cli.command()
+def run_server():
     """
     run the django dev server in endless loop.
 
@@ -78,25 +68,11 @@ def run_dev_server():
     e.g.:
         ~$ ~/Django-ForRunners/bin/for_runners
     """
-    if "--version" in sys.argv:
-        print(__version__)
-        sys.exit(0)
-
-    if "--help" in sys.argv:
-        print("Just start this file without any arguments to run the dev. server")
-        sys.exit(0)
-
-    if len(sys.argv) > 1:
-        # call via verbose_subprocess():
-        # run manage command:
-        manage()
-        sys.exit(0)
-
     while True:
         try:
-            verbose_subprocess("makemigrations")  # helpfull for developing and add/change models ;)
-            verbose_subprocess("migrate")
-            verbose_subprocess("run_server")
+            subprocess_manage("makemigrations")  # helpfull for developing and add/change models ;)
+            subprocess_manage("migrate")
+            subprocess_manage("run_server")
         except Exception as err:
             print("\nError: %s" % err)
         except KeyboardInterrupt:
@@ -116,5 +92,11 @@ def run_dev_server():
         os.environ["DONT_OPEN_BROWSER"] = "yes"
 
 
+@cli.command()
+def create_starter():
+    from for_runners_project.starter import create_starter
+    create_starter()
+
+
 if __name__ == "__main__":
-    run_dev_server()
+    cli()
