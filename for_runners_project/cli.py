@@ -88,9 +88,6 @@ def run_server():
             print("\n\nExit by keyboard interrupt, ok.\n")
             sys.exit(0)
 
-        # used in for_runners_project.for_runners_helper_app.management.commands.run_server.Command#run
-        os.environ["DONT_OPEN_BROWSER"] = "yes"
-
 
 @cli.command()
 def create_starter():

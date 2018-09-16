@@ -13,6 +13,8 @@ from django.core.management import call_command
 # https://github.com/jedie/django-for-runners
 from for_runners.models import DistanceModel
 
+DONT_OPEN_BROWSER_ENV_KEY = "DONT_OPEN_BROWSER"
+
 
 class Command(RunServerCommand):
     """
@@ -56,29 +58,29 @@ class Command(RunServerCommand):
                 # call: for_runners.management.commands.fill_basedata.Command
                 self.verbose_call("fill_basedata")
 
+            if not DONT_OPEN_BROWSER_ENV_KEY in os.environ:
+
+                def open_webbrowser():
+                    os.environ[DONT_OPEN_BROWSER_ENV_KEY] = "yes"  # open only one time ;)
+
+                    self.stderr.write("_" * 79)
+                    self.stderr.write("Start web server...")
+
+                    import webbrowser
+                    uri = "%(protocol)s://%(addr)s:%(port)s/" % {
+                        "protocol": self.protocol,
+                        "addr": '[%s]' % self.addr if self._raw_ipv6 else self.addr,
+                        "port": self.port,
+                    }
+                    print("\nStart browser with: %r\n" % uri)
+                    webbrowser.open_new_tab(uri)
+
+                Timer(1, open_webbrowser).start()
+
         options["insecure_serving"] = True
         super(Command, self).handle(*args, **options)
 
     def run(self, **options):
-
-        if "RUN_MAIN" in os.environ and not "DONT_OPEN_BROWSER" in os.environ:
-            # Just open browser and point to the server URI
-            # But only one time ;)
-            # "DONT_OPEN_BROWSER" set in for_runners_project.cli.run_dev_server
-            def open_webbrowser():
-                import webbrowser
-                uri = "%(protocol)s://%(addr)s:%(port)s/" % {
-                    "protocol": self.protocol,
-                    "addr": '[%s]' % self.addr if self._raw_ipv6 else self.addr,
-                    "port": self.port,
-                }
-                print("\nStart browser with: %r\n" % uri)
-                webbrowser.open_new_tab(uri)
-
-            Timer(1, open_webbrowser).start()
-
-        self.stderr.write("_" * 79)
-        self.stderr.write("Start web server...")
 
         if sys.platform in ('win32', 'cygwin'):
             # Bugfix for:
