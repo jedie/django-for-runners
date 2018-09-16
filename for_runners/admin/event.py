@@ -26,7 +26,15 @@ log = logging.getLogger(__name__)
 
 @admin.register(EventLinkModel)
 class EventLinkModelAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("event", "link_html")
+    list_filter = ("event",)
+    date_hierarchy = "event__start_date"
+    search_fields = (
+        "url",
+        "text",
+        "title",
+        "event__name",
+    )
 
 
 class LinkModelInline(admin.TabularInline):
