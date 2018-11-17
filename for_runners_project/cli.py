@@ -53,6 +53,12 @@ def subprocess_manage(*args):
     verbose_subprocess(*args)
 
 
+def call_manage_command(*, cmd_class):
+    django.setup()
+    cmd = cmd_class.Command()
+    call_command(cmd)
+
+
 @click.group()
 @click.version_option(__version__)
 def cli():
@@ -103,11 +109,9 @@ def recreate_svg():
     """
     Recreate all SVG files for all Tracks.
     """
-    django.setup()
-
     from for_runners.management.commands import recreate_svg
-    cmd = recreate_svg.Command()
-    call_command(cmd)
+    call_manage_command(cmd_class=recreate_svg)
+
 
 
 if __name__ == "__main__":
