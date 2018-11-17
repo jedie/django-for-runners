@@ -53,7 +53,13 @@ All in one step, e.g.:
 ~$ bash <(curl -s https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh)
 }}}
 
-just double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}} in your file manager ;)
+Just double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}} in your file manager ;)
+
+Or start by hand, e.g.:
+{{{
+~$ cd ~/Django-ForRunners/bin
+~/Django-ForRunners/bin$ ./for_runners run_server
+}}}
 
 More details:
 
