@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import click
+from for_runners_project.utils.venv import VirtualEnvPath
 
 # https://github.com/jedie/django-for-runners
 import for_runners
@@ -22,34 +23,6 @@ Name=Django-ForRunners
 """
 
 # gnome-terminal -x bash -c '/usr/bin/cal && bash'
-
-
-def get_env_path():
-    """
-    :return: VirtualEnv root dir, e.g.: /home/<username>/DjangoForRunnersEnv
-    """
-    # print("sys.executable:", sys.executable)
-    # print("sys.prefix:", sys.prefix)
-    # print("sys.real_prefix:", getattr(sys, "real_prefix", None))
-
-    executable_path = Path(sys.executable)  # e.g.: /home/<username>/DjangoForRunnersEnv/bin/python3
-    assert executable_path.is_file()
-    env_path = Path(sys.prefix)  # e.g.: /home/<username>/DjangoForRunnersEnv
-    assert env_path.is_dir()
-
-    # raise ValueError if env_path is not a subpath of executable_path
-    executable_path.relative_to(env_path)
-
-    if sys.platform in ('win32', 'cygwin'):
-        for_runners_filename = "for_runners.exe"
-    else:
-        for_runners_filename = "for_runners"
-
-    for_runners_exe = Path(executable_path.parent, for_runners_filename)
-    assert for_runners_exe.is_file(), "for_runner executeable not found here: '%s'" % for_runners_exe
-    assert os.access(str(for_runners_exe), os.X_OK), "File not executeable: '%s'" % for_runners_exe
-
-    return for_runners_exe, env_path
 
 
 def get_for_runners_app_path():
@@ -77,8 +50,12 @@ def create_linux_xdg_open_file(for_runners_exe, env_path):
 
 def create_starter():
     click.echo("Create stater")
-    for_runners_exe, env_path = get_env_path()
+
+    venv_path = VirtualEnvPath()
+    env_path = venv_path.env_path
     print("Create starter in: %s" % env_path)
+
+    for_runners_exe = venv_path.get_for_runners_exe()
 
     if sys.platform in ('win32', 'cygwin'):
         raise NotImplementedError("TODO: Create starter under Windows!")
