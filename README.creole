@@ -44,7 +44,7 @@
 
  # Download the file [[https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh|boot_django_for_runners.sh]] (right click and use "save under...")
  # run {{{boot_django_for_runners.sh}}}
- # double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}}
+ # double click on {{{~/Django-ForRunners/Django-ForRunners}}}
  # insert user name/password in terminal
 
 All in one step, e.g.:
@@ -53,7 +53,7 @@ All in one step, e.g.:
 ~$ bash <(curl -s https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh)
 }}}
 
-Just double click on {{{~/DjangoForRunnersEnv/Django-ForRunners}}} in your file manager ;)
+Just double click on {{{~/Django-ForRunners/Django-ForRunners}}} in your file manager ;)
 
 Or start by hand, e.g.:
 {{{
@@ -74,11 +74,11 @@ The setup routine will install two commands:
 
 e.g.:
 {{{
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ for_runners --help
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
+(Django-ForRunners) ~/Django-ForRunners$ for_runners --help
 ...
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ manage --help
+(Django-ForRunners) ~/Django-ForRunners$ manage --help
 ...
 }}}
 
@@ -115,9 +115,9 @@ e.g.:
 === regenerate all SVG files
 
 {{{
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ for_runners recreate_svg
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
+(Django-ForRunners) ~/Django-ForRunners$ for_runners recreate_svg
 }}}
 
 
@@ -144,15 +144,15 @@ e.g.:
 
 {{{
 # activate the virtualenv:
-~$ cd DjangoForRunnersEnv/
-~/DjangoForRunnersEnv$ source bin/activate
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
 
 # run the tests:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ cd src/django-for-runners/
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py test
+(Django-ForRunners) ~/Django-ForRunners$ cd src/django-for-runners/
+(Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ ./setup.py test
 
 # run text via tox:
-(DjangoForRunnersEnv) ~/DjangoForRunnersEnv/src/django-for-runners$ ./setup.py tox
+(Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ ./setup.py tox
 }}}
 
 
@@ -227,19 +227,19 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 If you would like to migrate, move/rename this file
 
-{{{~/DjangoForRunnersEnv/src/django-for-runners/test_project_db.sqlite3}}}
+{{{~/Django-ForRunners/src/django-for-runners/test_project_db.sqlite3}}}
 
 to:
 
-{{{~/DjangoForRunnersEnv/Django-ForRunners-database.sqlite3}}}
+{{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
 
 
 
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
-** Move the SQlite database to virtualenv root dir, e.g.: {{{~/DjangoForRunnersEnv/Django-ForRunners-database.sqlite3}}}
-** Create xdg-open desktop starter under linux here: {{{~/DjangoForRunnersEnv/Django-ForRunners}}}
+** Move the SQlite database to virtualenv root dir, e.g.: {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
+** Create xdg-open desktop starter under linux here: {{{~/Django-ForRunners/Django-ForRunners}}}
 ** refactor the startup process:
 *** auto loop the server process
 *** open web browser on first start
