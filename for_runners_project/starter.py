@@ -17,7 +17,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Icon={svg_logo_path}
-Exec=x-terminal-emulator -e "{for_runners_exe} run_server && bash -i"
+Exec=x-terminal-emulator -e "{for_runners_exe} run_server"
 Name=Django-ForRunners
 """
 
