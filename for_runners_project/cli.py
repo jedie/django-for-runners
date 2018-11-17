@@ -91,8 +91,23 @@ def run_server():
 
 @cli.command()
 def create_starter():
+    """
+    Create starter file.
+    """
     from for_runners_project.starter import create_starter
     create_starter()
+
+
+@cli.command()
+def recreate_svg():
+    """
+    Recreate all SVG files for all Tracks.
+    """
+    django.setup()
+
+    from for_runners.management.commands import recreate_svg
+    cmd = recreate_svg.Command()
+    call_command(cmd)
 
 
 if __name__ == "__main__":

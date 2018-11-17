@@ -31,6 +31,7 @@ from for_runners.gpx_tools.humanize import human_distance, human_duration, human
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
+from for_runners.services.gpx import generate_svg
 from for_runners.svg import gpx2svg_file, gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
 
@@ -638,15 +639,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
         if not self.track_svg:
             log.debug("Create SVG from GPX...")
-            svg_string = gpx2svg_string(gpxpy_instance)
-            content = ContentFile(svg_string)
-
-            # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
-            self.track_svg.save(
-                name="temp.svg",  # real file path will be set in self.get_svg_upload_path()
-                content=content,
-                save=False
-            )
+            generate_svg(gpx_track=self, force=False)
 
         # TODO: Handle other extensions, too.
         # Garmin containes also 'cad'

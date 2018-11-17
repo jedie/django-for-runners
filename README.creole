@@ -112,6 +112,14 @@ e.g.:
 **Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
 
 
+=== regenerate all SVG files
+
+{{{
+~$ cd DjangoForRunnersEnv/
+~/DjangoForRunnersEnv$ source bin/activate
+(DjangoForRunnersEnv) ~/DjangoForRunnersEnv$ for_runners recreate_svg
+}}}
+
 
 == Screenshots
 
