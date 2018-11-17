@@ -54,7 +54,6 @@ def subprocess_manage(*args):
 
 
 def call_manage_command(*, cmd_class):
-    django.setup()
     cmd = cmd_class.Command()
     call_command(cmd)
 
@@ -100,6 +99,7 @@ def create_starter():
     """
     Create starter file.
     """
+    django.setup()
     from for_runners_project.starter import create_starter
     create_starter()
 
@@ -109,9 +109,19 @@ def recreate_svg():
     """
     Recreate all SVG files for all Tracks.
     """
+    django.setup()
     from for_runners.management.commands import recreate_svg
     call_manage_command(cmd_class=recreate_svg)
 
+
+@cli.command()
+def backup():
+    """
+    Backup everything
+    """
+    django.setup()
+    from for_runners.management.commands import backup
+    call_manage_command(cmd_class=backup)
 
 
 if __name__ == "__main__":

@@ -112,6 +112,20 @@ e.g.:
 **Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
 
 
+=== backup
+
+Create a backup into {{{DjangoForRunnersEnv/backups/<timestamp>/}}} e.g.:
+{{{
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
+(Django-ForRunners) ~/Django-ForRunners$ for_runners backup
+}}}
+
+The backup does:
+ * backup the database
+ * export all GPX tracks
+
+
 === regenerate all SVG files
 
 {{{
@@ -239,6 +253,7 @@ to:
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
 ** Move the SQlite database to virtualenv root dir, e.g.: {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
+** NEW: Backup/export via cli: {{{$ for_runners backup}}}
 ** Create xdg-open desktop starter under linux here: {{{~/Django-ForRunners/Django-ForRunners}}}
 ** refactor the startup process:
 *** auto loop the server process

@@ -13,8 +13,9 @@ from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
-from django.db import IntegrityError, models, NotSupportedError
-from django.db.models import Avg, Max, Min
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError, NotSupportedError, models
+from django.db.models import Avg, Count, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
@@ -575,20 +576,12 @@ class GpxModelAdmin(admin.ModelAdmin):
         ] + urls
         return urls
 
-
     @cached_property
     def user_count(self):
-        qs = GpxModel.objects.all().only("tracked_by").order_by("tracked_by")
-
-        try:
-            user_count = qs.distinct("tracked_by").count()
-        except (NotImplementedError, NotSupportedError):
-            # e.g.: sqlite has no distinct :(
-            qs = qs.values_list("tracked_by__id", flat=True)
-            user_count = len(set(qs))
-
-        return user_count
-
+        User = get_user_model()
+        qs = User.objects.annotate(num_tracks=Count("gpxmodel_createby"))
+        qs = qs.filter(num_tracks__gt=0)
+        return qs.count()
 
     def get_list_display(self, request):
         list_display = super(GpxModelAdmin, self).get_list_display(request).copy()
@@ -598,7 +591,6 @@ class GpxModelAdmin(admin.ModelAdmin):
 
         return list_display
 
-
     def get_list_filter(self, request):
         list_filter = super(GpxModelAdmin, self).get_list_filter(request).copy()
 
@@ -606,7 +598,6 @@ class GpxModelAdmin(admin.ModelAdmin):
             list_filter.remove("tracked_by")
 
         return list_filter
-
 
     def get_changelist(self, request, **kwargs):
         """
