@@ -15,6 +15,7 @@ from django.utils.text import slugify
 
 # https://github.com/jedie/django-for-runners
 from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
+from for_runners.services.gpx import CsvGenerator
 from for_runners_project.utils.venv import VirtualEnvPath
 
 log = logging.getLogger(__name__)
@@ -32,20 +33,27 @@ class Command(BaseCommand):
             print("Backup database file to: %s" % db_file_bak)
             shutil.copyfile(str(db_file), str(db_file_bak))
 
-    def backup_gpx_tracks(self, *, backup_path):
+    def csv_user_export(self, *, backup_path):
+        """
+        Export all .gpx tracks
+            * create sub directory from username
+            * generate .csv file per user
+        """
         for user in gpx_users():
-            print("User: %s" % user.username)
+            print("Export for user: %s" % user.username)
+
             out_path = Path(backup_path, user.username)
             out_path.mkdir(parents=True, exist_ok=False)
 
             user_csv_path = Path(backup_path, "runnings_%s.csv" % user.username)
-            with user_csv_path.open("w", encoding='utf-8', newline='') as f:
-                user_csv_writer = csv.writer(f)
 
-                qs = gpx_user_tracks(user=user)
-                total_count = qs.count()
-                for no, track in enumerate(qs):
-                    print("\t [%i/%i] track: %s" % (no, total_count, track))
+            tracks = 0
+
+            with user_csv_path.open("w", encoding='utf-8', newline='') as csv_file:
+                csv_generator = CsvGenerator(csv_file=csv_file, add_username=False)
+
+                for track in gpx_user_tracks(user=user):
+                    print(".", end="", flush=True)
 
                     filename = "%s.gpx" % track.get_short_slug()
 
@@ -53,73 +61,32 @@ class Command(BaseCommand):
                     with file_path.open("w") as f:
                         f.write(track.gpx)
 
-                    user_csv_writer.writerow([
-                        track.short_name(), track.tracked_by.username,
-                        round(track.length / 1000, 2)
-                    ])
+                    # output one csv row:
+                    csv_generator.add_gpx_track(track=track)
 
-    def csv_export(self, *, backup_path):
+                    tracks += 1
+
+            print("\n%i trackes saved for user: %s\n" % (tracks, user.username))
+
+    def csv_complete_export(self, *, backup_path):
+
         csv_path = Path(backup_path, "runnings.csv")
+        print("Generate %s..." % csv_path)
 
-        HEADER_DATE = "date"
-        HEADER_NAME = "name"
-        HEADER_EVENT = "event"
-        HEADER_USER = "user"
-        HEADER_LENGTH = "length (km)"
-        HEADER_DURATION = "duration"
-        HEADER_PACE = "pace"
-        HEADER_HEART_RATE = "heart rate"
-        HEADER_TEMPERATURE = "temperature"
-        HEADER_WEATHER = "weather"
-        HEADER_CREATOR = "creator"
+        tracks = 0
 
         with csv_path.open("w", encoding='utf-8', newline='') as csv_file:
-            fieldnames = [
-                HEADER_DATE,
-                HEADER_NAME,
-                HEADER_EVENT,
-                HEADER_USER,
-                HEADER_LENGTH,
-                HEADER_DURATION,
-                HEADER_PACE,
-                HEADER_HEART_RATE,
-                HEADER_TEMPERATURE,
-                HEADER_WEATHER,
-                HEADER_CREATOR,
-            ]
-            csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            csv_writer.writeheader()
+            csv_generator = CsvGenerator(csv_file=csv_file, add_username=True)
 
-            qs = gpx_tracks(has_gpx=True)
-            total_count = qs.count()
-            for no, track in enumerate(qs):
-                print("\t [%i/%i] track: %s" % (no, total_count, track))
+            for track in gpx_tracks(has_gpx=True):
+                print(".", end="", flush=True)
 
-                if track.heart_rate_avg:
-                    heart_rate = "%i b/m" % track.heart_rate_avg
-                else:
-                    heart_rate = ""
+                # output one csv row:
+                csv_generator.add_gpx_track(track=track)
 
-                if track.start_temperature:
-                    temperature = "%i°C" % round(track.start_temperature, 1)
-                    weather = track.start_weather_state
-                else:
-                    temperature = ""
-                    weather = ""
+                tracks += 1
 
-                csv_writer.writerow({
-                    HEADER_DATE: track.start_time.isoformat(),
-                    HEADER_NAME: track.short_name(start_time=False),
-                    HEADER_EVENT: "x" if track.participation else "",
-                    HEADER_USER: track.tracked_by.username,
-                    HEADER_LENGTH: round(track.length / 1000, 2),
-                    HEADER_DURATION: track.human_duration(),
-                    HEADER_PACE: track.human_pace(),
-                    HEADER_HEART_RATE: heart_rate,
-                    HEADER_TEMPERATURE: temperature,
-                    HEADER_WEATHER: weather,
-                    HEADER_CREATOR: track.creator,
-                })
+        print("\n%i trackes\n" % tracks)
 
     def handle(self, *args, **options):
 
@@ -138,11 +105,14 @@ class Command(BaseCommand):
 
         backup_path.mkdir(parents=True, exist_ok=False)
 
+        # Backup SQLite database file:
         self.backup_database(backup_path=backup_path)
 
-        self.backup_gpx_tracks(backup_path=backup_path)
+        # Export gpx tracks and create user-csv-file:
+        self.csv_user_export(backup_path=backup_path)
 
-        self.csv_export(backup_path=backup_path)
+        # Generate .csv file for all tracks:
+        self.csv_complete_export(backup_path=backup_path)
 
         # TODO: Save svg
 

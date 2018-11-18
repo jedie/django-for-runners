@@ -3,8 +3,9 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
-
+import csv
 import logging
+from pathlib import Path
 
 from django.core.files.base import ContentFile
 
@@ -43,3 +44,73 @@ def generate_svg(gpx_track, force=False):
     log.debug("SVG created: %r" % svg)
 
     return svg
+
+
+class CsvGenerator:
+    HEADER_DATE = "date"
+    HEADER_NAME = "name"
+    HEADER_EVENT = "event"
+    HEADER_USER = "user"
+    HEADER_LENGTH = "length (km)"
+    HEADER_DURATION = "duration"
+    HEADER_PACE = "pace"
+    HEADER_HEART_RATE = "heart rate"
+    HEADER_TEMPERATURE = "temperature"
+    HEADER_WEATHER = "weather"
+    HEADER_CREATOR = "creator"
+
+    def __init__(self, *, csv_file, add_username=True):
+        """
+        :param csv_file: file object, opened for writing
+        :param add_username: add the username as csv column
+        """
+        self.csv_file = csv_file
+        self.add_username = add_username
+
+        fieldnames = [
+            self.HEADER_DATE,
+            self.HEADER_NAME,
+            self.HEADER_EVENT,
+            self.HEADER_LENGTH,
+            self.HEADER_DURATION,
+            self.HEADER_PACE,
+            self.HEADER_HEART_RATE,
+            self.HEADER_TEMPERATURE,
+            self.HEADER_WEATHER,
+            self.HEADER_CREATOR,
+        ]
+        if add_username:
+            fieldnames.insert(3, self.HEADER_USER)
+
+        self.csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        self.csv_writer.writeheader()
+
+    def add_gpx_track(self, track):
+        if track.heart_rate_avg:
+            heart_rate = "%i b/m" % track.heart_rate_avg
+        else:
+            heart_rate = ""
+
+        if track.start_temperature:
+            temperature = "%i°C" % round(track.start_temperature, 1)
+            weather = track.start_weather_state
+        else:
+            temperature = ""
+            weather = ""
+
+        row = {
+            self.HEADER_DATE: track.start_time.isoformat(),
+            self.HEADER_NAME: track.short_name(start_time=False),
+            self.HEADER_EVENT: "x" if track.participation else "",
+            self.HEADER_LENGTH: round(track.length / 1000, 2),
+            self.HEADER_DURATION: track.human_duration(),
+            self.HEADER_PACE: track.human_pace(),
+            self.HEADER_HEART_RATE: heart_rate,
+            self.HEADER_TEMPERATURE: temperature,
+            self.HEADER_WEATHER: weather,
+            self.HEADER_CREATOR: track.creator,
+        }
+        if self.add_username:
+            row[self.HEADER_USER] = track.tracked_by.username
+
+        self.csv_writer.writerow(row)
