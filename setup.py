@@ -231,7 +231,6 @@ if "publish" in sys.argv:
     sys.exit(0)
 
 
-
 def after_install_callback(bin_dir):
     """
     :param bin_dir: e.g.: /home/<username>/DjangoForRunnersEnv/bin
@@ -242,9 +241,9 @@ def after_install_callback(bin_dir):
 
     print("*** bin_dir:", bin_dir)
 
-    bin_path = Path(bin_dir) #/ "not found test"
+    bin_path = Path(bin_dir)  #/ "not found test"
     assert bin_path.is_dir(), "Script/bin directory not found here: '%s'" % bin_path
-    
+
     env_path = bin_path.parent
     print("*** env_path:", env_path)
 
@@ -254,7 +253,6 @@ def after_install_callback(bin_dir):
     except NotImplementedError:
         # TODO: Windows ;)
         pass
-
 
 
 class CustomInstallCommand(install):
@@ -271,6 +269,7 @@ class CustomDevelopCommand(develop):
     """
     e.g.: pip install --verbose -e .
     """
+
     def run(self):
         super().run()
         after_install_callback(self.script_dir)
@@ -331,7 +330,6 @@ setup(
 
             # run manage commands:
             'manage = for_runners_project.__main__:manage',
-
         ]
     },
 )
