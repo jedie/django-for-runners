@@ -311,8 +311,9 @@ setup(
     python_requires='>=3.5',
     install_requires=[
         "django>2.1",
-        "click>=7.0,<8.0", # http://click.pocoo.org/
-        "colorama", # Console colors under windows: https://pypi.org/project/colorama/
+        "click>=7.0,<8.0",  # http://click.pocoo.org/
+        "gunicorn",  # https://gunicorn.org/
+        "colorama",  # Console colors under windows: https://pypi.org/project/colorama/
     ],
     include_package_data=True,
     cmdclass={
