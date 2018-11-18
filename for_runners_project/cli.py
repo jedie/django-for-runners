@@ -10,6 +10,7 @@ import click
 
 # https://github.com/jedie/django-for-runners
 from for_runners.version import __version__
+from for_runners_project.utils.gunicorn_server import get_gunicorn_application
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "for_runners_project.settings"
 
@@ -71,7 +72,7 @@ def run_server():
 
     entry points used in setup.py
     e.g.:
-        ~$ ~/Django-ForRunners/bin/for_runners
+        ~$ ~/Django-ForRunners/bin/for_runners run-server
     """
     while True:
         try:
@@ -92,6 +93,21 @@ def run_server():
         except KeyboardInterrupt:
             print("\n\nExit by keyboard interrupt, ok.\n")
             sys.exit(0)
+
+
+@cli.command()
+def run_gunicorn():
+    """
+    run the gunicorn server in endless loop.
+
+    entry points used in setup.py
+    e.g.:
+        ~$ ~/Django-ForRunners/bin/for_runners run-gunicorn
+    """
+    subprocess_manage("makemigrations")  # helpfull for developing and add/change models ;)
+    subprocess_manage("migrate")
+    gunicorn_application = get_gunicorn_application()
+    gunicorn_application.run()
 
 
 @cli.command()
