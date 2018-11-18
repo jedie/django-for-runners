@@ -58,7 +58,7 @@ Just double click on {{{~/Django-ForRunners/Django-ForRunners}}} in your file ma
 Or start by hand, e.g.:
 {{{
 ~$ cd ~/Django-ForRunners/bin
-~/Django-ForRunners/bin$ ./for_runners run_server
+~/Django-ForRunners/bin$ ./for_runners run-server
 }}}
 
 More details:
@@ -131,7 +131,7 @@ The backup does:
 {{{
 ~$ cd Django-ForRunners/
 ~/Django-ForRunners$ source bin/activate
-(Django-ForRunners) ~/Django-ForRunners$ for_runners recreate_svg
+(Django-ForRunners) ~/Django-ForRunners$ for_runners recreate-svg
 }}}
 
 
@@ -247,7 +247,7 @@ to:
 
 {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
 
-
+* cli arguments changed with click v7.0: {{{"_" -> "-"}}}, e.g.: {{{"run_server" -> "run-server"}}}
 
 == history
 
