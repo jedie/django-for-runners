@@ -35,7 +35,7 @@ import_heading_djangotools=https://github.com/jedie/django-tools
 known_djangotools=django_tools
 
 import_heading_for_runners=https://github.com/jedie/django-for-runners
-known_for_runners=for_runners
+known_for_runners=for_runners_project,for_runners
 
 default_section=THIRDPARTY
 sections=FUTURE,STDLIB,EXTERNAL,django,THIRDPARTY,djangotools,for_runners,FIRSTPARTY,LOCALFOLDER
