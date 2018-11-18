@@ -122,8 +122,12 @@ Create a backup into {{{DjangoForRunnersEnv/backups/<timestamp>/}}} e.g.:
 }}}
 
 The backup does:
+
  * backup the database
  * export all GPX tracks
+ * generate .csv files:
+    * a complete file with all running tracks
+    * one file for every user
 
 
 === regenerate all SVG files
