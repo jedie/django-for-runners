@@ -23,9 +23,14 @@ def gpx_users():
     return qs
 
 
-def gpx_user_tracks(user, has_gpx=True):
+def gpx_tracks(has_gpx=True):
     qs = GpxModel.objects.all()
     if has_gpx:
         qs = qs.exclude(gpx="")
+    return qs
+
+
+def gpx_user_tracks(user, has_gpx=True):
+    qs = gpx_tracks(has_gpx=has_gpx)
     qs = qs.filter(tracked_by=user)
     return qs

@@ -653,11 +653,15 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if not self.creator:
             self.creator = gpxpy_instance.creator
 
-    def short_name(self):
+    def short_name(self, start_time=True):
         if self.pk is None:
             return "new, unsaved GPX Track"
 
-        parts = [self.start_time.strftime("%Y-%m-%d")]
+        if start_time:
+            parts = [self.start_time.strftime("%Y-%m-%d")]
+        else:
+            parts = []
+
         if self.participation:
             parts.append(self.participation.event.name)
         else:
