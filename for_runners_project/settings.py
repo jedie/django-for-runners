@@ -73,6 +73,8 @@ INSTALLED_APPS = (
     # 'filer', # https://github.com/divio/django-filer
     'dynamic_fixtures',  # https://github.com/Peter-Slump/django-dynamic-fixtures
 
+    'import_export', # https://github.com/django-import-export/django-import-export
+
     # Django-ForRunners
     'for_runners',
     "for_runners_project.for_runners_helper_app",

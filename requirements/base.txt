@@ -30,3 +30,5 @@ svgwrite
 # https://github.com/geopy/geopy
 geopy
 
+# https://github.com/django-import-export/django-import-export
+django-import-export

@@ -13,9 +13,8 @@ from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
-from django.contrib.auth import get_user_model
 from django.db import IntegrityError, NotSupportedError, models
-from django.db.models import Avg, Count, Max, Min
+from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
@@ -24,11 +23,14 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
+from import_export.admin import ImportExportModelAdmin
+
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
 
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
+from for_runners.admin.gpx_import_export import GpxModelResource
 from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
@@ -253,12 +255,21 @@ class StatisticsListFilter(admin.SimpleListFilter):
 class GpxModelChangeList(ChangeList):
 
     def __init__(self, *args, **kwargs):
+        print("XXX")
+        pprint(args)
+        pprint(kwargs)
         self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
             constants.DISPLAY_PACE_DURATION: DistancePaceStatisticsView,
             constants.DISPLAY_GPX_INFO: GpxInfoView,
             constants.DISPLAY_GPX_METADATA: GpxMetadataView,
         }
+
+        # work-a-round for:
+        #   __init__() missing 1 required positional argument: 'sortable_by'
+        # while using export view
+        # kwargs["sortable_by"] = None
+
         super().__init__(*args, **kwargs)
 
     def get_results(self, request):
@@ -318,7 +329,8 @@ class HasEventPartricipationFilter(admin.SimpleListFilter):
 
 
 @admin.register(GpxModel)
-class GpxModelAdmin(admin.ModelAdmin):
+class GpxModelAdmin(ImportExportModelAdmin):
+    resource_class = GpxModelResource
 
     @display_admin_error
     def leaflet_map_html(self, obj):
@@ -578,10 +590,16 @@ class GpxModelAdmin(admin.ModelAdmin):
 
     @cached_property
     def user_count(self):
-        User = get_user_model()
-        qs = User.objects.annotate(num_tracks=Count("gpxmodel_createby"))
-        qs = qs.filter(num_tracks__gt=0)
-        return qs.count()
+        qs = GpxModel.objects.all().only("tracked_by").order_by("tracked_by")
+
+        try:
+            user_count = qs.distinct("tracked_by").count()
+        except (NotImplementedError, NotSupportedError):
+            # e.g.: sqlite has no distinct :(
+            qs = qs.values_list("tracked_by__id", flat=True)
+            user_count = len(set(qs))
+
+        return user_count
 
     def get_list_display(self, request):
         list_display = super(GpxModelAdmin, self).get_list_display(request).copy()

@@ -31,6 +31,7 @@ from for_runners.gpx_tools.humanize import human_distance, human_duration, human
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
+from for_runners.models.fields import GpxFileField
 from for_runners.services.gpx import generate_svg
 from for_runners.svg import gpx2svg_file, gpx2svg_string
 from for_runners.weather import NoWeatherData, meta_weather_com
@@ -61,6 +62,11 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     )
 
     gpx = models.TextField(help_text="The raw gpx file content",)
+    gpx_file = GpxFileField(
+        verbose_name=_("GPX Track"), name=None, storage=None, max_length=100,
+            null=True,
+            blank=True)
+
     creator = models.CharField(
         help_text="Used device to create this track",
         max_length=511,
@@ -261,6 +267,17 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         svg_upload_path = "track_svg_%s/%s.svg" % (date_prefix, self.get_prefix_id())
         log.debug("Ignore source filename: %r upload to: %r", filename, svg_upload_path)
         return svg_upload_path
+
+    def get_gpx_filepath(self, filename):
+        # base_path created in for_runners.apps.ForRunnersConfig#ready
+        base_path = Path(settings.FOR_RUNNERS_DATA_FILE_PATH)
+        assert base_path.is_dir(
+        ), "Error: settings.FOR_RUNNERS_DATA_FILE_PATH doesn't exists here: %s" % settings.FOR_RUNNERS_DATA_FILE_PATH
+
+        date_prefix = self.start_time.strftime("%Y_%m")
+        gpx_upload_path = "track_gpx_%s/%s.gpx" % (date_prefix, self.get_prefix_id())
+        log.debug("Ignore source filename: %r upload to: %r", filename, gpx_upload_path)
+        return gpx_upload_path
 
     def svg_tag(self):
         if self.track_svg:
