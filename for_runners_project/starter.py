@@ -18,7 +18,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Icon={svg_logo_path}
-Exec=x-terminal-emulator -e "{for_runners_exe} run-server"
+Exec=x-terminal-emulator -e "{for_runners_exe} run_gunicorn"
 Name=Django-ForRunners
 """
 
