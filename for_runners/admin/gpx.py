@@ -255,9 +255,6 @@ class StatisticsListFilter(admin.SimpleListFilter):
 class GpxModelChangeList(ChangeList):
 
     def __init__(self, *args, **kwargs):
-        print("XXX")
-        pprint(args)
-        pprint(kwargs)
         self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
             constants.DISPLAY_PACE_DURATION: DistancePaceStatisticsView,
