@@ -23,7 +23,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ExportMixin, ImportExportModelAdmin
 
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
@@ -40,10 +40,10 @@ from for_runners.models import GpxModel
 log = logging.getLogger(__name__)
 
 STATISTICS_CHOICES = (
-    (constants.DISPLAY_DISTANCE_PACE_KEY, _('Distance/Pace')),
-    (constants.DISPLAY_PACE_DURATION, _('Pace/Duration')),
-    (constants.DISPLAY_GPX_INFO, _('GPX info')),
-    (constants.DISPLAY_GPX_METADATA, _('GPX metadata')),
+    (constants.DISPLAY_DISTANCE_PACE_KEY, _("Distance/Pace")),
+    (constants.DISPLAY_PACE_DURATION, _("Pace/Duration")),
+    (constants.DISPLAY_GPX_INFO, _("GPX info")),
+    (constants.DISPLAY_GPX_METADATA, _("GPX metadata")),
 )
 assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
 
@@ -125,7 +125,7 @@ class DistanceStatisticsView(BaseFormChangelistView):
         qs = self.change_list.queryset  # get the filteres queryset form GpxModelChangeList
         qs = qs.order_by("length")
 
-        length_statistics = qs.aggregate(Min('length'), Avg("length"), Max('length'))
+        length_statistics = qs.aggregate(Min("length"), Avg("length"), Max("length"))
 
         min_length = length_statistics["length__min"]
         max_length = length_statistics["length__max"]
@@ -168,33 +168,32 @@ class DistanceStatisticsView(BaseFormChangelistView):
                 avg_paces = "null"
                 max_paces = "null"
 
-            track_data.append((
-                round(distance_from / 1000, 1), round(distance_to / 1000, 1), track_count, min_paces, avg_paces,
-                max_paces
-            ))
+            track_data.append(
+                (
+                    round(distance_from / 1000, 1),
+                    round(distance_to / 1000, 1),
+                    track_count,
+                    min_paces,
+                    avg_paces,
+                    max_paces,
+                )
+            )
         print("total track counts:", total_tracks)
         pprint(track_data)
 
-        context.update({
-            "tracks":
-            qs,
-            "track_count":
-            total_tracks,
-            "min_length_km":
-            round(min_length / 1000),
-            "avg_length_km":
-            round(length_statistics["length__avg"] / 1000),
-            "max_length_km":
-            round(max_length / 1000),
-            "track_data":
-            track_data,
-            "title":
-            _("Distance Statistics"),
-            "user":
-            self.request.user,
-            "opts":
-            GpxModel._meta,
-        })
+        context.update(
+            {
+                "tracks": qs,
+                "track_count": total_tracks,
+                "min_length_km": round(min_length / 1000),
+                "avg_length_km": round(length_statistics["length__avg"] / 1000),
+                "max_length_km": round(max_length / 1000),
+                "track_data": track_data,
+                "title": _("Distance Statistics"),
+                "user": self.request.user,
+                "opts": GpxModel._meta,
+            }
+        )
         # pprint(context)
         return context
 
@@ -204,13 +203,14 @@ class GpxInfoView(BaseChangelistView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            "tracks": self.change_list.
-            queryset,  # get the filteres queryset form GpxModelChangeList,
-            "title": _("GPX Infomation"),
-            "user": self.request.user,
-            "opts": GpxModel._meta,
-        })
+        context.update(
+            {
+                "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
+                "title": _("GPX Infomation"),
+                "user": self.request.user,
+                "opts": GpxModel._meta,
+            }
+        )
         return context
 
 
@@ -219,17 +219,18 @@ class GpxMetadataView(BaseChangelistView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList
-            "title": _("GPX Metadata"),
-            "user": self.request.user,
-            "opts": GpxModel._meta,
-        })
+        context.update(
+            {
+                "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList
+                "title": _("GPX Metadata"),
+                "user": self.request.user,
+                "opts": GpxModel._meta,
+            }
+        )
         return context
 
 
 class CalculateValuesView(generic.View):
-
     def get(self, request, object_id):
         instance = GpxModel.objects.get(pk=object_id)
         instance.calculate_values()
@@ -239,8 +240,8 @@ class CalculateValuesView(generic.View):
 
 
 class StatisticsListFilter(admin.SimpleListFilter):
-    title = _('statistics')
-    template = 'admin/for_runners/gpxmodel/filter.html'
+    title = _("statistics")
+    template = "admin/for_runners/gpxmodel/filter.html"
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = constants.STATISTICS_PARAMETER_NAME
@@ -253,7 +254,6 @@ class StatisticsListFilter(admin.SimpleListFilter):
 
 
 class GpxModelChangeList(ChangeList):
-
     def __init__(self, *args, **kwargs):
         self.startistics_mapping = {
             constants.DISPLAY_DISTANCE_PACE_KEY: DistanceStatisticsView,
@@ -292,41 +292,37 @@ class GpxModelChangeList(ChangeList):
 
 
 class HasNetDurationFilter(admin.SimpleListFilter):
-    title = _('has net duration')
+    title = _("has net duration")
     parameter_name = "net_duration"
 
     def lookups(self, request, model_admin):
-        return (
-            ('y', _('yes')),
-            ('n', _('no')),
-        )
+        return (("y", _("yes")), ("n", _("no")))
 
     def queryset(self, request, queryset):
-        if self.value() == 'y':
+        if self.value() == "y":
             return queryset.exclude(participation__duration__isnull=True)
-        if self.value() == 'n':
+        if self.value() == "n":
             return queryset.filter(participation__duration__isnull=True)
 
 
 class HasEventPartricipationFilter(admin.SimpleListFilter):
-    title = _('has event participation')
+    title = _("has event participation")
     parameter_name = "participation"
 
     def lookups(self, request, model_admin):
-        return (
-            ('y', _('yes')),
-            ('n', _('no')),
-        )
+        return (("y", _("yes")), ("n", _("no")))
 
     def queryset(self, request, queryset):
-        if self.value() == 'y':
+        if self.value() == "y":
             return queryset.exclude(participation__isnull=True)
-        if self.value() == 'n':
+        if self.value() == "n":
             return queryset.filter(participation__isnull=True)
 
 
 @admin.register(GpxModel)
-class GpxModelAdmin(ImportExportModelAdmin):
+class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
+    # change_list_template = 'admin/import_export/change_list_export.html'
+    change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
 
     @display_admin_error
@@ -407,11 +403,9 @@ class GpxModelAdmin(ImportExportModelAdmin):
 
         km_points = []
         for point, distance_m, distance_km in iter_distance(gpxpy_instance, distance=1000):
-            km_points.append({
-                "x": "%i" % (point.time.timestamp() * 1000),
-                "distance_m": distance_m,
-                "distance_km": distance_km,
-            })
+            km_points.append(
+                {"x": "%i" % (point.time.timestamp() * 1000), "distance_m": distance_m, "distance_km": distance_km}
+            )
 
         context = {
             "instance": obj,
@@ -432,11 +426,9 @@ class GpxModelAdmin(ImportExportModelAdmin):
         event = obj.participation.event
         gpx_tracks = GpxModel.objects.all().filter(participation__event=event).exclude(pk=obj.pk)
 
-        context = {
-            "event": event,
-            "gpx_tracks": gpx_tracks,
-        }
+        context = {"event": event, "gpx_tracks": gpx_tracks}
         return render_to_string(template_name="admin/for_runners/gpxmodel/participation_links.html", context=context)
+
     participation_links.short_description = _("Links")
 
     def __init__(self, *args, **kwargs):
@@ -467,17 +459,10 @@ class GpxModelAdmin(ImportExportModelAdmin):
             "creator",
         ]
 
-    search_fields = (
-        "full_start_address",
-        "full_finish_address",
-        "creator",
-    )
+    search_fields = ("full_start_address", "full_finish_address", "creator")
 
     list_per_page = 50
-    list_display_links = (
-        "svg_tag",
-        "overview",
-    )
+    list_display_links = ("svg_tag", "overview")
     readonly_fields = (
         "leaflet_map_html",
         "dygraphs_html",
@@ -501,55 +486,48 @@ class GpxModelAdmin(ImportExportModelAdmin):
     )
 
     fieldsets = (
-        (_("Map / Graphs"), {
-            "fields": (
-                "leaflet_map_html",
-                "dygraphs_html",
-            )
-        }),
-        (_("Event"), {
-            "fields": (
-                "participation",
-                "participation_links",
-            )
-        }),
-        (_("Start"), {
-            "fields": (
-                ("start_time", "start_temperature", "start_weather_state"),
-                "short_start_address",
-                "full_start_address",
-                "start_coordinate_html",
-                ("start_latitude", "start_longitude"),
-            )
-        }),
-        (_("Finish"), {
-            "fields": (
-                ("finish_time", "finish_temperature", "finish_weather_state"),
-                "short_finish_address",
-                "full_finish_address",
-                "finish_coordinate_html",
-                ("finish_latitude", "finish_longitude"),
-            )
-        }),
-        (_("GPX data"), {
-            "classes": ("collapse", ),
-            "fields": (
-                ("gpx", "points_no"),
-                ("track_svg", "svg_tag_big"),
-            )
-        }),
-        (_("Values"), {
-            "fields": (
-                ("human_length_html", "ideal_distance"),
-                ("human_duration_html", "human_pace"),
-                ("heart_rate_min", "heart_rate_avg", "heart_rate_max"),
-                ("uphill", "downhill"),
-                ("min_elevation", "max_elevation"),
-            )
-        }),
+        (_("Map / Graphs"), {"fields": ("leaflet_map_html", "dygraphs_html")}),
+        (_("Event"), {"fields": ("participation", "participation_links")}),
+        (
+            _("Start"),
+            {
+                "fields": (
+                    ("start_time", "start_temperature", "start_weather_state"),
+                    "short_start_address",
+                    "full_start_address",
+                    "start_coordinate_html",
+                    ("start_latitude", "start_longitude"),
+                )
+            },
+        ),
+        (
+            _("Finish"),
+            {
+                "fields": (
+                    ("finish_time", "finish_temperature", "finish_weather_state"),
+                    "short_finish_address",
+                    "full_finish_address",
+                    "finish_coordinate_html",
+                    ("finish_latitude", "finish_longitude"),
+                )
+            },
+        ),
+        (_("GPX data"), {"classes": ("collapse",), "fields": (("gpx", "points_no"), ("track_svg", "svg_tag_big"))}),
+        (
+            _("Values"),
+            {
+                "fields": (
+                    ("human_length_html", "ideal_distance"),
+                    ("human_duration_html", "human_pace"),
+                    ("heart_rate_min", "heart_rate_avg", "heart_rate_max"),
+                    ("uphill", "downhill"),
+                    ("min_elevation", "max_elevation"),
+                )
+            },
+        ),
     )
     # FIXME: Made this in CSS ;)
-    formfield_overrides = {models.CharField: {'widget': forms.TextInput(attrs={'style': 'width:70%'})}}
+    formfield_overrides = {models.CharField: {"widget": forms.TextInput(attrs={"style": "width:70%"})}}
 
     def overview(self, obj):
         parts = []
@@ -570,17 +548,17 @@ class GpxModelAdmin(ImportExportModelAdmin):
             url(
                 r"^distance-statistics/$",
                 self.admin_site.admin_view(DistanceStatisticsView.as_view()),
-                name="distance-statistics"
+                name="distance-statistics",
             ),
             url(
                 r"^distance-pace-statistics/$",
                 self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
-                name="distance-pace-statistics"
+                name="distance-pace-statistics",
             ),
             url(
                 r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),
-                name="%s_%s_calculate-values" % info
+                name="%s_%s_calculate-values" % info,
             ),
         ] + urls
         return urls
@@ -601,7 +579,7 @@ class GpxModelAdmin(ImportExportModelAdmin):
     def get_list_display(self, request):
         list_display = super(GpxModelAdmin, self).get_list_display(request).copy()
 
-        if self.user_count <= 1 and 'tracked_by' in list_display:
+        if self.user_count <= 1 and "tracked_by" in list_display:
             list_display.remove("tracked_by")
 
         return list_display
@@ -609,7 +587,7 @@ class GpxModelAdmin(ImportExportModelAdmin):
     def get_list_filter(self, request):
         list_filter = super(GpxModelAdmin, self).get_list_filter(request).copy()
 
-        if self.user_count <= 1 and 'tracked_by' in list_filter:
+        if self.user_count <= 1 and "tracked_by" in list_filter:
             list_filter.remove("tracked_by")
 
         return list_filter

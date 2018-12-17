@@ -47,6 +47,9 @@ def generate_svg(gpx_track, force=False):
 
 
 class CsvGenerator:
+    """
+    TODO: Replace with for_runners.admin.gpx_import_export.GpxModelResource
+    """
     HEADER_DATE = "date"
     HEADER_NAME = "name"
     HEADER_EVENT = "event"

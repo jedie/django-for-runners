@@ -22,6 +22,9 @@ log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
+    """
+    TODO: Use for_runners.admin.gpx_import_export.GpxModelResource
+    """
     help = "Backup everything"
 
     def backup_database(self, *, backup_path):

@@ -5,7 +5,8 @@
     <ul class="object-tools">
     {% block object-tools-items %}
         <li><a href="upload/">Upload GPX file</a></li>
-        {{ block.super }}
+        {% include "admin/import_export/change_list_export_item.html" %}{# <- add "export" link #}
+        {# Don't call "block.super" to remove the "add item" link #}
     {% endblock %}
     </ul>
     {{ cl.statistics }}

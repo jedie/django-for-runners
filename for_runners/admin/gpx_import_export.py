@@ -10,6 +10,9 @@ from for_runners.models import GpxModel
 
 
 class GpxModelResource(resources.ModelResource):
+    """
+    TODO: Use it in for_runners.management.commands.backup.Command
+    """
 
     start_time = Field()
     name = Field()
