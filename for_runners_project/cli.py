@@ -66,7 +66,7 @@ def cli():
 
 
 @cli.command()
-def run_server():
+def run_dev_server():
     """
     run the django dev server in endless loop.
 
