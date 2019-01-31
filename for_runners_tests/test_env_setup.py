@@ -35,12 +35,12 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         )
 
     def test_for_runners_version(self):
-        self.assertEqual(self._call_for_runners(["--version"]), "for_runners, version %s" % __version__)
+        self.assertEqual(self._call_for_runners(["--version"]), "Django-ForRunners, version %s" % __version__)
 
     def test_for_runners_help(self):
         output = self._call_for_runners(["--help"])
         self.assertIn("Usage: for_runners [OPTIONS] COMMAND [ARGS]...", output)
-        self.assertIn("create_starter", output)
+        self.assertIn("create-starter", output)
         self.assertIn("run_server", output)
 
     def _call_manage(self, cmd):
