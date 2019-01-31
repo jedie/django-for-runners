@@ -70,3 +70,11 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         output = self._call_manage(["check"])
         print(output)
         self.assertIn("System check identified no issues (0 silenced).", output)
+
+    def test_update(self):
+        output = self._call_for_runners(["update"])
+        print(output)
+        self.assertIn("git pull", output)
+        self.assertIn("pip3 install -r", output)
+        self.assertIn("pip3 install --upgrade", output)
+        self.assertIn("Your virtual environment is updated!", output)
