@@ -101,6 +101,17 @@ Start the development server with the test project by double click on:
 }}}
 
 
+== update existing installation
+
+Just run {{{for_runners update}}} e.g.:
+
+{{{
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
+(Django-ForRunners) ~/Django-ForRunners$ for_runners update
+}}}
+
+
 === import GPX files
 
 e.g.:
@@ -241,6 +252,19 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 
 === v0.9
 
+==== How to update:
+
+{{{
+~$ cd Django-ForRunners/
+~/Django-ForRunners$ source bin/activate
+(Django-ForRunners) ~/Django-ForRunners$ cd src/django-for-runners/
+(Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ git pull origin master
+(Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ for_runners update
+}}}
+
+
+==== How to migrate
+
 * The SQlite database was moved.
 
 If you would like to migrate, move/rename this file
@@ -253,9 +277,11 @@ to:
 
 * cli arguments changed with click v7.0: {{{"_" -> "-"}}}, e.g.: {{{"run_server" -> "run-server"}}}
 
+
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
+** NEW: Update installation with: {{{for_runners update}}}
 ** Move the SQlite database to virtualenv root dir, e.g.: {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
 ** NEW: Backup/export via cli: {{{$ for_runners backup}}}
 ** Create xdg-open desktop starter under linux here: {{{~/Django-ForRunners/Django-ForRunners}}}

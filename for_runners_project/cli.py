@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 import click
 
@@ -35,14 +36,14 @@ if sys.version_info < (3, 5):
     sys.exit(101)
 
 
-def verbose_subprocess(*args):
+def verbose_subprocess(*args, **kwargs):
     """
     Call this script via subprocess, but with a "command" argument
     """
     print("\n" * 3)
     print("_" * 79, file=sys.stderr, flush=True)
     click.echo("subprocess call '%s'\n" % click.style(" ".join(args), fg="green"))
-    subprocess.check_call(args)
+    subprocess.check_call(args, **kwargs)
 
 
 def subprocess_manage(*args):
@@ -138,6 +139,49 @@ def backup():
     django.setup()
     from for_runners.management.commands import backup
     call_manage_command(cmd_class=backup)
+
+
+@cli.command()
+def update():
+    """
+    Update all packages in virtualenv.
+
+    start with:
+        $ for_runners update
+
+    (Call this command only in a activated virtualenv.)
+    """
+    assert "VIRTUAL_ENV" in os.environ, "ERROR: Call me only in a activated virtualenv!"
+
+    pip3_path = Path(sys.prefix, "bin", "pip3")
+    if not pip3_path.is_file():
+        print("ERROR: pip not found here: '%s'" % pip3_path)
+        return
+
+    print("pip found here: '%s'" % pip3_path)
+
+    # Upgrade pip:
+    verbose_subprocess(str(pip3_path), "install", "--upgrade", "pip")
+
+    src_pkg_path = Path(__file__).parent.parent # .../src/django-for-runners
+    print(src_pkg_path)
+
+    req_path=Path(src_pkg_path, "requirements.txt")
+    if not req_path.is_file():
+        print("ERROR: File not found: %s" % req_path)
+        sys.exit(-1)
+
+    # Update sources from git:
+    if Path(src_pkg_path, ".git").is_dir():
+        verbose_subprocess("git", "pull", "origin", "master", cwd=str(src_pkg_path))
+
+    # upgrade requirements:
+    verbose_subprocess(str(pip3_path), "install", "-r", str(req_path))
+
+    # install:
+    verbose_subprocess(str(pip3_path), "install", "--upgrade", "-e", ".", cwd=str(src_pkg_path))
+
+    print("\n\nYour virtual environment is updated!\n")
 
 
 if __name__ == "__main__":
