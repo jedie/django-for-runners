@@ -62,7 +62,7 @@ def call_manage_command(*, cmd_class):
 
 
 @click.group()
-@click.version_option(__version__)
+@click.version_option(__version__, prog_name="Django-ForRunners")
 def cli():
     print("Start up...")
 
