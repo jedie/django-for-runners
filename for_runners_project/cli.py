@@ -60,10 +60,12 @@ def call_manage_command(*, cmd_class):
     call_command(cmd)
 
 
+
 @click.group()
 @click.version_option(__version__)
 def cli():
-    pass
+    print("Start up...")
+
 
 
 @cli.command()
