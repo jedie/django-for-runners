@@ -41,7 +41,7 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
         output = self._call_for_runners(["--help"])
         self.assertIn("Usage: for_runners [OPTIONS] COMMAND [ARGS]...", output)
         self.assertIn("create-starter", output)
-        self.assertIn("run_server", output)
+        self.assertIn("run-server", output)
 
     def _call_manage(self, cmd):
         manage_path = Path(self.manage_bin)
