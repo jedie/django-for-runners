@@ -10,7 +10,6 @@ from pathlib import Path
 
 
 class VirtualEnvPath:
-
     def __init__(self):
         """
         :return: VirtualEnv root dir, e.g.: /home/<username>/DjangoForRunnersEnv
@@ -28,7 +27,7 @@ class VirtualEnvPath:
         self.executable_path.relative_to(self.env_path)
 
     def get_for_runners_exe(self):
-        if sys.platform in ('win32', 'cygwin'):
+        if sys.platform in ("win32", "cygwin"):
             for_runners_filename = "for_runners.exe"
         else:
             for_runners_filename = "for_runners"

@@ -6,14 +6,14 @@ import for_runners.models.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('for_runners', '0006_auto_20180902_1958'),
-    ]
+    dependencies = [("for_runners", "0006_auto_20180902_1958")]
 
     operations = [
         migrations.AddField(
-            model_name='gpxmodel',
-            name='gpx_file',
-            field=for_runners.models.fields.GpxFileField(blank=True, null=True, upload_to=for_runners.models.fields.gpx_upload_to, verbose_name='GPX Track'),
-        ),
+            model_name="gpxmodel",
+            name="gpx_file",
+            field=for_runners.models.fields.GpxFileField(
+                blank=True, null=True, upload_to=for_runners.models.fields.gpx_upload_to, verbose_name="GPX Track"
+            ),
+        )
     ]

@@ -8,7 +8,7 @@ from django import forms
 
 
 class UploadGpxFileForm(forms.Form):
-    gpx_files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    gpx_files = forms.FileField(widget=forms.ClearableFileInput(attrs={"multiple": True}))
 
     def send_email(self):
         # send email using the self.cleaned_data dictionary
@@ -24,8 +24,5 @@ class DistanceStatisticsForm(forms.Form):
         max_value=10,
         min_value=0.1,
         initial=INITIAL_DISTANCE,
-        help_text="Gradation in kilometers to summarize the data."
+        help_text="Gradation in kilometers to summarize the data.",
     )
-
-
-

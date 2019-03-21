@@ -24,8 +24,14 @@ from django_tools.models import UpdateTimeBaseModel
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import (
-    GpxIdentifier, add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance,
-    iter_points, parse_gpx
+    GpxIdentifier,
+    add_extension_data,
+    get_2d_coordinate_list,
+    get_extension_data,
+    get_identifier,
+    iter_distance,
+    iter_points,
+    parse_gpx,
 )
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
@@ -53,107 +59,47 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         * createtime
         * lastupdatetime
     """
+
     participation = models.OneToOneField(
-        ParticipationModel,
-        related_name="track",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        ParticipationModel, related_name="track", null=True, blank=True, on_delete=models.SET_NULL
     )
 
-    gpx = models.TextField(help_text="The raw gpx file content",)
+    gpx = models.TextField(help_text="The raw gpx file content")
     gpx_file = GpxFileField(
-        verbose_name=_("GPX Track"), name=None, storage=None, max_length=100,
-            null=True,
-            blank=True)
-
-    creator = models.CharField(
-        help_text="Used device to create this track",
-        max_length=511,
-        null=True,
-        blank=True,
-    )
-    track_svg = models.FileField(
-        verbose_name=_("Track SVG"),
-        upload_to=svg_upload_path,
-        null=True,
-        blank=True,
+        verbose_name=_("GPX Track"), name=None, storage=None, max_length=100, null=True, blank=True
     )
 
-    start_time = models.DateTimeField(
-        editable=False,
-        help_text=_("Start time of the first segment in track"),
-    )
+    creator = models.CharField(help_text="Used device to create this track", max_length=511, null=True, blank=True)
+    track_svg = models.FileField(verbose_name=_("Track SVG"), upload_to=svg_upload_path, null=True, blank=True)
+
+    start_time = models.DateTimeField(editable=False, help_text=_("Start time of the first segment in track"))
     start_latitude = models.FloatField(
-        editable=False,
-        help_text=_(
-            "Latitude of the first recorded point from the *.gpx file"),
+        editable=False, help_text=_("Latitude of the first recorded point from the *.gpx file")
     )
     start_longitude = models.FloatField(
-        editable=False,
-        help_text=_(
-            "Longitude of the first recorded point from the *.gpx file"),
+        editable=False, help_text=_("Longitude of the first recorded point from the *.gpx file")
     )
-    start_temperature = models.FloatField(
-        editable=True,
-        null=True,
-        blank=True,
-        help_text=_("Temperature at start."),
-    )
-    start_weather_state = models.CharField(
-        max_length=127,
-        null=True,
-        blank=True,
-        help_text="Weather state at start.",
-    )
+    start_temperature = models.FloatField(editable=True, null=True, blank=True, help_text=_("Temperature at start."))
+    start_weather_state = models.CharField(max_length=127, null=True, blank=True, help_text="Weather state at start.")
     short_start_address = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        help_text="The short address of the start point",
+        max_length=255, null=True, blank=True, help_text="The short address of the start point"
     )
     full_start_address = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        help_text="The full address of the start point",
+        max_length=255, null=True, blank=True, help_text="The full address of the start point"
     )
 
-    finish_time = models.DateTimeField(
-        editable=False,
-        help_text=_("End time of the last segment in track"),
-    )
-    finish_latitude = models.FloatField(
-        editable=False,
-        help_text=_("Latitude of the finish point"),
-    )
-    finish_longitude = models.FloatField(
-        editable=False,
-        help_text=_("Longitude of the finish point"),
-    )
-    finish_temperature = models.FloatField(
-        editable=True,
-        null=True,
-        blank=True,
-        help_text=_("Temperature at finish."),
-    )
+    finish_time = models.DateTimeField(editable=False, help_text=_("End time of the last segment in track"))
+    finish_latitude = models.FloatField(editable=False, help_text=_("Latitude of the finish point"))
+    finish_longitude = models.FloatField(editable=False, help_text=_("Longitude of the finish point"))
+    finish_temperature = models.FloatField(editable=True, null=True, blank=True, help_text=_("Temperature at finish."))
     finish_weather_state = models.CharField(
-        max_length=127,
-        null=True,
-        blank=True,
-        help_text="Weather state at finish.",
+        max_length=127, null=True, blank=True, help_text="Weather state at finish."
     )
     short_finish_address = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        help_text="The short address of the finish point",
+        max_length=255, null=True, blank=True, help_text="The short address of the finish point"
     )
     full_finish_address = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        help_text="The full address of the finish point",
+        max_length=255, null=True, blank=True, help_text="The full address of the finish point"
     )
 
     tracked_by = models.ForeignKey(
@@ -163,7 +109,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         null=True,
         blank=True,
         help_text="The user that tracked this gpx entry",
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
     lastupdateby = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -172,19 +118,15 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         null=True,
         blank=True,
         help_text="User as last edit this entry",
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
 
-    points_no = models.PositiveIntegerField(
-        help_text=_("Number of points in GPX"),
-        null=True,
-        blank=True,
-    )
+    points_no = models.PositiveIntegerField(help_text=_("Number of points in GPX"), null=True, blank=True)
 
     length = models.PositiveIntegerField(
-        help_text=
-        _("Length in meters (calculated from GPX track 3-dimensional used latitude, longitude, and elevation)"
-          ),
+        help_text=_(
+            "Length in meters (calculated from GPX track 3-dimensional used latitude, longitude, and elevation)"
+        ),
         null=True,
         blank=True,
     )
@@ -192,65 +134,37 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         to=DistanceModel,
         on_delete=models.SET_NULL,
         related_name="tracks",
-        help_text=
-        _("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"
-          ),
+        help_text=_("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"),
         null=True,
         blank=True,
     )
 
     duration_s = models.PositiveIntegerField(
-        help_text=_("Duration in seconds (from the GPX track)"),
-        editable=False,
-        null=True,
-        blank=True,
+        help_text=_("Duration in seconds (from the GPX track)"), editable=False, null=True, blank=True
     )
     pace = models.DecimalField(
-        help_text=_(
-            "Min/km (number of minutes it takes to cover a kilometer)"),
+        help_text=_("Min/km (number of minutes it takes to cover a kilometer)"),
         max_digits=4,
         decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
         null=True,
         blank=True,
     )
 
-    uphill = models.IntegerField(
-        help_text=_("Uphill elevation climbs in meters"),
-        null=True,
-        blank=True,
-    )
-    downhill = models.IntegerField(
-        help_text=_("Downhill elevation descent in meters"),
-        null=True,
-        blank=True,
-    )
+    uphill = models.IntegerField(help_text=_("Uphill elevation climbs in meters"), null=True, blank=True)
+    downhill = models.IntegerField(help_text=_("Downhill elevation descent in meters"), null=True, blank=True)
 
-    min_elevation = models.IntegerField(
-        help_text=_("Minimum elevation in meters"),
-        null=True,
-        blank=True,
-    )
-    max_elevation = models.IntegerField(
-        help_text=_("Maximum elevation in meters"),
-        null=True,
-        blank=True,
-    )
+    min_elevation = models.IntegerField(help_text=_("Minimum elevation in meters"), null=True, blank=True)
+    max_elevation = models.IntegerField(help_text=_("Maximum elevation in meters"), null=True, blank=True)
 
     heart_rate_min = models.PositiveIntegerField(
-        help_text=_("Minimum heart rate."),
-        null=True,
-        blank=True,
-        editable=False)
+        help_text=_("Minimum heart rate."), null=True, blank=True, editable=False
+    )
     heart_rate_avg = models.PositiveIntegerField(
-        help_text=_("Average heart rate."),
-        null=True,
-        blank=True,
-        editable=False)
+        help_text=_("Average heart rate."), null=True, blank=True, editable=False
+    )
     heart_rate_max = models.PositiveIntegerField(
-        help_text=_("Maximum heart rate."),
-        null=True,
-        blank=True,
-        editable=False)
+        help_text=_("Maximum heart rate."), null=True, blank=True, editable=False
+    )
 
     objects = GpxModelManager()
 
@@ -271,8 +185,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     def get_gpx_filepath(self, filename):
         # base_path created in for_runners.apps.ForRunnersConfig#ready
         base_path = Path(settings.FOR_RUNNERS_DATA_FILE_PATH)
-        assert base_path.is_dir(
-        ), "Error: settings.FOR_RUNNERS_DATA_FILE_PATH doesn't exists here: %s" % settings.FOR_RUNNERS_DATA_FILE_PATH
+        assert base_path.is_dir(), (
+            "Error: settings.FOR_RUNNERS_DATA_FILE_PATH doesn't exists here: %s" % settings.FOR_RUNNERS_DATA_FILE_PATH
+        )
 
         date_prefix = self.start_time.strftime("%Y_%m")
         gpx_upload_path = "track_gpx_%s/%s.gpx" % (date_prefix, self.get_prefix_id())
@@ -349,14 +264,14 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             if self.ideal_distance:
                 diff_km = abs(self.get_ideal_distance_diff_m() / 1000)
                 html = (
-                    '<span'
+                    "<span"
                     ' title="{ideal} is the standardized distance'
                     ' - GPX-Track: {gpx} (diff: {diff})"'
-                    '>{ideal}</span>'
+                    ">{ideal}</span>"
                 ).format(
                     ideal=self.ideal_distance.get_human_distance(),
                     gpx=human_distance(length_km),
-                    diff=human_distance(diff_km)
+                    diff=human_distance(diff_km),
                 )
             else:
                 html = ('<span title="real distance">%s</span>') % human_distance(length_km)
@@ -393,10 +308,10 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if net_duration_s is not None:
             duration_diff = self.duration_s - net_duration_s
             html = (
-                '<span'
+                "<span"
                 ' title="{net} is the official net duration'
                 ' - GPX-Track: {gpx} (diff: {diff})"'
-                '>{net}</span>'
+                ">{net}</span>"
             ).format(
                 net=human_seconds(net_duration_s),
                 gpx=human_seconds(self.duration_s),
@@ -408,10 +323,10 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if ideal_duration_s:
             duration_diff = self.duration_s - ideal_duration_s
             html = (
-                '<span'
+                "<span"
                 ' title="{ideal} is the standardized duration'
                 ' - GPX-Track: {gpx} (diff: {diff})"'
-                '>{ideal}</span>'
+                ">{ideal}</span>"
             ).format(
                 ideal=human_seconds(ideal_duration_s),
                 gpx=human_seconds(self.duration_s),
@@ -420,7 +335,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             return mark_safe(html)
 
         if self.duration_s:
-            html = ('<span' ' title="real duration"' '>%s</span>') % human_seconds(self.duration_s)
+            html = ("<span" ' title="real duration"' ">%s</span>") % human_seconds(self.duration_s)
             return mark_safe(html)
 
     human_duration_html.short_description = _("Duration")
@@ -444,20 +359,18 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def _coordinate2link(self, lat, lon):
         html = (
-            '<a'
+            "<a"
             ' href="https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"'
             ' title="Reverse {lat},{lon} address with OpenStreepMap"'
             ' target="_blank"'
-            '>reverse address</a>'
-            '<br>'
-            '<a'
+            ">reverse address</a>"
+            "<br>"
+            "<a"
             ' href="https://www.openstreetmap.org/search?query={lat}%2C{lon}"'
             ' title="OpenStreepMap at {lat},{lon}"'
             ' target="_blank"'
-            '>map</a>'
-        ).format(
-            lat=lat, lon=lon
-        )
+            ">map</a>"
+        ).format(lat=lat, lon=lon)
         return mark_safe(html)
 
     def start_coordinate_html(self):
@@ -465,10 +378,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         return HTML Links for start point.
         """
         if self.start_latitude and self.start_longitude:
-            return self._coordinate2link(
-                lat=self.start_latitude,
-                lon=self.start_longitude,
-            )
+            return self._coordinate2link(lat=self.start_latitude, lon=self.start_longitude)
 
     start_coordinate_html.short_description = _("Start coordinates")
 
@@ -477,10 +387,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         return HTML Links for finish point.
         """
         if self.finish_latitude and self.finish_longitude:
-            return self._coordinate2link(
-                lat=self.finish_latitude,
-                lon=self.finish_longitude,
-            )
+            return self._coordinate2link(lat=self.finish_latitude, lon=self.finish_longitude)
 
     finish_coordinate_html.short_description = _("finish coordinates")
 
@@ -569,8 +476,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
         try:
             ideal_distances_qs = DistanceModel.objects.filter(
-                min_distance_m__lte=self.length,
-                max_distance_m__gte=self.length,
+                min_distance_m__lte=self.length, max_distance_m__gte=self.length
             )
         except DistanceModel.DoesNotExist:
             pass
@@ -702,9 +608,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         return self.short_name()
 
     class Meta:
-        verbose_name = _('GPX Track')
-        verbose_name_plural = _('GPX Tracks')
-        unique_together = ((
-            "start_time", "start_latitude", "start_longitude", "finish_time", "finish_latitude", "finish_longitude"
-        ),)
-        ordering = ('-start_time', '-pk')
+        verbose_name = _("GPX Track")
+        verbose_name_plural = _("GPX Tracks")
+        unique_together = (
+            ("start_time", "start_latitude", "start_longitude", "finish_time", "finish_latitude", "finish_longitude"),
+        )
+        ordering = ("-start_time", "-pk")

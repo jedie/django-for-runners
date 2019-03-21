@@ -11,7 +11,6 @@ def gpx_upload_to(instance, filename):
 
 
 class GpxFileField(models.FileField):
-
     def __init__(self, **kwargs):
         kwargs["upload_to"] = gpx_upload_to
         super().__init__(**kwargs)

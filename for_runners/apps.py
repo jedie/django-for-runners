@@ -12,7 +12,7 @@ from django.conf import settings
 
 
 class ForRunnersConfig(AppConfig):
-    name = 'for_runners'
+    name = "for_runners"
     verbose_name = "ForRunners"
 
     def ready(self):

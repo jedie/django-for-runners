@@ -30,7 +30,7 @@ class NoWeatherData(ValueError):
 
 def request_json(url, timeout=3, user_agent="python"):
     request = urllib.request.Request(url)
-    request.add_header('User-Agent', user_agent)
+    request.add_header("User-Agent", user_agent)
 
     start_time = time.time()
     try:
@@ -170,8 +170,9 @@ class MetaWeatherCom:
         temperature = statistics.median(temperatures)
 
         # print(weather_state_counter) # e.g.: Counter({'Light Cloud': 5, 'Showers': 2, 'Heavy Cloud': 1})
-        weather_states = [item[0] for item in weather_state_counter.most_common()
-                         ]  # e.g.: ['Light Cloud', 'Showers', 'Heavy Cloud']
+        weather_states = [
+            item[0] for item in weather_state_counter.most_common()
+        ]  # e.g.: ['Light Cloud', 'Showers', 'Heavy Cloud']
         # print(weather_states)
         weather_state = "/".join(weather_states[:2])  # e.g.: Light Cloud/Showers
 

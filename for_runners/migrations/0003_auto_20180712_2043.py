@@ -6,32 +6,36 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('for_runners', '0002_auto_20180710_1910'),
-    ]
+    dependencies = [("for_runners", "0002_auto_20180710_1910")]
 
     operations = [
         migrations.AlterModelOptions(
-            name='participationmodel',
-            options={'ordering': ('-event__start_date', 'person'), 'verbose_name': 'Event Participation', 'verbose_name_plural': 'Event Participations'},
+            name="participationmodel",
+            options={
+                "ordering": ("-event__start_date", "person"),
+                "verbose_name": "Event Participation",
+                "verbose_name_plural": "Event Participations",
+            },
         ),
-        migrations.RemoveField(
-            model_name='gpxmodel',
-            name='event',
-        ),
-        migrations.RemoveField(
-            model_name='participationmodel',
-            name='distance',
+        migrations.RemoveField(model_name="gpxmodel", name="event"),
+        migrations.RemoveField(model_name="participationmodel", name="distance"),
+        migrations.AddField(
+            model_name="gpxmodel",
+            name="participation",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="tracks",
+                to="for_runners.ParticipationModel",
+            ),
         ),
         migrations.AddField(
-            model_name='gpxmodel',
-            name='participation',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tracks', to='for_runners.ParticipationModel'),
-        ),
-        migrations.AddField(
-            model_name='participationmodel',
-            name='distance_km',
-            field=models.DecimalField(decimal_places=4, default=0, help_text='Official track length in kilometer.', max_digits=7),
+            model_name="participationmodel",
+            name="distance_km",
+            field=models.DecimalField(
+                decimal_places=4, default=0, help_text="Official track length in kilometer.", max_digits=7
+            ),
             preserve_default=False,
         ),
     ]

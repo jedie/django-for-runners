@@ -23,7 +23,7 @@ from pathlib import Path as __Path
 # Used in
 #   for_runners.management.commands.fill_basedata.Command
 #
-BASE_IDEAL_TRACK_LENGTHS=( # All values are in kilometers ;)
+BASE_IDEAL_TRACK_LENGTHS = (  # All values are in kilometers ;)
     decimal.Decimal(0.4),
     decimal.Decimal(0.8),
     decimal.Decimal(5.0),

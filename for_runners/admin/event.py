@@ -29,12 +29,7 @@ class EventLinkModelAdmin(admin.ModelAdmin):
     list_display = ("event", "link_html")
     list_filter = ("event",)
     date_hierarchy = "event__start_date"
-    search_fields = (
-        "url",
-        "text",
-        "title",
-        "event__name",
-    )
+    search_fields = ("url", "text", "title", "event__name")
 
 
 class LinkModelInline(admin.TabularInline):
@@ -42,27 +37,20 @@ class LinkModelInline(admin.TabularInline):
     extra = 2
     min_num = 0
     max_num = None
-    fields = (
-        'url',
-        'text',
-        'title',
-    )
+    fields = ("url", "text", "title")
 
 
 class HasTracksFilter(admin.SimpleListFilter):
-    title = _('has GPX tracks')
+    title = _("has GPX tracks")
     parameter_name = "tracks"
 
     def lookups(self, request, model_admin):
-        return (
-            ('y', _('yes')),
-            ('n', _('no')),
-        )
+        return (("y", _("yes")), ("n", _("no")))
 
     def queryset(self, request, queryset):
-        if self.value() == 'y':
+        if self.value() == "y":
             return queryset.exclude(participations__tracks__isnull=True)  # FIXME!
-        if self.value() == 'n':
+        if self.value() == "n":
             return queryset.filter(participations__tracks__isnull=True)  # FIXME!
 
 
@@ -71,10 +59,7 @@ class EventStatistics:
     KEY_DURATION = "_duration"
 
     def __init__(self):
-        self.convert_map = {
-            self.KEY_DISTANCE: human_distance,
-            self.KEY_DURATION: human_duration,
-        }
+        self.convert_map = {self.KEY_DISTANCE: human_distance, self.KEY_DURATION: human_duration}
 
     def get(self, events):
         raw_person_data = collections.defaultdict(collections.Counter)
@@ -128,9 +113,7 @@ class EventStatistics:
         total_costs = dict(total_costs)
         total = total_costs.pop("total")  # add total as lates item
         total_costs = [(name, convert_cash_values(amount)) for name, amount in sorted(total_costs.items())]
-        total_costs.append(
-            (_("total"), convert_cash_values(total))
-        )
+        total_costs.append((_("total"), convert_cash_values(total)))
 
         # pprint(person_data)
         # pprint(total_costs)
@@ -149,18 +132,19 @@ class StatisticsView(BaseChangelistView):
 
         person_data, total_costs = EventStatistics().get(events)
 
-        context.update({
-            "title": _("Event Statistics"),
-            "person_data": person_data,
-            "total_costs": total_costs,
-            "user": self.request.user,
-            "opts": EventModel._meta,
-        })
+        context.update(
+            {
+                "title": _("Event Statistics"),
+                "person_data": person_data,
+                "total_costs": total_costs,
+                "user": self.request.user,
+                "opts": EventModel._meta,
+            }
+        )
         return context
 
 
 class EventModelChangeList(ChangeList):
-
     def get_results(self, request):
         super().get_results(request)
 
@@ -172,7 +156,6 @@ class EventModelChangeList(ChangeList):
 
 @admin.register(EventModel)
 class EventModelAdmin(admin.ModelAdmin):
-
     def gpx_tracks_change_form_links(self, obj):
         """
         Link to GPX Tracks in object change view
@@ -231,38 +214,34 @@ class EventModelAdmin(admin.ModelAdmin):
             change_url = participation.get_admin_change_url()
             html.append(
                 '<a href="{url}">{username} ({distance})</a>'.format(
-                    url=change_url,
-                    username=participation.person.username,
-                    distance=participation.get_human_distance(),
+                    url=change_url, username=participation.person.username, distance=participation.get_human_distance()
                 )
             )
 
         html = "<br>".join(html)
         html = mark_safe(html)
         return html
+
     participations.short_description = _("Participations")
 
     readonly_fields = ("gpx_tracks_change_form_links",)
     fieldsets = (
-        (_("Event Name"), {
-            "fields": (
-                ("no", "name", "start_date"),
-                "discipline",
-                "gpx_tracks_change_form_links",
-            )
-        }),
+        (_("Event Name"), {"fields": (("no", "name", "start_date"), "discipline", "gpx_tracks_change_form_links")}),
     )
 
     list_display = (
-        "verbose_name", "participations", "gpx_tracks_change_list_links", "links_html", "start_date", "discipline"
+        "verbose_name",
+        "participations",
+        "gpx_tracks_change_list_links",
+        "links_html",
+        "start_date",
+        "discipline",
     )
     date_hierarchy = "start_date"
     list_filter = (HasTracksFilter, "participations__person")
     list_display_links = ("verbose_name",)
     search_fields = ("name",)
-    inlines = [
-        LinkModelInline,
-    ]
+    inlines = [LinkModelInline]
 
     def get_changelist(self, request, **kwargs):
         """
@@ -280,10 +259,10 @@ class CostModelInline(admin.TabularInline):
 
 @admin.register(ParticipationModel)
 class ParticipationModelAdmin(admin.ModelAdmin):
-
     def human_duration(self, obj):
         if obj.duration:
             return human_seconds(obj.get_duration_s())
+
     human_duration.short_description = _("Duration")
     human_duration.admin_order_field = "duration"
 
@@ -291,16 +270,11 @@ class ParticipationModelAdmin(admin.ModelAdmin):
         pace_s = obj.get_pace_s()
         if pace_s:
             return "%s min/km" % human_seconds(pace_s)
+
     pace.short_description = _("Pace")
 
     list_display = ("event", "distance_km", "finisher_count", "person", "start_number", "human_duration", "pace")
     list_filter = ("person", "distance_km")
     date_hierarchy = "event__start_date"
-    search_fields = (
-        "person__username",
-        "event__name",
-        "event__start_date",
-    )
-    inlines = [
-        CostModelInline,
-    ]
+    search_fields = ("person__username", "event__name", "event__start_date")
+    inlines = [CostModelInline]

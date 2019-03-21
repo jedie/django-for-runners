@@ -37,9 +37,7 @@ def generate_svg(gpx_track, force=False):
 
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
     svg = gpx_track.track_svg.save(
-        name="temp.svg",  # real file path will be set in self.get_svg_upload_path()
-        content=content,
-        save=False
+        name="temp.svg", content=content, save=False  # real file path will be set in self.get_svg_upload_path()
     )
     log.debug("SVG created: %r" % svg)
 
@@ -50,6 +48,7 @@ class CsvGenerator:
     """
     TODO: Replace with for_runners.admin.gpx_import_export.GpxModelResource
     """
+
     HEADER_DATE = "date"
     HEADER_NAME = "name"
     HEADER_EVENT = "event"

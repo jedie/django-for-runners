@@ -24,6 +24,7 @@ try:
 except ImportError as err:
     print("\nERROR:\n")
     import traceback
+
     traceback.print_exc()
     print("")
     print(" *** Couldn't import Django. ***")
@@ -60,12 +61,10 @@ def call_manage_command(*, cmd_class):
     call_command(cmd)
 
 
-
 @click.group()
 @click.version_option(__version__, prog_name="Django-ForRunners")
 def cli():
     print("Start up...")
-
 
 
 @cli.command()
@@ -120,6 +119,7 @@ def create_starter():
     """
     django.setup()
     from for_runners_project.starter import create_starter
+
     create_starter()
 
 
@@ -130,6 +130,7 @@ def recreate_svg():
     """
     django.setup()
     from for_runners.management.commands import recreate_svg
+
     call_manage_command(cmd_class=recreate_svg)
 
 
@@ -140,6 +141,7 @@ def backup():
     """
     django.setup()
     from for_runners.management.commands import backup
+
     call_manage_command(cmd_class=backup)
 
 
@@ -165,10 +167,10 @@ def update():
     # Upgrade pip:
     verbose_subprocess(str(pip3_path), "install", "--upgrade", "pip")
 
-    src_pkg_path = Path(__file__).parent.parent # .../src/django-for-runners
+    src_pkg_path = Path(__file__).parent.parent  # .../src/django-for-runners
     print(src_pkg_path)
 
-    req_path=Path(src_pkg_path, "requirements.txt")
+    req_path = Path(src_pkg_path, "requirements.txt")
     if not req_path.is_file():
         print("ERROR: File not found: %s" % req_path)
         sys.exit(-1)

@@ -7,7 +7,6 @@ from for_runners.tests.base import BaseTestCase
 
 
 class TestBase(BaseTestCase):
-
     def test_assert_equal_rounded(self):
         self.assert_equal_rounded(1.21, 1.22, decimal_places=1)
         self.assert_equal_rounded([1.57, 1.6], [1.6, 1.58], decimal_places=1)

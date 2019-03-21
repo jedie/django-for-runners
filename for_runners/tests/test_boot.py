@@ -36,7 +36,6 @@ def assert_is_dir(path):
 
 
 class CLITest(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.cli_file_path = Path(cli.__file__)
@@ -57,7 +56,6 @@ class CLITest(unittest.TestCase):
 
 
 class BootTest(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.boot_file_path = Path(Path(for_runners.__file__).parent.parent, "boot_django_for_runners.sh")
@@ -103,7 +101,7 @@ class BootTest(unittest.TestCase):
 
             self.assertIn(
                 "+ pip3 install -e git+https://github.com/jedie/django-for-runners.git@master#egg=django-for-runners",
-                output
+                output,
             )
             self.assertIn(
                 "+ pip3 install -r %s/Django-ForRunners/src/django-for-runners/requirements.txt" % temp_path, output

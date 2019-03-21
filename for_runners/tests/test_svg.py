@@ -14,7 +14,6 @@ BASE_PATH = Path(__file__).parent
 
 
 class SvgTest(unittest.TestCase):
-
     def test_svg(self):
         filepath = Path(BASE_PATH, "fixture_files/parliament_buildings.gpx")
 

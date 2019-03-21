@@ -6,7 +6,10 @@ import pytest
 
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.selenium_utils import (
-    SeleniumChromiumTestCase, SeleniumFirefoxTestCase, chromium_available, firefox_available
+    SeleniumChromiumTestCase,
+    SeleniumFirefoxTestCase,
+    chromium_available,
+    firefox_available,
 )
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
@@ -22,12 +25,12 @@ class AdminAnonymousTests(BaseTestCase):
     """
 
     def test_login_en(self):
-        response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
-        self.assertRedirects(response, expected_url='/en/admin/login/?next=/en/admin/')
+        response = self.client.get("/en/admin/", HTTP_ACCEPT_LANGUAGE="en")
+        self.assertRedirects(response, expected_url="/en/admin/login/?next=/en/admin/")
 
     def test_login_de(self):
-        response = self.client.get('/de/admin/', HTTP_ACCEPT_LANGUAGE='de')
-        self.assertRedirects(response, expected_url='/de/admin/login/?next=/de/admin/')
+        response = self.client.get("/de/admin/", HTTP_ACCEPT_LANGUAGE="de")
+        self.assertRedirects(response, expected_url="/de/admin/login/?next=/de/admin/")
 
 
 @pytest.mark.django_db
@@ -37,8 +40,8 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
     """
 
     def test_staff_admin_index(self):
-        self.login(usertype='staff')
-        response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
+        self.login(usertype="staff")
+        response = self.client.get("/en/admin/", HTTP_ACCEPT_LANGUAGE="en")
         self.assertResponse(
             response,
             must_contain=(
@@ -47,32 +50,31 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
                 "<strong>staff_test_user</strong>",
                 "<p>You don't have permission to view or edit anything.</p>",
             ),
-            must_not_contain=('error', 'traceback', "/add/", "/change/"),
-            template_name='admin/index.html',
+            must_not_contain=("error", "traceback", "/add/", "/change/"),
+            template_name="admin/index.html",
             messages=[],
-            html=True
+            html=True,
         )
 
     def test_superuser_admin_index(self):
-        self.login(usertype='superuser')
-        response = self.client.get('/en/admin/', HTTP_ACCEPT_LANGUAGE='en')
+        self.login(usertype="superuser")
+        response = self.client.get("/en/admin/", HTTP_ACCEPT_LANGUAGE="en")
         self.assertResponse(
             response,
             must_contain=(
-                'Django-ForRunners',
-                'superuser',
-                'Site administration',
-                '/admin/auth/group/add/',
-                '/admin/auth/user/add/',
+                "Django-ForRunners",
+                "superuser",
+                "Site administration",
+                "/admin/auth/group/add/",
+                "/admin/auth/user/add/",
             ),
-            must_not_contain=('error', 'traceback'),
-            template_name='admin/index.html',
+            must_not_contain=("error", "traceback"),
+            template_name="admin/index.html",
         )
 
 
 @unittest.skipUnless(chromium_available(), "Skip because Chromium is not available!")
 class AdminChromiumTests(SeleniumChromiumTestCase):
-
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
         self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)
@@ -82,7 +84,6 @@ class AdminChromiumTests(SeleniumChromiumTestCase):
 
 @unittest.skipUnless(firefox_available(), "Skip because Firefox is not available!")
 class AdminFirefoxTests(SeleniumFirefoxTestCase):
-
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
         self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)

@@ -13,7 +13,6 @@ from for_runners.version import __version__
 
 
 class CheckTestEnvironment(DjangoCommandMixin, TestCase):
-
     @classmethod
     def setUpClass(cls):
         # installed via setup.py entry points !
@@ -29,9 +28,7 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
     def _call_for_runners(self, cmd):
         for_runners_path = Path(self.for_runners_bin)
         return self.call_manage_py(
-            cmd=cmd,
-            manage_dir=str(for_runners_path.parent),  # Python 3.5 needs str()
-            manage_py=for_runners_path.name,
+            cmd=cmd, manage_dir=str(for_runners_path.parent), manage_py=for_runners_path.name  # Python 3.5 needs str()
         )
 
     def test_for_runners_version(self):
@@ -48,9 +45,7 @@ class CheckTestEnvironment(DjangoCommandMixin, TestCase):
     def _call_manage(self, cmd):
         manage_path = Path(self.manage_bin)
         return self.call_manage_py(
-            cmd=cmd,
-            manage_dir=str(manage_path.parent),  # Python 3.5 needs str()
-            manage_py=manage_path.name,
+            cmd=cmd, manage_dir=str(manage_path.parent), manage_py=manage_path.name  # Python 3.5 needs str()
         )
 
     def test_manage_version(self):

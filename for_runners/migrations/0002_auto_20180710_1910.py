@@ -8,47 +8,98 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('for_runners', '0001_initial'),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL), ("for_runners", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='CostModel',
+            name="CostModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createtime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Create time')),
-                ('lastupdatetime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Time of the last change.')),
-                ('name', models.CharField(help_text='Your start number', max_length=15)),
-                ('amount', models.DecimalField(decimal_places=2, help_text='How much did you pay for this?', max_digits=8)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "createtime",
+                    models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text="Create time"),
+                ),
+                (
+                    "lastupdatetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False, help_text="Time of the last change."
+                    ),
+                ),
+                ("name", models.CharField(help_text="Your start number", max_length=15)),
+                (
+                    "amount",
+                    models.DecimalField(decimal_places=2, help_text="How much did you pay for this?", max_digits=8),
+                ),
             ],
-            options={
-                'verbose_name': 'Participation Cost',
-                'verbose_name_plural': 'Participation Costs',
-            },
+            options={"verbose_name": "Participation Cost", "verbose_name_plural": "Participation Costs"},
         ),
         migrations.CreateModel(
-            name='ParticipationModel',
+            name="ParticipationModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createtime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Create time')),
-                ('lastupdatetime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Time of the last change.')),
-                ('duration', models.TimeField(blank=True, help_text='You officially measured finisher time', null=True, verbose_name='Duration')),
-                ('start_number', models.CharField(blank=True, help_text='Your start number', max_length=15, null=True)),
-                ('finisher_count', models.PositiveIntegerField(blank=True, help_text='Number of participants who have finished in your discipline', null=True)),
-                ('distance', models.ForeignKey(help_text='Length in meters of your event participation', on_delete=django.db.models.deletion.CASCADE, related_name='event_participations', to='for_runners.DistanceModel')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='participations', to='for_runners.EventModel')),
-                ('person', models.ForeignKey(help_text='The person who participated to this competition.', on_delete=django.db.models.deletion.CASCADE, related_name='+', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "createtime",
+                    models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text="Create time"),
+                ),
+                (
+                    "lastupdatetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False, help_text="Time of the last change."
+                    ),
+                ),
+                (
+                    "duration",
+                    models.TimeField(
+                        blank=True,
+                        help_text="You officially measured finisher time",
+                        null=True,
+                        verbose_name="Duration",
+                    ),
+                ),
+                (
+                    "start_number",
+                    models.CharField(blank=True, help_text="Your start number", max_length=15, null=True),
+                ),
+                (
+                    "finisher_count",
+                    models.PositiveIntegerField(
+                        blank=True, help_text="Number of participants who have finished in your discipline", null=True
+                    ),
+                ),
+                (
+                    "distance",
+                    models.ForeignKey(
+                        help_text="Length in meters of your event participation",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="event_participations",
+                        to="for_runners.DistanceModel",
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="participations",
+                        to="for_runners.EventModel",
+                    ),
+                ),
+                (
+                    "person",
+                    models.ForeignKey(
+                        help_text="The person who participated to this competition.",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'verbose_name': 'Event Participation',
-                'verbose_name_plural': 'Event Participations',
-            },
+            options={"verbose_name": "Event Participation", "verbose_name_plural": "Event Participations"},
         ),
         migrations.AddField(
-            model_name='costmodel',
-            name='participation',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='costs', to='for_runners.ParticipationModel'),
+            model_name="costmodel",
+            name="participation",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name="costs", to="for_runners.ParticipationModel"
+            ),
         ),
     ]

@@ -1,4 +1,3 @@
-
 """
     Django settings used while pytest run
 """

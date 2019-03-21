@@ -8,6 +8,7 @@ from pathlib import Path
 
 from django.test import TestCase
 from django_tools.unittest_utils.user import TestUserMixin
+
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
 
@@ -15,7 +16,6 @@ BASE_PATH = Path(__file__).parent
 
 
 class GpxTests(TestUserMixin, TestCase):
-
     def test_parse_gpx(self):
 
         user = self._get_user(usertype="normal")

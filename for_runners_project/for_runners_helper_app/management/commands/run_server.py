@@ -20,6 +20,7 @@ class Command(RunServerCommand):
     """
     Expand django.contrib.staticfiles runserver
     """
+
     help = "Run Django-ForRunners with django developer server"
 
     def verbose_call(self, command, *args, **kwargs):
@@ -41,7 +42,7 @@ class Command(RunServerCommand):
             # work-a-round: We call it in the shell script
 
             # django.contrib.staticfiles.management.commands.collectstatic.Command
-            if sys.platform in ('win32', 'cygwin'):
+            if sys.platform in ("win32", "cygwin"):
                 # fix: CommandError: symbolic link privilege not held
                 link = False
             else:
@@ -67,9 +68,10 @@ class Command(RunServerCommand):
                     self.stderr.write("Start web server...")
 
                     import webbrowser
+
                     uri = "%(protocol)s://%(addr)s:%(port)s/" % {
                         "protocol": self.protocol,
-                        "addr": '[%s]' % self.addr if self._raw_ipv6 else self.addr,
+                        "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
                         "port": self.port,
                     }
                     print("\nStart browser with: %r\n" % uri)
@@ -82,7 +84,7 @@ class Command(RunServerCommand):
 
     def run(self, **options):
 
-        if sys.platform in ('win32', 'cygwin'):
+        if sys.platform in ("win32", "cygwin"):
             # Bugfix for:
             # can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners': [Errno 2] No such file or directory
             executable = Path(Path(sys.argv[0]).parent, "for_runners-script.py")

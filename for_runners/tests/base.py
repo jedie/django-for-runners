@@ -8,7 +8,6 @@ import unittest
 
 
 class BaseTestCase(unittest.TestCase):
-
     def assert_equal_rounded(self, value1, value2, decimal_places=5, msg=None):
 
         if isinstance(value1, (tuple, list)):

@@ -58,7 +58,6 @@ class GpxModelResource(resources.ModelResource):
     def dehydrate_username(self, track):
         return track.tracked_by.username
 
-
     class Meta:
         model = GpxModel
         fields = (

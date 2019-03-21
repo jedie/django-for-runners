@@ -10,13 +10,14 @@ import statistics
 from pathlib import Path
 
 import gpxpy
+
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 from gpxpy.geo import distance as geo_distance
 
 Identifier = collections.namedtuple(
-    'Identifier', ('start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon')
+    "Identifier", ("start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon")
 )
 
 
@@ -57,8 +58,12 @@ def get_identifier(gpxpy_instance):
         raise GpxDataError("Can't get last segment point")
 
     return Identifier(
-        time_bounds.start_time, first_point.latitude, first_point.longitude, time_bounds.end_time, last_point.latitude,
-        last_point.longitude
+        time_bounds.start_time,
+        first_point.latitude,
+        first_point.longitude,
+        time_bounds.end_time,
+        last_point.latitude,
+        last_point.longitude,
     )
 
 
@@ -87,7 +92,7 @@ class GpxIdentifier:
         identifier_string = self._identifier_string()
         self.hasher.update(identifier_string.encode("ASCII"))
         hex_digest = self.hasher.hexdigest()
-        hex_digest_cut = hex_digest[:self.HASH_LENGTH]
+        hex_digest_cut = hex_digest[: self.HASH_LENGTH]
         prefix = self._prefix()
         result = "%s_%s" % (prefix, hex_digest_cut)
         return result
@@ -208,7 +213,11 @@ def iter_distance(gpxpy_instance, distance):
     iterator = iter_points(gpxpy_instance)
 
     previous_point = next(iterator)
-    old_latitude, old_longitude, old_elevation = previous_point.latitude, previous_point.longitude, previous_point.elevation
+    old_latitude, old_longitude, old_elevation = (
+        previous_point.latitude,
+        previous_point.longitude,
+        previous_point.elevation,
+    )
 
     count = 1
     next_distance = distance
@@ -228,8 +237,8 @@ def iter_distance(gpxpy_instance, distance):
             previous_difference = abs(previous_total_distance - next_distance)
 
             print(
-                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm" %
-                (count, previous_total_distance, previous_difference, total_distance, current_difference)
+                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm"
+                % (count, previous_total_distance, previous_difference, total_distance, current_difference)
             )
 
             # We didn't use the >count< for resulting kilometers:
@@ -256,7 +265,11 @@ def iter_distances(gpxpy_instance, distance):
 
     previous_point = next(iterator)
     points = [previous_point]
-    old_latitude, old_longitude, old_elevation = previous_point.latitude, previous_point.longitude, previous_point.elevation
+    old_latitude, old_longitude, old_elevation = (
+        previous_point.latitude,
+        previous_point.longitude,
+        previous_point.elevation,
+    )
 
     count = 1
     next_distance = distance
@@ -280,8 +293,8 @@ def iter_distances(gpxpy_instance, distance):
             previous_difference = abs(previous_section_distance - next_distance)
 
             print(
-                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm" %
-                (count, previous_section_distance, previous_difference, section_distance, current_difference)
+                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm"
+                % (count, previous_section_distance, previous_difference, section_distance, current_difference)
             )
 
             # We didn't use the >count< for resulting kilometers:
@@ -306,7 +319,6 @@ def iter_distances(gpxpy_instance, distance):
 
 
 class GpxSection:
-
     def __init__(self, distance, points):
         self.distance = distance
         self.points = points
@@ -338,7 +350,6 @@ class GpxSection:
 
 
 class GpxMedian:
-
     def __init__(self, gpxpy_instance, distance):
         self.total_distance = 0
         self.sections = []

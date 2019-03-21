@@ -17,8 +17,7 @@ class Command(BaseCommand):
         updated_needed = False
 
         for distance_km in settings.BASE_IDEAL_TRACK_LENGTHS:
-            obj, created = DistanceModel.objects.get_or_create(
-                distance_km=distance_km)
+            obj, created = DistanceModel.objects.get_or_create(distance_km=distance_km)
             if created:
                 updated_needed = True
                 self.stdout.write("Create: %s" % repr(obj))

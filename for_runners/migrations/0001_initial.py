@@ -11,119 +11,333 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='DisciplineModel',
+            name="DisciplineModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Sport discipline', max_length=255)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(help_text="Sport discipline", max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='DistanceModel',
+            name="DistanceModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('distance_km', models.DecimalField(decimal_places=4, help_text='The ideal track length in kilometer.', max_digits=7, unique=True)),
-                ('variance', models.PositiveSmallIntegerField(default=5, help_text='Maximum (+/-) deviation in percent to match this distance.')),
-                ('min_distance_m', models.PositiveIntegerField(blank=True, editable=False, null=True)),
-                ('max_distance_m', models.PositiveIntegerField(blank=True, editable=False, null=True)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "distance_km",
+                    models.DecimalField(
+                        decimal_places=4, help_text="The ideal track length in kilometer.", max_digits=7, unique=True
+                    ),
+                ),
+                (
+                    "variance",
+                    models.PositiveSmallIntegerField(
+                        default=5, help_text="Maximum (+/-) deviation in percent to match this distance."
+                    ),
+                ),
+                ("min_distance_m", models.PositiveIntegerField(blank=True, editable=False, null=True)),
+                ("max_distance_m", models.PositiveIntegerField(blank=True, editable=False, null=True)),
             ],
-            options={
-                'verbose_name': 'Distance',
-                'verbose_name_plural': 'Distances',
-                'ordering': ('-distance_km',),
-            },
+            options={"verbose_name": "Distance", "verbose_name_plural": "Distances", "ordering": ("-distance_km",)},
         ),
         migrations.CreateModel(
-            name='EventLinkModel',
+            name="EventLinkModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createtime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Create time')),
-                ('lastupdatetime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Time of the last change.')),
-                ('url', models.URLField(help_text='Link URL')),
-                ('text', models.CharField(blank=True, help_text='Link text (leave empty to generate it from url)', max_length=127, null=True)),
-                ('title', models.CharField(blank=True, help_text='Link title (leave empty to generate it from url)', max_length=127, null=True)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "createtime",
+                    models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text="Create time"),
+                ),
+                (
+                    "lastupdatetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False, help_text="Time of the last change."
+                    ),
+                ),
+                ("url", models.URLField(help_text="Link URL")),
+                (
+                    "text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Link text (leave empty to generate it from url)",
+                        max_length=127,
+                        null=True,
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        blank=True,
+                        help_text="Link title (leave empty to generate it from url)",
+                        max_length=127,
+                        null=True,
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False},
         ),
         migrations.CreateModel(
-            name='EventModel',
+            name="EventModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createtime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Create time')),
-                ('lastupdatetime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Time of the last change.')),
-                ('no', models.PositiveIntegerField(blank=True, help_text='Sequential number of the event', null=True)),
-                ('name', models.CharField(help_text='Name of the event', max_length=255)),
-                ('start_date', models.DateField(blank=True, help_text='Start date of the run', null=True)),
-                ('createby', models.ForeignKey(blank=True, editable=False, help_text='User how create this entry.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='eventmodel_createby', to=settings.AUTH_USER_MODEL)),
-                ('discipline', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='for_runners.DisciplineModel')),
-                ('lastupdateby', models.ForeignKey(blank=True, editable=False, help_text='User as last edit this entry.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='eventmodel_lastupdateby', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "createtime",
+                    models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text="Create time"),
+                ),
+                (
+                    "lastupdatetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False, help_text="Time of the last change."
+                    ),
+                ),
+                ("no", models.PositiveIntegerField(blank=True, help_text="Sequential number of the event", null=True)),
+                ("name", models.CharField(help_text="Name of the event", max_length=255)),
+                ("start_date", models.DateField(blank=True, help_text="Start date of the run", null=True)),
+                (
+                    "createby",
+                    models.ForeignKey(
+                        blank=True,
+                        editable=False,
+                        help_text="User how create this entry.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="eventmodel_createby",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "discipline",
+                    models.ForeignKey(
+                        null=True, on_delete=django.db.models.deletion.SET_NULL, to="for_runners.DisciplineModel"
+                    ),
+                ),
+                (
+                    "lastupdateby",
+                    models.ForeignKey(
+                        blank=True,
+                        editable=False,
+                        help_text="User as last edit this entry.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="eventmodel_lastupdateby",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'verbose_name': 'Event',
-                'verbose_name_plural': 'Events',
-                'ordering': ('-start_date', '-pk'),
-            },
+            options={"verbose_name": "Event", "verbose_name_plural": "Events", "ordering": ("-start_date", "-pk")},
         ),
         migrations.CreateModel(
-            name='GpxModel',
+            name="GpxModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createtime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Create time')),
-                ('lastupdatetime', models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text='Time of the last change.')),
-                ('gpx', models.TextField(help_text='The raw gpx file content')),
-                ('creator', models.CharField(blank=True, help_text='Used device to create this track', max_length=511, null=True)),
-                ('track_svg', models.FileField(blank=True, null=True, upload_to=for_runners.models.gpx.svg_upload_path, verbose_name='Track SVG')),
-                ('start_time', models.DateTimeField(editable=False, help_text='Start time of the first segment in track')),
-                ('start_latitude', models.FloatField(editable=False, help_text='Latitude of the first recorded point from the *.gpx file')),
-                ('start_longitude', models.FloatField(editable=False, help_text='Longitude of the first recorded point from the *.gpx file')),
-                ('start_temperature', models.FloatField(blank=True, help_text='Temperature at start.', null=True)),
-                ('start_weather_state', models.CharField(blank=True, help_text='Weather state at start.', max_length=127, null=True)),
-                ('short_start_address', models.CharField(blank=True, help_text='The short address of the start point', max_length=255, null=True)),
-                ('full_start_address', models.CharField(blank=True, help_text='The full address of the start point', max_length=255, null=True)),
-                ('finish_time', models.DateTimeField(editable=False, help_text='End time of the last segment in track')),
-                ('finish_latitude', models.FloatField(editable=False, help_text='Latitude of the finish point')),
-                ('finish_longitude', models.FloatField(editable=False, help_text='Longitude of the finish point')),
-                ('finish_temperature', models.FloatField(blank=True, help_text='Temperature at finish.', null=True)),
-                ('finish_weather_state', models.CharField(blank=True, help_text='Weather state at finish.', max_length=127, null=True)),
-                ('short_finish_address', models.CharField(blank=True, help_text='The short address of the finish point', max_length=255, null=True)),
-                ('full_finish_address', models.CharField(blank=True, help_text='The full address of the finish point', max_length=255, null=True)),
-                ('points_no', models.PositiveIntegerField(blank=True, help_text='Number of points in GPX', null=True)),
-                ('length', models.PositiveIntegerField(blank=True, help_text='Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)', null=True)),
-                ('duration', models.PositiveIntegerField(blank=True, help_text='Duration in seconds', null=True)),
-                ('net_duration', models.TimeField(blank=True, help_text='The officially measured time (e.g. from the official timekeeping of a running event.)', null=True, verbose_name='Net Duration')),
-                ('pace', models.DecimalField(blank=True, decimal_places=2, help_text='Min/km (number of minutes it takes to cover a kilometer)', max_digits=4, null=True)),
-                ('uphill', models.IntegerField(blank=True, help_text='Uphill elevation climbs in meters', null=True)),
-                ('downhill', models.IntegerField(blank=True, help_text='Downhill elevation descent in meters', null=True)),
-                ('min_elevation', models.IntegerField(blank=True, help_text='Minimum elevation in meters', null=True)),
-                ('max_elevation', models.IntegerField(blank=True, help_text='Maximum elevation in meters', null=True)),
-                ('heart_rate_min', models.PositiveIntegerField(blank=True, editable=False, help_text='Minimum heart rate.', null=True)),
-                ('heart_rate_avg', models.PositiveIntegerField(blank=True, editable=False, help_text='Average heart rate.', null=True)),
-                ('heart_rate_max', models.PositiveIntegerField(blank=True, editable=False, help_text='Maximum heart rate.', null=True)),
-                ('event', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tracks', to='for_runners.EventModel')),
-                ('ideal_distance', models.ForeignKey(blank=True, help_text='Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tracks', to='for_runners.DistanceModel')),
-                ('lastupdateby', models.ForeignKey(blank=True, editable=False, help_text='User as last edit this entry', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gpxmodel_lastupdateby', to=settings.AUTH_USER_MODEL)),
-                ('tracked_by', models.ForeignKey(blank=True, editable=False, help_text='The user that tracked this gpx entry', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gpxmodel_createby', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "createtime",
+                    models.DateTimeField(default=django.utils.timezone.now, editable=False, help_text="Create time"),
+                ),
+                (
+                    "lastupdatetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False, help_text="Time of the last change."
+                    ),
+                ),
+                ("gpx", models.TextField(help_text="The raw gpx file content")),
+                (
+                    "creator",
+                    models.CharField(
+                        blank=True, help_text="Used device to create this track", max_length=511, null=True
+                    ),
+                ),
+                (
+                    "track_svg",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to=for_runners.models.gpx.svg_upload_path,
+                        verbose_name="Track SVG",
+                    ),
+                ),
+                (
+                    "start_time",
+                    models.DateTimeField(editable=False, help_text="Start time of the first segment in track"),
+                ),
+                (
+                    "start_latitude",
+                    models.FloatField(
+                        editable=False, help_text="Latitude of the first recorded point from the *.gpx file"
+                    ),
+                ),
+                (
+                    "start_longitude",
+                    models.FloatField(
+                        editable=False, help_text="Longitude of the first recorded point from the *.gpx file"
+                    ),
+                ),
+                ("start_temperature", models.FloatField(blank=True, help_text="Temperature at start.", null=True)),
+                (
+                    "start_weather_state",
+                    models.CharField(blank=True, help_text="Weather state at start.", max_length=127, null=True),
+                ),
+                (
+                    "short_start_address",
+                    models.CharField(
+                        blank=True, help_text="The short address of the start point", max_length=255, null=True
+                    ),
+                ),
+                (
+                    "full_start_address",
+                    models.CharField(
+                        blank=True, help_text="The full address of the start point", max_length=255, null=True
+                    ),
+                ),
+                (
+                    "finish_time",
+                    models.DateTimeField(editable=False, help_text="End time of the last segment in track"),
+                ),
+                ("finish_latitude", models.FloatField(editable=False, help_text="Latitude of the finish point")),
+                ("finish_longitude", models.FloatField(editable=False, help_text="Longitude of the finish point")),
+                ("finish_temperature", models.FloatField(blank=True, help_text="Temperature at finish.", null=True)),
+                (
+                    "finish_weather_state",
+                    models.CharField(blank=True, help_text="Weather state at finish.", max_length=127, null=True),
+                ),
+                (
+                    "short_finish_address",
+                    models.CharField(
+                        blank=True, help_text="The short address of the finish point", max_length=255, null=True
+                    ),
+                ),
+                (
+                    "full_finish_address",
+                    models.CharField(
+                        blank=True, help_text="The full address of the finish point", max_length=255, null=True
+                    ),
+                ),
+                ("points_no", models.PositiveIntegerField(blank=True, help_text="Number of points in GPX", null=True)),
+                (
+                    "length",
+                    models.PositiveIntegerField(
+                        blank=True,
+                        help_text="Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)",
+                        null=True,
+                    ),
+                ),
+                ("duration", models.PositiveIntegerField(blank=True, help_text="Duration in seconds", null=True)),
+                (
+                    "net_duration",
+                    models.TimeField(
+                        blank=True,
+                        help_text="The officially measured time (e.g. from the official timekeeping of a running event.)",
+                        null=True,
+                        verbose_name="Net Duration",
+                    ),
+                ),
+                (
+                    "pace",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        help_text="Min/km (number of minutes it takes to cover a kilometer)",
+                        max_digits=4,
+                        null=True,
+                    ),
+                ),
+                ("uphill", models.IntegerField(blank=True, help_text="Uphill elevation climbs in meters", null=True)),
+                (
+                    "downhill",
+                    models.IntegerField(blank=True, help_text="Downhill elevation descent in meters", null=True),
+                ),
+                ("min_elevation", models.IntegerField(blank=True, help_text="Minimum elevation in meters", null=True)),
+                ("max_elevation", models.IntegerField(blank=True, help_text="Maximum elevation in meters", null=True)),
+                (
+                    "heart_rate_min",
+                    models.PositiveIntegerField(
+                        blank=True, editable=False, help_text="Minimum heart rate.", null=True
+                    ),
+                ),
+                (
+                    "heart_rate_avg",
+                    models.PositiveIntegerField(
+                        blank=True, editable=False, help_text="Average heart rate.", null=True
+                    ),
+                ),
+                (
+                    "heart_rate_max",
+                    models.PositiveIntegerField(
+                        blank=True, editable=False, help_text="Maximum heart rate.", null=True
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="tracks",
+                        to="for_runners.EventModel",
+                    ),
+                ),
+                (
+                    "ideal_distance",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="tracks",
+                        to="for_runners.DistanceModel",
+                    ),
+                ),
+                (
+                    "lastupdateby",
+                    models.ForeignKey(
+                        blank=True,
+                        editable=False,
+                        help_text="User as last edit this entry",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="gpxmodel_lastupdateby",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "tracked_by",
+                    models.ForeignKey(
+                        blank=True,
+                        editable=False,
+                        help_text="The user that tracked this gpx entry",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="gpxmodel_createby",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'GPX Track',
-                'verbose_name_plural': 'GPX Tracks',
-                'ordering': ('-start_time', '-pk'),
+                "verbose_name": "GPX Track",
+                "verbose_name_plural": "GPX Tracks",
+                "ordering": ("-start_time", "-pk"),
             },
         ),
         migrations.AddField(
-            model_name='eventlinkmodel',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='links', to='for_runners.EventModel'),
+            model_name="eventlinkmodel",
+            name="event",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name="links", to="for_runners.EventModel"
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='gpxmodel',
-            unique_together={('start_time', 'start_latitude', 'start_longitude', 'finish_time', 'finish_latitude', 'finish_longitude')},
+            name="gpxmodel",
+            unique_together={
+                (
+                    "start_time",
+                    "start_latitude",
+                    "start_longitude",
+                    "finish_time",
+                    "finish_latitude",
+                    "finish_longitude",
+                )
+            },
         ),
     ]

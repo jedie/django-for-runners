@@ -1,4 +1,3 @@
-
 """
     ./manage.py load_dynamic_fixtures
 """
@@ -15,7 +14,6 @@ log = logging.getLogger(__name__)
 
 
 class Fixture(BaseFixture):
-
     def load(self):
         print("_" * 79)
         print("Create DisciplineModel examples:")

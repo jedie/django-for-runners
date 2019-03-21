@@ -9,6 +9,7 @@ from pathlib import Path
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
+
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
 
@@ -18,12 +19,12 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--username',
+            "--username",
             "-u",
-            action='store',
-            dest='username',
+            action="store",
+            dest="username",
             required=True,
-            help="The user to assign to the imported files"
+            help="The user to assign to the imported files",
         )
         parser.add_argument("path", help="Path to *.gpx files")
 
@@ -41,7 +42,7 @@ class Command(BaseCommand):
             print("ERROR: Given path '%s' is not a existing directory!" % path)
             sys.exit(-1)
 
-        gpx_files = path.glob('**/*.gpx')
+        gpx_files = path.glob("**/*.gpx")
         for gpx_file in sorted(gpx_files):
             with gpx_file.open("r") as f:
                 gpx_content = f.read()

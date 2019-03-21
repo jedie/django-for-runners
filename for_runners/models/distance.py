@@ -24,19 +24,10 @@ class DistanceModel(models.Model):
         decimal_places=4,
     )
     variance = models.PositiveSmallIntegerField(
-        help_text=_(
-            "Maximum (+/-) deviation in percent to match this distance."),
-        default=5)
-    min_distance_m = models.PositiveIntegerField(
-        editable=False,
-        blank=True,
-        null=True,
+        help_text=_("Maximum (+/-) deviation in percent to match this distance."), default=5
     )
-    max_distance_m = models.PositiveIntegerField(
-        editable=False,
-        blank=True,
-        null=True,
-    )
+    min_distance_m = models.PositiveIntegerField(editable=False, blank=True, null=True)
+    max_distance_m = models.PositiveIntegerField(editable=False, blank=True, null=True)
 
     def _set_min_max(self):
         distance_m = self.distance_km * 1000
@@ -78,6 +69,6 @@ class DistanceModel(models.Model):
         return self.get_human_distance()
 
     class Meta:
-        verbose_name = _('Distance')
-        verbose_name_plural = _('Distances')
-        ordering = ('-distance_km',)
+        verbose_name = _("Distance")
+        verbose_name_plural = _("Distances")
+        ordering = ("-distance_km",)

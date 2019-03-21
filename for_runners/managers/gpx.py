@@ -16,7 +16,6 @@ log = logging.getLogger(__name__)
 
 
 class GpxModelQuerySet(models.QuerySet):
-
     def get_by_identifier(self, identifier):
         """
         :param identifier: 'Identifier' namedtuple created here: for_runners.gpx.get_identifier
@@ -32,7 +31,6 @@ class GpxModelQuerySet(models.QuerySet):
 
 
 class BaseGpxModelManager(models.Manager):
-
     def get_queryset(self):
         return GpxModelQuerySet(self.model, using=self._db)
 
@@ -57,10 +55,7 @@ class BaseGpxModelManager(models.Manager):
             instance = qs.get_by_identifier(identifier)
         except self.model.DoesNotExist:
             log.debug("Create new track for user: %s", user)
-            instance = self.create(
-                gpx=gpx_content,
-                tracked_by=user,
-            )
+            instance = self.create(gpx=gpx_content, tracked_by=user)
             return instance
         else:
             log.info("Skip existing track: %s", instance)

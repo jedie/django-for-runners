@@ -9,7 +9,7 @@ import logging
 from geopy.geocoders import Nominatim
 
 log = logging.getLogger(__name__)
-Address = collections.namedtuple('Address', ('short, full'))
+Address = collections.namedtuple("Address", ("short, full"))
 
 
 def construct_short_address(address):
@@ -56,4 +56,4 @@ def reverse_geo(lat, lon):
 
 
 if __name__ == "__main__":
-    print(reverse_geo("51.6239133", "6.9749074")) # Bottrop Feldhausen
+    print(reverse_geo("51.6239133", "6.9749074"))  # Bottrop Feldhausen

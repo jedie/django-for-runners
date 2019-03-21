@@ -23,21 +23,22 @@ def human_seconds(duration):
     parts = []
 
     hours = None
-    if duration>1*60*60:
-        hours = math.floor(duration/60/60)
-        duration -= hours*60*60
+    if duration > 1 * 60 * 60:
+        hours = math.floor(duration / 60 / 60)
+        duration -= hours * 60 * 60
         parts.append("%i" % hours)
 
-    minutes = math.floor(duration/60)
+    minutes = math.floor(duration / 60)
     if hours is None:
         parts.append("%i" % minutes)
     else:
         parts.append("%02i" % minutes)
 
-    seconds = math.floor(duration - (minutes*60))
+    seconds = math.floor(duration - (minutes * 60))
     parts.append("%02i" % seconds)
 
     return ":".join(parts)
+
 
 def human_duration(t):
     """
@@ -76,11 +77,11 @@ def human_duration(t):
         t = decimal.Decimal(t)
 
     chunks = (
-      (decimal.Decimal(60 * 60 * 24 * 365), _('years')),
-      (decimal.Decimal(60 * 60 * 24 * 30), _('months')),
-      (decimal.Decimal(60 * 60 * 24 * 7), _('weeks')),
-      (decimal.Decimal(60 * 60 * 24), _('days')),
-      (decimal.Decimal(60 * 60), _('hours')),
+        (decimal.Decimal(60 * 60 * 24 * 365), _("years")),
+        (decimal.Decimal(60 * 60 * 24 * 30), _("months")),
+        (decimal.Decimal(60 * 60 * 24 * 7), _("weeks")),
+        (decimal.Decimal(60 * 60 * 24), _("days")),
+        (decimal.Decimal(60 * 60), _("hours")),
     )
 
     if t < 1:
@@ -95,7 +96,7 @@ def human_duration(t):
         if count >= 1:
             count = round(count, 1)
             break
-    return "%(number).1f %(type)s" % {'number': count, 'type': name}
+    return "%(number).1f %(type)s" % {"number": count, "type": name}
 
 
 def human_distance(km):
@@ -128,7 +129,6 @@ def human_distance(km):
     return "%s km" % txt
 
 
-
 def convert_cash_values(value, round_value=True):
     """
     >>> convert_cash_values(10.60)
@@ -137,11 +137,6 @@ def convert_cash_values(value, round_value=True):
     '10.60 €'
     """
     if round_value:
-        return "%i %s" % (
-            round(value), settings.FOR_RUNNERS_CURRENCY_SYMBOL
-        )
+        return "%i %s" % (round(value), settings.FOR_RUNNERS_CURRENCY_SYMBOL)
     else:
-        return "%.2f %s" % (
-            value, settings.FOR_RUNNERS_CURRENCY_SYMBOL
-        )
-
+        return "%.2f %s" % (value, settings.FOR_RUNNERS_CURRENCY_SYMBOL)

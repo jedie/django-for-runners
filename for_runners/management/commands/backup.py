@@ -25,6 +25,7 @@ class Command(BaseCommand):
     """
     TODO: Use for_runners.admin.gpx_import_export.GpxModelResource
     """
+
     help = "Backup everything"
 
     def backup_database(self, *, backup_path):
@@ -52,7 +53,7 @@ class Command(BaseCommand):
 
             tracks = 0
 
-            with user_csv_path.open("w", encoding='utf-8', newline='') as csv_file:
+            with user_csv_path.open("w", encoding="utf-8", newline="") as csv_file:
                 csv_generator = CsvGenerator(csv_file=csv_file, add_username=False)
 
                 for track in gpx_user_tracks(user=user):
@@ -78,7 +79,7 @@ class Command(BaseCommand):
 
         tracks = 0
 
-        with csv_path.open("w", encoding='utf-8', newline='') as csv_file:
+        with csv_path.open("w", encoding="utf-8", newline="") as csv_file:
             csv_generator = CsvGenerator(csv_file=csv_file, add_username=True)
 
             for track in gpx_tracks(has_gpx=True):

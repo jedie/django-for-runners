@@ -39,18 +39,13 @@ class LinkModelBase(UpdateTimeBaseModel):
      * createtime
      * lastupdatetime
     """
+
     url = models.URLField(help_text=_("Link URL"))
     text = models.CharField(
-        max_length=127,
-        help_text=_("Link text (leave empty to generate it from url)"),
-        null=True,
-        blank=True,
+        max_length=127, help_text=_("Link text (leave empty to generate it from url)"), null=True, blank=True
     )
     title = models.CharField(
-        max_length=127,
-        help_text=_("Link title (leave empty to generate it from url)"),
-        null=True,
-        blank=True,
+        max_length=127, help_text=_("Link title (leave empty to generate it from url)"), null=True, blank=True
     )
 
     def get_text(self):
@@ -60,11 +55,9 @@ class LinkModelBase(UpdateTimeBaseModel):
         return self.title or self.url
 
     def link_html(self):
-        html = ('<a href="{url}" title="{title}" target="_blank">'
-                '{text}'
-                '</a>').format(
-                    url=self.url, title=self.get_title(), text=self.get_text()
-                )
+        html = ('<a href="{url}" title="{title}" target="_blank">' "{text}" "</a>").format(
+            url=self.url, title=self.get_title(), text=self.get_text()
+        )
         return mark_safe(html)
 
     link_html.short_description = _("Link")
@@ -93,17 +86,10 @@ class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
         * createby
         * lastupdateby
     """
-    no = models.PositiveIntegerField(
-        help_text=_("Sequential number of the event"),
-        null=True,
-        blank=True,
-    )
+
+    no = models.PositiveIntegerField(help_text=_("Sequential number of the event"), null=True, blank=True)
     name = models.CharField(max_length=255, help_text=_("Name of the event"))
-    start_date = models.DateField(
-        help_text=_("Start date of the run"),
-        null=True,
-        blank=True,
-    )
+    start_date = models.DateField(help_text=_("Start date of the run"), null=True, blank=True)
     discipline = models.ForeignKey(DisciplineModel, on_delete=models.SET_NULL, null=True)
 
     def verbose_name(self):
@@ -134,9 +120,9 @@ class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
         return self.verbose_name()
 
     class Meta:
-        verbose_name = _('Event')
-        verbose_name_plural = _('Events')
-        ordering = ('-start_date', '-pk')
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
+        ordering = ("-start_date", "-pk")
 
 
 class EventLinkModel(LinkModelBase):
@@ -152,6 +138,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         * createtime
         * lastupdatetime
     """
+
     event = models.ForeignKey(EventModel, related_name="participations", on_delete=models.CASCADE)
     person = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -166,17 +153,11 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         decimal_places=4,
     )
     duration = models.TimeField(
-        verbose_name=_("Duration"),
-        help_text=_("You officially measured finisher time"),
-        null=True, blank=True,
+        verbose_name=_("Duration"), help_text=_("You officially measured finisher time"), null=True, blank=True
     )
-    start_number = models.CharField(max_length=15,
-        help_text=_("Your start number"),
-        null=True, blank=True
-    )
+    start_number = models.CharField(max_length=15, help_text=_("Your start number"), null=True, blank=True)
     finisher_count = models.PositiveIntegerField(
-        help_text=_("Number of participants who have finished in your discipline"),
-        null=True, blank=True
+        help_text=_("Number of participants who have finished in your discipline"), null=True, blank=True
     )
 
     def get_human_distance(self):
@@ -192,8 +173,8 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if self.duration:
             # FIXME: Is there really no easier way to do this?
             duration = self.duration.second
-            duration += (self.duration.minute * 60)
-            duration += (self.duration.hour * 60 * 60)
+            duration += self.duration.minute * 60
+            duration += self.duration.hour * 60 * 60
             return duration
 
     def human_duration(self):
@@ -209,13 +190,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
                 return pace * 60
 
     def verbose_name(self):
-        parts = [
-            self.event.verbose_name(),
-            "-",
-            self.person.username,
-            "-",
-            self.get_human_distance(),
-        ]
+        parts = [self.event.verbose_name(), "-", self.person.username, "-", self.get_human_distance()]
         if self.duration:
             parts.append("in %s" % self.human_duration())
 
@@ -229,9 +204,9 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         return self.verbose_name()
 
     class Meta:
-        verbose_name = _('Event Participation')
-        verbose_name_plural = _('Event Participations')
-        ordering = ('-event__start_date', 'person')
+        verbose_name = _("Event Participation")
+        verbose_name_plural = _("Event Participations")
+        ordering = ("-event__start_date", "person")
 
 
 class CostModel(UpdateTimeBaseModel):
@@ -240,18 +215,18 @@ class CostModel(UpdateTimeBaseModel):
      * createtime
      * lastupdatetime
     """
+
     participation = models.ForeignKey(ParticipationModel, related_name="costs", on_delete=models.CASCADE)
-    name = models.CharField(max_length=15,
-        help_text=_("The name of the item you dis pay for"),
-    )
+    name = models.CharField(max_length=15, help_text=_("The name of the item you dis pay for"))
     amount = models.DecimalField(
         help_text=_("How much did you pay for this?"),
-        max_digits=8, decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
+        max_digits=8,
+        decimal_places=2,  # store numbers up to 99 with a resolution of 2 decimal places
     )
 
     def __str__(self):
         return "%s: %s" % (self.name, self.amount)
 
     class Meta:
-        verbose_name = _('Participation Cost')
-        verbose_name_plural = _('Participation Costs')
+        verbose_name = _("Participation Cost")
+        verbose_name_plural = _("Participation Costs")
