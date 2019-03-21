@@ -284,6 +284,7 @@ to:
 ** NEW: Update installation with: {{{for_runners update}}}
 ** Move the SQlite database to virtualenv root dir, e.g.: {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
 ** NEW: Backup/export via cli: {{{$ for_runners backup}}}
+** NEW: export GPX Data via {{{django-import-export}}}
 ** Create xdg-open desktop starter under linux here: {{{~/Django-ForRunners/Django-ForRunners}}}
 ** refactor the startup process:
 *** auto loop the server process
