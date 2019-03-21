@@ -219,12 +219,19 @@ if __name__ == "__main__":
     temperature, weather_state = meta_weather_com.coordinates2weather(
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
     )
+    print(temperature, weather_state)
+    
     temperature, weather_state = meta_weather_com.coordinates2weather(
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=13, minute=30)
     )
+    print(temperature, weather_state)
+
     temperature, weather_state = meta_weather_com.coordinates2weather(
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=4, minute=30)
     )
+    print(temperature, weather_state)
+
     temperature, weather_state = meta_weather_com.coordinates2weather(
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
     )
+    print(temperature, weather_state)
