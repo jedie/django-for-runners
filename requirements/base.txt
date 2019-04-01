@@ -4,7 +4,7 @@
 django>=2.1,<2.2
 
 # https://github.com/jedie/django-tools
-django-tools>=0.40.2
+django-tools>=0.45.0
 
 # https://pypi.org/project/autotask/
 # https://bitbucket.org/kbr/autotask
