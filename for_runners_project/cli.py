@@ -180,7 +180,7 @@ def update():
         verbose_subprocess("git", "pull", "origin", "master", cwd=str(src_pkg_path))
 
     # upgrade requirements:
-    verbose_subprocess(str(pip3_path), "install", "-r", str(req_path))
+    verbose_subprocess(str(pip3_path), "install", "--upgrade", "-r", str(req_path))
 
     # install:
     verbose_subprocess(str(pip3_path), "install", "--upgrade", "-e", ".", cwd=str(src_pkg_path))
