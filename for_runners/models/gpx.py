@@ -176,6 +176,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if self.gpx:
             self.calculate_values()
 
+        self.full_clean()
         super().save(*args, **kwargs)
 
         # TODO: schedule request weather info, if not set

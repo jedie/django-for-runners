@@ -66,6 +66,7 @@ class LinkModelBase(UpdateTimeBaseModel):
         if self.text is None:
             self.text = human_url(self.url)
 
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):

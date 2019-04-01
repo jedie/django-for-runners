@@ -38,6 +38,7 @@ class DistanceModel(models.Model):
     def save(self, *args, **kwargs):
         self._set_min_max()
         log.debug("Save: %s", self)
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def get_variance_m(self):
