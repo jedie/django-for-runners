@@ -19,19 +19,14 @@ from django.utils.translation import ugettext_lazy as _
 
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
+from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
 
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import (
-    GpxIdentifier,
-    add_extension_data,
-    get_2d_coordinate_list,
-    get_extension_data,
-    get_identifier,
-    iter_distance,
-    iter_points,
-    parse_gpx,
+    GpxIdentifier, add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance,
+    iter_points, parse_gpx
 )
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
@@ -70,11 +65,22 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     gpx = models.TextField(help_text="The raw gpx file content")
     gpx_file = models.FileField(
-        verbose_name=_("GPX Track"), upload_to=gpx_upload_path, max_length=511, null=True, blank=True
+        verbose_name=_("GPX Track"),
+        upload_to=gpx_upload_path,
+        storage=OverwriteFileSystemStorage(create_backups=True),
+        max_length=511,
+        null=True,
+        blank=True,
     )
 
     creator = models.CharField(help_text="Used device to create this track", max_length=511, null=True, blank=True)
-    track_svg = models.FileField(verbose_name=_("Track SVG"), upload_to=svg_upload_path, null=True, blank=True)
+    track_svg = models.FileField(
+        verbose_name=_("Track SVG"),
+        upload_to=svg_upload_path,
+        storage=OverwriteFileSystemStorage(create_backups=False),
+        null=True,
+        blank=True,
+    )
 
     start_time = models.DateTimeField(editable=False, help_text=_("Start time of the first segment in track"))
     start_latitude = models.FloatField(
