@@ -272,8 +272,13 @@ logging.setLogRecordFactory(record_factory)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "formatters": {"verbose": {"format": "%(levelname)8s %(cut_path)s:%(lineno)-3s %(message)s"}},
-    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "verbose"}},
+    "formatters": {
+        "colored": {  # https://github.com/borntyping/python-colorlog
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(log_color)s%(asctime)s %(levelname)8s %(cut_path)s:%(lineno)-3s %(message)s",
+        }
+    },
+    "handlers": {"console": {"class": "colorlog.StreamHandler", "formatter": "colored"}},
     "loggers": {
         "": {"handlers": ["console"], "level": "DEBUG", "propagate": False},
         "matplotlib": {"handlers": ["console"], "level": "INFO", "propagate": False},

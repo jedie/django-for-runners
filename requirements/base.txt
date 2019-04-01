@@ -36,3 +36,7 @@ gunicorn
 
 # https://github.com/django-import-export/django-import-export
 django-import-export
+
+# https://pypi.org/project/colorlog/
+# https://github.com/borntyping/python-colorlog
+colorlog
