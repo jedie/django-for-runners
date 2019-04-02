@@ -124,14 +124,14 @@ def create_starter():
 
 
 @cli.command()
-def recreate_svg():
+def recreate_files():
     """
-    Recreate all SVG files for all Tracks.
+    Recreate all SVG and GPX files for all Tracks.
     """
     django.setup()
-    from for_runners.management.commands import recreate_svg
+    from for_runners.management.commands import recreate_files
 
-    call_manage_command(cmd_class=recreate_svg)
+    call_manage_command(cmd_class=recreate_files)
 
 
 @cli.command()

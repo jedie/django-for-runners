@@ -23,6 +23,7 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from for_runners.services.gpx_calculate_values import calculate_values
 
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 
@@ -77,8 +78,6 @@ class UploadGpxFileView(generic.FormView):
                         # give a better error message
                         messages.error(request, "Error process GPX data: %s" % err)
                         continue
-
-                    gpx.calculate_values()
                 except GpxDataError as err:
                     messages.error(request, "Error process GPX data: %s" % err)
                 else:

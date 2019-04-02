@@ -3,39 +3,27 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
-import io
+
 import logging
-import statistics
 from decimal import Decimal as D
 from pathlib import Path
 
 from django.conf import settings
-from django.core.files import File
-from django.core.files.base import ContentFile
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 # https://github.com/jedie/django-tools
-from django_tools.decorators import display_admin_error
 from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
 
 # https://github.com/jedie/django-for-runners
-from for_runners.geo import reverse_geo
-from for_runners.gpx import (
-    GpxIdentifier, add_extension_data, get_2d_coordinate_list, get_extension_data, get_identifier, iter_distance,
-    iter_points, parse_gpx
-)
+from for_runners.gpx import GpxIdentifier, parse_gpx
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
-from for_runners.services.gpx import generate_svg
-from for_runners.svg import gpx2svg_file, gpx2svg_string
-from for_runners.weather import NoWeatherData, meta_weather_com
 
 log = logging.getLogger(__name__)
 
@@ -61,7 +49,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     """
 
     participation = models.OneToOneField(
-        ParticipationModel, related_name="track", null=True, blank=True, on_delete=models.SET_NULL
+        ParticipationModel, related_name="track", null=True, blank=True, on_delete=models.PROTECT
     )
 
     gpx = models.TextField(help_text="The raw gpx file content")
@@ -117,10 +105,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         settings.AUTH_USER_MODEL,
         editable=False,
         related_name="%(class)s_createby",
-        null=True,
-        blank=True,
         help_text="The user that tracked this gpx entry",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
     )
     lastupdateby = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -180,8 +166,6 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     objects = GpxModelManager()
 
     def save(self, *args, **kwargs):
-        if self.gpx:
-            self.calculate_values()
 
         if self.pace is not None:
             # avoid error like:
@@ -199,10 +183,14 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             ~/DjangoForRunnersEnv/media/gpx_track_<date>/<prefix_id>.<file_extension>
         """
         date_prefix = self.start_time.strftime("%Y_%m")
-        upload_path = Path(
-            settings.MEDIA_ROOT, "gpx_track_%s" % date_prefix, "%s.%s" % (self.get_prefix_id(), file_extension)
+        upload_path = "/".join(
+            (
+                # settings.MEDIA_ROOT,
+                self.tracked_by.username,
+                "gpx_track_%s" % date_prefix,
+                "%s.%s" % (self.get_prefix_id(), file_extension),
+            )
         )
-        upload_path = upload_path.resolve()
         return upload_path
 
     def get_svg_upload_path(self, *, filename):
@@ -494,116 +482,6 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
                 log.error("Pace out of range: %f", pace)
             else:
                 self.pace = pace
-
-    def calculate_values(self):
-        if not self.gpx:
-            return
-
-        gpxpy_instance = self.get_gpxpy_instance()
-        self.points_no = gpxpy_instance.get_points_no()
-        self.length = gpxpy_instance.length_3d()
-
-        try:
-            ideal_distances_qs = DistanceModel.objects.filter(
-                min_distance_m__lte=self.length, max_distance_m__gte=self.length
-            )
-        except DistanceModel.DoesNotExist:
-            pass
-        else:
-            ideal_distance_count = ideal_distances_qs.count()
-            if ideal_distance_count > 1:
-                log.error("Found more the one ideal distances for %i Meters", self.length)
-                ideal_distances_qs = ideal_distances_qs.order_by("distance_km")
-                ideal_distance = ideal_distances_qs[0]
-            elif ideal_distance_count == 1:
-                ideal_distance = ideal_distances_qs.get()
-            else:
-                ideal_distance = None
-
-            if ideal_distance:
-                self.ideal_distance = ideal_distance
-                log.debug("Set ideal distance to %s", self.ideal_distance)
-
-        # e.g: GPX without a track return 0
-        duration = gpxpy_instance.get_duration()
-        if duration:
-            self.duration_s = duration
-            self.calc_pace()
-
-        uphill_downhill = gpxpy_instance.get_uphill_downhill()
-        self.uphill = uphill_downhill.uphill
-        self.downhill = uphill_downhill.downhill
-
-        elevation_extremes = gpxpy_instance.get_elevation_extremes()
-        self.min_elevation = elevation_extremes.minimum
-        self.max_elevation = elevation_extremes.maximum
-
-        identifier = get_identifier(gpxpy_instance)
-
-        self.start_time = identifier.start_time
-        self.finish_time = identifier.finish_time
-        self.start_latitude = identifier.start_lat
-        self.start_longitude = identifier.start_lon
-        self.finish_latitude = identifier.finish_lat
-        self.finish_longitude = identifier.finish_lon
-
-        if not self.start_temperature:
-            try:
-                temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.start_latitude, self.start_longitude, date=self.start_time, max_seconds=self.duration_s
-                )
-            except NoWeatherData:
-                log.error("No weather data for start.")
-            else:
-                self.start_temperature = temperature
-                self.start_weather_state = weather_state
-
-        if not self.finish_temperature:
-            try:
-                temperature, weather_state = meta_weather_com.coordinates2weather(
-                    self.finish_latitude, self.finish_longitude, date=self.finish_time, max_seconds=self.duration_s
-                )
-            except NoWeatherData:
-                log.error("No weather data for finish.")
-            else:
-                self.finish_temperature = temperature
-                self.finish_weather_state = weather_state
-
-        if not self.full_start_address:
-            try:
-                start_address = reverse_geo(self.start_latitude, self.start_longitude)
-            except Exception as err:
-                # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-                log.error("Can't reverse geo: %s" % err)
-            else:
-                self.short_start_address = start_address.short
-                self.full_start_address = start_address.full
-
-        if not self.full_finish_address:
-            try:
-                finish_address = reverse_geo(self.finish_latitude, self.finish_longitude)
-            except Exception as err:
-                # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-                log.error("Can't reverse geo: %s" % err)
-            else:
-                self.short_finish_address = finish_address.short
-                self.full_finish_address = finish_address.full
-
-        if not self.track_svg:
-            log.debug("Create SVG from GPX...")
-            generate_svg(gpx_track=self, force=False)
-
-        # TODO: Handle other extensions, too.
-        # Garmin containes also 'cad'
-        extension_data = get_extension_data(gpxpy_instance)
-        if extension_data is not None and "hr" in extension_data:
-            heart_rates = extension_data["hr"]
-            self.heart_rate_min = min(heart_rates)
-            self.heart_rate_avg = statistics.median(heart_rates)
-            self.heart_rate_max = max(heart_rates)
-
-        if not self.creator:
-            self.creator = gpxpy_instance.creator
 
     def short_name(self, start_time=True):
         if self.pk is None:
