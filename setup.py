@@ -237,6 +237,10 @@ def after_install_callback(bin_dir):
 
     Note: print outputs can only be seen in "--verbose" mode!
     """
+    if "publish" in sys.argv:
+        print("\nskip after_install_callback(), ok.")
+        return
+
     print("\nafter_install_callback()", file=sys.stderr)
 
     print("*** bin_dir:", bin_dir)
