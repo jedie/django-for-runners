@@ -98,13 +98,13 @@ def run_dev_server():
 
 
 @cli.command()
-def run_gunicorn():
+def run_server():
     """
     run the gunicorn server in endless loop.
 
     entry points used in setup.py
     e.g.:
-        ~$ ~/Django-ForRunners/bin/for_runners run-gunicorn
+        ~$ ~/Django-ForRunners/bin/for_runners run-server
     """
     subprocess_manage("makemigrations")  # helpfull for developing and add/change models ;)
     subprocess_manage("migrate")
