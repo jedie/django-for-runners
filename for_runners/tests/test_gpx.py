@@ -177,4 +177,4 @@ class GpxIdentifierTests(BaseTestCase):
         self.assertEqual(self.gi._prefix(), "20180221_1430")
 
     def test_prefix_id(self):
-        self.assertEqual(self.gi.get_prefix_id(), "20180221_1430_a307a8")
+        self.assertEqual(self.gi.get_prefix_id(), "20180221_1430_UMD2RR")

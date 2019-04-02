@@ -3,6 +3,7 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
+import base64
 import collections
 import hashlib
 import io
@@ -10,11 +11,11 @@ import statistics
 from pathlib import Path
 
 import gpxpy
+from gpxpy.geo import distance as geo_distance
 
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
-from gpxpy.geo import distance as geo_distance
 
 Identifier = collections.namedtuple(
     "Identifier", ("start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon")
@@ -67,13 +68,18 @@ def get_identifier(gpxpy_instance):
     )
 
 
-class GpxIdentifier:
-    HASHER_NAME = "sha512"
-    HASH_LENGTH = 6
+def cutted_hash(text, hash_name="sha512", length=6):
+    h = hashlib.new(hash_name)
+    h.update(bytes(text, encoding="UTF-8"))
+    digest = h.digest()
+    base32_bytes = base64.b32encode(digest)
+    hash = base32_bytes.decode("UTF-8")[:length]
+    return hash
 
+
+class GpxIdentifier:
     def __init__(self, gpxpy_instance):
         self.identifier = get_identifier(gpxpy_instance)
-        self.hasher = hashlib.new(self.HASHER_NAME)
 
     def _identifier_string(self):
         data = []
@@ -90,11 +96,7 @@ class GpxIdentifier:
 
     def get_prefix_id(self):
         identifier_string = self._identifier_string()
-        self.hasher.update(identifier_string.encode("ASCII"))
-        hex_digest = self.hasher.hexdigest()
-        hex_digest_cut = hex_digest[: self.HASH_LENGTH]
-        prefix = self._prefix()
-        result = "%s_%s" % (prefix, hex_digest_cut)
+        result = "%s_%s" % (self._prefix(), cutted_hash(identifier_string, length=6))
         return result
 
 
