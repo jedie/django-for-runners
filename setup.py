@@ -240,7 +240,7 @@ def after_install_callback(bin_dir):
 
     Note: print outputs can only be seen in "--verbose" mode!
     """
-    if "publish" in sys.argv:
+    if "publish" in sys.argv or "sdist" in sys.argv:
         print("\nskip after_install_callback(), ok.")
         return
 
