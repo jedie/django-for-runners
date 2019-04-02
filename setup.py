@@ -31,30 +31,32 @@ class BaseCommand(distutils.cmd.Command):
 
 class ToxTestCommand(BaseCommand):
     """Distutils command to run tests via tox: 'python setup.py tox'."""
+
     description = "Run tests via 'tox'."
 
     def run(self):
         self.announce("Running tests with 'tox'...", level=distutils.log.INFO)
-        returncode = subprocess.call(['tox'])
+        returncode = subprocess.call(["tox"])
         sys.exit(returncode)
 
 
 class TestCommand(BaseCommand):
     """Distutils command to run tests via py.test: 'python setup.py test'."""
+
     description = "Run tests via 'py.test'."
 
     def run(self):
         self.announce("Running tests...", level=distutils.log.INFO)
-        returncode = subprocess.call(['pytest'])
+        returncode = subprocess.call(["pytest"])
         sys.exit(returncode)
 
 
 __version__ = "<unknown>"
-exec(read('for_runners', 'version.py'))
+exec(read("for_runners", "version.py"))
 
 PACKAGE_ROOT = os.path.os.path.dirname(os.path.abspath(__file__))
 
-#_____________________________________________________________________________
+# _____________________________________________________________________________
 # convert creole to ReSt on-the-fly, see also:
 # https://github.com/jedie/python-creole/wiki/Use-In-Setup
 long_description = None
@@ -67,7 +69,7 @@ for arg in ("test", "check", "register", "sdist", "--long-description"):
         else:
             long_description = get_long_description(PACKAGE_ROOT)
         break
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 if "publish" in sys.argv:
     """
@@ -220,6 +222,7 @@ if "publish" in sys.argv:
     twine_args.insert(1, "dist/*")
     print("\ttwine upload command args: %r" % " ".join(twine_args))
     from twine.commands.upload import main as twine_upload
+
     twine_upload(twine_args)
 
     print("\ngit tag version")
@@ -245,13 +248,14 @@ def after_install_callback(bin_dir):
 
     print("*** bin_dir:", bin_dir)
 
-    bin_path = Path(bin_dir)  #/ "not found test"
+    bin_path = Path(bin_dir)  # / "not found test"
     assert bin_path.is_dir(), "Script/bin directory not found here: '%s'" % bin_path
 
     env_path = bin_path.parent
     print("*** env_path:", env_path)
 
     from for_runners_project.starter import create_starter
+
     try:
         create_starter()
     except NotImplementedError:
@@ -301,17 +305,17 @@ Topic :: Internet
 """
 
 setup(
-    name='django-for-runners',
+    name="django-for-runners",
     version=__version__,
-    description='Store your GPX tracks of your running (or other sports activity) in django.',
+    description="Store your GPX tracks of your running (or other sports activity) in django.",
     long_description=long_description,
-    author='Jens Diemer',
-    author_email='django-for-runners@jensdiemer.de',
-    url='https://github.com/jedie/django-for-runners',
+    author="Jens Diemer",
+    author_email="django-for-runners@jensdiemer.de",
+    url="https://github.com/jedie/django-for-runners",
     license="GNU General Public License v3.0 or above",
-    classifiers=[c.strip() for c in classifiers.splitlines() if c.strip() and not c.startswith('#')],
+    classifiers=[c.strip() for c in classifiers.splitlines() if c.strip() and not c.startswith("#")],
     packages=find_packages(),
-    python_requires='>=3.5',
+    python_requires=">=3.5",
     install_requires=[
         "django>2.1",
         "click>=7.0,<8.0",  # http://click.pocoo.org/
@@ -320,20 +324,18 @@ setup(
     ],
     include_package_data=True,
     cmdclass={
-        'test': TestCommand,
-        'tox': ToxTestCommand,
-        'install': CustomInstallCommand,  # normal install e.g.: ./setup.py install
-        'develop': CustomDevelopCommand,  # setuptools "develop mode" e.g.: pip install -e .
+        "test": TestCommand,
+        "tox": ToxTestCommand,
+        "install": CustomInstallCommand,  # normal install e.g.: ./setup.py install
+        "develop": CustomDevelopCommand,  # setuptools "develop mode" e.g.: pip install -e .
     },
     # scripts=["for_runners_project/manage.py"],
     entry_points={
-        'console_scripts': [
-
+        "console_scripts": [
             # run the dev. server:
-            'for_runners = for_runners_project.cli:cli',
-
+            "for_runners = for_runners_project.cli:cli",
             # run manage commands:
-            'manage = for_runners_project.__main__:manage',
+            "manage = for_runners_project.__main__:manage",
         ]
     },
 )
