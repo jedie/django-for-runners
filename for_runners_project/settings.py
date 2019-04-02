@@ -18,8 +18,8 @@
 print("Use settings:", __file__)
 
 import logging
-import os
 import sys as __sys
+from pathlib import Path as __Path
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,9 +30,13 @@ from django_tools.settings_utils import FnMatchIps
 
 # https://github.com/jedie/django-for-runners
 from for_runners.app_settings import *  # @UnusedWildImport
+from for_runners_project.utils.venv import get_venv_path as __get_venv_path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Build paths inside the project:
+BASE_PATH = __Path(__file__).resolve().parent
+
+# VirtualEnv root dir, e.g.: /home/<username>/DjangoForRunnersEnv
+VENV_PATH = __get_venv_path()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -110,7 +114,7 @@ MIDDLEWARE = (
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates/")],
+        "DIRS": [str(__Path(BASE_PATH, "templates/"))],
         "OPTIONS": {
             "loaders": [
                 (
@@ -146,13 +150,10 @@ if DEBUG:
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-print("sys.real_prefix:", getattr(__sys, "real_prefix", "-"))
-print("sys.prefix:", __sys.prefix)
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(__sys.prefix, "Django-ForRunners-database.sqlite3"),
+        "NAME": str(__Path(VENV_PATH, "Django-ForRunners-database.sqlite3")),
         # 'NAME': ":memory:"
         # https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errors
         "timeout": 30,
@@ -190,20 +191,19 @@ USE_I18N = True
 USE_L10N = True
 
 # https://docs.djangoproject.com/en/1.11/topics/i18n/timezones/
-# TODO: Use UTC and handle time zone
 TIME_ZONE = "Europe/Paris"
-USE_TZ = False
-# TIME_ZONE = 'UTC'
-# USE_TZ = True
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = str(__Path(BASE_PATH, "static"))
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = str(__Path(VENV_PATH, "media"))  # e.g.: /home/<username>/DjangoForRunnersEnv/media/
+print("Tracks stored in %r" % MEDIA_ROOT)
+
 
 # don't load jquery from ajax.googleapis.com, just use django's version:
 DEBUG_TOOLBAR_CONFIG["JQUERY_URL"] = STATIC_URL + "admin/js/vendor/jquery/jquery.min.js"
@@ -269,8 +269,13 @@ logging.setLogRecordFactory(record_factory)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "formatters": {"verbose": {"format": "%(levelname)8s %(cut_path)s:%(lineno)-3s %(message)s"}},
-    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "verbose"}},
+    "formatters": {
+        "colored": {  # https://github.com/borntyping/python-colorlog
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(log_color)s%(asctime)s %(levelname)8s %(cut_path)s:%(lineno)-3s %(message)s",
+        }
+    },
+    "handlers": {"console": {"class": "colorlog.StreamHandler", "formatter": "colored"}},
     "loggers": {
         "": {"handlers": ["console"], "level": "DEBUG", "propagate": False},
         "matplotlib": {"handlers": ["console"], "level": "INFO", "propagate": False},

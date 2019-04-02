@@ -11,4 +11,4 @@ if __name__ == "for_runners_project":
 
     if len(sys.argv) == 1:
         # FIXME: How can be a "default" action set in click?
-        sys.argv.append("run-gunicorn")
+        sys.argv.append("run-server")

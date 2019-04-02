@@ -24,10 +24,12 @@ def generate_svg(gpx_track, force=False):
     :param force: don't check if svg track already exists
     :return: svg
     """
+    log.debug("Create SVG from GPX...")
+
     if gpx_track.track_svg:
         # svg image already exists.
         if not force:
-            # Don't recreate existing images
+            log.info("Don't recreate existing images")
             return
 
     log.debug("Create SVG from GPX...")
@@ -36,12 +38,10 @@ def generate_svg(gpx_track, force=False):
     content = ContentFile(svg_string)
 
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
-    svg = gpx_track.track_svg.save(
+    gpx_track.track_svg.save(
         name="temp.svg", content=content, save=False  # real file path will be set in self.get_svg_upload_path()
     )
-    log.debug("SVG created: %r" % svg)
-
-    return svg
+    log.debug("SVG created: %r" % gpx_track.track_svg)
 
 
 class CsvGenerator:

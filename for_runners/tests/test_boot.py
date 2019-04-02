@@ -52,7 +52,8 @@ class CLITest(unittest.TestCase):
         output = subprocess_output(["%s" % self.cli_file_path, "--help"])
         self.assertIn("Usage: cli.py [OPTIONS] COMMAND [ARGS]...", output)
         self.assertIn("create-starter", output)
-        self.assertIn("run_server", output)
+        self.assertIn("run-dev-server", output)
+        self.assertIn("run-server", output)
 
 
 class BootTest(unittest.TestCase):

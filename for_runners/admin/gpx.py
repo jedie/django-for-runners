@@ -18,10 +18,12 @@ from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from for_runners.services.gpx_calculate_values import calculate_values
 
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 
@@ -76,8 +78,6 @@ class UploadGpxFileView(generic.FormView):
                         # give a better error message
                         messages.error(request, "Error process GPX data: %s" % err)
                         continue
-
-                    gpx.calculate_values()
                 except GpxDataError as err:
                     messages.error(request, "Error process GPX data: %s" % err)
                 else:
@@ -324,6 +324,10 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
     # change_list_template = 'admin/import_export/change_list_export.html'
     change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
+
+    def add_view(self, request, form_url='', extra_context=None):
+        # redirect the defaul add view to upload form view:
+        return HttpResponseRedirect(reverse("admin:upload-gpx-file"))
 
     @display_admin_error
     def leaflet_map_html(self, obj):

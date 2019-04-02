@@ -15,7 +15,7 @@ from django.utils.text import slugify
 
 # https://github.com/jedie/django-for-runners
 from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
-from for_runners.services.gpx import CsvGenerator
+from for_runners.services.gpx_svg_generator import CsvGenerator
 from for_runners_project.utils.venv import VirtualEnvPath
 
 log = logging.getLogger(__name__)

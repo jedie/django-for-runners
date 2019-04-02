@@ -98,13 +98,13 @@ def run_dev_server():
 
 
 @cli.command()
-def run_gunicorn():
+def run_server():
     """
     run the gunicorn server in endless loop.
 
     entry points used in setup.py
     e.g.:
-        ~$ ~/Django-ForRunners/bin/for_runners run-gunicorn
+        ~$ ~/Django-ForRunners/bin/for_runners run-server
     """
     subprocess_manage("makemigrations")  # helpfull for developing and add/change models ;)
     subprocess_manage("migrate")
@@ -124,14 +124,14 @@ def create_starter():
 
 
 @cli.command()
-def recreate_svg():
+def recreate_files():
     """
-    Recreate all SVG files for all Tracks.
+    Recreate all SVG and GPX files for all Tracks.
     """
     django.setup()
-    from for_runners.management.commands import recreate_svg
+    from for_runners.management.commands import recreate_files
 
-    call_manage_command(cmd_class=recreate_svg)
+    call_manage_command(cmd_class=recreate_files)
 
 
 @cli.command()
@@ -180,7 +180,7 @@ def update():
         verbose_subprocess("git", "pull", "origin", "master", cwd=str(src_pkg_path))
 
     # upgrade requirements:
-    verbose_subprocess(str(pip3_path), "install", "-r", str(req_path))
+    verbose_subprocess(str(pip3_path), "install", "--upgrade", "-r", str(req_path))
 
     # install:
     verbose_subprocess(str(pip3_path), "install", "--upgrade", "-e", ".", cwd=str(src_pkg_path))
