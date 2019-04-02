@@ -6,6 +6,7 @@
 import io
 import logging
 import statistics
+from decimal import Decimal as D
 from pathlib import Path
 
 from django.conf import settings
@@ -181,6 +182,11 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     def save(self, *args, **kwargs):
         if self.gpx:
             self.calculate_values()
+
+        if self.pace is not None:
+            # avoid error like:
+            # Ensure that there are no more than 2 decimal places.
+            self.pace = D(self.pace).quantize(D("10.00"))
 
         self.full_clean()
         super().save(*args, **kwargs)
