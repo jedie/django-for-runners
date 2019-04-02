@@ -2,15 +2,11 @@
 # for develop
 #
 
--r base.txt
+-r test.txt
 
 pip-tools
-#flake8
-#pydocstyle
-#pylint
-#Sphinx
 black
-tox
+
 wheel
 twine
 python-creole>=v0.8
@@ -19,9 +15,3 @@ docutils
 # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
 django-debug-toolbar
 
-# https://github.com/Peter-Slump/django-dynamic-fixtures
-django-dynamic-fixtures
-
-pytest-django
-pytest-cov
-selenium

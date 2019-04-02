@@ -1,0 +1,18 @@
+#
+# for running tests
+#
+
+-r base.txt
+
+#flake8
+#pydocstyle
+#pylint
+#Sphinx
+tox
+
+# https://github.com/Peter-Slump/django-dynamic-fixtures
+django-dynamic-fixtures
+
+pytest-django
+pytest-cov
+selenium
