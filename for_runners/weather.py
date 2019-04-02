@@ -148,6 +148,7 @@ class MetaWeatherCom:
         for result in json_data:
             created_string = result["created"]  # e.g.: 2018-06-20T22:30:29.227960Z
             created_datetime = datetime.datetime.strptime(created_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+            created_datetime = created_datetime.replace(tzinfo=date.tzinfo)
 
             delta = abs(date - created_datetime)
             data[delta.total_seconds()] = result
@@ -220,7 +221,7 @@ if __name__ == "__main__":
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
     )
     print(temperature, weather_state)
-    
+
     temperature, weather_state = meta_weather_com.coordinates2weather(
         51.4109, 6.7828, date=datetime.datetime(year=2018, month=6, day=20, hour=13, minute=30)
     )

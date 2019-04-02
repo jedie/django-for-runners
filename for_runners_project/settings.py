@@ -191,11 +191,8 @@ USE_I18N = True
 USE_L10N = True
 
 # https://docs.djangoproject.com/en/1.11/topics/i18n/timezones/
-# TODO: Use UTC and handle time zone
 TIME_ZONE = "Europe/Paris"
-USE_TZ = False
-# TIME_ZONE = 'UTC'
-# USE_TZ = True
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
