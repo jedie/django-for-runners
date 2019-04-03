@@ -9,7 +9,6 @@ black
 
 wheel
 twine
-python-creole>=v0.8
 docutils
 
 # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html

@@ -10,6 +10,8 @@
 #Sphinx
 tox
 
+python-creole>=v0.8
+
 # https://github.com/Peter-Slump/django-dynamic-fixtures
 django-dynamic-fixtures
 
