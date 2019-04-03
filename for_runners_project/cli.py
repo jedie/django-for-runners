@@ -98,17 +98,19 @@ def run_dev_server():
 
 
 @cli.command()
-def run_server():
+@click.argument("address", nargs=1, default="127.0.0.1:8000")
+def run_server(address):
     """
-    run the gunicorn server in endless loop.
-
-    entry points used in setup.py
+    Run the gunicorn server in endless loop.
     e.g.:
-        ~$ ~/Django-ForRunners/bin/for_runners run-server
+
+    ~$ for_runners run-server
+
+    ~$ for_runners run-server 127.0.0.1:8080
     """
     subprocess_manage("makemigrations")  # helpfull for developing and add/change models ;)
     subprocess_manage("migrate")
-    gunicorn_application = get_gunicorn_application()
+    gunicorn_application = get_gunicorn_application(address)
     gunicorn_application.run()
 
 

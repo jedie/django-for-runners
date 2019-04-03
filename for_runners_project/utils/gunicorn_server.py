@@ -31,7 +31,8 @@ def number_of_workers():
     return (multiprocessing.cpu_count() * 2) + 1
 
 
-def get_gunicorn_application():
+def get_gunicorn_application(address="127.0.0.1:8000"):
+    print("Start gunicorn on: %r" % address)
     wsgi_application = get_wsgi_application()
-    options = {"bind": "%s:%s" % ("127.0.0.1", "8000"), "workers": number_of_workers()}
+    options = {"bind": address, "workers": number_of_workers()}
     return GunicornApplication(wsgi_application, options)
