@@ -39,6 +39,9 @@
 
 == try-out
 
+dependencies are:
+
+* pip (Debian/Ubuntu package name: {{{python3-pip}}})
 
 === Linux
 
