@@ -464,7 +464,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         ]
 
     search_fields = ("full_start_address", "full_finish_address", "creator")
-
+    date_hierarchy = "start_time"
     list_per_page = 50
     list_display_links = ("svg_tag", "overview")
     readonly_fields = (
