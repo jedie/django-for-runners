@@ -23,7 +23,6 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from for_runners.services.gpx_calculate_values import calculate_values
 
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 
@@ -38,6 +37,7 @@ from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
 from for_runners.gpx import add_extension_data, get_2d_coordinate_list, iter_distance, iter_points
 from for_runners.models import GpxModel
+from for_runners.services.gpx_calculate_values import calculate_values
 
 log = logging.getLogger(__name__)
 
@@ -325,7 +325,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
     change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
 
-    def add_view(self, request, form_url='', extra_context=None):
+    def add_view(self, request, form_url="", extra_context=None):
         # redirect the defaul add view to upload form view:
         return HttpResponseRedirect(reverse("admin:upload-gpx-file"))
 
