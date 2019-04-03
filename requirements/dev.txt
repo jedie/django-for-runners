@@ -11,6 +11,5 @@ wheel
 twine
 docutils
 
-# http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
-django-debug-toolbar
+
 
