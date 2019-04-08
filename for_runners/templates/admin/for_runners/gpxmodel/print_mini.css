@@ -1,0 +1,47 @@
+body {
+    margin: auto;
+    width: 21cm;
+    background-color: #555;
+}
+body * {
+    vertical-align: middle;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
+}
+#print_button {
+    text-align: center;
+    font-size: 1.5em;
+    margin: 1em;
+    padding: 1em;
+    background-color: #fff;
+}
+#content {
+    text-align: left;
+    display: flex;
+    font-size: 0.2cm;
+    margin: 0.2cm;
+    border: 1px solid #000;
+    background-color: #fff;
+
+}
+#svg img {
+    width: 2.5cm;
+    height: 2.5cm;
+    margin: 0.3cm;
+    padding: 0cm;
+    float: left;
+    clear:both;
+}
+#text * {
+    margin: 0.3cm 0 0.3cm 0;
+}
+@media print {
+    body {
+        width: 100%;
+        size: 21cm 29.7cm;
+    }
+    #print_button {
+        display:none;
+    }
+}

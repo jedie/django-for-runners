@@ -230,6 +230,20 @@ class GpxMetadataView(BaseChangelistView):
         return context
 
 
+class PrintMiniView(generic.TemplateView):
+    template_name = "admin/for_runners/gpxmodel/print_mini.html"
+
+    def get(self, request):
+        ids = request.GET["ids"].split(",")
+        ids = [int(pk) for pk in ids]
+        self.instances = GpxModel.objects.filter(pk__in=ids)
+        return super().get(request)
+
+    def get_context_data(self, **kwargs):
+        context = {"gpx_tracks": self.instances}
+        return context
+
+
 class CalculateValuesView(generic.View):
     def get(self, request, object_id):
         instance = GpxModel.objects.get(pk=object_id)
@@ -321,9 +335,15 @@ class HasEventPartricipationFilter(admin.SimpleListFilter):
 
 @admin.register(GpxModel)
 class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
+    actions = ["print_mini_objects"]
     # change_list_template = 'admin/import_export/change_list_export.html'
     change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
+
+    def print_mini_objects(self, request, queryset):
+        url = reverse("admin:print-mini")
+        selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+        return HttpResponseRedirect("%s?ids=%s" % (url, ",".join(selected)))
 
     def add_view(self, request, form_url="", extra_context=None):
         # redirect the defaul add view to upload form view:
@@ -559,6 +579,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
                 name="distance-pace-statistics",
             ),
+            url(r"^print_mini/$", self.admin_site.admin_view(PrintMiniView.as_view()), name="print-mini"),
             url(
                 r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),

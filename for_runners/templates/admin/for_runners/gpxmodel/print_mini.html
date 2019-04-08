@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Print mini</title>
+    <style>{% include "admin/for_runners/gpxmodel/print_mini.css" %}</style>
+</head>
+<body>
+    <p id="print_button">
+        <button type="button" onclick="window.print()">print</button>
+    </p>
+    {% for gpx_track in gpx_tracks %}
+        <div id="content">
+            <p id="svg">
+                <img src="{{ gpx_track.track_svg.url }}" alt="gpx track" />
+            </p>
+            <div id="text">
+                <div id="headlines">
+                    <h1>
+                        {% if gpx_track.participation %}
+                            {{ gpx_track.tracked_by|capfirst }}: {{ gpx_track.participation.event.name }}
+                        {% else %}
+                            {{ gpx_track.tracked_by|capfirst }}: {{ gpx_track.short_start_address }}
+                        {% endif %}
+                    </h1>
+                    <p>{{ gpx_track.start_time }}</p>
+                </div>
+                <h2 id="stats">
+                    {{ gpx_track.human_ideal_length }} - {{ gpx_track.human_duration }} - {{ gpx_track.human_pace }}
+                </h2>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
