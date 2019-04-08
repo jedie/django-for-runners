@@ -240,7 +240,14 @@ class PrintMiniView(generic.TemplateView):
         return super().get(request)
 
     def get_context_data(self, **kwargs):
-        context = {"gpx_tracks": self.instances}
+        gpx_tracks = []
+        for gpx_track in self.instances:
+            if not gpx_track.track_svg.name:
+                log.critical("GPX Track has no svg file: %s", gpx_track)
+                generate_svg(gpx_track, force=False)
+
+            gpx_tracks.append(gpx_track)
+        context = {"gpx_tracks": gpx_tracks, "back_url": reverse("admin:for_runners_gpxmodel_changelist")}
         return context
 
 
