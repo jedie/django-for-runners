@@ -26,7 +26,7 @@ def generate_svg(gpx_track, force=False):
     """
     log.debug("Create SVG from GPX...")
 
-    if gpx_track.track_svg:
+    if gpx_track.track_svg.name:
         # svg image already exists.
         if not force:
             log.info("Don't recreate existing images")
@@ -42,6 +42,7 @@ def generate_svg(gpx_track, force=False):
         name="temp.svg", content=content, save=False  # real file path will be set in self.get_svg_upload_path()
     )
     log.debug("SVG created: %r" % gpx_track.track_svg)
+    gpx_track.save()
 
 
 class CsvGenerator:
