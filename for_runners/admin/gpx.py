@@ -23,6 +23,7 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from for_runners.services.gpx_svg_generator import generate_svg
 
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 
@@ -231,6 +232,10 @@ class GpxMetadataView(BaseChangelistView):
 
 
 class PrintMiniView(generic.TemplateView):
+    """
+    Generate a page to print a small overview.
+    """
+
     template_name = "admin/for_runners/gpxmodel/print_mini.html"
 
     def get(self, request):
@@ -342,15 +347,17 @@ class HasEventPartricipationFilter(admin.SimpleListFilter):
 
 @admin.register(GpxModel)
 class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
-    actions = ["print_mini_objects"]
+    actions = ["print_mini"]
     # change_list_template = 'admin/import_export/change_list_export.html'
     change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
 
-    def print_mini_objects(self, request, queryset):
-        url = reverse("admin:print-mini")
+    def print_mini(self, request, queryset):
+        url = reverse("admin:print-mini")  # for_runners.admin.gpx.PrintMiniView
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
         return HttpResponseRedirect("%s?ids=%s" % (url, ",".join(selected)))
+
+    print_mini.short_description = _("Generate a page to print a small overview.")
 
     def add_view(self, request, form_url="", extra_context=None):
         # redirect the defaul add view to upload form view:

@@ -9,7 +9,7 @@ body * {
     margin: 0px;
     padding: 0px;
 }
-#print_button {
+.info_box {
     text-align: center;
     font-size: 1.5em;
     margin: 1em;
@@ -41,7 +41,7 @@ body * {
         width: 100%;
         size: 21cm 29.7cm;
     }
-    #print_button {
+    .info_box {
         display:none;
     }
 }
