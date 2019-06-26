@@ -291,6 +291,7 @@ to:
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.10.0...master|compare v0.10.0...master]] **dev**
 ** tbc
+** Enhance "Event Participation" admin view: Add start date and costs in table
 * [[https://github.com/jedie/django-for-runners/compare/v0.9.0...v0.10.0|26.06.2019 - v0.10.0]]:
 ** NEW: GPX Admin action to print a small overview from one or a few tracks
 ** Accept optional server bind address, e.g.: {{{for_runners run-server 127.0.0.1:8080}}}

@@ -93,11 +93,16 @@ class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
     start_date = models.DateField(help_text=_("Start date of the run"), null=True, blank=True)
     discipline = models.ForeignKey(DisciplineModel, on_delete=models.SET_NULL, null=True)
 
-    def verbose_name(self):
+    def short_name(self):
         parts = []
         if self.no:
             parts.append("%i." % self.no)
         parts.append(self.name)
+        result = " ".join([part for part in parts if part])
+        return result
+
+    def verbose_name(self):
+        parts = [self.short_name()]
         if self.start_date:
             year = self.start_date.strftime("%Y")
             if year not in self.name:

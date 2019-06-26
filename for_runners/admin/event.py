@@ -5,6 +5,7 @@
 """
 import collections
 import logging
+from decimal import Decimal as D
 from pprint import pprint
 
 from django.conf import settings
@@ -259,6 +260,17 @@ class CostModelInline(admin.TabularInline):
 
 @admin.register(ParticipationModel)
 class ParticipationModelAdmin(admin.ModelAdmin):
+    def start_date(self, obj):
+        return obj.event.start_date
+
+    start_date.admin_order_field = "event__start_date"
+
+    def event_name(self, obj):
+        return obj.event.short_name()
+
+    event_name.short_description = _("Event")
+    event_name.admin_order_field = "event"
+
     def human_duration(self, obj):
         if obj.duration:
             return human_seconds(obj.get_duration_s())
@@ -273,7 +285,31 @@ class ParticipationModelAdmin(admin.ModelAdmin):
 
     pace.short_description = _("Pace")
 
-    list_display = ("event", "distance_km", "finisher_count", "person", "start_number", "human_duration", "pace")
+    def costs(self, obj):
+        parts = []
+        total = D("0.00")
+        for entry in obj.costs.all():
+            total += entry.amount
+            parts.append(str(entry))
+
+        if not parts:
+            return ""
+        elif len(parts) == 1:
+            return "%.2f€" % total
+        else:
+            return "%.2f€ (%s)" % (total, " ".join(parts))
+
+    list_display = (
+        "start_date",
+        "event_name",
+        "distance_km",
+        "finisher_count",
+        "person",
+        "costs",
+        "start_number",
+        "human_duration",
+        "pace",
+    )
     list_filter = ("person", "distance_km")
     date_hierarchy = "event__start_date"
     search_fields = ("person__username", "event__name", "event__start_date")
