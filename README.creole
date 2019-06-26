@@ -171,6 +171,12 @@ The backup does:
 {{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.6.0 2018-07-19 Event Costs.png|for-runners v0.6.0 2018-07-19 Event Costs.png}}
 
 
+== print a small overview ==
+
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.10.0 2010-06-26 print small overview 1.png|for-runners v0.10.0 2010-06-26 print small overview 1.png}}
+
+{{https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners v0.10.0 2010-06-26 print small overview 2.png|for-runners v0.10.0 2010-06-26 print small overview 2.png}}
+
 
 == run tests
 
@@ -283,8 +289,11 @@ to:
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.8.1...master|compare v0.8.1...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.9.1...master|compare v0.9.1...master]] **dev**
 ** tbc
+* [[https://github.com/jedie/django-for-runners/compare/v0.9.0...v0.9.1|03.04.2019 - v0.9.1]]:
+** NEW: GPX Admin action to print a small overview from one or a few tracks
+** Accept optional server bind address, e.g.: {{{for_runners run-server 127.0.0.1:8080}}}
 * [[https://github.com/jedie/django-for-runners/compare/v0.8.1...v0.9.0|02.04.2019 - v0.9.0]]:
 ** NEW: Update complete environment installation with: {{{for_runners update}}}
 ** Move the SQlite database to virtualenv root dir, e.g.: {{{~/Django-ForRunners/Django-ForRunners-database.sqlite3}}}
