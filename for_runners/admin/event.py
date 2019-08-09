@@ -310,6 +310,7 @@ class ParticipationModelAdmin(admin.ModelAdmin):
         "human_duration",
         "pace",
     )
+    list_display_links = ("event_name",)
     list_filter = ("person", "distance_km")
     date_hierarchy = "event__start_date"
     search_fields = ("person__username", "event__name", "event__start_date")
