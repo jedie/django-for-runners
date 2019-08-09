@@ -5,8 +5,8 @@ dist: xenial
 language: python
 
 addons:
-    addons:
-        firefox: latest
+    firefox: latest
+    chrome: stable
 
 cache:
   directories:
