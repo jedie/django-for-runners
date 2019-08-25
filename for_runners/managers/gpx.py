@@ -7,11 +7,6 @@ import logging
 
 from django.db import models
 
-from gpxpy.gpx import GPXException
-
-# https://github.com/jedie/django-for-runners
-from for_runners.gpx import get_identifier, parse_gpx
-
 log = logging.getLogger(__name__)
 
 
@@ -33,33 +28,6 @@ class GpxModelQuerySet(models.QuerySet):
 class BaseGpxModelManager(models.Manager):
     def get_queryset(self):
         return GpxModelQuerySet(self.model, using=self._db)
-
-    def add_gpx(self, gpx_content, user):
-        """
-        Create a new for_runners.models.GpxModel entry
-
-        :param gpx_content: String content of the new gpx file
-        :return: GpxModel instance
-        """
-        try:
-            gpxpy_instance = parse_gpx(gpx_content)
-        except GPXException as err:
-            log.exception("Invalid GPX Data: %s" % err)
-            return
-
-        identifier = get_identifier(gpxpy_instance)
-
-        qs = self.get_queryset()
-
-        try:
-            instance = qs.get_by_identifier(identifier)
-        except self.model.DoesNotExist:
-            log.debug("Create new track for user: %s", user)
-            instance = self.create(gpx=gpx_content, tracked_by=user)
-            return instance
-        else:
-            log.info("Skip existing track: %s", instance)
-            return
 
 
 GpxModelManager = BaseGpxModelManager.from_queryset(GpxModelQuerySet)
