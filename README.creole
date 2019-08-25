@@ -372,6 +372,14 @@ to:
 | PyPi       | https://pypi.org/project/django-for-runners/
 
 
+=== activity exporter ===
+
+It's sometimes hard to find a working project for exporting activities.
+So here tools that i use currently:
+
+* [[https://github.com/rsjrny/Garmin-Connect-Export|Garmin-Connect-Export]] from rsjrny
+
+
 === alternatives (OpenSource only) ==
 
 * https://github.com/pytrainer/pytrainer (Desktop Program)
