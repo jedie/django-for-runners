@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 
 from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand
 
 # https://github.com/jedie/django-for-runners
+from for_runners.management.commands.base import BaseCommand
 from for_runners.models import GpxModel
 from for_runners.services.gpx_create import add_from_files
 
@@ -30,11 +30,6 @@ class Command(BaseCommand):
         parser.add_argument("path", help="Path to *.gpx files")
 
     def handle(self, *args, **options):
-        self.stdout.write("\n")
-        self.stdout.write("_" * 79)
-        self.stdout.write(self.help)
-        self.stdout.write("\n")
-
         username = options.get("username")
         try:
             user = User.objects.get(username=username)

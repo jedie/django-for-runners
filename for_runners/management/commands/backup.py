@@ -3,17 +3,16 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
-import csv
+
 import datetime
 import logging
 import shutil
 from pathlib import Path
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
-from django.utils.text import slugify
 
 # https://github.com/jedie/django-for-runners
+from for_runners.management.commands.base import BaseCommand
 from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
 from for_runners.services.gpx_svg_generator import CsvGenerator
 from for_runners_project.utils.venv import VirtualEnvPath

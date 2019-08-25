@@ -5,7 +5,9 @@
 """
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
+
+# https://github.com/jedie/django-for-runners
+from for_runners.management.commands.base import BaseCommand
 from for_runners.models import DistanceModel, GpxModel
 
 

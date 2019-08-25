@@ -5,9 +5,8 @@
 """
 import logging
 
-from django.core.management.base import BaseCommand
-
 # https://github.com/jedie/django-for-runners
+from for_runners.management.commands.base import BaseCommand
 from for_runners.models import GpxModel
 from for_runners.services.gpx_save_gpx import save_gpx_file
 from for_runners.services.gpx_svg_generator import generate_svg
@@ -21,6 +20,7 @@ class Command(BaseCommand):
 
         ~/Django-ForRunners/bin$ ./manage recreate_files
     """
+
     help = "Recreate all svg, gpx files for existing gpx tracks on disk"
 
     def handle(self, *args, **options):
