@@ -379,7 +379,6 @@ to:
 
 Online tools:
 
-* https://www.gpsies.com
 * https://www.j-berkemeier.de/ShowGPX.html (de)
 
 
