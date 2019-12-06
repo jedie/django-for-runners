@@ -1,4 +1,4 @@
-FROM registry.opensource.zalan.do/stups/python:3.6.5-22
+FROM python:3.6.0-slim
 
 ARG work_dir=/src
 
