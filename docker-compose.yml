@@ -1,0 +1,20 @@
+version: "3"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/src
+      - app-python-site-packages:/usr/local/lib/python3.6
+      - app-usr-local-bin:/usr/local/bin
+    env_file: ./development.env
+    command: "tail -f /dev/null"
+    # command: gunicorn --timeout 300 --bind 0.0.0.0:8000 app
+    ports:
+      - 8000:8000
+    working_dir: /src
+
+volumes:
+  app-python-site-packages:
+    driver: local
+  app-usr-local-bin:
+    driver: local
