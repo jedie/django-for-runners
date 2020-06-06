@@ -13,8 +13,7 @@ Address = collections.namedtuple("Address", ("short, full"))
 
 
 def construct_short_address(address):
-    # from pprint import pprint
-    # pprint(address)
+    log.debug(f'address={address}')
     parts = []
 
     if "village" in address and "county" in address:
@@ -24,7 +23,12 @@ def construct_short_address(address):
         parts.append(address.get("city") or address.get("town") or address.get("county") or address.get("state"))
         parts.append(address.get("suburb"))
 
-    short_address = " ".join([part for part in parts if part])
+    results = []
+    for part in parts:
+        if part and part not in results:
+            results.append(part)
+
+    short_address = " ".join(results)
     return short_address
 
 
@@ -47,12 +51,12 @@ def reverse_geo(lat, lon):
         full : string
             The "full" Address
     """
-    log.debug('reverse_geo', lat=lat, lon=lon)
+    log.debug(f'reverse_geo lat={lat} lon={lon}')
     geolocator = Nominatim(user_agent="django-for-runners")
     location = geolocator.reverse(f"{lat}, {lon}")
 
     short_address = construct_short_address(address=location.raw["address"])
-    log.info('short_address', lat=lat, lon=lon, short_address=short_address)
+    log.info(f'short_address={short_address}')
 
     return Address(short_address, location.address)
 

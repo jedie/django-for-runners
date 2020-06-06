@@ -80,7 +80,7 @@ class ImportTestCase(TestUserMixin, TestCase):
         print(output)
 
         self.assertIn("Add new gpx tracks for user: normal_test_user", output)
-        self.assertIn("1 - Add new track: 2018-02-21 Moers Hülsdonk", output)
+        self.assertIn("1 - Add new track: 2018-02-21 Moers", output)
         self.assertIn("2 - Add new track: 2011-01-13 Berlin Tiergarten", output)
         self.assertIn("Added 2 new gpx tracks.", output)
         self.assertIn("User normal_test_user has now 2 tracks.", output)
@@ -89,7 +89,7 @@ class ImportTestCase(TestUserMixin, TestCase):
 
         existing_tracks = [str(track) for track in qs]
         assert_pformat_equal(
-            existing_tracks, ["2018-02-21 Moers Hülsdonk", "2011-01-13 Berlin Tiergarten"]
+            existing_tracks, ["2018-02-21 Moers", "2011-01-13 Berlin Tiergarten"]
         )
 
         assert qs.count() == 2

@@ -61,7 +61,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
             must_contain=(
                 "<title>Select GPX Track to change | Django-ForRunners v%s</title>" % __version__,
                 # "Process garmin_connect_1.gpx...",
-                # "Created: 2018-02-21 14:30:50 Moers Hülsdonk",
+                # "Created: 2018-02-21 14:30:50 Moers",
                 #
                 # "Process no_track_points.gpx...",
                 # "Error process GPX data: Can't get first track",
@@ -70,7 +70,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
             ),
             messages=[
                 "Process garmin_connect_1.gpx...",
-                "Created: 2018-02-21 Moers Hülsdonk",
+                "Created: 2018-02-21 Moers",
                 "Process no_track_points.gpx...",
                 "Error process GPX data: Can't get first track",
             ],
