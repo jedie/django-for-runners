@@ -1,6 +1,6 @@
 """
     created 31.05.2018 by Jens Diemer <opensource@jensdiemer.de>
-    :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
+    :copyleft: 2018-2020 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 import collections
@@ -18,7 +18,7 @@ def construct_short_address(address):
     parts = []
 
     if "village" in address and "county" in address:
-        parts.append("%s," % address["village"])
+        parts.append(f"{address['village']},")
         parts.append(address["county"])
     else:
         parts.append(address.get("city") or address.get("town") or address.get("county") or address.get("state"))
@@ -35,8 +35,8 @@ def reverse_geo(lat, lon):
     >>> address = reverse_geo("51.6239133", "6.9749074")
     >>> address.short
     'Feldhausen, Bottrop'
-    >>> address.full
-    'Movie Park Germany, 1, Warner-Allee, Kuhberg, Feldhausen, Bottrop, Regierungsbezirk Münster, Nordrhein-Westfalen, 46244, Deutschland'
+    >>> address.full[:70] + '...'
+    'Movie Park Germany, 1, Warner-Allee, Kuhberg, Feldhausen, Bottrop, Nor...'
 
     >>> reverse_geo("52.518611", "13.376111").short
     'Berlin Tiergarten'
@@ -47,10 +47,12 @@ def reverse_geo(lat, lon):
         full : string
             The "full" Address
     """
-    geolocator = Nominatim()
-    location = geolocator.reverse("%s, %s" % (lat, lon))
+    log.debug('reverse_geo', lat=lat, lon=lon)
+    geolocator = Nominatim(user_agent="django-for-runners")
+    location = geolocator.reverse(f"{lat}, {lon}")
 
     short_address = construct_short_address(address=location.raw["address"])
+    log.info('short_address', lat=lat, lon=lon, short_address=short_address)
 
     return Address(short_address, location.address)
 
