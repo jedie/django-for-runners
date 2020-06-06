@@ -24,15 +24,15 @@ from pathlib import Path as __Path
 #   for_runners.management.commands.fill_basedata.Command
 #
 BASE_IDEAL_TRACK_LENGTHS = (  # All values are in kilometers ;)
-    decimal.Decimal(0.4),
-    decimal.Decimal(0.8),
-    decimal.Decimal(5.0),
-    decimal.Decimal(6.5),
-    decimal.Decimal(7.5),
-    decimal.Decimal(8.5),
-    decimal.Decimal(10.0),
-    decimal.Decimal(21.0975),
-    decimal.Decimal(42.195),
+    decimal.Decimal('0.4'),
+    decimal.Decimal('0.8'),
+    decimal.Decimal('5.0'),
+    decimal.Decimal('6.5'),
+    decimal.Decimal('7.5'),
+    decimal.Decimal('8.5'),
+    decimal.Decimal('10.0'),
+    decimal.Decimal('21.0975'),
+    decimal.Decimal('42.195'),
 )
 
 # All cash values are stored as decimal field without any currency information
