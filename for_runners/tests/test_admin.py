@@ -12,7 +12,7 @@ from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
-from for_runners.version import __version__
+from for_runners import __version__
 
 BASE_PATH = Path(__file__).parent
 

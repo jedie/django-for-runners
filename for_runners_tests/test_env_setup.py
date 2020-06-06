@@ -6,7 +6,7 @@ from for_runners_tests.utils import ForRunnersCommandTestCase
 from django_tools.unittest_utils.assertments import assert_endswith
 
 # https://github.com/jedie/django-for-runners
-from for_runners.version import __version__
+from for_runners import __version__
 
 
 class CheckTestEnvironment(ForRunnersCommandTestCase):

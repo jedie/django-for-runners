@@ -15,7 +15,7 @@ from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
-from for_runners.version import __version__
+from for_runners import __version__
 
 
 @pytest.mark.django_db

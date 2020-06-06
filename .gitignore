@@ -10,6 +10,9 @@ for_runners_project/static/
 for_runners_project/media/
 test_project_db.sqlite3
 
+# Coverage HTML Report files:
+htmlcov
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

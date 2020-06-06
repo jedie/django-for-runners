@@ -19,7 +19,7 @@ from django_tools.unittest_utils.user import TestUserMixin
 import for_runners
 from for_runners.models import GpxModel
 from for_runners.tests.base import BaseTestCase
-from for_runners.version import __version__
+from for_runners import __version__
 
 
 class ImportCommandTestCase(ForRunnersCommandTestCase):
