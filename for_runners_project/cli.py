@@ -8,10 +8,10 @@ import time
 from pathlib import Path
 
 import click
+from for_runners_project.utils.gunicorn_server import get_gunicorn_application
 
 # https://github.com/jedie/django-for-runners
 from for_runners import __version__
-from for_runners_project.utils.gunicorn_server import get_gunicorn_application
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "for_runners_project.settings"
 
@@ -43,7 +43,7 @@ def verbose_subprocess(*args, **kwargs):
     """
     print("\n" * 3)
     print("_" * 79, file=sys.stderr, flush=True)
-    click.echo("subprocess call '%s'\n" % click.style(" ".join(args), fg="green"))
+    click.echo(f"subprocess call '{click.style(' '.join(args), fg='green')}'\n")
     subprocess.check_call(args, **kwargs)
 
 
@@ -82,7 +82,7 @@ def run_dev_server():
             subprocess_manage("migrate")
             subprocess_manage("run_server")
         except Exception as err:
-            print("\nError: %s" % err)
+            print(f"\nError: {err}")
         except KeyboardInterrupt:
             pass
 
@@ -145,49 +145,6 @@ def backup():
     from for_runners.management.commands import backup
 
     call_manage_command(cmd_class=backup)
-
-
-@cli.command()
-def update():
-    """
-    Update all packages in virtualenv.
-
-    start with:
-        $ for_runners update
-
-    (Call this command only in a activated virtualenv.)
-    """
-    assert "VIRTUAL_ENV" in os.environ, "ERROR: Call me only in a activated virtualenv!"
-
-    pip3_path = Path(sys.prefix, "bin", "pip3")
-    if not pip3_path.is_file():
-        print("ERROR: pip not found here: '%s'" % pip3_path)
-        return
-
-    print("pip found here: '%s'" % pip3_path)
-
-    # Upgrade pip:
-    verbose_subprocess(str(pip3_path), "install", "--upgrade", "pip")
-
-    src_pkg_path = Path(__file__).parent.parent  # .../src/django-for-runners
-    print(src_pkg_path)
-
-    req_path = Path(src_pkg_path, "requirements.txt")
-    if not req_path.is_file():
-        print("ERROR: File not found: %s" % req_path)
-        sys.exit(-1)
-
-    # Update sources from git:
-    if Path(src_pkg_path, ".git").is_dir():
-        verbose_subprocess("git", "pull", "origin", "master", cwd=str(src_pkg_path))
-
-    # upgrade requirements:
-    verbose_subprocess(str(pip3_path), "install", "--upgrade", "-r", str(req_path))
-
-    # install:
-    verbose_subprocess(str(pip3_path), "install", "--upgrade", "-e", ".", cwd=str(src_pkg_path))
-
-    print("\n\nYour virtual environment is updated!\n")
 
 
 if __name__ == "__main__":
