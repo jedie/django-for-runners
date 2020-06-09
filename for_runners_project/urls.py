@@ -1,5 +1,3 @@
-# coding: utf-8
-
 from django.conf.urls import include, static, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin

@@ -70,18 +70,15 @@ class Command(RunServerCommand):
 
                     import webbrowser
 
-                    uri = "%(protocol)s://%(addr)s:%(port)s/" % {
-                        "protocol": self.protocol,
-                        "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
-                        "port": self.port,
-                    }
+                    addr = f"[{self.addr}]" if self._raw_ipv6 else self.addr
+                    uri = f"{self.protocol}://{addr}:{self.port}/"
                     print(f"\nStart browser with: {uri!r}\n")
                     webbrowser.open_new_tab(uri)
 
                 Timer(1, open_webbrowser).start()
 
         options["insecure_serving"] = True
-        super(Command, self).handle(*args, **options)
+        super().handle(*args, **options)
 
     def run(self, **options):
 

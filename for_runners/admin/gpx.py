@@ -295,7 +295,7 @@ class GpxModelChangeList(ChangeList):
         super().__init__(*args, **kwargs)
 
     def get_results(self, request):
-        super(GpxModelChangeList, self).get_results(request)
+        super().get_results(request)
 
         self.statistics = ""
 
@@ -615,7 +615,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         return user_count
 
     def get_list_display(self, request):
-        list_display = super(GpxModelAdmin, self).get_list_display(request).copy()
+        list_display = super().get_list_display(request).copy()
 
         if self.user_count <= 1 and "tracked_by" in list_display:
             list_display.remove("tracked_by")
@@ -623,7 +623,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         return list_display
 
     def get_list_filter(self, request):
-        list_filter = super(GpxModelAdmin, self).get_list_filter(request).copy()
+        list_filter = super().get_list_filter(request).copy()
 
         if self.user_count <= 1 and "tracked_by" in list_filter:
             list_filter.remove("tracked_by")

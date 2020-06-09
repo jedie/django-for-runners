@@ -120,8 +120,7 @@ def parse_gpx_file(filepath):
 def iter_points(gpxpy_instance):
     for track in gpxpy_instance.tracks:
         for segment in track.segments:
-            for point in segment.points:
-                yield point
+            yield from segment.points
 
 
 def iter_coordinates(gpxpy_instance):

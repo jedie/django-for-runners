@@ -96,7 +96,7 @@ def human_duration(t):
         if count >= 1:
             count = round(count, 1)
             break
-    return "%(number).1f %(type)s" % {"number": count, "type": name}
+    return f"{count:.1f} {name}"
 
 
 def human_distance(km):
