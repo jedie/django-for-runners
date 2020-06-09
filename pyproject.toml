@@ -67,6 +67,7 @@ isort = "*"
 flake8 = "*"
 flynt = "*"
 autopep8 = "*"
+pyupgrade = "*"
 
 [tool.poetry.scripts]
 # run the dev. server:
