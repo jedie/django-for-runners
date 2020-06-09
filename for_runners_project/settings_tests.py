@@ -16,7 +16,8 @@ from for_runners_project.settings import *
 #   File ".../lib/python3.6/site-packages/autotask/apps.py", line 37, in delete_periodic_tasks
 #     if qs.count():
 #   ...
-# Failed: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+# Failed: Database access not allowed, use the "django_db" mark, or the
+# "db" or "transactional_db" fixtures to enable it.
 AUTOTASK_IS_ACTIVE = False
 
 

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
     Django settings for test_project project.
 
@@ -15,19 +13,19 @@
     https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-print("Use settings:", __file__)
-
 import logging
 import sys as __sys
 from pathlib import Path as __Path
 
 from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
 from django.utils.translation import ugettext_lazy as _
-# https://github.com/jedie/django-tools
 from django_tools.settings_utils import FnMatchIps
 
 from for_runners.app_settings import *  # @UnusedWildImport
 from for_runners_project.utils.venv import get_venv_path as __get_venv_path
+
+
+print("Use settings:", __file__)
 
 
 # Build paths inside the project:

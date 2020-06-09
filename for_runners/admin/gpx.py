@@ -416,7 +416,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
 
             row = ["new Date(%i)" % timestamp, point.elevation]
 
-            if has_hr is None or has_hr == True:
+            if has_hr is None or has_hr:
                 try:
                     row.append(point.extension_data["hr"])
                 except KeyError:
@@ -426,7 +426,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                         has_hr = True
                         labels.append(_("heart rate"))
 
-            if has_cad is None or has_cad == True:
+            if has_cad is None or has_cad:
                 try:
                     row.append(point.extension_data["cad"])
                 except KeyError:

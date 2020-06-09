@@ -60,7 +60,7 @@ class Command(RunServerCommand):
                 # call: for_runners.management.commands.fill_basedata.Command
                 self.verbose_call("fill_basedata")
 
-            if not DONT_OPEN_BROWSER_ENV_KEY in os.environ:
+            if DONT_OPEN_BROWSER_ENV_KEY not in os.environ:
 
                 def open_webbrowser():
                     os.environ[DONT_OPEN_BROWSER_ENV_KEY] = "yes"  # open only one time ;)
@@ -87,7 +87,8 @@ class Command(RunServerCommand):
 
         if sys.platform in ("win32", "cygwin"):
             # Bugfix for:
-            # can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners': [Errno 2] No such file or directory
+            #   can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners':
+            #   [Errno 2] No such file or directory
             executable = Path(Path(sys.argv[0]).parent, "for_runners-script.py")
             print(f"Patch executeable to: {executable}")
             assert executable.is_file(), f"Executeable not found here: {executable}"

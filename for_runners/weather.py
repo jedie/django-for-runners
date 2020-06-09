@@ -197,7 +197,11 @@ class MetaWeatherCom:
 
         nearest_woeid, woe_data, json_data = self.lat_lon2woeid(lat, lon)
         log.info("Use nearest WOEID: %i (%r)", nearest_woeid, woe_data)
-        temperature, weather_state = self.location_day(woeid=nearest_woeid, date=date, max_seconds=max_seconds)
+        temperature, weather_state = self.location_day(
+            woeid=nearest_woeid,
+            date=date,
+            max_seconds=max_seconds
+        )
         return temperature, weather_state
 
 
@@ -209,7 +213,9 @@ if __name__ == "__main__":
     # woeid=648820 # Essen, city
 
     # nearest_woeid, woe_data, json_data = MetaWeatherCom().lat_lon2woeid(36.96, -122.02)
-    # print("woeid:", nearest_woeid, woe_data) # woeid: 2488853 {'distance': 1836, 'title': 'Santa Cruz', 'location_type': 'City', 'woeid': 2488853, 'latt_long': '36.974018,-122.030952'}
+    # print("woeid:", nearest_woeid, woe_data)
+    # woeid: 2488853 {'distance': 1836, 'title': 'Santa Cruz', 'location_type': 'City',
+    # 'woeid': 2488853, 'latt_long': '36.974018,-122.030952'}
 
     # /api/location/2487956/2013/4/30/ - San Francisco on 30th April 2013
     # MetaWeatherCom().location_day(woeid=2488853, date=datetime.date(year=2017, month=4, day=30))

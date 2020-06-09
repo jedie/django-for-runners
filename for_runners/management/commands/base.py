@@ -19,7 +19,7 @@ class BaseCommand(DjangoBaseCommand):
         e.g.:
         terminal encoding fallback to ASCII (e.g.: wrong server config in a ssh session)
         call gpx import command and the track contains non ASCII characters
-        
+
          File "...Django-ForRunners/src/django-for-runners/for_runners/management/commands/import_gpx.py", line 70, in handle
             self.stdout.write(self.style.SUCCESS("%i - Add new track: %s" % (no, instance)))
           File "...Django-ForRunners/lib/python3.6/site-packages/django/core/management/base.py", line 145, in write
