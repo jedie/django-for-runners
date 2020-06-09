@@ -34,13 +34,13 @@ def get_for_runners_app_path():
 def get_svg_logo_path():
     for_runners_app_path = get_for_runners_app_path()
     svg_logo_path = Path(for_runners_app_path, SVG_LOGO)
-    assert svg_logo_path.is_file(), "Logo not found here: %s" % svg_logo_path
+    assert svg_logo_path.is_file(), f"Logo not found here: {svg_logo_path}"
     return svg_logo_path
 
 
 def create_linux_xdg_open_file(file_name, for_runners_exe, command, env_path):
-    desktop_file_path = Path(env_path, "%s.desktop" % file_name)
-    print("Create linux xdg-open starter here: %s" % desktop_file_path)
+    desktop_file_path = Path(env_path, f"{file_name}.desktop")
+    print(f"Create linux xdg-open starter here: {desktop_file_path}")
 
     svg_logo_path = get_svg_logo_path()
     content = XDG_OPEN_TEMPLATE.format(
@@ -56,7 +56,7 @@ def create_starter():
 
     venv_path = VirtualEnvPath()
     env_path = venv_path.env_path
-    print("Create starter in: %s" % env_path)
+    print(f"Create starter in: {env_path}")
 
     for_runners_exe = venv_path.get_for_runners_exe()
 

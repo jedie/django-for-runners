@@ -31,7 +31,7 @@ def add_gpx(*, gpx_content, user):
     try:
         gpxpy_instance = parse_gpx(gpx_content)
     except GPXException as err:
-        log.exception("Invalid GPX Data: %s" % err)
+        log.exception(f"Invalid GPX Data: {err}")
         return
 
     identifier = get_identifier(gpxpy_instance)

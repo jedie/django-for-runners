@@ -59,7 +59,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
         self.assertResponse(
             response,
             must_contain=(
-                "<title>Select GPX Track to change | Django-ForRunners v%s</title>" % __version__,
+                f"<title>Select GPX Track to change | Django-ForRunners v{__version__}</title>",
                 # "Process garmin_connect_1.gpx...",
                 # "Created: 2018-02-21 14:30:50 Moers",
                 #

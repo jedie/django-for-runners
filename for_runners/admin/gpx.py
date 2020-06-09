@@ -64,7 +64,7 @@ class UploadGpxFileView(generic.FormView):
         if form.is_valid():
             log.debug("files: %r", files)
             for f in files:
-                messages.info(request, "Process %s..." % f.name)
+                messages.info(request, f"Process {f.name}...")
 
                 content = f.file.read()
                 log.debug("raw content......: %s", repr(content)[:100])
@@ -77,12 +77,12 @@ class UploadGpxFileView(generic.FormView):
                     except IntegrityError as err:
                         # catch: UNIQUE constraint failed
                         # give a better error message
-                        messages.error(request, "Error process GPX data: %s" % err)
+                        messages.error(request, f"Error process GPX data: {err}")
                         continue
                 except GpxDataError as err:
-                    messages.error(request, "Error process GPX data: %s" % err)
+                    messages.error(request, f"Error process GPX data: {err}")
                 else:
-                    messages.success(request, "Created: %s" % gpx)
+                    messages.success(request, f"Created: {gpx}")
 
                     # redirect to change view:
                     self.success_url = gpx.get_admin_change_url()
@@ -161,9 +161,9 @@ class DistanceStatisticsView(BaseFormChangelistView):
 
             if tracks:
                 paces = [track.pace for track in tracks]
-                min_paces = "%.2f" % min(paces)
-                avg_paces = "%.2f" % statistics.median(paces)
-                max_paces = "%.2f" % max(paces)
+                min_paces = f"{min(paces):.2f}"
+                avg_paces = f"{statistics.median(paces):.2f}"
+                max_paces = f"{max(paces):.2f}"
             else:
                 min_paces = "null"
                 avg_paces = "null"
@@ -313,7 +313,7 @@ class GpxModelChangeList(ChangeList):
             else:
                 view = ViewClass.as_view()
                 response = view(request, self)
-                assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
+                assert isinstance(response, TemplateResponse), f"Method {view} didn't return a TemplateResponse!"
                 self.statistics = response.rendered_content
 
 
@@ -355,7 +355,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
     def print_mini(self, request, queryset):
         url = reverse("admin:print-mini")  # for_runners.admin.gpx.PrintMiniView
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-        return HttpResponseRedirect("%s?ids=%s" % (url, ",".join(selected)))
+        return HttpResponseRedirect(f"{url}?ids={','.join(selected)}")
 
     print_mini.short_description = _("Generate a page to print a small overview.")
 
@@ -571,7 +571,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         parts = []
         if obj.participation:
             event = obj.participation.event
-            parts.append("<strong>%s</strong>" % event)
+            parts.append(f"<strong>{event}</strong>")
         parts.append(obj.start_end_address())
         html = "<br>".join(parts)
         return mark_safe(html)

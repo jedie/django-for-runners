@@ -118,15 +118,15 @@ def human_distance(km):
         m = round(km * 1000, 1)
         if m == int(m):
             return "%i m" % m
-        return "%.1f m" % m
+        return f"{m:.1f} m"
 
     if km == int(km):
-        return "%.0f km" % km
+        return f"{km:.0f} km"
 
     # FIXME:
-    txt = "%.4f" % km
+    txt = f"{km:.4f}"
     txt = txt.rstrip("0")
-    return "%s km" % txt
+    return f"{txt} km"
 
 
 def convert_cash_values(value, round_value=True):
@@ -139,4 +139,4 @@ def convert_cash_values(value, round_value=True):
     if round_value:
         return "%i %s" % (round(value), settings.FOR_RUNNERS_CURRENCY_SYMBOL)
     else:
-        return "%.2f %s" % (value, settings.FOR_RUNNERS_CURRENCY_SYMBOL)
+        return f"{value:.2f} {settings.FOR_RUNNERS_CURRENCY_SYMBOL}"

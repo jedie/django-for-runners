@@ -101,7 +101,7 @@ def calculate_values(*, gpx_track):
             start_address = reverse_geo(gpx_track.start_latitude, gpx_track.start_longitude)
         except Exception as err:
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
+            log.error(f"Can't reverse geo: {err}")
         else:
             gpx_track.short_start_address = start_address.short
             gpx_track.full_start_address = start_address.full
@@ -111,7 +111,7 @@ def calculate_values(*, gpx_track):
             finish_address = reverse_geo(gpx_track.finish_latitude, gpx_track.finish_longitude)
         except Exception as err:
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
+            log.error(f"Can't reverse geo: {err}")
         else:
             gpx_track.short_finish_address = finish_address.short
             gpx_track.full_finish_address = finish_address.full

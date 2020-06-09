@@ -25,7 +25,7 @@ class Command(RunServerCommand):
 
     def verbose_call(self, command, *args, **kwargs):
         self.stderr.write("_" * 79)
-        self.stdout.write("Call %r with: %r %r" % (command, args, kwargs))
+        self.stdout.write(f"Call {command!r} with: {args!r} {kwargs!r}")
         call_command(command, *args, **kwargs)
 
     def handle(self, *args, **options):
@@ -74,7 +74,7 @@ class Command(RunServerCommand):
                         "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
                         "port": self.port,
                     }
-                    print("\nStart browser with: %r\n" % uri)
+                    print(f"\nStart browser with: {uri!r}\n")
                     webbrowser.open_new_tab(uri)
 
                 Timer(1, open_webbrowser).start()
@@ -88,8 +88,8 @@ class Command(RunServerCommand):
             # Bugfix for:
             # can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners': [Errno 2] No such file or directory
             executable = Path(Path(sys.argv[0]).parent, "for_runners-script.py")
-            print("Patch executeable to: %s" % executable)
-            assert executable.is_file(), "Executeable not found here: %s" % executable
+            print(f"Patch executeable to: {executable}")
+            assert executable.is_file(), f"Executeable not found here: {executable}"
             sys.argv[0] = str(executable)
 
         try:

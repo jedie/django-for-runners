@@ -159,7 +159,7 @@ DATABASES = {
         "timeout": 30,
     }
 }
-print("Use Database: %r" % DATABASES["default"]["NAME"])
+print(f"Use Database: {DATABASES['default']['NAME']!r}")
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -202,7 +202,7 @@ STATIC_ROOT = str(__Path(BASE_PATH, "static"))
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = str(__Path(VENV_PATH, "media"))  # e.g.: /home/<username>/DjangoForRunnersEnv/media/
-print("Tracks stored in %r" % MEDIA_ROOT)
+print(f"Tracks stored in {MEDIA_ROOT!r}")
 
 
 # don't load jquery from ajax.googleapis.com, just use django's version:
@@ -252,7 +252,7 @@ old_factory = logging.getLogRecordFactory()
 def cut_path(pathname, max_length):
     if len(pathname) <= max_length:
         return pathname
-    return "...%s" % pathname[-(max_length - 3) :]
+    return f"...{pathname[-(max_length - 3):]}"
 
 
 def record_factory(*args, **kwargs):
