@@ -21,16 +21,14 @@ import logging
 import sys as __sys
 from pathlib import Path as __Path
 
-from django.utils.translation import ugettext_lazy as _
-
 from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
-
+from django.utils.translation import ugettext_lazy as _
 # https://github.com/jedie/django-tools
 from django_tools.settings_utils import FnMatchIps
 
-# https://github.com/jedie/django-for-runners
 from for_runners.app_settings import *  # @UnusedWildImport
 from for_runners_project.utils.venv import get_venv_path as __get_venv_path
+
 
 # Build paths inside the project:
 BASE_PATH = __Path(__file__).resolve().parent

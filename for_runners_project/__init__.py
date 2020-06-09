@@ -2,6 +2,7 @@ import sys
 
 from for_runners import __version__
 
+
 if __name__ == "for_runners_project":
     #
     # This will be called before the click cli

@@ -7,6 +7,7 @@ from poetry_publish.utils.subprocess_utils import verbose_check_call
 # https://github.com/jedie/django-for-runners
 import for_runners
 
+
 PACKAGE_ROOT = Path(for_runners.__file__).parent.parent
 
 

@@ -11,6 +11,7 @@ from for_runners.models import GpxModel
 from for_runners.services.gpx_save_gpx import save_gpx_file
 from for_runners.services.gpx_svg_generator import generate_svg
 
+
 log = logging.getLogger(__name__)
 
 

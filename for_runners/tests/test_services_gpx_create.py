@@ -7,13 +7,13 @@
 from pathlib import Path
 
 from django.test import TestCase
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_pformat_equal
 from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
 from for_runners.services.gpx_create import add_from_file, add_from_files, add_gpx
+
 
 BASE_PATH = Path(__file__).parent
 

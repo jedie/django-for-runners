@@ -2,17 +2,16 @@
 from pathlib import Path
 
 import pytest
-
 from django.core.files.uploadedfile import UploadedFile
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.BrowserDebug import debug_response
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 
+from for_runners import __version__
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
-from for_runners import __version__
+
 
 BASE_PATH = Path(__file__).parent
 

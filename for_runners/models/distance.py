@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.humanize import human_distance
 
+
 log = logging.getLogger(__name__)
 
 

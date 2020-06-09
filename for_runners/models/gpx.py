@@ -13,7 +13,6 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
-
 # https://github.com/jedie/django-tools
 from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
@@ -24,6 +23,7 @@ from for_runners.gpx_tools.humanize import human_distance, human_duration, human
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
+
 
 log = logging.getLogger(__name__)
 

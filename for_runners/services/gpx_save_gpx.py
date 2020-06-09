@@ -8,6 +8,7 @@ import logging
 
 from django.core.files.base import ContentFile
 
+
 log = logging.getLogger(__name__)
 
 
@@ -35,5 +36,3 @@ def save_gpx_file(*, gpx_track, force=False):
         name="temp.gpx", content=content, save=False  # real file path will be set in self.get_gpx_upload_path()
     )
     log.debug(f"gpx file created: {gpx_track.gpx_file!r}")
-
-

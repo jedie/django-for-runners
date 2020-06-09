@@ -7,16 +7,15 @@
 import logging
 
 from django.db import IntegrityError, transaction
-
-from gpxpy.gpx import GPXException
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_is_dir, assert_is_file
+from gpxpy.gpx import GPXException
 
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx import get_identifier, parse_gpx
 from for_runners.models import GpxModel
+
 
 log = logging.getLogger(__name__)
 

@@ -8,6 +8,7 @@ import logging
 
 from geopy.geocoders import Nominatim
 
+
 log = logging.getLogger(__name__)
 Address = collections.namedtuple("Address", ("short, full"))
 

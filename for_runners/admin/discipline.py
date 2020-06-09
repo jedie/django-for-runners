@@ -11,6 +11,7 @@ from django.contrib import admin
 # https://github.com/jedie/django-for-runners
 from for_runners.models import DisciplineModel
 
+
 log = logging.getLogger(__name__)
 
 

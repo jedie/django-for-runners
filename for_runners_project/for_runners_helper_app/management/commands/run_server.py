@@ -13,6 +13,7 @@ from django.core.management import call_command
 # https://github.com/jedie/django-for-runners
 from for_runners.models import DistanceModel
 
+
 DONT_OPEN_BROWSER_ENV_KEY = "DONT_OPEN_BROWSER"
 
 

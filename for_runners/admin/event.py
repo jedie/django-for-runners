@@ -22,6 +22,7 @@ from for_runners.gpx_tools.humanize import convert_cash_values, human_distance, 
 from for_runners.models import EventLinkModel, EventModel
 from for_runners.models.event import CostModel, ParticipationModel
 
+
 log = logging.getLogger(__name__)
 
 

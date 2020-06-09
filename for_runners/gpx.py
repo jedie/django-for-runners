@@ -17,6 +17,7 @@ from gpxpy.geo import distance as geo_distance
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 
+
 Identifier = collections.namedtuple(
     "Identifier", ("start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon")
 )

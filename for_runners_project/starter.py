@@ -8,6 +8,7 @@ import click
 import for_runners
 from for_runners_project.utils.venv import VirtualEnvPath
 
+
 SVG_LOGO = "static/Django-ForRunners.svg"  # .../for_runners/static/Django-ForRunners.svg
 
 XDG_OPEN_FILENAME_NORMAL = "Django-ForRunners"

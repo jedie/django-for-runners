@@ -13,6 +13,7 @@ from for_runners.gpx import get_extension_data, get_identifier
 from for_runners.models import DistanceModel
 from for_runners.weather import NoWeatherData, meta_weather_com
 
+
 log = logging.getLogger(__name__)
 
 

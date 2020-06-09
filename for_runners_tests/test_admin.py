@@ -3,7 +3,6 @@
 import unittest
 
 import pytest
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.selenium_utils import (
     SeleniumChromiumTestCase,

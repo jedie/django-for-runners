@@ -3,11 +3,12 @@
 from django.conf.urls import include, static, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.views.generic import RedirectView
 from django.urls import path
+from django.views.generic import RedirectView
 
 # https://github.com/jedie/django-for-runners
 from for_runners_project import settings
+
 
 admin.autodiscover()
 

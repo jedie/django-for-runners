@@ -12,5 +12,6 @@ from for_runners.models.event import CostModel, EventLinkModel, EventModel, Part
 from for_runners.models.gpx import GpxModel
 from for_runners.signal_handlers.gpx import gpx_post_save_handler, gpx_pre_save_handler
 
+
 pre_save.connect(receiver=gpx_pre_save_handler, sender=GpxModel)
 post_save.connect(receiver=gpx_post_save_handler, sender=GpxModel)

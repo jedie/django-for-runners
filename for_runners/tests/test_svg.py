@@ -8,8 +8,10 @@
 from pathlib import Path
 
 from django.test import SimpleTestCase
+
 from for_runners.gpx import parse_gpx_file
 from for_runners.svg import gpx2svg_string
+
 
 BASE_PATH = Path(__file__).parent
 

@@ -5,11 +5,10 @@ import unittest
 from pathlib import Path
 from pprint import pprint
 
-from for_runners_project import cli
-
 # https://github.com/jedie/django-for-runners
 import for_runners
 from for_runners import __version__
+from for_runners_project import cli
 
 
 def subprocess_output(*args, **kwargs):

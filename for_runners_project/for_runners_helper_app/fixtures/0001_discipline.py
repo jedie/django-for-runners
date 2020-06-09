@@ -5,10 +5,11 @@ import logging
 
 from django.conf import settings
 from django.utils import translation
-
 # https://github.com/Peter-Slump/django-dynamic-fixtures
 from dynamic_fixtures.fixtures import BaseFixture
+
 from for_runners.models import DisciplineModel
+
 
 log = logging.getLogger(__name__)
 

@@ -12,6 +12,7 @@ from django.core.files.base import ContentFile
 # https://github.com/jedie/django-for-runners
 from for_runners.svg import gpx2svg_string
 
+
 log = logging.getLogger(__name__)
 
 

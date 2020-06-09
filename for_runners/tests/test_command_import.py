@@ -6,9 +6,6 @@ from unittest.mock import patch
 from django import __version__ as django_version
 from django.core.management import call_command
 from django.test import TestCase
-
-from for_runners_tests.utils import ForRunnersCommandTestCase
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_endswith, assert_is_dir, assert_pformat_equal
 from django_tools.unittest_utils.django_command import DjangoCommandMixin
@@ -17,9 +14,10 @@ from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
 import for_runners
+from for_runners import __version__
 from for_runners.models import GpxModel
 from for_runners.tests.base import BaseTestCase
-from for_runners import __version__
+from for_runners_tests.utils import ForRunnersCommandTestCase
 
 
 # TODO:

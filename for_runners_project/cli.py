@@ -8,10 +8,11 @@ import time
 from pathlib import Path
 
 import click
-from for_runners_project.utils.gunicorn_server import get_gunicorn_application
 
 # https://github.com/jedie/django-for-runners
 from for_runners import __version__
+from for_runners_project.utils.gunicorn_server import get_gunicorn_application
+
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "for_runners_project.settings"
 
