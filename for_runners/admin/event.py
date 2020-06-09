@@ -22,6 +22,7 @@ from for_runners.gpx_tools.humanize import convert_cash_values, human_distance, 
 from for_runners.models import EventLinkModel, EventModel
 from for_runners.models.event import CostModel, ParticipationModel
 
+
 log = logging.getLogger(__name__)
 
 
@@ -151,7 +152,7 @@ class EventModelChangeList(ChangeList):
 
         view = StatisticsView.as_view()
         response = view(request, self)
-        assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
+        assert isinstance(response, TemplateResponse), f"Method {view} didn't return a TemplateResponse!"
         self.statistics = response.rendered_content
 
 
@@ -214,9 +215,7 @@ class EventModelAdmin(admin.ModelAdmin):
         for participation in participations:
             change_url = participation.get_admin_change_url()
             html.append(
-                '<a href="{url}">{username} ({distance})</a>'.format(
-                    url=change_url, username=participation.person.username, distance=participation.get_human_distance()
-                )
+                f'<a href="{change_url}">{participation.person.username} ({participation.get_human_distance()})</a>'
             )
 
         html = "<br>".join(html)
@@ -281,7 +280,7 @@ class ParticipationModelAdmin(admin.ModelAdmin):
     def pace(self, obj):
         pace_s = obj.get_pace_s()
         if pace_s:
-            return "%s min/km" % human_seconds(pace_s)
+            return f"{human_seconds(pace_s)} min/km"
 
     pace.short_description = _("Pace")
 
@@ -295,9 +294,9 @@ class ParticipationModelAdmin(admin.ModelAdmin):
         if not parts:
             return ""
         elif len(parts) == 1:
-            return "%.2f€" % total
+            return f"{total:.2f}€"
         else:
-            return "%.2f€ (%s)" % (total, " ".join(parts))
+            return f"{total:.2f}€ ({' '.join(parts)})"
 
     list_display = (
         "start_date",

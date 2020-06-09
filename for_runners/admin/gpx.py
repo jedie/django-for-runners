@@ -23,12 +23,9 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from for_runners.services.gpx_svg_generator import generate_svg
-
-from import_export.admin import ExportMixin, ImportExportModelAdmin
-
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
+from import_export.admin import ExportMixin, ImportExportModelAdmin
 
 # https://github.com/jedie/django-for-runners
 from for_runners import constants
@@ -39,6 +36,8 @@ from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGp
 from for_runners.gpx import add_extension_data, get_2d_coordinate_list, iter_distance, iter_points
 from for_runners.models import GpxModel
 from for_runners.services.gpx_calculate_values import calculate_values
+from for_runners.services.gpx_svg_generator import generate_svg
+
 
 log = logging.getLogger(__name__)
 
@@ -64,7 +63,7 @@ class UploadGpxFileView(generic.FormView):
         if form.is_valid():
             log.debug("files: %r", files)
             for f in files:
-                messages.info(request, "Process %s..." % f.name)
+                messages.info(request, f"Process {f.name}...")
 
                 content = f.file.read()
                 log.debug("raw content......: %s", repr(content)[:100])
@@ -77,12 +76,12 @@ class UploadGpxFileView(generic.FormView):
                     except IntegrityError as err:
                         # catch: UNIQUE constraint failed
                         # give a better error message
-                        messages.error(request, "Error process GPX data: %s" % err)
+                        messages.error(request, f"Error process GPX data: {err}")
                         continue
                 except GpxDataError as err:
-                    messages.error(request, "Error process GPX data: %s" % err)
+                    messages.error(request, f"Error process GPX data: {err}")
                 else:
-                    messages.success(request, "Created: %s" % gpx)
+                    messages.success(request, f"Created: {gpx}")
 
                     # redirect to change view:
                     self.success_url = gpx.get_admin_change_url()
@@ -161,9 +160,9 @@ class DistanceStatisticsView(BaseFormChangelistView):
 
             if tracks:
                 paces = [track.pace for track in tracks]
-                min_paces = "%.2f" % min(paces)
-                avg_paces = "%.2f" % statistics.median(paces)
-                max_paces = "%.2f" % max(paces)
+                min_paces = f"{min(paces):.2f}"
+                avg_paces = f"{statistics.median(paces):.2f}"
+                max_paces = f"{max(paces):.2f}"
             else:
                 min_paces = "null"
                 avg_paces = "null"
@@ -296,7 +295,7 @@ class GpxModelChangeList(ChangeList):
         super().__init__(*args, **kwargs)
 
     def get_results(self, request):
-        super(GpxModelChangeList, self).get_results(request)
+        super().get_results(request)
 
         self.statistics = ""
 
@@ -313,7 +312,7 @@ class GpxModelChangeList(ChangeList):
             else:
                 view = ViewClass.as_view()
                 response = view(request, self)
-                assert isinstance(response, TemplateResponse), "Method %s didn't return a TemplateResponse!" % view
+                assert isinstance(response, TemplateResponse), f"Method {view} didn't return a TemplateResponse!"
                 self.statistics = response.rendered_content
 
 
@@ -355,7 +354,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
     def print_mini(self, request, queryset):
         url = reverse("admin:print-mini")  # for_runners.admin.gpx.PrintMiniView
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-        return HttpResponseRedirect("%s?ids=%s" % (url, ",".join(selected)))
+        return HttpResponseRedirect(f"{url}?ids={','.join(selected)}")
 
     print_mini.short_description = _("Generate a page to print a small overview.")
 
@@ -417,7 +416,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
 
             row = ["new Date(%i)" % timestamp, point.elevation]
 
-            if has_hr is None or has_hr == True:
+            if has_hr is None or has_hr:
                 try:
                     row.append(point.extension_data["hr"])
                 except KeyError:
@@ -427,7 +426,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                         has_hr = True
                         labels.append(_("heart rate"))
 
-            if has_cad is None or has_cad == True:
+            if has_cad is None or has_cad:
                 try:
                     row.append(point.extension_data["cad"])
                 except KeyError:
@@ -571,7 +570,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         parts = []
         if obj.participation:
             event = obj.participation.event
-            parts.append("<strong>%s</strong>" % event)
+            parts.append(f"<strong>{event}</strong>")
         parts.append(obj.start_end_address())
         html = "<br>".join(parts)
         return mark_safe(html)
@@ -616,7 +615,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         return user_count
 
     def get_list_display(self, request):
-        list_display = super(GpxModelAdmin, self).get_list_display(request).copy()
+        list_display = super().get_list_display(request).copy()
 
         if self.user_count <= 1 and "tracked_by" in list_display:
             list_display.remove("tracked_by")
@@ -624,7 +623,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         return list_display
 
     def get_list_filter(self, request):
-        list_filter = super(GpxModelAdmin, self).get_list_filter(request).copy()
+        list_filter = super().get_list_filter(request).copy()
 
         if self.user_count <= 1 and "tracked_by" in list_filter:
             list_filter.remove("tracked_by")

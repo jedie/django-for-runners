@@ -10,14 +10,15 @@ import unittest
 from datetime import datetime
 from functools import reduce
 from pathlib import Path
-
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
+
+from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
 
 from for_runners.gpx import GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file
 from for_runners.tests.base import BaseTestCase
 from for_runners.tests.utils import earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers
-from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
+
 
 BASE_PATH = Path(__file__).parent
 

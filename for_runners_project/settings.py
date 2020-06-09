@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
     Django settings for test_project project.
 
@@ -15,22 +13,20 @@
     https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-print("Use settings:", __file__)
-
 import logging
 import sys as __sys
 from pathlib import Path as __Path
 
-from django.utils.translation import ugettext_lazy as _
-
 from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG
-
-# https://github.com/jedie/django-tools
+from django.utils.translation import ugettext_lazy as _
 from django_tools.settings_utils import FnMatchIps
 
-# https://github.com/jedie/django-for-runners
 from for_runners.app_settings import *  # @UnusedWildImport
 from for_runners_project.utils.venv import get_venv_path as __get_venv_path
+
+
+print("Use settings:", __file__)
+
 
 # Build paths inside the project:
 BASE_PATH = __Path(__file__).resolve().parent
@@ -159,7 +155,7 @@ DATABASES = {
         "timeout": 30,
     }
 }
-print("Use Database: %r" % DATABASES["default"]["NAME"])
+print(f"Use Database: {DATABASES['default']['NAME']!r}")
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -202,7 +198,7 @@ STATIC_ROOT = str(__Path(BASE_PATH, "static"))
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = str(__Path(VENV_PATH, "media"))  # e.g.: /home/<username>/DjangoForRunnersEnv/media/
-print("Tracks stored in %r" % MEDIA_ROOT)
+print(f"Tracks stored in {MEDIA_ROOT!r}")
 
 
 # don't load jquery from ajax.googleapis.com, just use django's version:
@@ -252,7 +248,7 @@ old_factory = logging.getLogRecordFactory()
 def cut_path(pathname, max_length):
     if len(pathname) <= max_length:
         return pathname
-    return "...%s" % pathname[-(max_length - 3) :]
+    return f"...{pathname[-(max_length - 3):]}"
 
 
 def record_factory(*args, **kwargs):

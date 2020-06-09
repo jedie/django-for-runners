@@ -13,6 +13,7 @@ from django.core.management import call_command
 # https://github.com/jedie/django-for-runners
 from for_runners.models import DistanceModel
 
+
 DONT_OPEN_BROWSER_ENV_KEY = "DONT_OPEN_BROWSER"
 
 
@@ -25,7 +26,7 @@ class Command(RunServerCommand):
 
     def verbose_call(self, command, *args, **kwargs):
         self.stderr.write("_" * 79)
-        self.stdout.write("Call %r with: %r %r" % (command, args, kwargs))
+        self.stdout.write(f"Call {command!r} with: {args!r} {kwargs!r}")
         call_command(command, *args, **kwargs)
 
     def handle(self, *args, **options):
@@ -59,7 +60,7 @@ class Command(RunServerCommand):
                 # call: for_runners.management.commands.fill_basedata.Command
                 self.verbose_call("fill_basedata")
 
-            if not DONT_OPEN_BROWSER_ENV_KEY in os.environ:
+            if DONT_OPEN_BROWSER_ENV_KEY not in os.environ:
 
                 def open_webbrowser():
                     os.environ[DONT_OPEN_BROWSER_ENV_KEY] = "yes"  # open only one time ;)
@@ -69,27 +70,25 @@ class Command(RunServerCommand):
 
                     import webbrowser
 
-                    uri = "%(protocol)s://%(addr)s:%(port)s/" % {
-                        "protocol": self.protocol,
-                        "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
-                        "port": self.port,
-                    }
-                    print("\nStart browser with: %r\n" % uri)
+                    addr = f"[{self.addr}]" if self._raw_ipv6 else self.addr
+                    uri = f"{self.protocol}://{addr}:{self.port}/"
+                    print(f"\nStart browser with: {uri!r}\n")
                     webbrowser.open_new_tab(uri)
 
                 Timer(1, open_webbrowser).start()
 
         options["insecure_serving"] = True
-        super(Command, self).handle(*args, **options)
+        super().handle(*args, **options)
 
     def run(self, **options):
 
         if sys.platform in ("win32", "cygwin"):
             # Bugfix for:
-            # can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners': [Errno 2] No such file or directory
+            #   can't open file 'C:\Program Files\Django-ForRunners\Scripts\for_runners':
+            #   [Errno 2] No such file or directory
             executable = Path(Path(sys.argv[0]).parent, "for_runners-script.py")
-            print("Patch executeable to: %s" % executable)
-            assert executable.is_file(), "Executeable not found here: %s" % executable
+            print(f"Patch executeable to: {executable}")
+            assert executable.is_file(), f"Executeable not found here: {executable}"
             sys.argv[0] = str(executable)
 
         try:

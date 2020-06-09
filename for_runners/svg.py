@@ -2,8 +2,10 @@ import io
 import logging
 
 import svgwrite
+
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx import get_2d_coordinate_list
+
 
 log = logging.getLogger(__name__)
 

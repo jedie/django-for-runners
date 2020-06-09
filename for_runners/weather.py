@@ -21,6 +21,7 @@ import urllib.request
 from pprint import pprint
 from urllib.error import URLError
 
+
 log = logging.getLogger(__name__)
 
 
@@ -37,11 +38,11 @@ def request_json(url, timeout=3, user_agent="python"):
         with urllib.request.urlopen(request, timeout=timeout) as f:
             json_data = f.read()
     except (URLError, socket.timeout) as err:
-        print("ERROR: %s (url: %r)" % (err, url))
+        print(f"ERROR: {err} (url: {url!r})")
         raise NoWeatherData
     else:
         response_time_ms = round((time.time() - start_time) * 1000, 1)
-        print("Response in: %.1fms (url: %r)" % (response_time_ms, url))
+        print(f"Response in: {response_time_ms:.1f}ms (url: {url!r})")
         if isinstance(json_data, bytes):
             json_data = json_data.decode("utf-8")
         data = json.loads(json_data)
@@ -75,7 +76,7 @@ class MetaWeatherCom:
         except KeyError:
             log.info("Request WOEID")
 
-        json_data = self._request(url="/location/search/?lattlong=%s,%s" % (lat, lon))
+        json_data = self._request(url=f"/location/search/?lattlong={lat},{lon}")
         # pprint(json_data)
         # [{'distance': 1836,
         #   'latt_long': '36.974018,-122.030952',
@@ -111,9 +112,7 @@ class MetaWeatherCom:
 
     def location_day(self, woeid, date, max_seconds=60):
 
-        url = "/location/{woeid}/{year}/{month}/{day}/".format(
-            woeid=woeid, year=date.year, month=date.month, day=date.day
-        )
+        url = f"/location/{woeid}/{date.year}/{date.month}/{date.day}/"
         try:
             json_data = self._location_day_cache[url]
         except KeyError:
@@ -198,7 +197,11 @@ class MetaWeatherCom:
 
         nearest_woeid, woe_data, json_data = self.lat_lon2woeid(lat, lon)
         log.info("Use nearest WOEID: %i (%r)", nearest_woeid, woe_data)
-        temperature, weather_state = self.location_day(woeid=nearest_woeid, date=date, max_seconds=max_seconds)
+        temperature, weather_state = self.location_day(
+            woeid=nearest_woeid,
+            date=date,
+            max_seconds=max_seconds
+        )
         return temperature, weather_state
 
 
@@ -210,7 +213,9 @@ if __name__ == "__main__":
     # woeid=648820 # Essen, city
 
     # nearest_woeid, woe_data, json_data = MetaWeatherCom().lat_lon2woeid(36.96, -122.02)
-    # print("woeid:", nearest_woeid, woe_data) # woeid: 2488853 {'distance': 1836, 'title': 'Santa Cruz', 'location_type': 'City', 'woeid': 2488853, 'latt_long': '36.974018,-122.030952'}
+    # print("woeid:", nearest_woeid, woe_data)
+    # woeid: 2488853 {'distance': 1836, 'title': 'Santa Cruz', 'location_type': 'City',
+    # 'woeid': 2488853, 'latt_long': '36.974018,-122.030952'}
 
     # /api/location/2487956/2013/4/30/ - San Francisco on 30th April 2013
     # MetaWeatherCom().location_day(woeid=2488853, date=datetime.date(year=2017, month=4, day=30))

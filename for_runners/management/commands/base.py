@@ -19,7 +19,7 @@ class BaseCommand(DjangoBaseCommand):
         e.g.:
         terminal encoding fallback to ASCII (e.g.: wrong server config in a ssh session)
         call gpx import command and the track contains non ASCII characters
-        
+
          File "...Django-ForRunners/src/django-for-runners/for_runners/management/commands/import_gpx.py", line 70, in handle
             self.stdout.write(self.style.SUCCESS("%i - Add new track: %s" % (no, instance)))
           File "...Django-ForRunners/lib/python3.6/site-packages/django/core/management/base.py", line 145, in write
@@ -37,16 +37,16 @@ class BaseCommand(DjangoBaseCommand):
 
             self.stderr.write("\n")
             self.stderr.write("*" * 79)
-            self.stderr.write("UnicodeEncodeError: %s" % err)
+            self.stderr.write(f"UnicodeEncodeError: {err}")
             self.stderr.write("\n")
             self.stderr.write("Hint:")
             self.stderr.write(" - Maybe python output encoding falls back to ASCII ?")
             self.stderr.write(" - setup your locales or set LANG or PYTHONIOENCODING ;)")
             self.stderr.write("\n")
-            self.stderr.write("locale: %s" % repr(locale.getlocale()))
-            self.stderr.write("LANG: %r" % os.environ.get("LANG"))
-            self.stderr.write("PYTHONIOENCODING: %r" % os.environ.get("PYTHONIOENCODING"))
-            self.stderr.write("sys.stdout.encoding: %r" % sys.stdout.encoding)
+            self.stderr.write(f"locale: {repr(locale.getlocale())}")
+            self.stderr.write(f"LANG: {os.environ.get('LANG')!r}")
+            self.stderr.write(f"PYTHONIOENCODING: {os.environ.get('PYTHONIOENCODING')!r}")
+            self.stderr.write(f"sys.stdout.encoding: {sys.stdout.encoding!r}")
             self.stderr.write("\n")
             self.stderr.write("*" * 79)
             self.stderr.write("\n")

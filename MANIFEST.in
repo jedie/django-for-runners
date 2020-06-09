@@ -14,8 +14,3 @@ recursive-exclude * *.py[co]
 
 recursive-exclude for_runners_project/media *
 recursive-exclude for_runners_project/static *
-
-include requirements.txt
-recursive-include requirements *.txt
-
-recursive-include docs *.rst conf.py git_sync.sh *.jpg *.png *.gif

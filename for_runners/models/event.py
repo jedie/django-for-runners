@@ -12,7 +12,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 # https://github.com/jedie/django-tools
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
@@ -20,6 +19,7 @@ from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 from for_runners.gpx_tools.humanize import human_distance, human_seconds
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DisciplineModel
+
 
 log = logging.getLogger(__name__)
 
@@ -198,7 +198,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     def verbose_name(self):
         parts = [self.event.verbose_name(), "-", self.person.username, "-", self.get_human_distance()]
         if self.duration:
-            parts.append("in %s" % self.human_duration())
+            parts.append(f"in {self.human_duration()}")
 
         result = " ".join([part for part in parts if part])
         return result
@@ -231,7 +231,7 @@ class CostModel(UpdateTimeBaseModel):
     )
 
     def __str__(self):
-        return "%s: %s" % (self.name, self.amount)
+        return f"{self.name}: {self.amount}"
 
     class Meta:
         verbose_name = _("Participation Cost")

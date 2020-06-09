@@ -13,6 +13,7 @@ from for_runners.gpx import get_extension_data, get_identifier
 from for_runners.models import DistanceModel
 from for_runners.weather import NoWeatherData, meta_weather_com
 
+
 log = logging.getLogger(__name__)
 
 
@@ -101,7 +102,7 @@ def calculate_values(*, gpx_track):
             start_address = reverse_geo(gpx_track.start_latitude, gpx_track.start_longitude)
         except Exception as err:
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
+            log.error(f"Can't reverse geo: {err}")
         else:
             gpx_track.short_start_address = start_address.short
             gpx_track.full_start_address = start_address.full
@@ -111,7 +112,7 @@ def calculate_values(*, gpx_track):
             finish_address = reverse_geo(gpx_track.finish_latitude, gpx_track.finish_longitude)
         except Exception as err:
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
-            log.error("Can't reverse geo: %s" % err)
+            log.error(f"Can't reverse geo: {err}")
         else:
             gpx_track.short_finish_address = finish_address.short
             gpx_track.full_finish_address = finish_address.full

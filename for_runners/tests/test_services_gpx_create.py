@@ -7,13 +7,13 @@
 from pathlib import Path
 
 from django.test import TestCase
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_pformat_equal
 from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
 from for_runners.services.gpx_create import add_from_file, add_from_files, add_gpx
+
 
 BASE_PATH = Path(__file__).parent
 
@@ -26,7 +26,7 @@ class GpxTests(TestUserMixin, TestCase):
     def assert_garmin_connect_1_gpx(self, instance):
         print(instance)
 
-        self.assertEqual(repr(instance), "<GpxModel: 2018-02-21 Moers Hülsdonk>")
+        self.assertEqual(repr(instance), "<GpxModel: 2018-02-21 Moers>")
 
         self.assertEqual(instance.points_no, 3)
         self.assertEqual(round(instance.length, 3), 4.727)
@@ -34,7 +34,7 @@ class GpxTests(TestUserMixin, TestCase):
         self.assertEqual(round(instance.pace, 3), 7.052)
         self.assertEqual(instance.heart_rate_avg, 125)
 
-        self.assertEqual(instance.get_short_slug(), "2018-02-21-moers-hulsdonk")
+        self.assertEqual(instance.get_short_slug(), "2018-02-21-moers")
 
     def test_add_gpx(self):
         filepath = Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")
@@ -60,5 +60,5 @@ class GpxTests(TestUserMixin, TestCase):
             )
         ]
         assert_pformat_equal(
-            instances, ["2018-02-21 Moers Hülsdonk", "2011-01-13 Berlin Tiergarten"]
+            instances, ["2018-02-21 Moers", "2011-01-13 Berlin Tiergarten"]
         )

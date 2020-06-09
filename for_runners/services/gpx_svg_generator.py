@@ -12,6 +12,7 @@ from django.core.files.base import ContentFile
 # https://github.com/jedie/django-for-runners
 from for_runners.svg import gpx2svg_string
 
+
 log = logging.getLogger(__name__)
 
 
@@ -41,7 +42,7 @@ def generate_svg(gpx_track, force=False):
     gpx_track.track_svg.save(
         name="temp.svg", content=content, save=False  # real file path will be set in self.get_svg_upload_path()
     )
-    log.debug("SVG created: %r" % gpx_track.track_svg)
+    log.debug(f"SVG created: {gpx_track.track_svg!r}")
     gpx_track.save()
 
 

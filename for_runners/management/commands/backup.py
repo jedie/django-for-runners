@@ -17,6 +17,7 @@ from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
 from for_runners.services.gpx_svg_generator import CsvGenerator
 from for_runners_project.utils.venv import VirtualEnvPath
 
+
 log = logging.getLogger(__name__)
 
 
@@ -30,10 +31,10 @@ class Command(BaseCommand):
     def backup_database(self, *, backup_path):
         db_file = Path(settings.DATABASES["default"]["NAME"])
         if not db_file.is_file():
-            print("Error database file not found: %s" % db_file)
+            print(f"Error database file not found: {db_file}")
         else:
             db_file_bak = Path(backup_path, db_file.name)
-            print("Backup database file to: %s" % db_file_bak)
+            print(f"Backup database file to: {db_file_bak}")
             shutil.copyfile(str(db_file), str(db_file_bak))
 
     def csv_user_export(self, *, backup_path):
@@ -43,12 +44,12 @@ class Command(BaseCommand):
             * generate .csv file per user
         """
         for user in gpx_users():
-            print("Export for user: %s" % user.username)
+            print(f"Export for user: {user.username}")
 
             out_path = Path(backup_path, user.username)
             out_path.mkdir(parents=True, exist_ok=False)
 
-            user_csv_path = Path(backup_path, "runnings_%s.csv" % user.username)
+            user_csv_path = Path(backup_path, f"runnings_{user.username}.csv")
 
             tracks = 0
 
@@ -58,7 +59,7 @@ class Command(BaseCommand):
                 for track in gpx_user_tracks(user=user):
                     print(".", end="", flush=True)
 
-                    filename = "%s.gpx" % track.get_short_slug()
+                    filename = f"{track.get_short_slug()}.gpx"
 
                     file_path = Path(out_path, filename)
                     with file_path.open("w") as f:
@@ -74,7 +75,7 @@ class Command(BaseCommand):
     def csv_complete_export(self, *, backup_path):
 
         csv_path = Path(backup_path, "runnings.csv")
-        print("Generate %s..." % csv_path)
+        print(f"Generate {csv_path}...")
 
         tracks = 0
 
@@ -95,7 +96,7 @@ class Command(BaseCommand):
 
         venv_path = VirtualEnvPath()
         env_path = venv_path.env_path
-        print("virtualenv path: %s" % env_path)
+        print(f"virtualenv path: {env_path}")
 
         now = datetime.datetime.now()
         timestamp = now.strftime("%Y%m%d_%H%M")
@@ -103,7 +104,7 @@ class Command(BaseCommand):
         backup_path = Path(env_path, "backups", timestamp)
 
         print("_" * 100)
-        print(" *** Create backup to: %s ***" % backup_path)
+        print(f" *** Create backup to: {backup_path} ***")
         print()
 
         backup_path.mkdir(parents=True, exist_ok=False)

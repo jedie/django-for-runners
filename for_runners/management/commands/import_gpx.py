@@ -34,21 +34,21 @@ class Command(BaseCommand):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist as err:
-            self.stderr.write("ERROR getting user %r: %s" % (username, err))
+            self.stderr.write(f"ERROR getting user {username!r}: {err}")
             user_names = ", ".join(User.objects.values_list("username", flat=True))
-            self.stdout.write("Existing usernames are: %s" % user_names)
+            self.stdout.write(f"Existing usernames are: {user_names}")
             sys.exit(3)
 
-        self.stdout.write("Add new gpx tracks for user: %s" % user)
+        self.stdout.write(f"Add new gpx tracks for user: {user}")
 
         path = Path(options.get("path"))
         path = path.expanduser()
         path = path.resolve()
         if not path.is_dir():
-            self.stderr.write("ERROR: Given path '%s' is not a existing directory!" % path)
+            self.stderr.write(f"ERROR: Given path '{path}' is not a existing directory!")
             sys.exit(4)
 
-        self.stdout.write("Read directory: %s" % path)
+        self.stdout.write(f"Read directory: {path}")
         self.stdout.write("\n")
 
         new_tracks = 0

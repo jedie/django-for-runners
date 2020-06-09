@@ -17,6 +17,7 @@ from gpxpy.geo import distance as geo_distance
 from for_runners.exceptions import GpxDataError
 from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 
+
 Identifier = collections.namedtuple(
     "Identifier", ("start_time, start_lat, start_lon, finish_time, finish_lat, finish_lon")
 )
@@ -84,11 +85,11 @@ class GpxIdentifier:
     def _identifier_string(self):
         data = []
         data.append(self.identifier.start_time.strftime("%Y%m%d%H%M%S"))
-        data.append("%.25f" % self.identifier.start_lat)
-        data.append("%.25f" % self.identifier.start_lon)
+        data.append(f"{self.identifier.start_lat:.25f}")
+        data.append(f"{self.identifier.start_lon:.25f}")
         data.append(self.identifier.finish_time.strftime("%Y%m%d%H%M%S"))
-        data.append("%.25f" % self.identifier.finish_lat)
-        data.append("%.25f" % self.identifier.finish_lon)
+        data.append(f"{self.identifier.finish_lat:.25f}")
+        data.append(f"{self.identifier.finish_lon:.25f}")
         return "_".join(data)
 
     def _prefix(self):
@@ -96,7 +97,7 @@ class GpxIdentifier:
 
     def get_prefix_id(self):
         identifier_string = self._identifier_string()
-        result = "%s_%s" % (self._prefix(), cutted_hash(identifier_string, length=6))
+        result = f"{self._prefix()}_{cutted_hash(identifier_string, length=6)}"
         return result
 
 
@@ -109,7 +110,7 @@ def parse_gpx(content):
 
 
 def parse_gpx_file(filepath):
-    assert filepath.is_file(), "File not found: '%s'" % filepath
+    assert filepath.is_file(), f"File not found: '{filepath}'"
     with filepath.open("r") as f:
         content = f.read()
 
@@ -119,8 +120,7 @@ def parse_gpx_file(filepath):
 def iter_points(gpxpy_instance):
     for track in gpxpy_instance.tracks:
         for segment in track.segments:
-            for point in segment.points:
-                yield point
+            yield from segment.points
 
 
 def iter_coordinates(gpxpy_instance):
@@ -337,18 +337,18 @@ class GpxSection:
             values = self.extension_data[key]
             print(key, values)
 
-            self.extension_data_median["%s_min" % key] = min(values)
-            self.extension_data_median["%s_max" % key] = max(values)
-            self.extension_data_median["%s_avg" % key] = statistics.median(values)
+            self.extension_data_median[f"{key}_min"] = min(values)
+            self.extension_data_median[f"{key}_max"] = max(values)
+            self.extension_data_median[f"{key}_avg"] = statistics.median(values)
 
     def get_extension_min(self, key):
-        return self.extension_data_median["%s_min" % key]
+        return self.extension_data_median[f"{key}_min"]
 
     def get_extension_max(self, key):
-        return self.extension_data_median["%s_max" % key]
+        return self.extension_data_median[f"{key}_max"]
 
     def get_extension_avg(self, key):
-        return self.extension_data_median["%s_avg" % key]
+        return self.extension_data_median[f"{key}_avg"]
 
 
 class GpxMedian:

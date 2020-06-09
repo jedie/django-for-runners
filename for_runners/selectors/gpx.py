@@ -13,6 +13,7 @@ from django.db.models import Count, Q
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
 
+
 log = logging.getLogger(__name__)
 
 

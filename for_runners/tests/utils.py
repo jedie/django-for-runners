@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
 
+
 # circumference of the equator is 40075.017 km (WGS 84)
 earth_circumference = 2 * math.pi * 6378.137  # ==> 40075.016685578485
 km_per_longitude = earth_circumference / 360  # ==> 111.31949166666666 km

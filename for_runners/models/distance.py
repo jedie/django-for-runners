@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.humanize import human_distance
 
+
 log = logging.getLogger(__name__)
 
 
@@ -62,7 +63,7 @@ class DistanceModel(models.Model):
     get_human_variance_as_length.short_description = _("Variance")
 
     def get_human_min_max(self):
-        return "%s - %s" % (human_distance(self.min_distance_m / 1000), human_distance(self.max_distance_m / 1000))
+        return f"{human_distance(self.min_distance_m / 1000)} - {human_distance(self.max_distance_m / 1000)}"
 
     get_human_min_max.short_description = _("Min/Max")
 

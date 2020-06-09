@@ -1,0 +1,87 @@
+[tool.poetry]
+name = "django-for-runners"
+version = "0.11.0"
+description = "Store your GPX tracks of your running (or other sports activity) in django."
+authors = ["JensDiemer <git@jensdiemer.de>"]
+packages = [
+    { include = "for_runners" },
+    { include = "for_runners_project" },
+    { include = "for_runners_tests" },
+]
+keywords=['running','gpx','gps-tracking','gps-data','django']
+classifiers = [
+    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    "Development Status :: 4 - Beta",
+    #"Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3 :: Only",
+    'Framework :: Django',
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Documentation",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP :: Site Management",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Operating System :: OS Independent",
+]
+
+# Will be generated from README.creole with: 'poetry run update_rst_readme'
+readme='README.rst'
+
+[tool.poetry.dependencies]
+python = "^3.6"
+click = "*"  # https://github.com/mitsuhiko/click
+colorama = "*"  # Console colors under windows: https://pypi.org/project/colorama/
+colorlog = "*"  # https://github.com/borntyping/python-colorlog
+gunicorn = "*"  # https://gunicorn.org/
+#
+# https://www.djangoproject.com/download/#supported-versions
+# v2.2 LTS - extended support until April 2022
+django = "2.2.*"
+django-debug-toolbar = "*"  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
+django-tools = "*"  # https://github.com/jedie/django-tools/
+django-import-export = "*"  # https://github.com/django-import-export/django-import-export
+autotask = "*"  # https://bitbucket.org/kbr/autotask
+gpxpy = "*" # https://github.com/tkrajina/gpxpy
+matplotlib = "*"  # http://matplotlib.org/
+svgwrite = "*"  # http://github.com/mozman/svgwrite.git
+geopy = "*"  # https://github.com/geopy/geopy
+lxml = "*"
+
+[tool.poetry.dev-dependencies]
+poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+tox = "*"
+pytest = "*"
+pytest-randomly = "*"
+pytest-cov = "*"
+pytest-django = "*"
+selenium = "*"
+django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
+coveralls = "*"
+isort = "*"
+flake8 = "*"
+flynt = "*"
+autopep8 = "*"
+pyupgrade = "*"
+
+[tool.poetry.scripts]
+# run the dev. server:
+for_runners = "for_runners_project.cli:cli"
+# run manage commands:
+manage = "for_runners_project.__main__:manage"
+update_rst_readme = "for_runners_project.publish:update_readme"
+publish = "for_runners_project.publish:publish"
+
+[tool.autopep8]
+# https://github.com/hhatto/autopep8#pyprojecttoml
+max_line_length = 120
+exclude = "*/migrations/*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

@@ -13,7 +13,6 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
-
 # https://github.com/jedie/django-tools
 from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
@@ -24,6 +23,7 @@ from for_runners.gpx_tools.humanize import human_distance, human_duration, human
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DistanceModel, ParticipationModel
+
 
 log = logging.getLogger(__name__)
 
@@ -187,8 +187,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             (
                 # settings.MEDIA_ROOT,
                 self.tracked_by.username,
-                "gpx_track_%s" % date_prefix,
-                "%s.%s" % (self.get_prefix_id(), file_extension),
+                f"gpx_track_{date_prefix}",
+                f"{self.get_prefix_id()}.{file_extension}",
             )
         )
         return upload_path
@@ -213,7 +213,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def svg_tag(self):
         if self.track_svg:
-            html = '<img src="{}" alt="gpx track" height="70px" width="70px" />'.format(self.track_svg.url)
+            html = f'<img src="{self.track_svg.url}" alt="gpx track" height="70px" width="70px" />'
             return mark_safe(html)
         return ""
 
@@ -221,7 +221,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def svg_tag_big(self):
         if self.track_svg:
-            html = '<img src="{}" alt="gpx track" height="200px" width="200px" />'.format(self.track_svg.url)
+            html = f'<img src="{self.track_svg.url}" alt="gpx track" height="200px" width="200px" />'
             return mark_safe(html)
         return ""
 
@@ -229,8 +229,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def start_end_address(self):
         if self.short_start_address == self.short_finish_address:
-            return "\u27F3 %s" % self.short_start_address
-        html = "%s<br>\u25BE<br>%s" % (self.short_start_address, self.short_finish_address)
+            return f"⟳ {self.short_start_address}"
+        html = f"{self.short_start_address}<br>▾<br>{self.short_finish_address}"
         return mark_safe(html)
 
     start_end_address.short_description = _("Start/End Address")
@@ -360,7 +360,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def human_pace(self):
         if self.pace:
-            return "%s min/km" % human_seconds(self.pace * 60)
+            return f"{human_seconds(self.pace * 60)} min/km"
 
     human_pace.short_description = _("Pace")
     human_pace.admin_order_field = "pace"
@@ -368,7 +368,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     def human_weather(self):
         if not self.start_temperature:
             return "-"
-        html = "%s°C<br/>%s" % (round(self.start_temperature, 1), self.start_weather_state)
+        html = f"{round(self.start_temperature, 1)}°C<br/>{self.start_weather_state}"
         return mark_safe(html)
 
     human_weather.short_description = _("Weather")
@@ -476,7 +476,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             pace = (duration_s / 60) / distance_km
         except ZeroDivisionError:
             # FIXME
-            log.exception("Error calculate pace with duration %rsec and distance %skm!" % (duration_s, distance_km))
+            log.exception(f"Error calculate pace with duration {duration_s!r}sec and distance {distance_km}km!")
         else:
             if pace > 99 or pace < 0:
                 log.error("Pace out of range: %f", pace)
@@ -499,7 +499,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         result = " ".join([str(part) for part in parts if part])
         if result:
             return result
-        return "GPX Track ID:%s" % self.pk
+        return f"GPX Track ID:{self.pk}"
 
     def get_short_slug(self):
         name = self.short_name()

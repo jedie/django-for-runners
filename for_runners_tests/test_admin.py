@@ -1,9 +1,6 @@
-# coding: utf-8
-
 import unittest
 
 import pytest
-
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.selenium_utils import (
     SeleniumChromiumTestCase,
@@ -15,7 +12,7 @@ from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 
 # https://github.com/jedie/django-for-runners
-from for_runners.version import __version__
+from for_runners import __version__
 
 
 @pytest.mark.django_db
@@ -45,7 +42,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
         self.assertResponse(
             response,
             must_contain=(
-                "<title>Site administration | Django-ForRunners v%s</title>" % __version__,
+                f"<title>Site administration | Django-ForRunners v{__version__}</title>",
                 "<h1>Site administration</h1>",
                 "<strong>staff_test_user</strong>",
                 "<p>You don't have permission to view or edit anything.</p>",
@@ -77,7 +74,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
 class AdminChromiumTests(SeleniumChromiumTestCase):
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
-        self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)
+        self.assert_equal_page_title(f"Log in | Django-ForRunners v{__version__}")
         self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
         self.assert_no_javascript_alert()
 
@@ -86,6 +83,6 @@ class AdminChromiumTests(SeleniumChromiumTestCase):
 class AdminFirefoxTests(SeleniumFirefoxTestCase):
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
-        self.assert_equal_page_title("Log in | Django-ForRunners v%s" % __version__)
+        self.assert_equal_page_title(f"Log in | Django-ForRunners v{__version__}")
         self.assert_in_page_source('<form action="/en/admin/login/" method="post" id="login-form">')
         self.assert_no_javascript_alert()
