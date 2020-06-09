@@ -1,6 +1,7 @@
 .*
 !.editorconfig
 !.gitignore
+!.isort.cfg
 !/.travis.yml
 !/.style.yapf
 !.coveralls.yml
