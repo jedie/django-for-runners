@@ -1,14 +1,10 @@
 from pathlib import Path
 
-import pytest
 from django.core.files.uploadedfile import UploadedFile
-# https://github.com/jedie/django-tools
-from django_tools.unittest_utils.BrowserDebug import debug_response
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 
 from for_runners import __version__
-# https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel
 
 
@@ -46,7 +42,7 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
 
         self.assertRedirects(
             response,
-            expected_url="/en/admin/for_runners/gpxmodel/%i/change/" % new_track.pk,
+            expected_url=f"/en/admin/for_runners/gpxmodel/{new_track.pk:d}/change/",
             status_code=302,
             target_status_code=200,
             fetch_redirect_response=False,

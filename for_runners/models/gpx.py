@@ -6,7 +6,7 @@
 
 import logging
 from decimal import Decimal as D
-from pathlib import Path
+
 
 from django.conf import settings
 from django.db import models

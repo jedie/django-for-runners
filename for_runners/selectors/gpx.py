@@ -7,8 +7,7 @@
 import logging
 
 from django.contrib.auth import get_user_model
-from django.db import NotSupportedError
-from django.db.models import Count, Q
+from django.db.models import Count
 
 # https://github.com/jedie/django-for-runners
 from for_runners.models import GpxModel

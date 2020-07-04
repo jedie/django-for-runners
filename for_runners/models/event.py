@@ -9,13 +9,11 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 from django.db import models
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-# https://github.com/jedie/django-tools
+
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
-# https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.humanize import human_distance, human_seconds
 from for_runners.model_utils import ModelAdminUrlMixin
 from for_runners.models import DisciplineModel

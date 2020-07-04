@@ -6,12 +6,11 @@
 import collections
 import logging
 from decimal import Decimal as D
-from pprint import pprint
 
-from django.conf import settings
+
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
-from django.db import models
+
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
