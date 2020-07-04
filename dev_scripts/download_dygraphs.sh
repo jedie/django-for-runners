@@ -9,8 +9,8 @@
 
 set -ex
 
-mkdir -p for_runners/static/dygraphs
-cd for_runners/static/dygraphs
+mkdir -p ../for_runners/static/dygraphs
+cd ../for_runners/static/dygraphs
 
 #
 # download link from:

@@ -6,7 +6,7 @@
 
 set -ex
 
-cd for_runners/static/chartjs
+cd ../for_runners/static/chartjs
 
 #
 # download link from:

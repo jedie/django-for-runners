@@ -6,7 +6,7 @@
 
 set -ex
 
-cd for_runners/static/leaflet
+cd ../for_runners/static/leaflet
 
 #
 # download link from:
