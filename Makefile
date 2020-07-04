@@ -28,6 +28,11 @@ install-poetry: ## install or update poetry
 install: check-poetry ## install django-for-runners via poetry
 	poetry install
 
+update: check-poetry ## update the sources and installation
+	git fetch --all
+	git pull origin master
+	poetry update
+
 lint: ## Run code formatters and linter
 	poetry run flynt --fail-on-change --line_length=${MAX_LINE_LENGTH} .
 	poetry run isort --check-only --recursive .
