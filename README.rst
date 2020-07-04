@@ -90,82 +90,99 @@ dependencies are:
 Linux
 =====
 
-#. Download the file `boot_django_for_runners.sh <https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh>`_ (right click and use "save under...")
-
-#. run ``boot_django_for_runners.sh``
-
-#. double click on ``~/Django-ForRunners/Django-ForRunners``
-
-#. insert user name/password in terminal
-
-All in one step, e.g.:
+Prepare: `install poetry <https://python-poetry.org/docs/#installation>`_ e.g.:
 
 ::
 
-    ~$ bash <(curl -s https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.sh)
+    ~$ sudo apt install python3-pip
+    ~$ pip3 install -U pip --user
+    ~$ pip3 install -U poerty --user
 
-Just double click on ``~/Django-ForRunners/Django-ForRunners`` in your file manager ;)
-
-Or start by hand, e.g.:
-
-::
-
-    ~$ cd ~/Django-ForRunners/bin
-    ~/Django-ForRunners/bin$ ./for_runners run-server
-
-More details:
-
-The shell script creates a python virtual environment and install all needed requirements into:
-
-* ``~/Django-ForRunners``
-
-The setup routine will install two commands:
-
-*  ``~/Django-ForRunners/bin/for_runners`` - CLI to start the web server to use Django-ForRunners
-
-*  ``~/Django-ForRunners/bin/manage`` - Run django manage commands with Django-ForRunners project settings
-
-e.g.:
+Clone the sources, e.g.:
 
 ::
 
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
-    (Django-ForRunners) ~/Django-ForRunners$ for_runners --help
+    ~$ git clone https://github.com/jedie/django-for-runners.git
+    ~$ cd django-for-runners
+    
+    # install via poetry:
+    ~/django-for-runners$ make install
+    
+    # Start Django dev. server:
+    ~/django-for-runners$ make run-dev-server
+
+Our Makefile help, e.g.:
+
+::
+
+    ~/django-for-runners$ make help
+    help                 List all commands
+    install-poetry       install or update poetry
+    install              install django-for-runners via poetry
+    update               update the sources and installation
+    lint                 Run code formatters and linter
+    fix-code-style       Fix code formatting
+    tox-listenvs         List all tox test environments
+    tox                  Run pytest via tox with all environments
+    tox-py36             Run pytest via tox with *python v3.6*
+    tox-py37             Run pytest via tox with *python v3.7*
+    tox-py38             Run pytest via tox with *python v3.8*
+    pytest               Run pytest
+    update-rst-readme    update README.rst from README.creole
+    publish              Release new version to PyPi
+    run-dev-server       Run the django dev server in endless loop.
+    run-server           Run the gunicorn server in endless loop.
+    backup               Backup everything
+    create-starter       Create starter file.
+    recreate-files       Recreate all SVG and GPX files for all Tracks.
+
+We have these commands:
+
+CLI to start the web server to use Django-ForRunners, e.g.:
+
+::
+
+    ~/django-for-runners$ poetry run for_runners --help
+    Django-ForRunners v0.11.0
+    Usage: for_runners [OPTIONS] COMMAND [ARGS]...
+    
+    Options:
+      --version  Show the version and exit.
+      --help     Show this message and exit.
+    
+    Commands:
+      backup          Backup everything
+      create-starter  Create starter file.
+      recreate-files  Recreate all SVG and GPX files for all Tracks.
+      run-dev-server  run the django dev server in endless loop.
+      run-server      Run the gunicorn server in endless loop.
+
+Run django manage commands with Django-ForRunners project settings, e.g.:
+
+::
+
+    ~/django-for-runners$ poetry run manage --help
     ...
-    (Django-ForRunners) ~/Django-ForRunners$ manage --help
+    Type 'manage help <subcommand>' for help on a specific subcommand.
+    
+    Available subcommands:
+    ...
+    [for_runners]
+        backup
+        base
+        fill_basedata
+        import_gpx
+        recreate_files
+    
+    [for_runners_helper_app]
+        run_server
     ...
 
 Windows
 =======
 
 TODO: Create shortcut (via pywin32?)
-
-#. Download the file `boot_django_for_runners.cmd <https://raw.githubusercontent.com/jedie/django-for-runners/master/boot_django_for_runners.cmd>`_ (right click and use "save under...")
-
-#. run ``boot_django_for_runners.cmd``
-
-The batch file creates a python virtual environment and install all needed requirements into:
-
-* ``C:\Program Files\Django-ForRunners``
-
-Start the development server with the test project by double click on:
-
-::
-
-    "C:\Program Files\Django-ForRunners\Scripts\for_runners.exe"
-
-----------------------------
-update existing installation
-----------------------------
-
-Just run ``for_runners update`` e.g.:
-
-::
-
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
-    (Django-ForRunners) ~/Django-ForRunners$ for_runners update
+TODO: Update `the old boot cmd file <https://github.com/jedie/django-for-runners/blob/v0.10.1/boot_django_for_runners.cmd>`_
 
 import GPX files
 ================
@@ -174,20 +191,18 @@ e.g.:
 
 ::
 
-    ~$ ~/Django-ForRunners/bin/manage import_gpx --username <django_username> ~/backups/gpx_files
+    ~/django-for-runners$ poetry run manage import_gpx --username <django_username> ~/backups/gpx_files
 
 **Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
 
 backup
 ======
 
-Create a backup into ``DjangoForRunnersEnv/backups/<timestamp>/`` e.g.:
+Create a backup into ``.../backups/<timestamp>/`` e.g.:
 
 ::
 
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
-    (Django-ForRunners) ~/Django-ForRunners$ for_runners backup
+    ~/django-for-runners$ poetry run for_runners backup
 
 The backup does:
 
@@ -206,9 +221,7 @@ regenerate all SVG files
 
 ::
 
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
-    (Django-ForRunners) ~/Django-ForRunners$ for_runners recreate-svg
+    ~/django-for-runners$ poetry run for_runners recreate-svg
 
 -----------
 Screenshots
@@ -258,16 +271,11 @@ run tests
 
 ::
 
-    # activate the virtualenv:
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
+    ~/Django-ForRunners$ make test
     
-    # run the tests:
-    (Django-ForRunners) ~/Django-ForRunners$ cd src/django-for-runners/
-    (Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ ./setup.py test
+    or:
     
-    # run text via tox:
-    (Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ ./setup.py tox
+    ~/Django-ForRunners$ make tox
 
 **Note:**
 
@@ -346,6 +354,8 @@ Django compatibility
 +--------------------+----------------+---------------+
 | django-for-runners | django version | python        |
 +====================+================+===============+
+| >=v0.11.0          | 2.2.x LTS      | 3.6, 3.7, 3.8 |
++--------------------+----------------+---------------+
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7 |
@@ -357,44 +367,27 @@ Django compatibility
 Backwards-incompatible changes
 ------------------------------
 
-v0.9
-====
+Older changes, see:
 
-How to update:
---------------
-
-::
-
-    ~$ cd Django-ForRunners/
-    ~/Django-ForRunners$ source bin/activate
-    (Django-ForRunners) ~/Django-ForRunners$ cd src/django-for-runners/
-    (Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ git pull origin master
-    (Django-ForRunners) ~/Django-ForRunners/src/django-for-runners$ for_runners update
-
-How to migrate
---------------
-
-* The SQlite database was moved.
-
-If you would like to migrate, move/rename this file
-
-``~/Django-ForRunners/src/django-for-runners/test_project_db.sqlite3``
-
-to:
-
-``~/Django-ForRunners/Django-ForRunners-database.sqlite3``
-
-* cli arguments changed with click v7.0: ``"_" -> "-"``, e.g.: ``"run_server" -> "run-server"``
+`https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes <https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes>`_
 
 -------
 history
 -------
 
-* `compare v0.10.1...master <https://github.com/jedie/django-for-runners/compare/v0.10.1...master>`_ **dev** 
+* `compare v0.11.0...master <https://github.com/jedie/django-for-runners/compare/v0.11.0...master>`_ **dev** 
+
+    * tbc
+
+* `04.07.2020 - v0.11.0 <https://github.com/jedie/django-for-runners/compare/v0.10.1...v0.11.0>`_:
 
     * refactor gpx import code
 
-    * tbc
+    * update tests
+
+    * Use poetry and add Makefile
+
+    * update code style
 
 * `09.08.2019 - v0.10.1 <https://github.com/jedie/django-for-runners/compare/v0.10.0...v0.10.1>`_:
 
@@ -608,4 +601,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2020-06-06 16:29:12 with "python-creole"``
+``Note: this file is generated from README.creole 2020-07-04 19:49:40 with "python-creole"``
