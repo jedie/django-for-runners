@@ -3,7 +3,7 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
-import decimal
+
 
 from django import forms
 from django.conf import settings

@@ -4,7 +4,7 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-from for_runners.admin.discipline import DisciplineModelAdmin
-from for_runners.admin.distance import DistanceModelAdmin
-from for_runners.admin.event import EventLinkModelAdmin, EventModelAdmin, ParticipationModelAdmin
-from for_runners.admin.gpx import GpxModelAdmin
+from for_runners.admin.discipline import DisciplineModelAdmin  # noqa
+from for_runners.admin.distance import DistanceModelAdmin  # noqa
+from for_runners.admin.event import EventLinkModelAdmin, EventModelAdmin, ParticipationModelAdmin  # noqa
+from for_runners.admin.gpx import GpxModelAdmin  # noqa

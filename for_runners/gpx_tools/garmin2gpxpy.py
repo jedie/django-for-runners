@@ -8,7 +8,6 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-from pathlib import Path
 
 import gpxpy.gpx
 from lxml import etree

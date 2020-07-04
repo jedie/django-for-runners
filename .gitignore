@@ -1,5 +1,6 @@
 .*
 !.editorconfig
+!.flake8
 !.gitignore
 !.isort.cfg
 !/.travis.yml

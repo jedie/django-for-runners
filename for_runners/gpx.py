@@ -6,16 +6,13 @@
 import base64
 import collections
 import hashlib
-import io
 import statistics
-from pathlib import Path
 
 import gpxpy
 from gpxpy.geo import distance as geo_distance
 
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
-from for_runners.gpx_tools.garmin2gpxpy import garmin2gpxpy
 
 
 Identifier = collections.namedtuple(
@@ -142,19 +139,6 @@ def get_2d_coordinate_list(gpxpy_instance):
     return (lat_list, lon_list)
 
 
-def get_2d_coordinate_list(gpxpy_instance):
-    lat_list = []
-    lon_list = []
-    for latitude, longitude, elevation in iter_coordinates(gpxpy_instance):
-        lat_list.append(latitude)
-        lon_list.append(longitude)
-
-    if not lat_list or not lon_list:
-        raise GpxDataError("No track points in file!")
-
-    return (lat_list, lon_list)
-
-
 def add_extension_data(point):
     """
     Add all existing extension_data dict to the point.
@@ -228,7 +212,8 @@ def iter_distance(gpxpy_instance, distance):
         latitude, longitude, elevation = point.latitude, point.longitude, point.elevation
 
         previous_total_distance = total_distance
-        total_distance += geo_distance(old_latitude, old_longitude, old_elevation, latitude, longitude, elevation)
+        total_distance += geo_distance(
+            old_latitude, old_longitude, old_elevation, latitude, longitude, elevation)
 
         old_latitude, old_longitude, old_elevation = latitude, longitude, elevation
 
@@ -239,17 +224,20 @@ def iter_distance(gpxpy_instance, distance):
             previous_difference = abs(previous_total_distance - next_distance)
 
             print(
-                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm"
-                % (count, previous_total_distance, previous_difference, total_distance, current_difference)
+                f"no. {count:03d}: previous point {previous_total_distance:.1f}m"
+                f" diff: {previous_difference:.1f}m vs. current point {total_distance:.1f}m"
+                f" diff: {current_difference:.1f}m"
             )
 
             # We didn't use the >count< for resulting kilometers:
-            # Maybe the point density is very low and the real distance is greater than kilometers ;)
+            # Maybe the point density is very low and the real distance is greater than kilometers.
             # Use convert_distance_in_km() and the real distance.
 
             if previous_difference < current_difference:
                 # The deviation from the previous position is smaller:
-                yield previous_point, previous_total_distance, convert_distance_in_km(previous_total_distance)
+                yield previous_point, previous_total_distance, convert_distance_in_km(
+                    previous_total_distance
+                )
             else:
                 yield point, total_distance, convert_distance_in_km(total_distance)
 
@@ -281,7 +269,9 @@ def iter_distances(gpxpy_instance, distance):
         points.append(point)
         latitude, longitude, elevation = point.latitude, point.longitude, point.elevation
 
-        point_distance = geo_distance(old_latitude, old_longitude, old_elevation, latitude, longitude, elevation)
+        point_distance = geo_distance(
+            old_latitude, old_longitude, old_elevation, latitude, longitude, elevation
+        )
 
         previous_section_distance = section_distance
         section_distance += point_distance
@@ -295,12 +285,13 @@ def iter_distances(gpxpy_instance, distance):
             previous_difference = abs(previous_section_distance - next_distance)
 
             print(
-                "no. %03i: previous point %.1fm diff: %.1fm vs. current point %.1fm diff: %.1fm"
-                % (count, previous_section_distance, previous_difference, section_distance, current_difference)
+                f"no. {count:03d}: previous point {previous_section_distance:.1f}m"
+                f" diff: {previous_difference:.1f}m vs. current point {section_distance:.1f}m"
+                f" diff: {current_difference:.1f}m"
             )
 
             # We didn't use the >count< for resulting kilometers:
-            # Maybe the point density is very low and the real distance is greater than kilometers ;)
+            # Maybe the point density is very low and the real distance is greater than kilometers.
             # Use convert_distance_in_km() and the real distance.
 
             if previous_difference < current_difference:

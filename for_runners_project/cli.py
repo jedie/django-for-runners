@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import os
-import shutil
+
 import subprocess
 import sys
 import time
-from pathlib import Path
+
 
 import click
 
@@ -23,7 +23,7 @@ try:
     import django
     from django.core.management import call_command
 except ImportError as err:
-    print("\nERROR:\n")
+    print(f"\nERROR: {err}\n")
     import traceback
 
     traceback.print_exc()

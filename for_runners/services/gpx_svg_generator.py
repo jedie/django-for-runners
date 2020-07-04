@@ -5,7 +5,7 @@
 """
 import csv
 import logging
-from pathlib import Path
+
 
 from django.core.files.base import ContentFile
 

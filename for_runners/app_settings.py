@@ -12,7 +12,6 @@
 """
 
 import decimal
-from pathlib import Path as __Path
 
 
 # Base data for:

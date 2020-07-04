@@ -1,12 +1,8 @@
 import os
 import subprocess
-import tempfile
 import unittest
 from pathlib import Path
-from pprint import pprint
 
-# https://github.com/jedie/django-for-runners
-import for_runners
 from for_runners import __version__
 from for_runners_project import cli
 

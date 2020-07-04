@@ -4,16 +4,15 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-import math
+
 import operator
-import unittest
 from datetime import datetime
 from functools import reduce
 from pathlib import Path
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
 
-from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
+from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
 from for_runners.gpx import GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file
 from for_runners.tests.base import BaseTestCase
@@ -45,7 +44,12 @@ class GpxTests(BaseTestCase):
         print(gpxpy_instance)
         self.assertEqual(
             repr(gpxpy_instance),
-            "GPX(waypoints=[GPXWaypoint(51.43788, 6.61701, name='Somewhere', description='foobar', symbol='Waypoint')])",
+            (
+                "GPX(waypoints=["
+                "GPXWaypoint("
+                "51.43788, 6.61701, name='Somewhere', description='foobar', symbol='Waypoint'"
+                ")])"
+            ),
         )
 
     def test_parse_no_heart_rate_gpx(self):
@@ -120,6 +124,7 @@ class GpxMedianTests(BaseTestCase):
         gpxpy_instance.tracks.append(GPXTrack())
         gpxpy_instance.tracks[0].segments.append(GPXTrackSegment())
         points = gpxpy_instance.tracks[0].segments[0].points
+        assert points == []
 
         longitude_distance_km = 111.31949079327357
 
