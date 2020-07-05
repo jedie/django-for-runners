@@ -263,7 +263,7 @@ Django = ">=2.0"
 diff-match-patch = "*"
 
 [package.dependencies.tablib]
-extras = ["ods", "xls", "xlsx", "html", "yaml"]
+extras = ["xlsx", "html", "yaml", "xls", "ods"]
 version = ">=0.14.0"
 
 [[package]]
@@ -448,7 +448,7 @@ description = "A Python utility / library to sort Python imports."
 name = "isort"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "5.0.2"
+version = "5.0.3"
 
 [package.extras]
 pipfile_deprecated_finder = ["pipreqs", "requirementslib", "tomlkit (>=0.5.3)"]
@@ -821,7 +821,7 @@ category = "main"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = "*"
 version = "5.3.1"
 
 [[package]]
@@ -1358,8 +1358,8 @@ importlib-resources = [
     {file = "importlib_resources-3.0.0.tar.gz", hash = "sha256:19f745a6eca188b490b1428c8d1d4a0d2368759f32370ea8fb89cad2ab1106c3"},
 ]
 isort = [
-    {file = "isort-5.0.2-py3-none-any.whl", hash = "sha256:52530356f89f009c3e8e0bb36d3e0dc6ddb0a59926cb918d488e35582ecbfe36"},
-    {file = "isort-5.0.2.tar.gz", hash = "sha256:ba8e494fc13974ec02a623c4aaead306bb86a3102a1df8d399748445f32a78f2"},
+    {file = "isort-5.0.3-py3-none-any.whl", hash = "sha256:3fbfad425b0a08a2969c5e1821d88785c210a08656c029c28931a1620f2d0f12"},
+    {file = "isort-5.0.3.tar.gz", hash = "sha256:4c48d4cd773a6226baaaa176839e6f7ff82ef7c7842f6c54374fe2b14df4024b"},
 ]
 jdcal = [
     {file = "jdcal-1.4.1-py2.py3-none-any.whl", hash = "sha256:1abf1305fce18b4e8aa248cf8fe0c56ce2032392bc64bbd61b5dff2a19ec8bba"},
