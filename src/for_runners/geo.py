@@ -39,7 +39,7 @@ def reverse_geo(lat, lon):
 
     >>> address = reverse_geo("51.6239133", "6.9749074")
     >>> address.short
-    'Feldhausen, Bottrop'
+    'Bottrop Feldhausen'
     >>> address.full[:70] + '...'
     'Movie Park Germany, 1, Warner-Allee, Kuhberg, Feldhausen, Bottrop, Nor...'
 
