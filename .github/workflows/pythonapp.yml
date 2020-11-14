@@ -21,12 +21,9 @@ jobs:
 
     - name: 'Install package'
       run: |
-        make install-poetry
+        pip3 install poetry tox-gh-actions
         source $HOME/.poetry/env
-        poetry lock
-        poetry show --tree
         make install
-        pip3 install tox-gh-actions
 
     - name: 'List installed packages'
       run: |
