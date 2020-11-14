@@ -37,105 +37,90 @@
 ** Multiple user support (However: no rights management and currently only suitable for a handful of users)
 
 
-== try-out
+== Project structure
 
-dependencies are:
+There are two main directories:
 
-* pip (Debian/Ubuntu package name: {{{python3-pip}}})
+|= directory |= description
+| **[[https://github.com/jedie/django-for-runners/tree/master/src|/src/]]**               | The main  Django-ForRunners source code
+| **[[https://github.com/jedie/django-for-runners/tree/master/deployment|/deployment/]]** | deploy  Django-ForRunners for production use case
 
-=== Linux
+== install
 
-Prepare: [[https://python-poetry.org/docs/#installation|install poetry]] e.g.:
+There exists two kind of installation/usage:
 
-{{{
-~$ sudo apt install python3-pip
-~$ pip3 install -U pip --user
-~$ pip3 install -U poerty --user
-}}}
+* local development installation using poetry
+* production use with docker-compose
 
-Clone the sources, e.g.:
+This README contains only the information about local development installation.
+
+Read [[https://github.com/jedie/django-for-runners/tree/master/deployment#readme|/deployment/README]] for instruction to install  Django-ForRunners on a root server.
+
+
+=== prepare
+
 {{{
 ~$ git clone https://github.com/jedie/django-for-runners.git
-~$ cd django-for-runners
+~$ cd django-for-runners/
+~/django-for-runners$ make
+_________________________________________________________________
+DjangoForRunners - *dev* Makefile
 
-# install via poetry:
+install-poetry         install or update poetry
+install                install DjangoForRunners via poetry
+manage-update          Collectstatic + makemigration + migrate
+update                 update the sources and installation
+lint                   Run code formatters and linter
+fix-code-style         Fix code formatting
+tox-listenvs           List all tox test environments
+tox                    Run pytest via tox with all environments
+tox-py36               Run pytest via tox with *python v3.6*
+tox-py37               Run pytest via tox with *python v3.7*
+tox-py38               Run pytest via tox with *python v3.8*
+pytest                 Run pytest
+update-rst-readme      update README.rst from README.creole
+publish                Release new version to PyPi
+run-dev-server         Run the django dev server in endless loop.
+createsuperuser        Create super user
+messages               Make and compile locales message files
+dbbackup               Backup database
+dbrestore              Restore a database backup
+run-docker-dev-server  Start docker containers with current dev source code
+}}}
+
+
+=== local development installation
+
+{{{
+# install or update Poetry:
+~/django-for-runners$ make install-poetry
+
+# install  Django-ForRunners via poetry:
 ~/django-for-runners$ make install
+...
 
-# Start Django dev. server:
+# Collectstatic + makemigration + migrate:
+~/django-for-runners$ make manage-update
+
+# Create a django super user:
+~/django-for-runners$ ./manage.sh createsuperuser
+
+# start local dev. web server:
 ~/django-for-runners$ make run-dev-server
 }}}
 
-Our Makefile help, e.g.:
+The web page is available in Port 8000, e.g.: {{{http://127.0.0.1:8000/}}}
+
+
+=== local docker dev run
+
+You can run the deployment docker containers with current source code with:
 {{{
-~/django-for-runners$ make help
-help                 List all commands
-install-poetry       install or update poetry
-install              install django-for-runners via poetry
-update               update the sources and installation
-lint                 Run code formatters and linter
-fix-code-style       Fix code formatting
-tox-listenvs         List all tox test environments
-tox                  Run pytest via tox with all environments
-tox-py36             Run pytest via tox with *python v3.6*
-tox-py37             Run pytest via tox with *python v3.7*
-tox-py38             Run pytest via tox with *python v3.8*
-pytest               Run pytest
-update-rst-readme    update README.rst from README.creole
-publish              Release new version to PyPi
-run-dev-server       Run the django dev server in endless loop.
-run-server           Run the gunicorn server in endless loop.
-backup               Backup everything
-create-starter       Create starter file.
-recreate-files       Recreate all SVG and GPX files for all Tracks.
+~/django-for-runners$ make run-docker-dev-server
 }}}
+Just hit Cntl-C to stop the containers
 
-
-We have these commands:
-
-CLI to start the web server to use Django-ForRunners, e.g.:
-{{{
-~/django-for-runners$ poetry run for_runners --help
-Django-ForRunners v0.11.0
-Usage: for_runners [OPTIONS] COMMAND [ARGS]...
-
-Options:
-  --version  Show the version and exit.
-  --help     Show this message and exit.
-
-Commands:
-  backup          Backup everything
-  create-starter  Create starter file.
-  recreate-files  Recreate all SVG and GPX files for all Tracks.
-  run-dev-server  run the django dev server in endless loop.
-  run-server      Run the gunicorn server in endless loop.
-}}}
-
-Run django manage commands with Django-ForRunners project settings, e.g.:
-{{{
-~/django-for-runners$ poetry run manage --help
-...
-Type 'manage help <subcommand>' for help on a specific subcommand.
-
-Available subcommands:
-...
-[for_runners]
-    backup
-    base
-    fill_basedata
-    import_gpx
-    recreate_files
-
-[for_runners_helper_app]
-    run_server
-...
-}}}
-
-
-=== Windows
-
-TODO: Create shortcut (via pywin32?)
-TODO: Update [[https://github.com/jedie/django-for-runners/blob/v0.10.1/boot_django_for_runners.cmd|the old boot cmd file]]
-
+The web page is available on Port 80, e.g.: {{{http://localhost/}}}
 
 
 === import GPX files
@@ -277,11 +262,18 @@ Older changes, see:
 
 https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes
 
+=== v0.12.0
+
+Move main project sources into "/src/"
+Add deployment setup into "/development/"
 
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.11.0...master|compare v0.11.0...master]] **dev**
 ** tbc
+* [[https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0.rc1|v0.12.0.rc1 *dev*]]:
+** refactor project structure and add a deployment via docker-compose setup
+** Add django-axes and django-processinfo
 * [[https://github.com/jedie/django-for-runners/compare/v0.10.1...v0.11.0|04.07.2020 - v0.11.0]]:
 ** refactor gpx import code
 ** update tests
