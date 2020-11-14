@@ -36,9 +36,8 @@ fi
 	./manage.py migrate
 
     uwsgi \
-        --http for_runners:8000 \
-        --chdir /for_runners/ \
-        --wsgi-file /for_runners/wsgi.py \
+        --http "$(hostname):8000" \
+        --wsgi-file /django/wsgi.py \
         --master \
         --processes 2 \
         --threads 2 \

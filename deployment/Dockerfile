@@ -1,6 +1,9 @@
 FROM python:3.9-slim-buster
 # https://hub.docker.com/_/python
 
+ARG XDG_CACHE_HOME
+ENV XDG_CACHE_HOME=${XDG_CACHE_HOME}
+
 # Install deps
 RUN apt-get update \
     && apt-mark auto $(apt-mark showinstall) \
@@ -11,7 +14,7 @@ RUN apt-get update \
     && python3 -m pip install -U pip \
     && pip install -U psycopg2-binary
 
-WORKDIR /for_runners
+WORKDIR /django
 
 RUN pip install "django-for-runners>=0.11.0"
 

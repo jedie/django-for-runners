@@ -15,7 +15,7 @@ from django.conf import settings
 from for_runners.management.commands.base import BaseCommand
 from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
 from for_runners.services.gpx_svg_generator import CsvGenerator
-from for_runners_project.utils.venv import VirtualEnvPath
+
 
 
 log = logging.getLogger(__name__)
@@ -94,14 +94,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        venv_path = VirtualEnvPath()
-        env_path = venv_path.env_path
-        print(f"virtualenv path: {env_path}")
-
         now = datetime.datetime.now()
         timestamp = now.strftime("%Y%m%d_%H%M")
 
-        backup_path = Path(env_path, "backups", timestamp)
+        backup_path = Path(settings.PROJECT_PATH, "backups", timestamp)
 
         print("_" * 100)
         print(f" *** Create backup to: {backup_path} ***")

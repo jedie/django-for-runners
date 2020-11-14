@@ -6,7 +6,6 @@ authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
     { include = "for_runners", from = "src" },
     { include = "for_runners_project", from = "src" },
-    { include = "for_runners_tests", from = "src" },
 ]
 keywords=['running','gpx','gps-tracking','gps-data','django']
 classifiers = [
@@ -130,7 +129,7 @@ norecursedirs = ".* .git __pycache__ coverage* dist volumes"
 #    -p no:warnings
 addopts = """
     --import-mode=importlib
-    --ignore-glob=deployment/inventory/*
+    --ignore-glob=deployment/for_runners/*
     --reuse-db
     --nomigrations
     --cov=.
@@ -158,5 +157,5 @@ skip_missing_interpreters = True
 [testenv]
 whitelist_externals = pytest
 commands =
-    pytest --pyargs inventory for_runners_project
+    pytest --pyargs for_runners for_runners_project
 """
