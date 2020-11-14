@@ -8,7 +8,7 @@
 
 import sys as __sys
 
-from inventory_project.settings.base import *  # noqa
+from for_runners_project.settings.base import *  # noqa
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -61,4 +61,4 @@ DEBUG_TOOLBAR_CONFIG['JQUERY_URL'] = STATIC_URL + 'admin/js/vendor/jquery/jquery
 
 DEBUG_TOOLBAR_CONFIG['SHOW_TEMPLATE_CONTEXT'] = True
 DEBUG_TOOLBAR_CONFIG['SHOW_COLLAPSED'] = True  # Show toolbar collapsed by default.
-DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = 'inventory_project.middlewares.djdt_show'
+DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = 'for_runners_project.middlewares.djdt_show'

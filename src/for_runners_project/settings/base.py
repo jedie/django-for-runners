@@ -54,10 +54,8 @@ INSTALLED_APPS = [
     'axes',  # https://github.com/jazzband/django-axes
     'django_processinfo',  # https://github.com/jedie/django-processinfo/
 
-    'inventory.apps.InventoryConfig',
-
     # Django-ForRunners
-    'for_runners',
+    'for_runners.apps.ForRunnersConfig',
     'for_runners_project.for_runners_helper_app',
 ]
 

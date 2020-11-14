@@ -86,9 +86,9 @@ pyupgrade = "*"
 model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 
 [tool.poetry.scripts]
-manage = "inventory_project.manage:main"
-update_rst_readme = "inventory_project.publish:update_readme"
-publish = "inventory_project.publish:publish"
+manage = "for_runners_project.manage:main"
+update_rst_readme = "for_runners_project.publish:update_readme"
+publish = "for_runners_project.publish:publish"
 
 [build-system]
 requires = ["poetry>=0.12"]
@@ -109,7 +109,7 @@ case_sensitive=false
 skip_glob=["*/migrations/*","*/volumes/*"]
 multi_line_output=3
 include_trailing_comma=true
-known_first_party=["inventory","inventory_project","inventory_tests"]
+known_first_party=["inventory","for_runners_project","inventory_tests"]
 no_lines_before="LOCALFOLDER"
 default_section="THIRDPARTY"
 sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
@@ -119,7 +119,7 @@ lines_after_imports=2
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/latest/customize.html#pyproject-toml
 minversion = "6.0"
-DJANGO_SETTINGS_MODULE="inventory_project.settings.tests"
+DJANGO_SETTINGS_MODULE="for_runners_project.settings.tests"
 norecursedirs = ".* .git __pycache__ coverage* dist volumes"
 # sometimes helpfull "addopts" arguments:
 #    -vv
@@ -158,5 +158,5 @@ skip_missing_interpreters = True
 [testenv]
 whitelist_externals = pytest
 commands =
-    pytest --pyargs inventory inventory_project
+    pytest --pyargs inventory for_runners_project
 """

@@ -2,14 +2,9 @@
 
 from django.db import migrations
 
-# https://github.com/jedie/django-for-runners
-from for_runners_project.cli import call_manage_command
-
 
 def forwards(apps, schema_editor):
-    from for_runners.management.commands import recreate_files
-
-    call_manage_command(cmd_class=recreate_files)
+    pass
 
 
 class Migration(migrations.Migration):

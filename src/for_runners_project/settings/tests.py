@@ -1,4 +1,4 @@
-from inventory_project.settings.base import *  # noqa
+from for_runners_project.settings.base import *  # noqa
 
 
 DATABASES = {
