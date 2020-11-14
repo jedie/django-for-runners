@@ -30,7 +30,7 @@ jobs:
 
     - name: 'Run tests with Python v${{ matrix.python-version }}'
       run: |
-        make pytest
+        poetry run pytest -p no:parallel
 
     - name: 'Upload coverage report'
       run: bash <(curl -s https://codecov.io/bash)
