@@ -1,3 +1,4 @@
+import os
 import unittest
 
 import pytest
@@ -70,6 +71,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
         )
 
 
+@unittest.skipIf('CI' in os.environ, 'Skip, selenium tests does not work on CI run!')
 @unittest.skipUnless(chromium_available(), "Skip because Chromium is not available!")
 class AdminChromiumTests(SeleniumChromiumTestCase):
     def test_admin_login_page(self):
@@ -79,6 +81,7 @@ class AdminChromiumTests(SeleniumChromiumTestCase):
         self.assert_no_javascript_alert()
 
 
+@unittest.skipIf('CI' in os.environ, 'Skip, selenium tests does not work on CI run!')
 @unittest.skipUnless(firefox_available(), "Skip because Firefox is not available!")
 class AdminFirefoxTests(SeleniumFirefoxTestCase):
     def test_admin_login_page(self):
