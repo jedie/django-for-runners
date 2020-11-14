@@ -1,10 +1,9 @@
 .*
+!.github
 !.editorconfig
 !.flake8
 !.gitignore
-!.isort.cfg
 !/.travis.yml
-!/.style.yapf
 !.coveralls.yml
 
 # for django-dbbackup
