@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+    caddy: # https://hub.docker.com/_/caddy
+        environment:
+            - HOSTNAME=localhost
+            - LETSENCRYPT_EMAIL=internal
+
+    for_runners:
+        environment:
+            - DJANGO_SETTINGS_MODULE=docker_settings
+            - HOSTNAME=localhost
+        links:
+            - postgres:postgres
+        depends_on:
+            - postgres
+            - caddy
+        volumes:
+            - ./dist/:/dist/

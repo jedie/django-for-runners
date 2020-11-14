@@ -1,0 +1,28 @@
+# https://caddyserver.com/docs/caddyfile
+
+{$HOSTNAME} {
+    tls {$LETSENCRYPT_EMAIL}
+
+    log {
+        output stdout
+        format console
+        level WARN
+    }
+
+    header {
+        X-Robots-Tag "none"
+    }
+
+    respond /robots.txt 200 {
+        body "User-agent: *
+Disallow: /"
+        close
+    }
+
+    route {
+        file_server /static/* {
+            root /srv/
+        }
+        reverse_proxy for_runners:8000
+    }
+}

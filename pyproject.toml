@@ -1,12 +1,11 @@
 [tool.poetry]
 name = "django-for-runners"
-version = "0.11.0"
+version = "0.12.0.rc1"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
-    { include = "for_runners" },
-    { include = "for_runners_project" },
-    { include = "for_runners_tests" },
+    { include = "for_runners", from = "src" },
+    { include = "for_runners_project", from = "src" },
 ]
 keywords=['running','gpx','gps-tracking','gps-data','django']
 classifiers = [
@@ -29,20 +28,22 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
     "Operating System :: OS Independent",
 ]
+include = ['AUTHORS', 'LICENSE', 'README.creole']
 
 # Will be generated from README.creole with: 'poetry run update_rst_readme'
 readme='README.rst'
 
 [tool.poetry.dependencies]
-python = "^3.6"
 click = "*"  # https://github.com/mitsuhiko/click
+python = ">=3.7,<4.0.0"
 colorama = "*"  # Console colors under windows: https://pypi.org/project/colorama/
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
-gunicorn = "*"  # https://gunicorn.org/
+uWSGI = "*"
 #
 # https://www.djangoproject.com/download/#supported-versions
 # v2.2 LTS - extended support until April 2022
 django = "2.2.*"
+django-processinfo = "*"  # https://github.com/jedie/django-processinfo/
 django-debug-toolbar = "*"  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
 django-tools = "*"  # https://github.com/jedie/django-tools/
 django-import-export = "*"  # https://github.com/django-import-export/django-import-export
@@ -52,14 +53,28 @@ matplotlib = "*"  # http://matplotlib.org/
 svgwrite = "*"  # http://github.com/mozman/svgwrite.git
 geopy = "*"  # https://github.com/geopy/geopy
 lxml = "*"
+django-dbbackup = "*"  # https://github.com/django-dbbackup/django-dbbackup
+
+# We can't install v5 until https://github.com/python-poetry/poetry/issues/3320 is fixed!
+bx_py_utils = "!=5"  # https://github.com/boxine/bx_py_utils
+
+django-axes = "*"  # https://github.com/jazzband/django-axes
+docker-compose = { version = "*", optional = true }  # install via: poetry install --extras "docker"
+psycopg2-binary = { version = "*", optional = true }  # install via: poetry install --extras "postgres"
+
+[tool.poetry.extras]
+docker = ["docker-compose"]
+postgres = ["psycopg2-binary"]
 
 [tool.poetry.dev-dependencies]
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+python-creole = "*"  # https://github.com/jedie/python-creole
 tox = "*"
 pytest = "*"
 pytest-randomly = "*"
 pytest-cov = "*"
 pytest-django = "*"
+pytest-parallel = "*"
 selenium = "*"
 django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
 coveralls = "*"
@@ -68,20 +83,81 @@ flake8 = "*"
 flynt = "*"
 autopep8 = "*"
 pyupgrade = "*"
+model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 
 [tool.poetry.scripts]
-# run the dev. server:
-for_runners = "for_runners_project.cli:cli"
-# run manage commands:
-manage = "for_runners_project.__main__:manage"
+manage = "for_runners_project.manage:main"
 update_rst_readme = "for_runners_project.publish:update_readme"
 publish = "for_runners_project.publish:publish"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
 
 [tool.autopep8]
 # https://github.com/hhatto/autopep8#pyprojecttoml
 max_line_length = 120
 exclude = "*/migrations/*"
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
+atomic=true
+line_length=120
+case_sensitive=false
+skip_glob=["*/migrations/*","*/volumes/*"]
+multi_line_output=3
+include_trailing_comma=true
+known_first_party=["inventory","for_runners_project","inventory_tests"]
+no_lines_before="LOCALFOLDER"
+default_section="THIRDPARTY"
+sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+lines_after_imports=2
+
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/latest/customize.html#pyproject-toml
+minversion = "6.0"
+DJANGO_SETTINGS_MODULE="for_runners_project.settings.tests"
+norecursedirs = ".* .git __pycache__ coverage* dist volumes"
+# sometimes helpfull "addopts" arguments:
+#    -vv
+#    --verbose
+#    --capture=no
+#    --trace-config
+#    --full-trace
+#    -p no:warnings
+addopts = """
+    --import-mode=importlib
+    --ignore-glob=deployment/django/*
+    --reuse-db
+    --nomigrations
+    --cov=.
+    --cov-report term-missing
+    --cov-report html
+    --cov-report xml
+    --no-cov-on-fail
+    --showlocals
+    --doctest-modules
+    --failed-first
+    --last-failed-no-failures all
+    --new-first
+    -p no:randomly
+"""
+
+
+[tool.tox]
+# https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py39,py38,py37
+skip_missing_interpreters = True
+
+[testenv]
+passenv = *
+whitelist_externals = pytest
+commands =
+    pytest --workers auto --tests-per-worker 1 --pyargs for_runners for_runners_project
+"""

@@ -1,0 +1,223 @@
+=  Django-ForRunners - deployment instruction
+
+Web based management to catalog things including state and location etc. using Python/Django.
+
+**Note:**
+
+* This README contains only the instruction to install  Django-ForRunners on a root server.
+* Read [[https://github.com/jedie/ Django-ForRunners/tree/master#readme|the main README]] for local development installation.
+
+Pull requests welcome!
+
+
+== Project structure
+
+There are two main directories:
+
+|= directory |= description
+| **[[https://github.com/jedie/ Django-ForRunners/tree/master/src|/src/]]**               | The main  Django-ForRunners source code
+| **[[https://github.com/jedie/ Django-ForRunners/tree/master/deployment|/deployment/]]** | deploy  Django-ForRunners for production use case
+
+
+== deploy
+
+Install  Django-ForRunners on a root server:
+
+**Note:**
+
+* Running a public web server is a lot of work and brings some risks.
+* This instructions are only the basics to get  Django-ForRunners working.
+* To run the server safely, more work should be done, which is not explained here.
+* Run at your own risk! No warranty is given.
+
+
+=== prepare root server
+
+Here some steps for a fresh created root server:
+
+Update all packages, e.g.:
+{{{
+apt update && apt -y full-upgrade
+}}}
+
+Setup a normal user. You may use [[https://github.com/jedie/ Django-ForRunners/blob/deployment/scripts/setup_user.sh|scripts/setup_user.sh]]
+
+
+===  Setup SSH services
+
+{{{
+~# nano /etc/ssh/sshd_config
+}}}
+
+Change e.g.:
+{{{
+Port xxxx
+PermitRootLogin no
+PasswordAuthentication no
+}}}
+(Changing the Port may need to change a firewall/network settings)
+
+{{{
+# restart SSH deamon:
+~# service ssh restart
+
+# Display and follow the ssh log output to see connection errors:
+~# journalctl -f -u ssh
+}}}
+
+* Keep the current SSH session (with the log output) open!
+* Update your {{{~/.ssh/config}}}
+* Try to connect as the new, normal user in a **separate** terminal
+
+Only after a working new connection: Terminate the first root SSH session ;)
+
+
+=== setup unattended-upgrades
+
+{{{
+~$ sudo apt install unattended-upgrades
+~$ sudo dpkg-reconfigure unattended-upgrades
+~$ sudo nano /etc/apt/apt.conf.d/50unattended-upgrades
+}}}
+
+
+=== install requirements
+
+Install docker, see: https://docs.docker.com/engine/install/ubuntu/
+
+install some base packages, e.g.:
+{{{
+~$ sudo apt install git make
+}}}
+
+
+
+=== install  Django-ForRunners
+
+{{{
+# Checkout the deployment branch:
+~$ git clone https://github.com/jedie/ Django-ForRunners.git
+~$ cd  Django-ForRunners/deployment/
+
+# Theses Makefile targets exists:
+~/ Django-ForRunners/deployment$ make
+_________________________________________________________________
+ Django-ForRunners - *deployment* Makefile
+
+install-poetry       install or update poetry
+install              install requirements to setup project
+update               update the sources and docker containers
+up                   Start containers via docker-compose
+down                 Stop all containers
+prune                Cleanup docker
+build                Update docker container build
+init_postgres        Create postgres database
+createsuperuser      Create super user
+shell_for_runners      Go into bash shell in for_runners container
+shell_postgres       Go into bash shell in postgres container
+shell_caddy          Go into bash shell in caddy container
+caddy_environ        Prints the caddy environment
+logs                 Display docker logs from all containers
+logs_postgres        Display docker logs from postgres container
+logs_for_runners       Display docker logs from for_runners container
+logs_caddy           Display docker logs from caddy container
+dbbackup             Backup database
+dbrestore            Restore a database backup
+restart              Restart all containers
+upgrade_for_runners    Upgrade "for_runners" container and restart it
+restart_caddy        Restart caddy container
+reload_caddy         Reload Caddy server
+reload_for_runners     Reload server in "for_runners" container
+}}}
+
+Install, e.g.:
+
+{{{
+# install or update poetry:
+~/ Django-ForRunners/deployment$ make install-poetry
+}}}
+
+To keep poetry running (PATH must be expand) just logout and login ;)
+
+{{{
+# install requirements (e.g.: docker-compose) via poetry:
+~/ Django-ForRunners/deployment$ make install
+}}}
+
+Create a {{{.env}}} file in project root directory with these content, e.g.:
+{{{
+~/ Django-ForRunners/deployment$ touch .env
+~/ Django-ForRunners/deployment$ nano .env
+~/ Django-ForRunners/deployment$ cat .env
+# Your Public domain:
+HOSTNAME=domain.tld
+
+# eMail address for Let's encrypt:
+LETSENCRYPT_EMAIL=webmaster@domain.tld
+}}}
+
+For local testing of the docker-compose setup, used this values:
+{{{
+HOSTNAME=localhost
+LETSENCRYPT_EMAIL=internal
+}}}
+(Caddy will create a self signed https certificate)
+
+Start containers via docker-compose:
+{{{
+~/ Django-ForRunners/deployment$ make up
+}}}
+
+Notes: At the first start it takes a little while until the database is created ;)
+
+Create first super user:
+{{{
+~/ Django-ForRunners/deployment$ make docker_createsuperuser
+}}}
+
+* Now you should be able to connect to your  Django-ForRunners installation and login with created super user.
+* Redirect from **http** to **https** should work.
+* Let's Encrypt certificate should be installed and valid.
+* Containers should be restarted after a server reboot
+
+
+=== Maintenance
+
+TO keep everything up-to-date do the following steps:
+
+Update the OS call:
+{{{
+~/ Django-ForRunners/deployment$ sudo ./scripts/apt-distupgrade.sh
+}}}
+
+Update  Django-ForRunners installation and docker containers:
+{{{
+~/ Django-ForRunners/deployment$ make update
+}}}
+
+This will do:
+
+* update the source code
+* update docker-compose and all requirements
+* Pull and rebuild all docker containers
+* restart all docker containers
+
+Take a look at [[https://github.com/jedie/ Django-ForRunners/blob/deployment/scripts/apt-cleanup.sh|scripts/apt-cleanup.sh]] to keep your system clean.
+
+
+== links ==
+
+| Homepage   | http://github.com/jedie/ Django-ForRunners
+
+Web server stuff:
+
+* https://help.ubuntu.com/community/Security
+* https://help.ubuntu.com/lts/serverguide/automatic-updates.html
+* https://help.ubuntu.com/community/AutomaticSecurityUpdate
+
+
+== donation ==
+
+* [[https://www.paypal.me/JensDiemer|paypal.me/JensDiemer]]
+* [[https://flattr.com/submit/auto?uid=jedie&url=https%3A%2F%2Fgithub.com%2Fjedie%2F Django-ForRunners%2F|Flattr This!]]
+* Send [[http://www.bitcoin.org/|Bitcoins]] to [[https://blockexplorer.com/address/1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F|1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F]]
