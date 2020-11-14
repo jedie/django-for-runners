@@ -2,13 +2,12 @@ import os
 import unittest
 
 import pytest
-# https://github.com/jedie/django-tools
-from django_tools.unittest_utils.selenium_utils import (
-    SeleniumChromiumTestCase,
-    SeleniumFirefoxTestCase,
-    chromium_available,
-    firefox_available,
+from django_tools.selenium.chromedriver import chromium_available
+from django_tools.selenium.django import (
+    SeleniumChromiumStaticLiveServerTestCase,
+    SeleniumFirefoxStaticLiveServerTestCase,
 )
+from django_tools.selenium.geckodriver import firefox_available
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
 
@@ -73,7 +72,7 @@ class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
 
 @unittest.skipIf('CI' in os.environ, 'Skip, selenium tests does not work on CI run!')
 @unittest.skipUnless(chromium_available(), "Skip because Chromium is not available!")
-class AdminChromiumTests(SeleniumChromiumTestCase):
+class AdminChromiumTests(SeleniumChromiumStaticLiveServerTestCase):
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
         self.assert_equal_page_title(f"Log in | Django-ForRunners v{__version__}")
@@ -83,7 +82,7 @@ class AdminChromiumTests(SeleniumChromiumTestCase):
 
 @unittest.skipIf('CI' in os.environ, 'Skip, selenium tests does not work on CI run!')
 @unittest.skipUnless(firefox_available(), "Skip because Firefox is not available!")
-class AdminFirefoxTests(SeleniumFirefoxTestCase):
+class AdminFirefoxTests(SeleniumFirefoxStaticLiveServerTestCase):
     def test_admin_login_page(self):
         self.driver.get(self.live_server_url + "/admin/login/")
         self.assert_equal_page_title(f"Log in | Django-ForRunners v{__version__}")
