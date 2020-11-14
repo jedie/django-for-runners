@@ -84,6 +84,7 @@ flynt = "*"
 autopep8 = "*"
 pyupgrade = "*"
 model_bakery = "*"  # https://github.com/model-bakers/model_bakery
+requests-mock = "*"
 
 [tool.poetry.scripts]
 manage = "for_runners_project.manage:main"
