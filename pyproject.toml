@@ -131,8 +131,6 @@ norecursedirs = ".* .git __pycache__ coverage* dist volumes"
 addopts = """
     --import-mode=importlib
     --ignore-glob=deployment/django/*
-    --workers auto
-    --tests-per-worker 1
     --reuse-db
     --nomigrations
     --cov=.
@@ -161,5 +159,5 @@ skip_missing_interpreters = True
 passenv = *
 whitelist_externals = pytest
 commands =
-    pytest --pyargs for_runners for_runners_project
+    pytest --workers auto --tests-per-worker 1 --pyargs for_runners for_runners_project
 """
