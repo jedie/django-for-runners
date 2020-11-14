@@ -6,7 +6,6 @@
 import csv
 import logging
 
-
 from django.core.files.base import ContentFile
 
 # https://github.com/jedie/django-for-runners

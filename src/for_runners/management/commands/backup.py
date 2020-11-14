@@ -17,7 +17,6 @@ from for_runners.selectors.gpx import gpx_tracks, gpx_user_tracks, gpx_users
 from for_runners.services.gpx_svg_generator import CsvGenerator
 
 
-
 log = logging.getLogger(__name__)
 
 

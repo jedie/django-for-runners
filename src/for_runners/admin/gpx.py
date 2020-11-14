@@ -35,7 +35,6 @@ from for_runners.exceptions import GpxDataError
 from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
 from for_runners.gpx import add_extension_data, get_2d_coordinate_list, iter_distance, iter_points
 from for_runners.models import GpxModel
-
 from for_runners.services.gpx_svg_generator import generate_svg
 
 

@@ -7,7 +7,6 @@
 import logging
 from decimal import Decimal as D
 
-
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
