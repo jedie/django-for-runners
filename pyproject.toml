@@ -4,9 +4,9 @@ version = "0.11.0"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
-    { include = "for_runners" },
-    { include = "for_runners_project" },
-    { include = "for_runners_tests" },
+    { include = "for_runners", from = "src" },
+    { include = "for_runners_project", from = "src" },
+    { include = "for_runners_tests", from = "src" },
 ]
 keywords=['running','gpx','gps-tracking','gps-data','django']
 classifiers = [
