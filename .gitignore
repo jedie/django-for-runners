@@ -7,10 +7,18 @@
 !/.style.yapf
 !.coveralls.yml
 
+# for django-dbbackup
+/backups/
+!/backups/.gitkeep
+
 # from test projects:
-for_runners_project/static/
-for_runners_project/media/
-test_project_db.sqlite3
+/static/
+/media/
+*.sqlite3
+
+
+# Django
+secret.txt
 
 # Coverage HTML Report files:
 htmlcov
