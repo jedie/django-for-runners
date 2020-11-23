@@ -27,5 +27,5 @@ class GeoTests(TestCase):
             address = reverse_geo(lat, lon)
         assert address.short == 'Moers'
         assert address.full == (
-            '148, Filder Straße, Vinn, Moers, Kreis Wesel, North Rhine-Westphalia, 47447, Germany'
+            '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland'
         )
