@@ -1,5 +1,7 @@
+import json
 from pathlib import Path
 
+import requests_mock
 from django.core.files.uploadedfile import UploadedFile
 from django_tools.unittest_utils.unittest_base import BaseTestCase
 from django_tools.unittest_utils.user import TestUserMixin
@@ -23,17 +25,30 @@ class ForRunnerAdminTests(TestUserMixin, BaseTestCase):
         gpx_file_path2 = Path(BASE_PATH, "fixture_files/no_track_points.gpx")
 
         with gpx_file_path1.open("rb") as file1, gpx_file_path2.open("rb") as file2:
-
-            response = self.client.post(
-                "/en/admin/for_runners/gpxmodel/upload/",
-                data={
-                    "gpx_files": [
-                        UploadedFile(file=file1, name=gpx_file_path1.name, content_type="application/gpx+xml"),
-                        UploadedFile(file=file2, name=gpx_file_path2.name, content_type="application/gpx+xml"),
-                    ]
-                },
-                HTTP_ACCEPT_LANGUAGE="en",
-            )
+            with requests_mock.mock() as m:
+                m.get(
+                    ('https://nominatim.openstreetmap.org/reverse'
+                     '?lat=51.437889290973544&lon=6.617012657225132'
+                     '&format=json&addressdetails=1'),
+                    headers={'Content-Type': 'application/json'},
+                    content=open(BASE_PATH / 'fixture_files/osm_reverse1.json', 'rb').read()
+                )
+                response = self.client.post(
+                    "/en/admin/for_runners/gpxmodel/upload/",
+                    data={
+                        "gpx_files": [
+                            UploadedFile(
+                                file=file1, name=gpx_file_path1.name,
+                                content_type="application/gpx+xml"
+                            ),
+                            UploadedFile(
+                                file=file2, name=gpx_file_path2.name,
+                                content_type="application/gpx+xml"
+                            ),
+                        ]
+                    },
+                    HTTP_ACCEPT_LANGUAGE="en",
+                )
             # debug_response(response)
 
         tracks = GpxModel.objects.all()
