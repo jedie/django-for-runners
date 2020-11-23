@@ -21,7 +21,10 @@ def construct_short_address(address):
         parts.append(f"{address['village']},")
         parts.append(address["county"])
     else:
-        parts.append(address.get("city") or address.get("town") or address.get("county") or address.get("state"))
+        parts.append(
+            address.get("city") or address.get("town")
+            or address.get("county") or address.get("state")
+        )
         parts.append(address.get("suburb"))
 
     results = []
@@ -36,15 +39,6 @@ def construct_short_address(address):
 def reverse_geo(lat, lon):
     """
     Create short+full address string from given geo coordinates
-
-    >>> address = reverse_geo("51.6239133", "6.9749074")
-    >>> address.short
-    'Bottrop Feldhausen'
-    >>> address.full[:70] + '...'
-    'Movie Park Germany, 1, Warner-Allee, Kuhberg, Feldhausen, Bottrop, Nor...'
-
-    >>> reverse_geo("52.518611", "13.376111").short
-    'Berlin Tiergarten'
 
     :return: Address named tuple
         short : string
