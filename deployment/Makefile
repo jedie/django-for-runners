@@ -4,7 +4,7 @@ all: help
 
 help:
 	@echo -e '_________________________________________________________________'
-	@echo -e ' Django-ForRunners - *deployment* Makefile\n'
+	@echo -e '*Deployment* Makefile\n'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -_]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 check-poetry:
@@ -59,6 +59,7 @@ prune:  ## Cleanup docker
 	docker system prune --force --all --filter until=4464h
 
 build: check-compose  ## Update docker container build
+	./compose.sh pull
 	./compose.sh build --pull
 
 init_postgres:  ## Create postgres database
@@ -67,12 +68,12 @@ init_postgres:  ## Create postgres database
 ##############################################################################
 
 createsuperuser:  ## Create super user
-	./compose.sh exec for_runners ./manage.sh createsuperuser
+	./compose.sh exec django ./manage.sh createsuperuser
 
 ##############################################################################
 
-shell_for_runners:  ## Go into bash shell in for_runners container
-	./compose.sh exec for_runners /bin/bash
+shell_django:  ## Go into bash shell in django container
+	./compose.sh exec django /bin/bash
 
 shell_postgres:  ## Go into bash shell in postgres container
 	./compose.sh exec postgres /bin/bash
@@ -93,8 +94,8 @@ logs:  ## Display docker logs from all containers
 logs_postgres:  ## Display docker logs from postgres container
 	./compose.sh logs --tail=500 --follow postgres
 
-logs_for_runners:  ## Display docker logs from for_runners container
-	./compose.sh logs --tail=500 --follow for_runners
+logs_django:  ## Display docker logs from django container
+	./compose.sh logs --tail=500 --follow django
 
 logs_caddy:  ## Display docker logs from caddy container
 	./compose.sh logs --tail=500 --follow caddy
@@ -102,18 +103,18 @@ logs_caddy:  ## Display docker logs from caddy container
 ##############################################################################
 
 dbbackup:  ## Backup database
-	./compose.sh exec for_runners ./manage.sh dbbackup
+	./compose.sh exec django ./manage.sh dbbackup
 
 dbrestore:  ## Restore a database backup
-	./compose.sh exec for_runners ./manage.sh dbrestore
+	./compose.sh exec django ./manage.sh dbrestore
 
 ##############################################################################
 
 restart: down up  ## Restart all containers
 
-upgrade_for_runners:  ## Upgrade "for_runners" container and restart it
+upgrade_django:  ## Upgrade "django" container and restart it
 	$(MAKE) build
-	./compose.sh stop for_runners
+	./compose.sh stop django
 	$(MAKE) up
 
 restart_caddy:  ## Restart caddy container
@@ -126,9 +127,9 @@ reload_caddy:  ## Reload Caddy server
 	./compose.sh exec caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
 	$(MAKE) logs_caddy
 
-reload_for_runners:  ## Reload server in "for_runners" container
-	./compose.sh exec for_runners ./docker/kill_python.sh
-	./compose.sh logs --tail=500 --follow for_runners
+reload_django:  ## Reload server in "django" container
+	./compose.sh exec django /django/reload_gunicorn.sh
+	./compose.sh logs --tail=500 --follow django
 
 ##############################################################################
 

@@ -11,23 +11,28 @@ services:
             - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
             - ./volumes/caddy/data/:/data/:rw
             - ./volumes/caddy/config/:/config/:rw
+            # Servce django static files with caddy:
             - ./volumes/django/static/:/srv/static/:ro
         environment:
             - HOSTNAME=${HOSTNAME:-localhost}
             - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-internal}
 
-    for_runners:
+    django:
         build:
             context: .
             dockerfile: Dockerfile
+            args:
+                - PROJECT_PACKAGE_NAME=${PROJECT_PACKAGE_NAME}
+                - PROJECT_VERSION=${PROJECT_VERSION}
         restart: unless-stopped
-        hostname: for_runners
+        hostname: django
         ports:
             - "8000"
         env_file: ./common.env
         environment:
             - DJANGO_SETTINGS_MODULE=docker_settings
             - HOSTNAME=${HOSTNAME:-localhost}
+            - DB_NAME=${PROJECT_NAME}
         links:
             - postgres:postgres
         depends_on:
@@ -36,7 +41,10 @@ services:
         volumes:
             - ./django/:/django/:ro
             - ./volumes/django/:/django_volumes/:rw
+            # static files, served by caddy:
             - ./volumes/django/static/:/static/:rw
+            # Use files, served by django:
+            - ./volumes/django/media/:/media/:rw
             # e.g.: pip cache must be the same value as $XDG_CACHE_HOME !
             - ./volumes/cache/:/var/cache/:rw
         entrypoint: /django/entrypoint.sh
@@ -50,6 +58,7 @@ services:
             - "5432"
         env_file: ./common.env
         environment:
+            - DB_NAME=${PROJECT_NAME}
             - POSTGRES_HOST_AUTH_METHOD=trust
         volumes:
             - ./postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro

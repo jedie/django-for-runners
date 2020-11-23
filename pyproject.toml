@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-for-runners"
-version = "0.12.0.rc1"
+version = "0.12.0rc1"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
@@ -56,7 +56,7 @@ lxml = "*"
 django-dbbackup = "*"  # https://github.com/django-dbbackup/django-dbbackup
 
 # We can't install v5 until https://github.com/python-poetry/poetry/issues/3320 is fixed!
-bx_py_utils = "!=5"  # https://github.com/boxine/bx_py_utils
+bx_py_utils = "0.0.4"  # https://github.com/boxine/bx_py_utils
 
 django-axes = "*"  # https://github.com/jazzband/django-axes
 docker-compose = { version = "*", optional = true }  # install via: poetry install --extras "docker"

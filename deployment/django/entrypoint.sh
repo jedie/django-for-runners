@@ -26,27 +26,19 @@ if [ -d "/dist/" ] ; then
 else
     (
         set -x
-        pip3 install -U "django-for-runners>=0.5.0"
+        pip3 install -U "${PROJECT_PACKAGE_NAME}>=${PROJECT_VERSION}"
     )
 fi
+
 (
     set -x
 
     ./manage.py collectstatic --noinput
 	./manage.py migrate
 
-    uwsgi \
-        --http "$(hostname):8000" \
-        --wsgi-file /django/wsgi.py \
-        --master \
-        --processes 2 \
-        --threads 2 \
-        --ignore-sigpipe \
-        --ignore-write-errors \
-        --disable-write-exception \
-        --http-auto-chunked \
-        --http-keepalive
-    echo "uwsgi terminated with exit code: $?"
+    su django -c "/usr/local/bin/gunicorn --config /django/gunicorn.conf.py wsgi"
+
+    echo "gunicorn terminated with exit code: $?"
     sleep 3
     exit 1
 )
