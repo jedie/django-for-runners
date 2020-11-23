@@ -1,11 +1,11 @@
-=  Django-ForRunners - deployment instruction
+= PyInventory - deployment instruction
 
 Web based management to catalog things including state and location etc. using Python/Django.
 
 **Note:**
 
-* This README contains only the instruction to install  Django-ForRunners on a root server.
-* Read [[https://github.com/jedie/ Django-ForRunners/tree/master#readme|the main README]] for local development installation.
+* This README contains only the instruction to install PyInventory on a root server.
+* Read [[https://github.com/jedie/PyInventory/tree/master#readme|the main README]] for local development installation.
 
 Pull requests welcome!
 
@@ -15,18 +15,18 @@ Pull requests welcome!
 There are two main directories:
 
 |= directory |= description
-| **[[https://github.com/jedie/ Django-ForRunners/tree/master/src|/src/]]**               | The main  Django-ForRunners source code
-| **[[https://github.com/jedie/ Django-ForRunners/tree/master/deployment|/deployment/]]** | deploy  Django-ForRunners for production use case
+| **[[https://github.com/jedie/PyInventory/tree/master/src|/src/]]**               | The main PyInventory source code
+| **[[https://github.com/jedie/PyInventory/tree/master/deployment|/deployment/]]** | deploy PyInventory for production use case
 
 
 == deploy
 
-Install  Django-ForRunners on a root server:
+Install PyInventory on a root server:
 
 **Note:**
 
 * Running a public web server is a lot of work and brings some risks.
-* This instructions are only the basics to get  Django-ForRunners working.
+* This instructions are only the basics to get PyInventory working.
 * To run the server safely, more work should be done, which is not explained here.
 * Run at your own risk! No warranty is given.
 
@@ -40,7 +40,7 @@ Update all packages, e.g.:
 apt update && apt -y full-upgrade
 }}}
 
-Setup a normal user. You may use [[https://github.com/jedie/ Django-ForRunners/blob/deployment/scripts/setup_user.sh|scripts/setup_user.sh]]
+Setup a normal user. You may use [[https://github.com/jedie/PyInventory/blob/deployment/scripts/setup_user.sh|scripts/setup_user.sh]]
 
 
 ===  Setup SSH services
@@ -92,17 +92,17 @@ install some base packages, e.g.:
 
 
 
-=== install  Django-ForRunners
+=== install PyInventory
 
 {{{
 # Checkout the deployment branch:
-~$ git clone https://github.com/jedie/ Django-ForRunners.git
-~$ cd  Django-ForRunners/deployment/
+~$ git clone https://github.com/jedie/PyInventory.git
+~$ cd PyInventory/deployment/
 
 # Theses Makefile targets exists:
-~/ Django-ForRunners/deployment$ make
+~/PyInventory/deployment$ make
 _________________________________________________________________
- Django-ForRunners - *deployment* Makefile
+*Deployment* Makefile
 
 install-poetry       install or update poetry
 install              install requirements to setup project
@@ -113,42 +113,42 @@ prune                Cleanup docker
 build                Update docker container build
 init_postgres        Create postgres database
 createsuperuser      Create super user
-shell_for_runners      Go into bash shell in for_runners container
+shell_django         Go into bash shell in django container
 shell_postgres       Go into bash shell in postgres container
 shell_caddy          Go into bash shell in caddy container
 caddy_environ        Prints the caddy environment
 logs                 Display docker logs from all containers
 logs_postgres        Display docker logs from postgres container
-logs_for_runners       Display docker logs from for_runners container
+logs_django          Display docker logs from django container
 logs_caddy           Display docker logs from caddy container
 dbbackup             Backup database
 dbrestore            Restore a database backup
 restart              Restart all containers
-upgrade_for_runners    Upgrade "for_runners" container and restart it
+upgrade_django       Upgrade "django" container and restart it
 restart_caddy        Restart caddy container
 reload_caddy         Reload Caddy server
-reload_for_runners     Reload server in "for_runners" container
+reload_django        Reload server in "django" container
 }}}
 
 Install, e.g.:
 
 {{{
 # install or update poetry:
-~/ Django-ForRunners/deployment$ make install-poetry
+~/PyInventory/deployment$ make install-poetry
 }}}
 
 To keep poetry running (PATH must be expand) just logout and login ;)
 
 {{{
 # install requirements (e.g.: docker-compose) via poetry:
-~/ Django-ForRunners/deployment$ make install
+~/PyInventory/deployment$ make install
 }}}
 
 Create a {{{.env}}} file in project root directory with these content, e.g.:
 {{{
-~/ Django-ForRunners/deployment$ touch .env
-~/ Django-ForRunners/deployment$ nano .env
-~/ Django-ForRunners/deployment$ cat .env
+~/PyInventory/deployment$ touch .env
+~/PyInventory/deployment$ nano .env
+~/PyInventory/deployment$ cat .env
 # Your Public domain:
 HOSTNAME=domain.tld
 
@@ -165,17 +165,17 @@ LETSENCRYPT_EMAIL=internal
 
 Start containers via docker-compose:
 {{{
-~/ Django-ForRunners/deployment$ make up
+~/PyInventory/deployment$ make up
 }}}
 
 Notes: At the first start it takes a little while until the database is created ;)
 
 Create first super user:
 {{{
-~/ Django-ForRunners/deployment$ make docker_createsuperuser
+~/PyInventory/deployment$ make docker_createsuperuser
 }}}
 
-* Now you should be able to connect to your  Django-ForRunners installation and login with created super user.
+* Now you should be able to connect to your PyInventory installation and login with created super user.
 * Redirect from **http** to **https** should work.
 * Let's Encrypt certificate should be installed and valid.
 * Containers should be restarted after a server reboot
@@ -187,12 +187,12 @@ TO keep everything up-to-date do the following steps:
 
 Update the OS call:
 {{{
-~/ Django-ForRunners/deployment$ sudo ./scripts/apt-distupgrade.sh
+~/PyInventory/deployment$ sudo ./scripts/apt-distupgrade.sh
 }}}
 
-Update  Django-ForRunners installation and docker containers:
+Update PyInventory installation and docker containers:
 {{{
-~/ Django-ForRunners/deployment$ make update
+~/PyInventory/deployment$ make update
 }}}
 
 This will do:
@@ -202,12 +202,12 @@ This will do:
 * Pull and rebuild all docker containers
 * restart all docker containers
 
-Take a look at [[https://github.com/jedie/ Django-ForRunners/blob/deployment/scripts/apt-cleanup.sh|scripts/apt-cleanup.sh]] to keep your system clean.
+Take a look at [[https://github.com/jedie/PyInventory/blob/deployment/scripts/apt-cleanup.sh|scripts/apt-cleanup.sh]] to keep your system clean.
 
 
 == links ==
 
-| Homepage   | http://github.com/jedie/ Django-ForRunners
+| Homepage   | http://github.com/jedie/PyInventory
 
 Web server stuff:
 
@@ -219,5 +219,5 @@ Web server stuff:
 == donation ==
 
 * [[https://www.paypal.me/JensDiemer|paypal.me/JensDiemer]]
-* [[https://flattr.com/submit/auto?uid=jedie&url=https%3A%2F%2Fgithub.com%2Fjedie%2F Django-ForRunners%2F|Flattr This!]]
+* [[https://flattr.com/submit/auto?uid=jedie&url=https%3A%2F%2Fgithub.com%2Fjedie%2FPyInventory%2F|Flattr This!]]
 * Send [[http://www.bitcoin.org/|Bitcoins]] to [[https://blockexplorer.com/address/1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F|1823RZ5Md1Q2X5aSXRC5LRPcYdveCiVX6F]]

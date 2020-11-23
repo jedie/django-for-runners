@@ -23,6 +23,6 @@ Disallow: /"
         file_server /static/* {
             root /srv/
         }
-        reverse_proxy for_runners:8000
+        reverse_proxy django:8000
     }
 }

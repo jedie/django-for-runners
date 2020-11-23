@@ -9,4 +9,5 @@ fi
 
 set -x
 
+source project.env
 exec poetry run docker-compose -f docker-compose.yml -f docker-compose.dev.yml "$@"
