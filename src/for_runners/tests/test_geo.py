@@ -1,6 +1,8 @@
 from unittest import TestCase
 
 import requests_mock
+from django.conf import settings
+from django.core.cache import cache
 
 from for_runners.geo import reverse_geo
 from for_runners.tests.fixture_files import fixture_content
@@ -28,6 +30,30 @@ class GeoTests(ClearCacheMixin, TestCase):
         assert address.short == 'Moers'
         assert address.full == (
             '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland'
+        )
+
+        # Check if cache works in tests:
+        assert settings.CACHES['default']['BACKEND'] == (
+            'django.core.cache.backends.locmem.LocMemCache'
+        )
+        cache.set('foo', 'bar', timeout=None)
+        assert cache.get('foo') == 'bar'
+
+        # Cache filled?
+        address = cache.get('reverse_geo_51.43789_6.61701')
+        assert address is not None
+        assert address == (
+            '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland',
+            {'city': 'Moers',
+             'country': 'Deutschland',
+             'country_code': 'de',
+             'county': 'Kreis Wesel',
+             'hamlet': 'Vinn',
+             'house_number': '148',
+             'postcode': '47447',
+             'road': 'Filder Straße',
+             'state': 'Nordrhein-Westfalen',
+             'suburb': 'Moers'}
         )
 
         # Second request is cached -> no request

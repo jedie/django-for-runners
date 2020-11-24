@@ -150,6 +150,16 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = str(__Path(BASE_PATH, 'media'))
 
 # _____________________________________________________________________________
+# Cache Backend
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# _____________________________________________________________________________
 # django-processinfo
 
 from django_processinfo import app_settings as PROCESSINFO  # noqa

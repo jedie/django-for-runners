@@ -35,16 +35,25 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
         self.assertEqual(instance.get_short_slug(), "2018-02-21")
 
     def test_add_gpx(self):
-        with locmem_stats_override_storage() as storage_stats:
-            with requests_mock.mock():
-                gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
-                instance = add_gpx(gpx_content=gpx_content, user=self.user)
-                self.assert_garmin_connect_1_gpx(instance)
-            assert storage_stats.fields_saved == [
-                ('for_runners', 'gpxmodel', 'track_svg'),
-                ('for_runners', 'gpxmodel', 'gpx_file')
-            ]
-            assert storage_stats.fields_read == []
+        with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
+            m.get(
+                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_5144_662.json')
+            )
+            m.get(
+                'https://www.metaweather.com/api/location/648820/2018/2/21/',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_location_648820_2018_2_21.json')
+            )
+            gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
+            instance = add_gpx(gpx_content=gpx_content, user=self.user)
+            self.assert_garmin_connect_1_gpx(instance)
+        assert storage_stats.fields_saved == [
+            ('for_runners', 'gpxmodel', 'track_svg'),
+            ('for_runners', 'gpxmodel', 'gpx_file')
+        ]
+        assert storage_stats.fields_read == []
 
     def test_add_from_file(self):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
