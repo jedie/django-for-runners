@@ -136,7 +136,7 @@ addopts = """
     --ignore-glob=deployment/django/*
     --reuse-db
     --nomigrations
-    --cov=.
+    --cov=src
     --cov-report term-missing
     --cov-report html
     --cov-report xml
