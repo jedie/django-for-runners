@@ -11,14 +11,12 @@
 """
 import collections
 import datetime
-import json
 import logging
-import socket
 import statistics
 import time
-import urllib
-import urllib.request
-from urllib.error import URLError
+
+import requests
+from requests import HTTPError
 
 
 log = logging.getLogger(__name__)
@@ -28,23 +26,20 @@ class NoWeatherData(ValueError):
     pass
 
 
-def request_json(url, timeout=3, user_agent="python"):
-    request = urllib.request.Request(url)
-    request.add_header("User-Agent", user_agent)
+def request_json(url, timeout=3, user_agent="django-for-runners"):
+    headers = {'user-agent': user_agent}
 
     start_time = time.time()
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as f:
-            json_data = f.read()
-    except (URLError, socket.timeout) as err:
+        r = requests.get(url, headers=headers, timeout=timeout)
+        r.raise_for_status()
+        data = r.json()
+    except (HTTPError, ValueError) as err:
         print(f"ERROR: {err} (url: {url!r})")
         raise NoWeatherData
     else:
         response_time_ms = round((time.time() - start_time) * 1000, 1)
         print(f"Response in: {response_time_ms:.1f}ms (url: {url!r})")
-        if isinstance(json_data, bytes):
-            json_data = json_data.decode("utf-8")
-        data = json.loads(json_data)
         return data
 
 
