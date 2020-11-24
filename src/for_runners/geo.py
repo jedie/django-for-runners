@@ -77,6 +77,7 @@ def reverse_geo(lat, lon):
         full_address = location.address
         raw_address = location.raw["address"]
         address = (full_address, raw_address)
+        log.debug(f'Store to cache: {cache_key!r}')
         cache.set(
             cache_key, address,
             timeout=None  # cache forever
