@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 import requests_mock
+from django.conf import settings
 from django.core.cache import cache
 
 from for_runners.geo import reverse_geo
@@ -30,6 +31,13 @@ class GeoTests(ClearCacheMixin, TestCase):
         assert address.full == (
             '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland'
         )
+
+        # Check if cache works in tests:
+        assert settings.CACHES['default']['BACKEND'] == (
+            'django.core.cache.backends.locmem.LocMemCache'
+        )
+        cache.set('foo', 'bar', timeout=None)
+        assert cache.get('foo') == 'bar'
 
         # Cache filled?
         address = cache.get('reverse_geo_51.43789_6.61701')
