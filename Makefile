@@ -48,10 +48,10 @@ lint: ## Run code formatters and linter
 	poetry run flake8 .
 
 fix-code-style: ## Fix code formatting
-	poetry run flynt -e "volumes" --line_length=${MAX_LINE_LENGTH} .
-	poetry run pyupgrade --exit-zero-even-if-changed --py3-plus --py36-plus --py37-plus `find . -name "*.py" -type f ! -path "./.tox/*" ! -path "./volumes/*" 2>/dev/null`
-	poetry run isort .
-	poetry run autopep8 --exclude="volumes,migrations" --aggressive --aggressive --in-place --recursive .
+	poetry run flynt -e "volumes" --line_length=${MAX_LINE_LENGTH} src
+	poetry run pyupgrade --exit-zero-even-if-changed --py3-plus --py36-plus --py37-plus `find src -name "*.py" -type f ! -path "./.tox/*" ! -path "./volumes/*" 2>/dev/null`
+	poetry run isort src
+	poetry run autopep8 --exclude="volumes,migrations" --aggressive --aggressive --in-place --recursive src
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
