@@ -6,6 +6,7 @@
 import math
 from datetime import datetime, timedelta
 
+from django.core.cache import cache
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackPoint, GPXTrackSegment
 
 
@@ -75,3 +76,9 @@ def generate_gpx_track(
         print("\t", td)
 
     return gpxpy_instance
+
+
+class ClearCacheMixin:
+    def setUp(self):
+        super().setUp()
+        cache.clear()

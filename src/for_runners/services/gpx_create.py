@@ -55,6 +55,7 @@ def add_from_file(*, gpx_file_file_path, user):
     """
     assert_is_file(gpx_file_file_path)
 
+    log.info(f'Add GPX file: {gpx_file_file_path}')
     with gpx_file_file_path.open("r") as f:
         gpx_content = f.read()
 

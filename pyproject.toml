@@ -54,6 +54,7 @@ svgwrite = "*"  # http://github.com/mozman/svgwrite.git
 geopy = "*"  # https://github.com/geopy/geopy
 lxml = "*"
 django-dbbackup = "*"  # https://github.com/django-dbbackup/django-dbbackup
+requests = "*"  # https://github.com/psf/requests
 
 # We can't install v5 until https://github.com/python-poetry/poetry/issues/3320 is fixed!
 bx_py_utils = "0.0.4"  # https://github.com/boxine/bx_py_utils
@@ -85,6 +86,7 @@ autopep8 = "*"
 pyupgrade = "*"
 model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 requests-mock = "*"
+django-override-storage = "*"  # https://github.com/danifus/django-override-storage
 
 [tool.poetry.scripts]
 manage = "for_runners_project.manage:main"

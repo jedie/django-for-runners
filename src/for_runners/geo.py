@@ -6,10 +6,14 @@
 import collections
 import logging
 
+from django.core.cache import cache
 from geopy.geocoders import Nominatim
 
 
 log = logging.getLogger(__name__)
+
+WGS84_NDIGITS = 5
+
 Address = collections.namedtuple("Address", ("short, full"))
 
 
@@ -46,14 +50,42 @@ def reverse_geo(lat, lon):
         full : string
             The "full" Address
     """
-    log.debug(f'reverse_geo lat={lat} lon={lon}')
-    geolocator = Nominatim(user_agent="django-for-runners")
-    location = geolocator.reverse(f"{lat}, {lon}")
+    lat2 = round(lat, ndigits=WGS84_NDIGITS)
+    if lat2 != lat:
+        log.debug(f'round lat={lat} -> {lat2}')
 
-    short_address = construct_short_address(address=location.raw["address"])
+    lon2 = round(lon, ndigits=WGS84_NDIGITS)
+    if lon2 != lon:
+        log.debug(f'round lat={lon} -> {lon2}')
+
+    log.debug(f'reverse_geo lat={lat2} lon={lon2}')
+
+    cache_key = f'reverse_geo_{lat2}_{lon2}'
+    address = cache.get(cache_key)
+    if address:
+        log.debug('reverse geo from cache')
+        full_address, raw_address = address
+    else:
+        geolocator = Nominatim(user_agent="django-for-runners")
+
+        # https://nominatim.org/release-docs/develop/api/Reverse/
+        location = geolocator.reverse(
+            query=f"{lat2}, {lon2}",
+            # TODO: language={user language}
+            zoom=17  # major and minor streets
+        )
+        full_address = location.address
+        raw_address = location.raw["address"]
+        address = (full_address, raw_address)
+        cache.set(
+            cache_key, address,
+            timeout=None  # cache forever
+        )
+
+    short_address = construct_short_address(address=raw_address)
     log.info(f'short_address={short_address}')
 
-    return Address(short_address, location.address)
+    return Address(short_address, full_address)
 
 
 if __name__ == "__main__":

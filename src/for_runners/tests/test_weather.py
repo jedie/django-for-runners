@@ -10,38 +10,58 @@
 
 import datetime
 
+import requests_mock
+
 from for_runners.tests.base import BaseTestCase
+from for_runners.tests.fixture_files import fixture_content
+from for_runners.tests.utils import ClearCacheMixin
 from for_runners.weather import NoWeatherData, meta_weather_com
 
 
-class WeatherTest(BaseTestCase):
-    """
-    TODO: Mock request!
-    """
-
+class WeatherTest(ClearCacheMixin, BaseTestCase):
     def test(self):
         lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
         date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
 
-        # Essen City on 21.06.2018
-        # https://www.metaweather.com/de/648820/2018/6/20/
-        temperature, weather_state = meta_weather_com.coordinates2weather(
-            lat, lon, date=date, max_seconds=12 * 60 * 60
-        )
+        with requests_mock.mock() as m:
+            m.get(
+                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_5141_678.json')
+            )
+            m.get(
+                'https://www.metaweather.com/api/location/648820/2018/6/20/',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_location_648820_2018_6_20.json')
+            )
+            temperature, weather_state = meta_weather_com.coordinates2weather(
+                lat, lon, date=date, max_seconds=12 * 60 * 60
+            )
 
-        self.assert_equal_rounded(temperature, 25.41, decimal_places=2)
-        self.assertEqual(weather_state, "Light Cloud/Showers")
+            self.assert_equal_rounded(temperature, 25.41, decimal_places=2)
+            self.assertEqual(weather_state, "Light Cloud/Showers")
 
     def test_small_max_seconds(self):
         lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
         date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
 
-        # Essen City on 21.06.2018
-        # https://www.metaweather.com/de/648820/2018/6/20/
-        temperature, weather_state = meta_weather_com.coordinates2weather(lat, lon, date=date, max_seconds=0.1)
+        with requests_mock.mock() as m:
+            m.get(
+                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_5141_678.json')
+            )
+            m.get(
+                'https://www.metaweather.com/api/location/648820/2018/6/20/',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_location_648820_2018_6_20.json')
+            )
+            temperature, weather_state = meta_weather_com.coordinates2weather(
+                lat, lon, date=date, max_seconds=0.1
+            )
 
-        self.assert_equal_rounded(temperature, 27.94, decimal_places=2)
-        self.assertEqual(weather_state, "Light Cloud")
+            self.assert_equal_rounded(temperature, 27.94, decimal_places=2)
+            self.assertEqual(weather_state, "Light Cloud")
 
     def test_no_json_data(self):
         """
@@ -56,5 +76,18 @@ class WeatherTest(BaseTestCase):
         lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
         date = datetime.datetime(year=2017, month=2, day=10, hour=12, minute=00)
 
-        with self.assertRaises(NoWeatherData):
-            temperature, weather_state = meta_weather_com.coordinates2weather(lat, lon, date=date)
+        with requests_mock.mock() as m:
+            m.get(
+                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('metaweather_5141_678.json')
+            )
+            m.get(
+                'https://www.metaweather.com/api/location/648820/2017/2/10/',
+                headers={'Content-Type': 'application/json'},
+                content=b'[]'
+            )
+            with self.assertRaises(NoWeatherData):
+                temperature, weather_state = meta_weather_com.coordinates2weather(
+                    lat, lon, date=date
+                )
