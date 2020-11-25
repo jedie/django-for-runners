@@ -5,18 +5,28 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
+from for_runners.views.media_files import UserMediaView
+
 
 admin.autodiscover()
 
+
 urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
+
     # until there is not real CMS pages: redirect to the interesting admin page:
     url(r"^$", RedirectView.as_view(url="/admin/for_runners/gpxmodel/")),
 )
 
+
+urlpatterns = [
+    # TODO: Change from user name to ID?
+    path('media/<slug:user_name>/<path:path>', UserMediaView.as_view()),
+] + urlpatterns
+
+
 if settings.SERVE_FILES:
     urlpatterns += static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
