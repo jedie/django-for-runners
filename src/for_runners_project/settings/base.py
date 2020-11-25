@@ -3,6 +3,7 @@
 """
 
 import logging
+import sys as __sys
 from pathlib import Path as __Path
 
 from django.utils.translation import ugettext_lazy as _
@@ -14,7 +15,7 @@ from for_runners.app_settings import *  # noqa
 
 # Build paths relative to the project root:
 PROJECT_PATH = __Path(__file__).parent.parent.parent
-print(f'PROJECT_PATH:{PROJECT_PATH}')
+print(f'PROJECT_PATH:{PROJECT_PATH}', file=__sys.stderr)
 
 if __Path('/.dockerenv').is_file():
     # We are inside a docker container
@@ -24,7 +25,7 @@ else:
     # Build paths relative to the current working directory:
     BASE_PATH = __Path().cwd().resolve()
 
-print(f'BASE_PATH:{BASE_PATH}')
+print(f'BASE_PATH:{BASE_PATH}', file=__sys.stderr)
 
 # Paths with Django dev. server:
 # BASE_PATH...: .../django-for-runners
