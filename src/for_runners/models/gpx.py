@@ -185,7 +185,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         upload_path = "/".join(
             (
                 # settings.MEDIA_ROOT,
-                self.tracked_by.username, # TODO: Change to user id?
+                self.tracked_by.username,  # TODO: Change to user id?
                 f"gpx_track_{date_prefix}",
                 f"{self.get_prefix_id()}.{file_extension}",
             )
