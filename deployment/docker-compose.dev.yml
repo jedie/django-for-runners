@@ -2,13 +2,31 @@ version: "3.7"
 
 services:
     caddy: # https://hub.docker.com/_/caddy
+        restart: "no"
         environment:
             - HOSTNAME=localhost
             - LETSENCRYPT_EMAIL=internal
 
     django:
+        restart: "no"
         environment:
             - DJANGO_SETTINGS_MODULE=docker_settings
             - HOSTNAME=localhost
         volumes:
             - ./dist/:/dist/
+
+    postgres:
+        restart: "no"
+
+    adminer: # https://hub.docker.com/_/adminer
+        # Available here: http://localhost:8080/ (No HTTPS!)
+        image: adminer
+        restart: "no"
+        ports:
+            - "8080:8080"
+        environment:
+            - ADMINER_DEFAULT_SERVER=postgres
+        links:
+            - postgres:postgres
+        depends_on:
+            - postgres
