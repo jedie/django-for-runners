@@ -91,6 +91,11 @@ messages: ## Make and compile locales message files
 
 ##############################################################################
 
+dumpdata:  ## Backup database with Django's dumpdata
+	./manage.sh dumpdata --indent 4 --exclude axes --exclude django_processinfo >dumpdata.json
+
+##############################################################################
+
 dbbackup:  ## Backup database
 	./manage.sh dbbackup
 
