@@ -16,9 +16,9 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
     "Topic :: Database :: Front-Ends",
@@ -38,7 +38,7 @@ click = "*"  # https://github.com/mitsuhiko/click
 python = ">=3.7,<4.0.0"
 colorama = "*"  # Console colors under windows: https://pypi.org/project/colorama/
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
-uWSGI = "*"
+gunicorn = "*"  # https://github.com/benoimyproject.wsgitc/gunicorn
 #
 # https://www.djangoproject.com/download/#supported-versions
 # v2.2 LTS - extended support until April 2022
@@ -101,7 +101,7 @@ build-backend = "poetry.masonry.api"
 [tool.autopep8]
 # https://github.com/hhatto/autopep8#pyprojecttoml
 max_line_length = 120
-exclude = "*/migrations/*"
+exclude="*/htmlcov/*,*/migrations/*,*/volumes/*"
 
 
 [tool.isort]
@@ -109,7 +109,7 @@ exclude = "*/migrations/*"
 atomic=true
 line_length=120
 case_sensitive=false
-skip_glob=["*/migrations/*","*/volumes/*"]
+skip_glob=["*/htmlcov/*","*/migrations/*","*/volumes/*"]
 multi_line_output=3
 include_trailing_comma=true
 known_first_party=["inventory","for_runners_project","inventory_tests"]
@@ -123,7 +123,7 @@ lines_after_imports=2
 # https://docs.pytest.org/en/latest/customize.html#pyproject-toml
 minversion = "6.0"
 DJANGO_SETTINGS_MODULE="for_runners_project.settings.tests"
-norecursedirs = ".* .git __pycache__ coverage* dist volumes"
+norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes"
 # sometimes helpfull "addopts" arguments:
 #    -vv
 #    --verbose
