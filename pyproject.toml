@@ -55,10 +55,7 @@ geopy = "*"  # https://github.com/geopy/geopy
 lxml = "*"
 django-dbbackup = "*"  # https://github.com/django-dbbackup/django-dbbackup
 requests = "*"  # https://github.com/psf/requests
-
-# We can't install v5 until https://github.com/python-poetry/poetry/issues/3320 is fixed!
-bx_py_utils = "0.0.4"  # https://github.com/boxine/bx_py_utils
-
+bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
 django-axes = "*"  # https://github.com/jazzband/django-axes
 docker-compose = { version = "*", optional = true }  # install via: poetry install --extras "docker"
 psycopg2-binary = { version = "*", optional = true }  # install via: poetry install --extras "postgres"
