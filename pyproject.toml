@@ -2,6 +2,7 @@
 name = "django-for-runners"
 version = "0.12.0rc2"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
+homepage = "https://github.com/jedie/django-for-runners"
 authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
     { include = "for_runners", from = "src" },
@@ -34,9 +35,8 @@ include = ['AUTHORS', 'LICENSE', 'README.creole']
 readme='README.rst'
 
 [tool.poetry.dependencies]
-click = "*"  # https://github.com/mitsuhiko/click
 python = ">=3.7,<4.0.0"
-colorama = "*"  # Console colors under windows: https://pypi.org/project/colorama/
+click = "*"  # https://github.com/mitsuhiko/click
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
 gunicorn = "*"  # https://github.com/benoimyproject.wsgitc/gunicorn
 #
@@ -109,7 +109,7 @@ case_sensitive=false
 skip_glob=["*/htmlcov/*","*/migrations/*","*/volumes/*"]
 multi_line_output=3
 include_trailing_comma=true
-known_first_party=["inventory","for_runners_project","inventory_tests"]
+known_first_party=["for_runners","for_runners_project"]
 no_lines_before="LOCALFOLDER"
 default_section="THIRDPARTY"
 sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
