@@ -379,7 +379,7 @@ history
 
     * tbc
 
-* `v0.12.0.rc1 *dev* <https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0.rc1>`_:
+* `v0.12.0.rc3 *dev* <https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0.rc3>`_:
 
     * refactor project structure and add a deployment via docker-compose setup
 
@@ -607,4 +607,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2020-11-14 14:37:02 with "python-creole"``
+``Note: this file is generated from README.creole 2020-12-30 10:39:15 with "python-creole"``
