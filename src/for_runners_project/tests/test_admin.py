@@ -1,22 +1,21 @@
 import os
 import unittest
 
-import pytest
+from bx_py_utils.test_utils.html_assertion import HtmlAssertionMixin
+from django.contrib.auth.models import User
+from django.test import TestCase
 from django_tools.selenium.chromedriver import chromium_available
 from django_tools.selenium.django import (
     SeleniumChromiumStaticLiveServerTestCase,
     SeleniumFirefoxStaticLiveServerTestCase,
 )
 from django_tools.selenium.geckodriver import firefox_available
-from django_tools.unittest_utils.unittest_base import BaseTestCase
-from django_tools.unittest_utils.user import TestUserMixin
+from model_bakery import baker
 
-# https://github.com/jedie/django-for-runners
 from for_runners import __version__
 
 
-@pytest.mark.django_db
-class AdminAnonymousTests(BaseTestCase):
+class AdminAnonymousTests(HtmlAssertionMixin, TestCase):
     """
     Anonymous will be redirected to the login page.
     """
@@ -30,44 +29,45 @@ class AdminAnonymousTests(BaseTestCase):
         self.assertRedirects(response, expected_url="/de/admin/login/?next=/de/admin/")
 
 
-@pytest.mark.django_db
-class AdminLoggedinTests(TestUserMixin, AdminAnonymousTests):
+class AdminLoggedinTests(HtmlAssertionMixin, TestCase):
     """
     Some basics test with the django admin
     """
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.superuser = baker.make(User, username='superuser', is_staff=True, is_active=True, is_superuser=True)
+        cls.staffuser = baker.make(User, username='staff_test_user', is_staff=True, is_active=True, is_superuser=False)
+
     def test_staff_admin_index(self):
-        self.login(usertype="staff")
+        self.client.force_login(self.staffuser)
+
         response = self.client.get("/en/admin/", HTTP_ACCEPT_LANGUAGE="en")
-        self.assertResponse(
+        self.assert_html_parts(
             response,
-            must_contain=(
+            parts=(
                 f"<title>Site administration | Django-ForRunners v{__version__}</title>",
                 "<h1>Site administration</h1>",
                 "<strong>staff_test_user</strong>",
                 "<p>You don't have permission to view or edit anything.</p>",
             ),
-            must_not_contain=("error", "traceback", "/add/", "/change/"),
-            template_name="admin/index.html",
-            messages=[],
-            html=True,
         )
+        self.assertTemplateUsed(response, template_name="admin/index.html")
 
     def test_superuser_admin_index(self):
-        self.login(usertype="superuser")
+        self.client.force_login(self.superuser)
         response = self.client.get("/en/admin/", HTTP_ACCEPT_LANGUAGE="en")
-        self.assertResponse(
+        self.assert_html_parts(
             response,
-            must_contain=(
+            parts=(
                 "Django-ForRunners",
-                "superuser",
+                "<strong>superuser</strong>",
                 "Site administration",
                 "/admin/auth/group/add/",
                 "/admin/auth/user/add/",
             ),
-            must_not_contain=("error", "traceback"),
-            template_name="admin/index.html",
         )
+        self.assertTemplateUsed(response, template_name="admin/index.html")
 
 
 @unittest.skipIf('CI' in os.environ, 'Skip, selenium tests does not work on CI run!')
