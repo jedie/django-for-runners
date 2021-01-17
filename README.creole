@@ -50,6 +50,7 @@ There exists two kind of installation/usage:
 
 * local development installation using poetry
 * production use with docker-compose
+* Install as [[https://yunohost.org|YunoHost]] App via [[https://github.com/YunoHost-Apps/django-for-runners_ynh|django-for-runners_ynh]]
 
 This README contains only the information about local development installation.
 
