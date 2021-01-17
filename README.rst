@@ -373,15 +373,19 @@ Add deployment setup into "/development/"
 history
 -------
 
-* `compare v0.11.0...master <https://github.com/jedie/django-for-runners/compare/v0.11.0...master>`_ **dev** 
+* `compare v0.12.0...master <https://github.com/jedie/django-for-runners/compare/v0.12.0...master>`_ **dev** 
 
     * tbc
 
-* `v0.12.0.rc3 *dev* <https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0.rc3>`_:
+* `17.01.2021 - v0.12.0 <https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0>`_:
 
     * refactor project structure and add a deployment via docker-compose setup
 
+    * installation as YunoHost app: `https://github.com/YunoHost-Apps/django-for-runners_ynh <https://github.com/YunoHost-Apps/django-for-runners_ynh>`_
+
     * Add django-axes and django-processinfo
+
+    * Mock requests in tests
 
 * `04.07.2020 - v0.11.0 <https://github.com/jedie/django-for-runners/compare/v0.10.1...v0.11.0>`_:
 
@@ -605,4 +609,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2021-01-17 13:12:59 with "python-creole"``
+``Note: this file is generated from README.creole 2021-01-17 13:16:44 with "python-creole"``
