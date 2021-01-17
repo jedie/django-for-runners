@@ -4,26 +4,22 @@ Django-ForRunners
 
 |Logo| Store your GPX tracks of your running (or other sports activity) in django.
 
-.. |Logo| image:: https://raw.githubusercontent.com/jedie/django-for-runners/master/for_runners/static/Django-ForRunners128.png
+.. |Logo| image:: https://raw.githubusercontent.com/jedie/django-for-runners/master/src/for_runners/static/Django-ForRunners128.png
 
-+-----------------------------------+--------------------------------------------------------+
-| |Build Status on travis-ci.org|   | `travis-ci.org/jedie/django-for-runners`_              |
-+-----------------------------------+--------------------------------------------------------+
-| |Coverage Status on codecov.io|   | `codecov.io/gh/jedie/django-for-runners`_              |
-+-----------------------------------+--------------------------------------------------------+
-| |Coverage Status on coveralls.io| | `coveralls.io/r/jedie/django-for-runners`_             |
-+-----------------------------------+--------------------------------------------------------+
-| |Status on landscape.io|          | `landscape.io/github/jedie/django-for-runners/master`_ |
-+-----------------------------------+--------------------------------------------------------+
++-----------------------------------+------------------------------------------------+
+| |Build Status on github|          | `github.com/jedie/django-for-runners/actions`_ |
++-----------------------------------+------------------------------------------------+
+| |Coverage Status on codecov.io|   | `codecov.io/gh/jedie/django-for-runners`_      |
++-----------------------------------+------------------------------------------------+
+| |Coverage Status on coveralls.io| | `coveralls.io/r/jedie/django-for-runners`_     |
++-----------------------------------+------------------------------------------------+
 
-.. |Build Status on travis-ci.org| image:: https://travis-ci.org/jedie/django-for-runners.svg
-.. _travis-ci.org/jedie/django-for-runners: https://travis-ci.org/jedie/django-for-runners/
+.. |Build Status on github| image:: https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=master
+.. _github.com/jedie/django-for-runners/actions: https://github.com/jedie/django-for-runners/actions
 .. |Coverage Status on codecov.io| image:: https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg
 .. _codecov.io/gh/jedie/django-for-runners: https://codecov.io/gh/jedie/django-for-runners
 .. |Coverage Status on coveralls.io| image:: https://coveralls.io/repos/jedie/django-for-runners/badge.svg
 .. _coveralls.io/r/jedie/django-for-runners: https://coveralls.io/r/jedie/django-for-runners
-.. |Status on landscape.io| image:: https://landscape.io/github/jedie/django-for-runners/master/landscape.svg
-.. _landscape.io/github/jedie/django-for-runners/master: https://landscape.io/github/jedie/django-for-runners/master
 
 (The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: `http://rvier.fr/#forrunners <http://rvier.fr/#forrunners>`_ )
 
@@ -105,6 +101,8 @@ There exists two kind of installation/usage:
 * local development installation using poetry
 
 * production use with docker-compose
+
+* Install as `YunoHost <https://yunohost.org>`_ App via `django-for-runners_ynh <https://github.com/YunoHost-Apps/django-for-runners_ynh>`_
 
 This README contains only the information about local development installation.
 
@@ -607,4 +605,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2020-12-30 10:39:15 with "python-creole"``
+``Note: this file is generated from README.creole 2021-01-17 13:12:59 with "python-creole"``
