@@ -21,7 +21,7 @@ jobs:
 
     - name: 'Install package'
       run: |
-        pip3 install poetry
+        make install-poetry
         make install
 
     - name: 'List installed packages'

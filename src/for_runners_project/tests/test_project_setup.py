@@ -5,6 +5,7 @@ from pathlib import Path
 
 from creole.setup_utils import update_rst_readme
 from django.conf import settings
+from django.core.cache import cache
 from django.test import TestCase
 
 import for_runners
@@ -93,3 +94,12 @@ class ProjectSettingsTestCase(TestCase):
         assert len(dirs) == 1
         template_path = Path(dirs[0]).resolve()
         assert template_path.is_dir()
+
+    def test_cache(self):
+        # django cache should work in tests, because some tests "depends" on it
+        cache_key = 'a-cache-key'
+        assert cache.get(cache_key) is None
+        cache.set(cache_key, 'the cache content', timeout=1)
+        assert cache.get(cache_key) == 'the cache content'
+        cache.delete(cache_key)
+        assert cache.get(cache_key) is None

@@ -19,28 +19,23 @@ check-poetry:
 		exit 1 ; \
 	fi
 
-install-poetry: ## install or update poetry
-	@if [[ "$(shell poetry --version 2>/dev/null)" == *"Poetry"* ]] ; \
-	then \
-		echo 'Update poetry' ; \
-		poetry self update ; \
-	else \
-		echo 'Install poetry' ; \
-		curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python3 ; \
-	fi
+install-poetry:  ## install or update poetry
+	pip3 install -U pip
+	pip3 install -U poetry
 
-install: check-poetry ## install DjangoForRunners via poetry
+install: check-poetry  ## install project via poetry
 	poetry install
+
+update: check-poetry ## update the sources and installation
+	git fetch --all
+	git pull origin master
+	poetry run pip install -U pip
+	poetry update
 
 manage-update: ## Collectstatic + makemigration + migrate
 	./manage.sh collectstatic --noinput
 	./manage.sh makemigrations
 	./manage.sh migrate
-
-update: check-poetry ## update the sources and installation
-	git fetch --all
-	git pull origin master
-	poetry update
 
 lint: ## Run code formatters and linter
 	poetry run flynt -e "volumes" --fail-on-change --line_length=${MAX_LINE_LENGTH} .
