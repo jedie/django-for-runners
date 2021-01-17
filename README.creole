@@ -2,10 +2,9 @@
 
 {{https://raw.githubusercontent.com/jedie/django-for-runners/master/for_runners/static/Django-ForRunners128.png|Logo}} Store your GPX tracks of your running (or other sports activity) in django.
 
-| {{https://travis-ci.org/jedie/django-for-runners.svg|Build Status on travis-ci.org}} | [[https://travis-ci.org/jedie/django-for-runners/|travis-ci.org/jedie/django-for-runners]] |
+| {{https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=master|Build Status on github}} | [[https://github.com/jedie/django-for-runners/actions|github.com/jedie/django-for-runners/actions]] |
 | {{https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg|Coverage Status on codecov.io}} | [[https://codecov.io/gh/jedie/django-for-runners|codecov.io/gh/jedie/django-for-runners]] |
 | {{https://coveralls.io/repos/jedie/django-for-runners/badge.svg|Coverage Status on coveralls.io}} | [[https://coveralls.io/r/jedie/django-for-runners|coveralls.io/r/jedie/django-for-runners]] |
-| {{https://landscape.io/github/jedie/django-for-runners/master/landscape.svg|Status on landscape.io}} | [[https://landscape.io/github/jedie/django-for-runners/master|landscape.io/github/jedie/django-for-runners/master]] |
 
 (The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: http://rvier.fr/#forrunners )
 
