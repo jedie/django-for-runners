@@ -185,7 +185,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         upload_path = "/".join(
             (
                 # settings.MEDIA_ROOT,
-                self.tracked_by.username,  # TODO: Change to user id?
+                # TODO: Use https://github.com/jedie/django-tools/tree/master/django_tools/serve_media_app
+                self.tracked_by.username,
                 f"gpx_track_{date_prefix}",
                 f"{self.get_prefix_id()}.{file_extension}",
             )

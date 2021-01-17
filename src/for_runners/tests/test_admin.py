@@ -3,7 +3,6 @@ from pathlib import Path
 import requests_mock
 from bx_py_utils.test_utils.html_assertion import HtmlAssertionMixin
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import UploadedFile
 from django.test import TestCase
 from model_bakery import baker
 from override_storage import locmem_stats_override_storage
@@ -20,7 +19,7 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.superuser = baker.make(User, is_staff=True, is_active=True, is_superuser=True)
+        cls.superuser = baker.make(User, username='test-superuser', is_staff=True, is_active=True, is_superuser=True)
 
     def test_staff_upload(self):
         self.client.force_login(self.superuser)
@@ -28,9 +27,8 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         gpx_file_path1 = Path(FIXTURES_PATH, "garmin_connect_1.gpx")
         gpx_file_path2 = Path(FIXTURES_PATH, "no_track_points.gpx")
 
-        with gpx_file_path1.open("rb") as file1, gpx_file_path2.open(
-            "rb"
-        ) as file2, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
+        with gpx_file_path1.open("rb") as file1, gpx_file_path2.open("rb") as file2, \
+                locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
@@ -41,15 +39,33 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                 headers={'Content-Type': 'application/json'},
                 content=fixture_content('metaweather_location_648820_2018_2_21.json'),
             )
-
+            m.get(
+                (
+                    'https://nominatim.openstreetmap.org/reverse?lat=51.43789&lon=6.61701'
+                    '&format=json&addressdetails=1&zoom=17'
+                ),
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('osm_5143789_661701.json'),
+            )
+            m.get(  # Start point lat=51.437889290973544 - lat=6.617012657225132
+                (
+                    'https://nominatim.openstreetmap.org/reverse?lat=51.43785&lon=6.61701'
+                    '&format=json&addressdetails=1&zoom=17'
+                ),
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('osm_5143789_661701.json'),
+            )
+            m.get(  # End point lat=51.437847297638655 - lat=6.6170057002455
+                (
+                    'https://nominatim.openstreetmap.org/reverse?lat=51.43789&lon=6.61701'
+                    '&format=json&addressdetails=1&zoom=17'
+                ),
+                headers={'Content-Type': 'application/json'},
+                content=fixture_content('osm_5143785_661701.json'),
+            )
             response = self.client.post(
                 "/en/admin/for_runners/gpxmodel/upload/",
-                data={
-                    "gpx_files": [
-                        UploadedFile(file=file1, name=gpx_file_path1.name, content_type="application/gpx+xml"),
-                        UploadedFile(file=file2, name=gpx_file_path2.name, content_type="application/gpx+xml"),
-                    ]
-                },
+                data={"gpx_files": [file1, file2]},
                 HTTP_ACCEPT_LANGUAGE="en",
             )
             # debug_response(response)
@@ -91,7 +107,7 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                 response,
                 expected_messages=[
                     "Process garmin_connect_1.gpx...",
-                    "Created: 2018-02-21",
+                    "Created: 2018-02-21 Moers",
                     "Process no_track_points.gpx...",
                     "Error process GPX data: Can't get first track",
                 ],
