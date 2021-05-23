@@ -1,21 +1,27 @@
+# https://github.com/actions/setup-python
+
 name: test
 
 on:
+  push:
   schedule:
     - cron: '0 8 * * *'
-  push:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: 'Python ${{ matrix.python-version }} on ${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUNBUFFERED: 1
     strategy:
-      max-parallel: 2
+      fail-fast: false
       matrix:
         python-version: [3.9, 3.8, 3.7]
+        os: [ubuntu-latest] # TODO: macOS-latest, windows-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: 'Set up Python ${{ matrix.python-version }}'
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: '${{ matrix.python-version }}'
 
