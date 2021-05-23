@@ -433,7 +433,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                         has_cad = True
                         labels.append(_("cadence"))
 
-            columns.append(",".join([str(i) for i in row]))
+            columns.append(",".join(str(i) for i in row))
 
         km_points = []
         for point, distance_m, distance_km in iter_distance(gpxpy_instance, distance=1000):

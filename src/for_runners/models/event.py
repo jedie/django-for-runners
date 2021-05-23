@@ -95,7 +95,7 @@ class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
         if self.no:
             parts.append("%i." % self.no)
         parts.append(self.name)
-        result = " ".join([part for part in parts if part])
+        result = " ".join(part for part in parts if part)
         return result
 
     def verbose_name(self):
@@ -104,7 +104,7 @@ class EventModel(ModelAdminUrlMixin, UpdateInfoBaseModel):
             year = self.start_date.strftime("%Y")
             if year not in self.name:
                 parts.append(year)
-        result = " ".join([part for part in parts if part])
+        result = " ".join(part for part in parts if part)
         return result
 
     verbose_name.short_description = _("Event Name")
@@ -197,7 +197,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         if self.duration:
             parts.append(f"in {self.human_duration()}")
 
-        result = " ".join([part for part in parts if part])
+        result = " ".join(part for part in parts if part)
         return result
 
     verbose_name.short_description = _("Event Name")
