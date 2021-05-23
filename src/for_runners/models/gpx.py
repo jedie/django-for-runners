@@ -496,7 +496,7 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             parts.append(self.participation.event.name)
         else:
             parts.append(self.short_start_address)
-        result = " ".join([str(part) for part in parts if part])
+        result = " ".join(str(part) for part in parts if part)
         if result:
             return result
         return f"GPX Track ID:{self.pk}"
