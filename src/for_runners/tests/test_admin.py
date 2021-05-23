@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import requests_mock
-from bx_py_utils.test_utils.html_assertion import HtmlAssertionMixin
+from bx_django_utils.test_utils.html_assertion import HtmlAssertionMixin
 from django.contrib.auth.models import User
 from django.test import TestCase
 from model_bakery import baker
