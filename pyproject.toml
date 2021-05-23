@@ -56,6 +56,7 @@ lxml = "*"
 django-dbbackup = "*"  # https://github.com/django-dbbackup/django-dbbackup
 requests = "*"  # https://github.com/psf/requests
 bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
+bx_django_utils = "*"  # https://github.com/boxine/bx_django_utils
 django-axes = "*"  # https://github.com/jazzband/django-axes
 docker-compose = { version = "*", optional = true }  # install via: poetry install --extras "docker"
 psycopg2-binary = { version = "*", optional = true }  # install via: poetry install --extras "postgres"
