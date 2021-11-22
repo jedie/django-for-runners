@@ -346,14 +346,14 @@ Django compatibility
 +--------------------+----------------+---------------+
 | django-for-runners | django version | python        |
 +====================+================+===============+
-| >=v0.11.0          | 2.2.x LTS      | 3.6, 3.7, 3.8 |
+| >=v0.11.0          | 2.2.x LTS      | 3.7, 3.8, 3.9 |
 +--------------------+----------------+---------------+
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 
-(See also combinations in `.travis.yml <https://github.com/jedie/django-for-runners/blob/master/.travis.yml>`_ and `tox.ini <https://github.com/jedie/django-for-runners/blob/master/tox.ini>`_)
+(See also combinations in `tox.ini <https://github.com/jedie/django-for-runners/blob/master/tox.ini>`_ and `github actions <https://github.com/jedie/django-for-runners/blob/master/.github/workflows/pythonapp.yml>`_)
 
 ------------------------------
 Backwards-incompatible changes
