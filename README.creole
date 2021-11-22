@@ -269,8 +269,10 @@ Add deployment setup into "/development/"
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.12.0...master|compare v0.12.0...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.12.1...master|compare v0.12.1...master]] **dev**
 ** tbc
+* [[https://github.com/jedie/django-for-runners/compare/v0.12.0...v0.12.1|22.11.2021 - v0.12.1]]:
+** update requirements
 * [[https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0|17.01.2021 - v0.12.0]]:
 ** refactor project structure and add a deployment via docker-compose setup
 ** installation as YunoHost app: https://github.com/YunoHost-Apps/django-for-runners_ynh
