@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-for-runners"
-version = "0.12.0"
+version = "0.12.1"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 homepage = "https://github.com/jedie/django-for-runners"
 authors = ["JensDiemer <git@jensdiemer.de>"]

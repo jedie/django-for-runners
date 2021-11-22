@@ -346,14 +346,14 @@ Django compatibility
 +--------------------+----------------+---------------+
 | django-for-runners | django version | python        |
 +====================+================+===============+
-| >=v0.11.0          | 2.2.x LTS      | 3.6, 3.7, 3.8 |
+| >=v0.11.0          | 2.2.x LTS      | 3.7, 3.8, 3.9 |
 +--------------------+----------------+---------------+
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 
-(See also combinations in `.travis.yml <https://github.com/jedie/django-for-runners/blob/master/.travis.yml>`_ and `tox.ini <https://github.com/jedie/django-for-runners/blob/master/tox.ini>`_)
+(See also combinations in `tox.ini <https://github.com/jedie/django-for-runners/blob/master/tox.ini>`_ and `github actions <https://github.com/jedie/django-for-runners/blob/master/.github/workflows/pythonapp.yml>`_)
 
 ------------------------------
 Backwards-incompatible changes
@@ -373,9 +373,13 @@ Add deployment setup into "/development/"
 history
 -------
 
-* `compare v0.12.0...master <https://github.com/jedie/django-for-runners/compare/v0.12.0...master>`_ **dev** 
+* `compare v0.12.1...master <https://github.com/jedie/django-for-runners/compare/v0.12.1...master>`_ **dev** 
 
     * tbc
+
+* `22.11.2021 - v0.12.1 <https://github.com/jedie/django-for-runners/compare/v0.12.0...v0.12.1>`_:
+
+    * update requirements
 
 * `17.01.2021 - v0.12.0 <https://github.com/jedie/django-for-runners/compare/v0.11.0...v0.12.0>`_:
 
@@ -609,4 +613,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2021-01-17 13:16:44 with "python-creole"``
+``Note: this file is generated from README.creole 2021-11-22 23:13:24 with "python-creole"``
