@@ -3,8 +3,6 @@
 !.editorconfig
 !.flake8
 !.gitignore
-!/.travis.yml
-!.coveralls.yml
 
 # for django-dbbackup
 /backups/
@@ -14,7 +12,7 @@
 /static/
 /media/
 *.sqlite3
-
+*.json
 
 # Django
 secret.txt
