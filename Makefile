@@ -37,16 +37,6 @@ manage-update: ## Collectstatic + makemigration + migrate
 	./manage.sh makemigrations
 	./manage.sh migrate
 
-lint: ## Run code formatters and linter
-	poetry run flynt -e "volumes" --fail-on-change --line-length=${MAX_LINE_LENGTH} .
-	poetry run isort --check-only .
-	poetry run flake8 .
-
-fix-code-style: ## Fix code formatting
-	poetry run flynt -e "volumes" --line-length=${MAX_LINE_LENGTH} src
-	poetry run pyupgrade --exit-zero-even-if-changed --py3-plus --py36-plus --py37-plus `find src -name "*.py" -type f ! -path "./.tox/*" ! -path "./volumes/*" 2>/dev/null`
-	poetry run isort src
-	poetry run autopep8 --exclude="volumes,migrations" --aggressive --aggressive --in-place --recursive src
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
@@ -65,6 +55,9 @@ tox-py38: check-poetry ## Run pytest via tox with *python v3.8*
 
 pytest: check-poetry ## Run pytest
 	DJANGO_SETTINGS_MODULE=for_runners_project.settings.tests poetry run pytest --workers auto --tests-per-worker 1
+
+renew-fixtures: ## Renew all fixture files
+	./manage.sh renew_fixtures
 
 update-rst-readme: ## update README.rst from README.creole
 	poetry run update_rst_readme
@@ -96,20 +89,6 @@ dbbackup:  ## Backup database
 
 dbrestore:  ## Restore a database backup
 	./manage.sh dbrestore
-
-##############################################################################
-
-run-docker-dev-server:  ## Start docker containers with current dev source code
-	rm -Rf dist/
-	poetry build
-	rm -Rf deployment/dist/
-	cp -ruv dist deployment/
-	cd deployment && make down
-	cd deployment && ./compose.dev.sh build --pull
-	cd deployment && ./compose.dev.sh up
-
-shell_docker-dev-server:  ## Go into bash shell in for_runners container
-	cd deployment && ./compose.dev.sh exec for_runners /bin/bash
 
 ##############################################################################
 

@@ -1,0 +1,72 @@
+[
+  {
+    "distance": 95674,
+    "latt_long": "47.377060,8.539550",
+    "location_type": "City",
+    "title": "Zurich",
+    "woeid": 784794
+  },
+  {
+    "distance": 128881,
+    "latt_long": "46.208351,6.142700",
+    "location_type": "City",
+    "title": "Geneva",
+    "woeid": 782538
+  },
+  {
+    "distance": 209620,
+    "latt_long": "45.070290,7.667680",
+    "location_type": "City",
+    "title": "Torino",
+    "woeid": 725003
+  },
+  {
+    "distance": 212151,
+    "latt_long": "45.468941,9.181030",
+    "location_type": "City",
+    "title": "Milan",
+    "woeid": 718345
+  },
+  {
+    "distance": 239723,
+    "latt_long": "48.767670,9.171920",
+    "location_type": "City",
+    "title": "Stuttgart",
+    "woeid": 698064
+  },
+  {
+    "distance": 239997,
+    "latt_long": "45.759392,4.828980",
+    "location_type": "City",
+    "title": "Lyon",
+    "woeid": 609125
+  },
+  {
+    "distance": 337153,
+    "latt_long": "48.136410,11.577530",
+    "location_type": "City",
+    "title": "Munich",
+    "woeid": 676757
+  },
+  {
+    "distance": 361207,
+    "latt_long": "43.701530,7.278240",
+    "location_type": "City",
+    "title": "Nice",
+    "woeid": 614274
+  },
+  {
+    "distance": 363090,
+    "latt_long": "50.112080,8.683410",
+    "location_type": "City",
+    "title": "Frankfurt",
+    "woeid": 650272
+  },
+  {
+    "distance": 387044,
+    "latt_long": "49.454342,11.07349",
+    "location_type": "City",
+    "title": "Nuremberg",
+    "woeid": 680564
+  }
+]

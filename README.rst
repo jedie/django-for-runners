@@ -75,38 +75,11 @@ Features:
 
     * Multiple user support (However: no rights management and currently only suitable for a handful of users)
 
------------------
-Project structure
------------------
-
-There are two main directories:
-
-+---------------------+---------------------------------------------------+
-| directory           | description                                       |
-+=====================+===================================================+
-| **`/src/`_**        | The main  Django-ForRunners source code           |
-+---------------------+---------------------------------------------------+
-| **`/deployment/`_** | deploy  Django-ForRunners for production use case |
-+---------------------+---------------------------------------------------+
-
-.. _/src/: https://github.com/jedie/django-for-runners/tree/main/src
-.. _/deployment/: https://github.com/jedie/django-for-runners/tree/main/deployment
-
--------
-install
--------
-
-There exists two kind of installation/usage:
-
-* local development installation using poetry
-
-* production use with docker-compose
-
 * Install as `YunoHost <https://yunohost.org>`_ App via `django-for-runners_ynh <https://github.com/YunoHost-Apps/django-for-runners_ynh>`_
 
-This README contains only the information about local development installation.
-
-Read `/deployment/README <https://github.com/jedie/django-for-runners/tree/main/deployment#readme>`_ for instruction to install  Django-ForRunners on a root server.
+---------------------
+Developer information
+---------------------
 
 prepare
 =======
@@ -123,8 +96,6 @@ prepare
     install                install DjangoForRunners via poetry
     manage-update          Collectstatic + makemigration + migrate
     update                 update the sources and installation
-    lint                   Run code formatters and linter
-    fix-code-style         Fix code formatting
     tox-listenvs           List all tox test environments
     tox                    Run pytest via tox with all environments
     tox-py36               Run pytest via tox with *python v3.6*
@@ -162,19 +133,6 @@ local development installation
     ~/django-for-runners$ make run-dev-server
 
 The web page is available in Port 8000, e.g.: ``http://127.0.0.1:8000/``
-
-local docker dev run
-====================
-
-You can run the deployment docker containers with current source code with:
-
-::
-
-    ~/django-for-runners$ make run-docker-dev-server
-
-Just hit Cntl-C to stop the containers
-
-The web page is available on Port 80, e.g.: ``http://localhost/``
 
 import GPX files
 ================
@@ -343,15 +301,17 @@ See also: `https://wiki.openstreetmap.org/wiki/Precision_of_coordinates <https:/
 Django compatibility
 --------------------
 
-+--------------------+----------------+---------------+
-| django-for-runners | django version | python        |
-+====================+================+===============+
-| >=v0.11.0          | 2.2.x LTS      | 3.7, 3.8, 3.9 |
-+--------------------+----------------+---------------+
-| >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7 |
-+--------------------+----------------+---------------+
-| v0.5.x             | 2.0            | 3.5, 3.6, 3.7 |
-+--------------------+----------------+---------------+
++--------------------+----------------+---------------------+
+| django-for-runners | django version | python              |
++====================+================+=====================+
+| >=v0.12.0          | 2.2.x LTS      | 3.7, 3.8, 3.9, 3.10 |
++--------------------+----------------+---------------------+
+| >=v0.11.0          | 2.2.x LTS      | 3.7, 3.8, 3.9       |
++--------------------+----------------+---------------------+
+| >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7       |
++--------------------+----------------+---------------------+
+| v0.5.x             | 2.0            | 3.5, 3.6, 3.7       |
++--------------------+----------------+---------------------+
 
 (See also combinations in `tox.ini <https://github.com/jedie/django-for-runners/blob/main/tox.ini>`_ and `github actions <https://github.com/jedie/django-for-runners/blob/main/.github/workflows/pythonapp.yml>`_)
 
@@ -363,19 +323,21 @@ Older changes, see:
 
 `https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes <https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes>`_
 
-v0.12.0
-=======
-
-Move main project sources into "/src/"
-Add deployment setup into "/development/"
-
 -------
 history
 -------
 
-* `compare v0.12.1...main <https://github.com/jedie/django-for-runners/compare/v0.12.1...main>`_ **dev** 
+* `compare v0.13.0...main <https://github.com/jedie/django-for-runners/compare/v0.13.0...main>`_ **dev** 
 
     * tbc
+
+* `15.04.2022 - v0.13.0 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0>`_:
+
+    * Switch git branch from "master" to "main"
+
+    * Remove "/development/" and mode "/src/"
+
+    * update requirements
 
 * `22.11.2021 - v0.12.1 <https://github.com/jedie/django-for-runners/compare/v0.12.0...v0.12.1>`_:
 
@@ -613,4 +575,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2022-04-15 16:11:43 with "python-creole"``
+``Note: this file is generated from README.creole 2022-04-15 17:57:48 with "python-creole"``
