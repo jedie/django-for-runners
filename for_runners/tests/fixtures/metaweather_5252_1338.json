@@ -1,0 +1,72 @@
+[
+  {
+    "distance": 482,
+    "latt_long": "52.516071,13.376980",
+    "location_type": "City",
+    "title": "Berlin",
+    "woeid": 638242
+  },
+  {
+    "distance": 147245,
+    "latt_long": "51.3452,12.38594",
+    "location_type": "City",
+    "title": "Leipzig",
+    "woeid": 671072
+  },
+  {
+    "distance": 164826,
+    "latt_long": "51.053631,13.74081",
+    "location_type": "City",
+    "title": "Dresden",
+    "woeid": 645686
+  },
+  {
+    "distance": 247187,
+    "latt_long": "52.372269,9.73815",
+    "location_type": "City",
+    "title": "Hanover",
+    "woeid": 657169
+  },
+  {
+    "distance": 253780,
+    "latt_long": "53.553341,9.992450",
+    "location_type": "City",
+    "title": "Hamburg",
+    "woeid": 656958
+  },
+  {
+    "distance": 280937,
+    "latt_long": "50.079079,14.433220",
+    "location_type": "City",
+    "title": "Prague",
+    "woeid": 796597
+  },
+  {
+    "distance": 313483,
+    "latt_long": "53.075089,8.8047",
+    "location_type": "City",
+    "title": "Bremen",
+    "woeid": 641142
+  },
+  {
+    "distance": 354694,
+    "latt_long": "55.676311,12.569350",
+    "location_type": "City",
+    "title": "Copenhagen",
+    "woeid": 554890
+  },
+  {
+    "distance": 376899,
+    "latt_long": "49.454342,11.07349",
+    "location_type": "City",
+    "title": "Nuremberg",
+    "woeid": 680564
+  },
+  {
+    "distance": 419902,
+    "latt_long": "51.516609,7.458290",
+    "location_type": "City",
+    "title": "Dortmund",
+    "woeid": 645458
+  }
+]

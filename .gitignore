@@ -15,7 +15,7 @@
 *.json
 
 # Include "ignored" *.json:
-!for_runners/tests/fixture_files/*
+!**/fixtures/*.json
 
 # Django
 secret.txt

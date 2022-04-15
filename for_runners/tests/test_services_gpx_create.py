@@ -13,6 +13,12 @@ from override_storage import locmem_stats_override_storage
 
 from for_runners.services.gpx_create import add_from_file, add_from_files, add_gpx
 from for_runners.tests.fixture_files import FIXTURES_PATH, fixture_content
+from for_runners.tests.fixtures.metaweather import (
+    MetaWeather4695_744Fixtures,
+    MetaWeather5144_662Fixtures,
+    MetaWeather5252_1338Fixtures,
+    MetaWeather648820_2018_2_21Fixtures,
+)
 from for_runners.tests.utils import ClearCacheMixin
 
 
@@ -36,16 +42,8 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
 
     def test_add_gpx(self):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/2/21/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
-            )
+            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
             gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
             instance = add_gpx(gpx_content=gpx_content, user=self.user)
             self.assert_garmin_connect_1_gpx(instance)
@@ -57,16 +55,8 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
 
     def test_add_from_file(self):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/2/21/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
-            )
+            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
             instance = add_from_file(
                 gpx_file_file_path=FIXTURES_PATH / 'garmin_connect_1.gpx', user=self.user
             )
@@ -79,35 +69,17 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
 
     def test_add_from_files(self):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/2/21/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=52.52,13.38',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5252_1338.json'),  # 4.5°C 'Light Cloud'
-            )
+            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather5252_1338Fixtures().get_requests_mock_kwargs())
             m.get(
                 'https://www.metaweather.com/api/location/638242/2011/1/13/',
-                headers={'Content-Type': 'application/json'},
-                content=b'[]',  # No weather data for start.
+                json=[],  # No weather data
             )
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=46.95,7.44',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_4695_744.json'),
-            )
+            m.get(**MetaWeather4695_744Fixtures().get_requests_mock_kwargs())
             m.get(
                 'https://www.metaweather.com/api/location/784794/2011/1/15/',
-                headers={'Content-Type': 'application/json'},
-                content=b'[]',  # No weather data for start.
+                json=[],  # No weather data
             )
             instances = [
                 str(instance)

@@ -13,7 +13,10 @@ import datetime
 import requests_mock
 
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.fixture_files import fixture_content
+from for_runners.tests.fixtures.metaweather import (
+    MetaWeather5141_678Fixtures,
+    MetaWeather648820_2018_6_20Fixtures,
+)
 from for_runners.tests.utils import ClearCacheMixin
 from for_runners.weather import NoWeatherData, meta_weather_com
 
@@ -24,16 +27,8 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
         date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
 
         with requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/6/20/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_6_20.json'),
-            )
+            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_6_20Fixtures().get_requests_mock_kwargs())
             temperature, weather_state = meta_weather_com.coordinates2weather(
                 lat, lon, date=date, max_seconds=12 * 60 * 60
             )
@@ -46,16 +41,8 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
         date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
 
         with requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/6/20/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_6_20.json'),
-            )
+            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_6_20Fixtures().get_requests_mock_kwargs())
             temperature, weather_state = meta_weather_com.coordinates2weather(
                 lat, lon, date=date, max_seconds=0.1
             )
@@ -77,17 +64,7 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
         date = datetime.datetime(year=2017, month=2, day=10, hour=12, minute=00)
 
         with requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2017/2/10/',
-                headers={'Content-Type': 'application/json'},
-                content=b'[]',
-            )
+            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
+            m.get('https://www.metaweather.com/api/location/648820/2017/2/10/', json=[])
             with self.assertRaises(NoWeatherData):
-                temperature, weather_state = meta_weather_com.coordinates2weather(
-                    lat, lon, date=date
-                )
+                meta_weather_com.coordinates2weather(lat, lon, date=date)

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from for_runners.geo import reverse_geo
-from for_runners.tests.fixture_files import fixture_content
+from for_runners.tests.fixtures.openstreetmap import OpenStreetMap5143789_661701Fixtures
 from for_runners.tests.utils import ClearCacheMixin
 
 
@@ -17,19 +17,14 @@ class GeoTests(ClearCacheMixin, TestCase):
         lon = 6.617012657225131988525390625
 
         with requests_mock.mock() as m:
-            m.get(
-                (
-                    'https://nominatim.openstreetmap.org/reverse'
-                    '?lat=51.43789&lon=6.61701&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5143789_661701.json'),
-            )
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
+
             address = reverse_geo(lat, lon)
 
         assert address.short == 'Moers'
         assert address.full == (
-            '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland'
+            'Zur Alten Wassermühle, Vinn, Moers, Kreis Wesel,'
+            ' Nordrhein-Westfalen, 47447, Deutschland'
         )
 
         # Check if cache works in tests:
@@ -41,20 +36,20 @@ class GeoTests(ClearCacheMixin, TestCase):
 
         # Cache filled?
         address = cache.get('reverse_geo_51.43789_6.61701')
-        assert address is not None
+        assert address
         assert address == (
-            '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland',
+            'Zur Alten Wassermühle, Vinn, Moers, Kreis Wesel,'
+            ' Nordrhein-Westfalen, 47447, Deutschland',
             {
+                'ISO3166-2-lvl4': 'DE-NW',
                 'city': 'Moers',
                 'country': 'Deutschland',
                 'country_code': 'de',
                 'county': 'Kreis Wesel',
                 'hamlet': 'Vinn',
-                'house_number': '148',
                 'postcode': '47447',
-                'road': 'Filder Straße',
+                'road': 'Zur Alten Wassermühle',
                 'state': 'Nordrhein-Westfalen',
-                'suburb': 'Moers',
             },
         )
 
@@ -64,5 +59,6 @@ class GeoTests(ClearCacheMixin, TestCase):
 
         assert address.short == 'Moers'
         assert address.full == (
-            '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland'
+            'Zur Alten Wassermühle, Vinn, Moers, Kreis Wesel,'
+            ' Nordrhein-Westfalen, 47447, Deutschland'
         )

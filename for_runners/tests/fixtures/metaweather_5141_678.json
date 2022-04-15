@@ -1,0 +1,72 @@
+[
+  {
+    "distance": 16638,
+    "latt_long": "51.451809,7.0106",
+    "location_type": "City",
+    "title": "Essen",
+    "woeid": 648820
+  },
+  {
+    "distance": 21601,
+    "latt_long": "51.215630,6.776040",
+    "location_type": "City",
+    "title": "Düsseldorf",
+    "woeid": 646099
+  },
+  {
+    "distance": 48430,
+    "latt_long": "51.516609,7.458290",
+    "location_type": "City",
+    "title": "Dortmund",
+    "woeid": 645458
+  },
+  {
+    "distance": 53455,
+    "latt_long": "50.941662,6.955180",
+    "location_type": "City",
+    "title": "Cologne",
+    "woeid": 667931
+  },
+  {
+    "distance": 167915,
+    "latt_long": "52.373119,4.893190",
+    "location_type": "City",
+    "title": "Amsterdam",
+    "woeid": 727232
+  },
+  {
+    "distance": 180601,
+    "latt_long": "50.848381,4.349680",
+    "location_type": "City",
+    "title": "Brussels",
+    "woeid": 968019
+  },
+  {
+    "distance": 185233,
+    "latt_long": "52.083988,4.31741",
+    "location_type": "City",
+    "title": "The Hague",
+    "woeid": 726874
+  },
+  {
+    "distance": 196720,
+    "latt_long": "50.112080,8.683410",
+    "location_type": "City",
+    "title": "Frankfurt",
+    "woeid": 650272
+  },
+  {
+    "distance": 229306,
+    "latt_long": "52.372269,9.73815",
+    "location_type": "City",
+    "title": "Hanover",
+    "woeid": 657169
+  },
+  {
+    "distance": 230669,
+    "latt_long": "53.075089,8.8047",
+    "location_type": "City",
+    "title": "Bremen",
+    "woeid": 641142
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "address": {
+    "ISO3166-2-lvl4": "DE-NW",
+    "city": "Moers",
+    "country": "Deutschland",
+    "country_code": "de",
+    "county": "Kreis Wesel",
+    "hamlet": "Vinn",
+    "postcode": "47447",
+    "road": "Zur Alten Wassermühle",
+    "state": "Nordrhein-Westfalen"
+  },
+  "boundingbox": [
+    "51.4385227",
+    "51.4393386",
+    "6.6167734",
+    "6.6208149"
+  ],
+  "display_name": "Zur Alten Wassermühle, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland",
+  "lat": "51.43923089575525",
+  "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+  "lon": "6.617311121070591",
+  "osm_id": 82295726,
+  "osm_type": "way",
+  "place_id": 120369666
+}

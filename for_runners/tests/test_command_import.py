@@ -11,7 +11,13 @@ from override_storage import locmem_stats_override_storage
 import for_runners
 from for_runners.management.commands import import_gpx
 from for_runners.models import GpxModel
-from for_runners.tests.fixture_files import fixture_content
+from for_runners.tests.fixtures.metaweather import (
+    MetaWeather4695_744Fixtures,
+    MetaWeather5144_662Fixtures,
+    MetaWeather5252_1338Fixtures,
+    MetaWeather648820_2018_2_21Fixtures,
+)
+from for_runners.tests.fixtures.openstreetmap import OpenStreetMap51437889_66617012Fixtures
 from for_runners.tests.utils import ClearCacheMixin
 
 
@@ -63,61 +69,27 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
         assert_is_dir(fixture_files_path)
 
         with StdoutStderrBuffer() as buff, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:  # noqa
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/2/21/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=52.52,13.38',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5252_1338.json'),  # 4.5°C 'Light Cloud'
-            )
+            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather5252_1338Fixtures().get_requests_mock_kwargs())
             m.get(
                 'https://www.metaweather.com/api/location/638242/2011/1/13/',
-                headers={'Content-Type': 'application/json'},
-                content=b'[]',  # No weather data for start.
+                json=[],  # No weather data
             )
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=46.95,7.44',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_4695_744.json'),
-            )
+            m.get(**MetaWeather4695_744Fixtures().get_requests_mock_kwargs())
             m.get(
                 'https://www.metaweather.com/api/location/784794/2011/1/15/',
-                headers={'Content-Type': 'application/json'},
-                content=b'[]',  # No weather data for start.
-            )
-            m.get(
-                (
-                    'https://nominatim.openstreetmap.org/reverse'
-                    '?lat=0.0&lon=0.0&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('nominatim_osm_reverse_0_0.json'),
+                json=[],  # No weather data
             )
             m.get(
                 (
                     'https://nominatim.openstreetmap.org/reverse'
                     '?lat=0.0&lon=180.0&format=json&addressdetails=1&zoom=17'
                 ),
-                headers={'Content-Type': 'application/json'},
-                content=b'{"error":"Unable to geocode"}',
+                json={"error": "Unable to geocode"},
             )
-            m.get(
-                (
-                    'https://nominatim.openstreetmap.org/reverse'
-                    '?lat=51.437889290973544&lon=6.617012657225132'
-                    '&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('nominatim_osm_reverse_0_0.json'),
-            )
+            m.get(**OpenStreetMap51437889_66617012Fixtures().get_requests_mock_kwargs())
+
             call_command(import_gpx.Command(), "--username", test_username, str(fixture_files_path))
             assert storage_stats.fields_saved == [
                 ('for_runners', 'gpxmodel', 'track_svg'),

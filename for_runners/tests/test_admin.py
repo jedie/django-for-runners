@@ -9,7 +9,15 @@ from override_storage import locmem_stats_override_storage
 
 from for_runners import __version__
 from for_runners.models import GpxModel
-from for_runners.tests.fixture_files import FIXTURES_PATH, fixture_content
+from for_runners.tests.fixture_files import FIXTURES_PATH
+from for_runners.tests.fixtures.metaweather import (
+    MetaWeather5144_662Fixtures,
+    MetaWeather648820_2018_2_21Fixtures,
+)
+from for_runners.tests.fixtures.openstreetmap import (
+    OpenStreetMap5143785_661701Fixtures,
+    OpenStreetMap5143789_661701Fixtures,
+)
 
 
 class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
@@ -32,40 +40,17 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         with gpx_file_path1.open("rb") as file1, gpx_file_path2.open(
             "rb"
         ) as file2, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
-            m.get(
-                'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json'),
-            )
-            m.get(
-                'https://www.metaweather.com/api/location/648820/2018/2/21/',
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
-            )
-            m.get(
-                (
-                    'https://nominatim.openstreetmap.org/reverse?lat=51.43789&lon=6.61701'
-                    '&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('osm_5143789_661701.json'),
-            )
-            m.get(  # Start point lat=51.437889290973544 - lat=6.617012657225132
-                (
-                    'https://nominatim.openstreetmap.org/reverse?lat=51.43785&lon=6.61701'
-                    '&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('osm_5143789_661701.json'),
-            )
-            m.get(  # End point lat=51.437847297638655 - lat=6.6170057002455
-                (
-                    'https://nominatim.openstreetmap.org/reverse?lat=51.43789&lon=6.61701'
-                    '&format=json&addressdetails=1&zoom=17'
-                ),
-                headers={'Content-Type': 'application/json'},
-                content=fixture_content('osm_5143785_661701.json'),
-            )
+            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
+            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
+
+            # Start point lat=51.437889290973544 - lat=6.617012657225132:
+            m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
+
+            # End point lat=51.437847297638655 - lat=6.6170057002455:
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
+
             response = self.client.post(
                 "/en/admin/for_runners/gpxmodel/upload/",
                 data={"gpx_files": [file1, file2]},
