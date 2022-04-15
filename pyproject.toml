@@ -5,8 +5,8 @@ description = "Store your GPX tracks of your running (or other sports activity) 
 homepage = "https://github.com/jedie/django-for-runners"
 authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
-    { include = "for_runners", from = "src" },
-    { include = "for_runners_project", from = "src" },
+    { include = "for_runners" },
+    { include = "for_runners_project" },
 ]
 keywords=['running','gpx','gps-tracking','gps-data','django']
 classifiers = [
@@ -144,8 +144,6 @@ norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes"
 #    --full-trace
 #    -p no:warnings
 addopts = """
-    --import-mode=importlib
-    --ignore-glob=deployment/django/*
     --reuse-db
     --nomigrations
     --cov=src

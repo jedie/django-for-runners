@@ -89,18 +89,4 @@ dbrestore:  ## Restore a database backup
 
 ##############################################################################
 
-run-docker-dev-server:  ## Start docker containers with current dev source code
-	rm -Rf dist/
-	poetry build
-	rm -Rf deployment/dist/
-	cp -ruv dist deployment/
-	cd deployment && make down
-	cd deployment && ./compose.dev.sh build --pull
-	cd deployment && ./compose.dev.sh up
-
-shell_docker-dev-server:  ## Go into bash shell in for_runners container
-	cd deployment && ./compose.dev.sh exec for_runners /bin/bash
-
-##############################################################################
-
 .PHONY: help install lint fix test publish
