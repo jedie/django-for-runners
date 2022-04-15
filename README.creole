@@ -235,9 +235,9 @@ https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.13.0...main|compare v0.13.0...main]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.13.0rc1...main|compare v0.13.0rc1...main]] **dev**
 ** tbc
-* [[https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0|15.04.2022 - v0.13.0]]:
+* [[https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0rc1|15.04.2022 - v0.13.0rc1]]:
 ** Switch git branch from "master" to "main"
 ** Remove "/development/" and mode "/src/"
 ** update requirements
