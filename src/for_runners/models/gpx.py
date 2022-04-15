@@ -12,6 +12,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+
 # https://github.com/jedie/django-tools
 from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
@@ -61,7 +62,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         blank=True,
     )
 
-    creator = models.CharField(help_text="Used device to create this track", max_length=511, null=True, blank=True)
+    creator = models.CharField(
+        help_text="Used device to create this track", max_length=511, null=True, blank=True
+    )
     track_svg = models.FileField(
         verbose_name=_("Track SVG"),
         upload_to=svg_upload_path,
@@ -70,15 +73,21 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         blank=True,
     )
 
-    start_time = models.DateTimeField(editable=False, help_text=_("Start time of the first segment in track"))
+    start_time = models.DateTimeField(
+        editable=False, help_text=_("Start time of the first segment in track")
+    )
     start_latitude = models.FloatField(
         editable=False, help_text=_("Latitude of the first recorded point from the *.gpx file")
     )
     start_longitude = models.FloatField(
         editable=False, help_text=_("Longitude of the first recorded point from the *.gpx file")
     )
-    start_temperature = models.FloatField(editable=True, null=True, blank=True, help_text=_("Temperature at start."))
-    start_weather_state = models.CharField(max_length=127, null=True, blank=True, help_text="Weather state at start.")
+    start_temperature = models.FloatField(
+        editable=True, null=True, blank=True, help_text=_("Temperature at start.")
+    )
+    start_weather_state = models.CharField(
+        max_length=127, null=True, blank=True, help_text="Weather state at start."
+    )
     short_start_address = models.CharField(
         max_length=255, null=True, blank=True, help_text="The short address of the start point"
     )
@@ -86,10 +95,16 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         max_length=255, null=True, blank=True, help_text="The full address of the start point"
     )
 
-    finish_time = models.DateTimeField(editable=False, help_text=_("End time of the last segment in track"))
+    finish_time = models.DateTimeField(
+        editable=False, help_text=_("End time of the last segment in track")
+    )
     finish_latitude = models.FloatField(editable=False, help_text=_("Latitude of the finish point"))
-    finish_longitude = models.FloatField(editable=False, help_text=_("Longitude of the finish point"))
-    finish_temperature = models.FloatField(editable=True, null=True, blank=True, help_text=_("Temperature at finish."))
+    finish_longitude = models.FloatField(
+        editable=False, help_text=_("Longitude of the finish point")
+    )
+    finish_temperature = models.FloatField(
+        editable=True, null=True, blank=True, help_text=_("Temperature at finish.")
+    )
     finish_weather_state = models.CharField(
         max_length=127, null=True, blank=True, help_text="Weather state at finish."
     )
@@ -117,7 +132,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         on_delete=models.SET_NULL,
     )
 
-    points_no = models.PositiveIntegerField(help_text=_("Number of points in GPX"), null=True, blank=True)
+    points_no = models.PositiveIntegerField(
+        help_text=_("Number of points in GPX"), null=True, blank=True
+    )
 
     length = models.PositiveIntegerField(
         help_text=_(
@@ -146,11 +163,19 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         blank=True,
     )
 
-    uphill = models.IntegerField(help_text=_("Uphill elevation climbs in meters"), null=True, blank=True)
-    downhill = models.IntegerField(help_text=_("Downhill elevation descent in meters"), null=True, blank=True)
+    uphill = models.IntegerField(
+        help_text=_("Uphill elevation climbs in meters"), null=True, blank=True
+    )
+    downhill = models.IntegerField(
+        help_text=_("Downhill elevation descent in meters"), null=True, blank=True
+    )
 
-    min_elevation = models.IntegerField(help_text=_("Minimum elevation in meters"), null=True, blank=True)
-    max_elevation = models.IntegerField(help_text=_("Maximum elevation in meters"), null=True, blank=True)
+    min_elevation = models.IntegerField(
+        help_text=_("Minimum elevation in meters"), null=True, blank=True
+    )
+    max_elevation = models.IntegerField(
+        help_text=_("Maximum elevation in meters"), null=True, blank=True
+    )
 
     heart_rate_min = models.PositiveIntegerField(
         help_text=_("Minimum heart rate."), null=True, blank=True, editable=False
@@ -476,7 +501,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             pace = (duration_s / 60) / distance_km
         except ZeroDivisionError:
             # FIXME
-            log.exception(f"Error calculate pace with duration {duration_s!r}sec and distance {distance_km}km!")
+            log.exception(
+                f"Error calculate pace with duration {duration_s!r}sec and distance {distance_km}km!"
+            )
         else:
             if pace > 99 or pace < 0:
                 log.error("Pace out of range: %f", pace)
@@ -518,6 +545,13 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         verbose_name = _("GPX Track")
         verbose_name_plural = _("GPX Tracks")
         unique_together = (
-            ("start_time", "start_latitude", "start_longitude", "finish_time", "finish_latitude", "finish_longitude"),
+            (
+                "start_time",
+                "start_latitude",
+                "start_longitude",
+                "finish_time",
+                "finish_latitude",
+                "finish_longitude",
+            ),
         )
         ordering = ("-start_time", "-pk")

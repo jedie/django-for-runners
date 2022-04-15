@@ -8,7 +8,12 @@ from django.db.models.signals import post_save, pre_save
 # https://github.com/jedie/django-for-runners
 from for_runners.models.discipline import DisciplineModel  # noqa
 from for_runners.models.distance import DistanceModel  # noqa
-from for_runners.models.event import CostModel, EventLinkModel, EventModel, ParticipationModel  # noqa
+from for_runners.models.event import (  # noqa
+    CostModel,
+    EventLinkModel,
+    EventModel,
+    ParticipationModel,
+)
 from for_runners.models.gpx import GpxModel  # noqa
 from for_runners.signal_handlers.gpx import gpx_post_save_handler, gpx_pre_save_handler  # noqa
 

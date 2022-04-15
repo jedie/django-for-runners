@@ -9,6 +9,7 @@ import operator
 from datetime import datetime
 from functools import reduce
 from pathlib import Path
+
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
 
@@ -16,7 +17,12 @@ from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
 from for_runners.gpx import GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.utils import earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers
+from for_runners.tests.utils import (
+    earth_circumference,
+    generate_gpx_track,
+    kilometers2lon_count,
+    lon2kilometers,
+)
 
 
 BASE_PATH = Path(__file__).parent
@@ -58,7 +64,8 @@ class GpxTests(BaseTestCase):
         gpxpy_instance = parse_gpx_file(filepath)
         print(gpxpy_instance)
         self.assertEqual(
-            repr(gpxpy_instance), "GPX(tracks=[GPXTrack(name='Foo Bar', segments=[GPXTrackSegment(points=[...])])])"
+            repr(gpxpy_instance),
+            "GPX(tracks=[GPXTrack(name='Foo Bar', segments=[GPXTrackSegment(points=[...])])])",
         )
 
     def test_iter_distance(self):
@@ -108,12 +115,15 @@ class GpxMedianTests(BaseTestCase):
 
     def test_iter_extension_data(self):
         gpx_median = GpxMedian(
-            gpxpy_instance=parse_gpx_file(Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")), distance=1
+            gpxpy_instance=parse_gpx_file(Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")),
+            distance=1,
         )
 
         hr_data = tuple(gpx_median.iter_extension_data(key="hr"))
         pprint(hr_data)
-        self.assertEqual(hr_data, (([120], 120, 120, 120), ([125], 125, 125, 125), ([130], 130, 130, 130)))
+        self.assertEqual(
+            hr_data, (([120], 120, 120, 120), ([125], 125, 125, 125), ([130], 130, 130, 130))
+        )
 
         cad_data = tuple(gpx_median.iter_extension_data(key="cad"))
         pprint(cad_data)
@@ -134,7 +144,9 @@ class GpxMedianTests(BaseTestCase):
         for lon_count in range(10):
             distance_km = lon2kilometers(lon_count)
             self.assert_equal_rounded(distance_km, longitude_distance_km * lon_count)
-            self.assert_equal_rounded(kilometers2lon_count(distance_km), lon_count, decimal_places=0)
+            self.assert_equal_rounded(
+                kilometers2lon_count(distance_km), lon_count, decimal_places=0
+            )
 
     def test_generate_gpx_track(self):
 

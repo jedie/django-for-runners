@@ -23,6 +23,7 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
 from import_export.admin import ExportMixin
@@ -250,7 +251,10 @@ class PrintMiniView(generic.TemplateView):
                 generate_svg(gpx_track, force=False)
 
             gpx_tracks.append(gpx_track)
-        context = {"gpx_tracks": gpx_tracks, "back_url": reverse("admin:for_runners_gpxmodel_changelist")}
+        context = {
+            "gpx_tracks": gpx_tracks,
+            "back_url": reverse("admin:for_runners_gpxmodel_changelist"),
+        }
         return context
 
 
@@ -311,7 +315,9 @@ class GpxModelChangeList(ChangeList):
             else:
                 view = ViewClass.as_view()
                 response = view(request, self)
-                assert isinstance(response, TemplateResponse), f"Method {view} didn't return a TemplateResponse!"
+                assert isinstance(
+                    response, TemplateResponse
+                ), f"Method {view} didn't return a TemplateResponse!"
                 self.statistics = response.rendered_content
 
 
@@ -438,7 +444,11 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         km_points = []
         for point, distance_m, distance_km in iter_distance(gpxpy_instance, distance=1000):
             km_points.append(
-                {"x": "%i" % (point.time.timestamp() * 1000), "distance_m": distance_m, "distance_km": distance_km}
+                {
+                    "x": "%i" % (point.time.timestamp() * 1000),
+                    "distance_m": distance_m,
+                    "distance_km": distance_km,
+                }
             )
 
         context = {
@@ -546,7 +556,13 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                 )
             },
         ),
-        (_("GPX data"), {"classes": ("collapse",), "fields": (("gpx", "points_no"), ("track_svg", "svg_tag_big"))}),
+        (
+            _("GPX data"),
+            {
+                "classes": ("collapse",),
+                "fields": (("gpx", "points_no"), ("track_svg", "svg_tag_big")),
+            },
+        ),
         (
             _("Values"),
             {
@@ -561,7 +577,9 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         ),
     )
     # FIXME: Made this in CSS ;)
-    formfield_overrides = {models.CharField: {"widget": forms.TextInput(attrs={"style": "width:70%"})}}
+    formfield_overrides = {
+        models.CharField: {"widget": forms.TextInput(attrs={"style": "width:70%"})}
+    }
 
     def overview(self, obj):
         parts = []

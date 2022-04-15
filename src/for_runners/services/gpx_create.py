@@ -7,6 +7,7 @@
 import logging
 
 from django.db import IntegrityError, transaction
+
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_is_dir, assert_is_file
 from gpxpy.gpx import GPXException

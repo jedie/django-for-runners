@@ -6,5 +6,9 @@
 
 from for_runners.admin.discipline import DisciplineModelAdmin  # noqa
 from for_runners.admin.distance import DistanceModelAdmin  # noqa
-from for_runners.admin.event import EventLinkModelAdmin, EventModelAdmin, ParticipationModelAdmin  # noqa
+from for_runners.admin.event import (  # noqa
+    EventLinkModelAdmin,
+    EventModelAdmin,
+    ParticipationModelAdmin,
+)
 from for_runners.admin.gpx import GpxModelAdmin  # noqa

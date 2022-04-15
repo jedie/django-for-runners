@@ -61,7 +61,7 @@ def test_poetry_check(package_root=None):
 
     output = subprocess.check_output(
         [poerty_bin, 'check'],
-        universal_newlines=True,
+        text=True,
         env=os.environ,
         stderr=subprocess.STDOUT,
         cwd=str(package_root),
