@@ -4,7 +4,7 @@ Django-ForRunners
 
 |Logo| Store your GPX tracks of your running (or other sports activity) in django.
 
-.. |Logo| image:: https://raw.githubusercontent.com/jedie/django-for-runners/master/src/for_runners/static/Django-ForRunners128.png
+.. |Logo| image:: https://raw.githubusercontent.com/jedie/django-for-runners/main/src/for_runners/static/Django-ForRunners128.png
 
 +-----------------------------------+------------------------------------------------+
 | |Build Status on github|          | `github.com/jedie/django-for-runners/actions`_ |
@@ -14,9 +14,9 @@ Django-ForRunners
 | |Coverage Status on coveralls.io| | `coveralls.io/r/jedie/django-for-runners`_     |
 +-----------------------------------+------------------------------------------------+
 
-.. |Build Status on github| image:: https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=master
+.. |Build Status on github| image:: https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=main
 .. _github.com/jedie/django-for-runners/actions: https://github.com/jedie/django-for-runners/actions
-.. |Coverage Status on codecov.io| image:: https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg
+.. |Coverage Status on codecov.io| image:: https://codecov.io/gh/jedie/django-for-runners/branch/main/graph/badge.svg
 .. _codecov.io/gh/jedie/django-for-runners: https://codecov.io/gh/jedie/django-for-runners
 .. |Coverage Status on coveralls.io| image:: https://coveralls.io/repos/jedie/django-for-runners/badge.svg
 .. _coveralls.io/r/jedie/django-for-runners: https://coveralls.io/r/jedie/django-for-runners
@@ -89,8 +89,8 @@ There are two main directories:
 | **`/deployment/`_** | deploy  Django-ForRunners for production use case |
 +---------------------+---------------------------------------------------+
 
-.. _/src/: https://github.com/jedie/django-for-runners/tree/master/src
-.. _/deployment/: https://github.com/jedie/django-for-runners/tree/master/deployment
+.. _/src/: https://github.com/jedie/django-for-runners/tree/main/src
+.. _/deployment/: https://github.com/jedie/django-for-runners/tree/main/deployment
 
 -------
 install
@@ -106,7 +106,7 @@ There exists two kind of installation/usage:
 
 This README contains only the information about local development installation.
 
-Read `/deployment/README <https://github.com/jedie/django-for-runners/tree/master/deployment#readme>`_ for instruction to install  Django-ForRunners on a root server.
+Read `/deployment/README <https://github.com/jedie/django-for-runners/tree/main/deployment#readme>`_ for instruction to install  Django-ForRunners on a root server.
 
 prepare
 =======
@@ -353,7 +353,7 @@ Django compatibility
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7 |
 +--------------------+----------------+---------------+
 
-(See also combinations in `tox.ini <https://github.com/jedie/django-for-runners/blob/master/tox.ini>`_ and `github actions <https://github.com/jedie/django-for-runners/blob/master/.github/workflows/pythonapp.yml>`_)
+(See also combinations in `tox.ini <https://github.com/jedie/django-for-runners/blob/main/tox.ini>`_ and `github actions <https://github.com/jedie/django-for-runners/blob/main/.github/workflows/pythonapp.yml>`_)
 
 ------------------------------
 Backwards-incompatible changes
@@ -373,7 +373,7 @@ Add deployment setup into "/development/"
 history
 -------
 
-* `compare v0.12.1...master <https://github.com/jedie/django-for-runners/compare/v0.12.1...master>`_ **dev** 
+* `compare v0.12.1...main <https://github.com/jedie/django-for-runners/compare/v0.12.1...main>`_ **dev** 
 
     * tbc
 
@@ -613,4 +613,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2021-11-22 23:13:24 with "python-creole"``
+``Note: this file is generated from README.creole 2022-04-15 16:11:43 with "python-creole"``

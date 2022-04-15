@@ -1,9 +1,9 @@
 = Django-ForRunners
 
-{{https://raw.githubusercontent.com/jedie/django-for-runners/master/src/for_runners/static/Django-ForRunners128.png|Logo}} Store your GPX tracks of your running (or other sports activity) in django.
+{{https://raw.githubusercontent.com/jedie/django-for-runners/main/src/for_runners/static/Django-ForRunners128.png|Logo}} Store your GPX tracks of your running (or other sports activity) in django.
 
-| {{https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=master|Build Status on github}} | [[https://github.com/jedie/django-for-runners/actions|github.com/jedie/django-for-runners/actions]] |
-| {{https://codecov.io/gh/jedie/django-for-runners/branch/master/graph/badge.svg|Coverage Status on codecov.io}} | [[https://codecov.io/gh/jedie/django-for-runners|codecov.io/gh/jedie/django-for-runners]] |
+| {{https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=main|Build Status on github}} | [[https://github.com/jedie/django-for-runners/actions|github.com/jedie/django-for-runners/actions]] |
+| {{https://codecov.io/gh/jedie/django-for-runners/branch/main/graph/badge.svg|Coverage Status on codecov.io}} | [[https://codecov.io/gh/jedie/django-for-runners|codecov.io/gh/jedie/django-for-runners]] |
 | {{https://coveralls.io/repos/jedie/django-for-runners/badge.svg|Coverage Status on coveralls.io}} | [[https://coveralls.io/r/jedie/django-for-runners|coveralls.io/r/jedie/django-for-runners]] |
 
 (The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: http://rvier.fr/#forrunners )
@@ -41,8 +41,8 @@
 There are two main directories:
 
 |= directory |= description
-| **[[https://github.com/jedie/django-for-runners/tree/master/src|/src/]]**               | The main  Django-ForRunners source code
-| **[[https://github.com/jedie/django-for-runners/tree/master/deployment|/deployment/]]** | deploy  Django-ForRunners for production use case
+| **[[https://github.com/jedie/django-for-runners/tree/main/src|/src/]]**               | The main  Django-ForRunners source code
+| **[[https://github.com/jedie/django-for-runners/tree/main/deployment|/deployment/]]** | deploy  Django-ForRunners for production use case
 
 == install
 
@@ -54,7 +54,7 @@ There exists two kind of installation/usage:
 
 This README contains only the information about local development installation.
 
-Read [[https://github.com/jedie/django-for-runners/tree/master/deployment#readme|/deployment/README]] for instruction to install  Django-ForRunners on a root server.
+Read [[https://github.com/jedie/django-for-runners/tree/main/deployment#readme|/deployment/README]] for instruction to install  Django-ForRunners on a root server.
 
 
 === prepare
@@ -252,7 +252,7 @@ See also: https://wiki.openstreetmap.org/wiki/Precision_of_coordinates
 | >=v0.7.1            | 2.1             | 3.5, 3.6, 3.7   |
 | v0.5.x              | 2.0             | 3.5, 3.6, 3.7   |
 
-(See also combinations in [[https://github.com/jedie/django-for-runners/blob/master/tox.ini|tox.ini]] and [[https://github.com/jedie/django-for-runners/blob/master/.github/workflows/pythonapp.yml|github actions]])
+(See also combinations in [[https://github.com/jedie/django-for-runners/blob/main/tox.ini|tox.ini]] and [[https://github.com/jedie/django-for-runners/blob/main/.github/workflows/pythonapp.yml|github actions]])
 
 
 
@@ -269,7 +269,7 @@ Add deployment setup into "/development/"
 
 == history
 
-* [[https://github.com/jedie/django-for-runners/compare/v0.12.1...master|compare v0.12.1...master]] **dev**
+* [[https://github.com/jedie/django-for-runners/compare/v0.12.1...main|compare v0.12.1...main]] **dev**
 ** tbc
 * [[https://github.com/jedie/django-for-runners/compare/v0.12.0...v0.12.1|22.11.2021 - v0.12.1]]:
 ** update requirements

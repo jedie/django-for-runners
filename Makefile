@@ -28,7 +28,7 @@ install: check-poetry  ## install project via poetry
 
 update: check-poetry ## update the sources and installation
 	git fetch --all
-	git pull origin master
+	git pull origin main
 	poetry run pip install -U pip
 	poetry update
 
