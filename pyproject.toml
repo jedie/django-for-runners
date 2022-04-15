@@ -127,7 +127,7 @@ atomic=true
 profile='black'
 line_length=100
 skip_glob=["*/htmlcov/*","*/migrations/*"]
-known_first_party=["for_runners"]
+known_first_party=["for_runners", "for_runners_project"]
 lines_after_imports=2
 
 
