@@ -327,11 +327,11 @@ Older changes, see:
 history
 -------
 
-* `compare v0.12.2...main <https://github.com/jedie/django-for-runners/compare/v0.12.2...main>`_ **dev** 
+* `compare v0.13.0...main <https://github.com/jedie/django-for-runners/compare/v0.13.0...main>`_ **dev** 
 
     * tbc
 
-* `15.04.2022 - v0.12.2 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.12.2>`_:
+* `15.04.2022 - v0.13.0 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0>`_:
 
     * Switch git branch from "master" to "main"
 
@@ -575,4 +575,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2022-04-15 17:32:13 with "python-creole"``
+``Note: this file is generated from README.creole 2022-04-15 17:57:48 with "python-creole"``

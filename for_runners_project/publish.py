@@ -8,7 +8,7 @@ from poetry_publish.utils.subprocess_utils import verbose_check_call
 import for_runners
 
 
-PACKAGE_ROOT = Path(for_runners.__file__).parent.parent.parent
+PACKAGE_ROOT = Path(for_runners.__file__).parent.parent
 
 
 def update_readme():
