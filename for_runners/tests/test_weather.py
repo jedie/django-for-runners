@@ -27,12 +27,12 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json')
+                content=fixture_content('metaweather_5141_678.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/6/20/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_6_20.json')
+                content=fixture_content('metaweather_location_648820_2018_6_20.json'),
             )
             temperature, weather_state = meta_weather_com.coordinates2weather(
                 lat, lon, date=date, max_seconds=12 * 60 * 60
@@ -49,12 +49,12 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json')
+                content=fixture_content('metaweather_5141_678.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/6/20/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_6_20.json')
+                content=fixture_content('metaweather_location_648820_2018_6_20.json'),
             )
             temperature, weather_state = meta_weather_com.coordinates2weather(
                 lat, lon, date=date, max_seconds=0.1
@@ -80,12 +80,12 @@ class WeatherTest(ClearCacheMixin, BaseTestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.41,6.78',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5141_678.json')
+                content=fixture_content('metaweather_5141_678.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2017/2/10/',
                 headers={'Content-Type': 'application/json'},
-                content=b'[]'
+                content=b'[]',
             )
             with self.assertRaises(NoWeatherData):
                 temperature, weather_state = meta_weather_com.coordinates2weather(

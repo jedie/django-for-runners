@@ -50,7 +50,9 @@ def gpx2svg(gpxpy_instance):
 
     drawing = svgwrite.Drawing(size=(total_size_x, total_size_y), profile="tiny")
     drawing.add(drawing.rect(insert=(0, 0), size=(total_size_x, total_size_y), fill="#000000"))
-    drawing.add(drawing.rect(insert=(1, 1), size=(total_size_x - 2, total_size_y - 2), fill="#ffffff"))
+    drawing.add(
+        drawing.rect(insert=(1, 1), size=(total_size_x - 2, total_size_y - 2), fill="#ffffff")
+    )
     lines = drawing.add(drawing.g(stroke_width=1, stroke="blue", fill="none"))
 
     lines_size_x = total_size_x - (border * 2)

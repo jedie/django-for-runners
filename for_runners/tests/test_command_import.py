@@ -62,23 +62,21 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
         fixture_files_path = Path(base_path, "tests/fixture_files")
         assert_is_dir(fixture_files_path)
 
-        with StdoutStderrBuffer() as buff, \
-                locmem_stats_override_storage() as storage_stats, \
-                requests_mock.mock() as m:
+        with StdoutStderrBuffer() as buff, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:  # noqa
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json')
+                content=fixture_content('metaweather_5144_662.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/2/21/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json')
+                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=52.52,13.38',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5252_1338.json')  # 4.5°C 'Light Cloud'
+                content=fixture_content('metaweather_5252_1338.json'),  # 4.5°C 'Light Cloud'
             )
             m.get(
                 'https://www.metaweather.com/api/location/638242/2011/1/13/',
@@ -88,7 +86,7 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=46.95,7.44',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_4695_744.json')
+                content=fixture_content('metaweather_4695_744.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/784794/2011/1/15/',
@@ -101,7 +99,7 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
                     '?lat=0.0&lon=0.0&format=json&addressdetails=1&zoom=17'
                 ),
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('nominatim_osm_reverse_0_0.json')
+                content=fixture_content('nominatim_osm_reverse_0_0.json'),
             )
             m.get(
                 (
@@ -109,20 +107,21 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
                     '?lat=0.0&lon=180.0&format=json&addressdetails=1&zoom=17'
                 ),
                 headers={'Content-Type': 'application/json'},
-                content=b'{"error":"Unable to geocode"}'
+                content=b'{"error":"Unable to geocode"}',
             )
             m.get(
                 (
                     'https://nominatim.openstreetmap.org/reverse'
-                    '?lat=51.437889290973544&lon=6.617012657225132&format=json&addressdetails=1&zoom=17'
+                    '?lat=51.437889290973544&lon=6.617012657225132'
+                    '&format=json&addressdetails=1&zoom=17'
                 ),
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('nominatim_osm_reverse_0_0.json')
+                content=fixture_content('nominatim_osm_reverse_0_0.json'),
             )
             call_command(import_gpx.Command(), "--username", test_username, str(fixture_files_path))
             assert storage_stats.fields_saved == [
                 ('for_runners', 'gpxmodel', 'track_svg'),
-                ('for_runners', 'gpxmodel', 'gpx_file')
+                ('for_runners', 'gpxmodel', 'gpx_file'),
             ]
             assert storage_stats.fields_read == []
 
@@ -138,9 +137,7 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
             qs = GpxModel.objects.filter(tracked_by__username=test_username)
 
             existing_tracks = [str(track) for track in qs]
-            assert_pformat_equal(
-                existing_tracks, ['2018-02-21', '2011-01-13']
-            )
+            assert_pformat_equal(existing_tracks, ['2018-02-21', '2011-01-13'])
 
             assert qs.count() == 2
             assert storage_stats.fields_read == []

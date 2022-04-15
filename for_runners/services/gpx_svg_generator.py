@@ -39,7 +39,10 @@ def generate_svg(gpx_track, force=False):
 
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
     gpx_track.track_svg.save(
-        name="temp.svg", content=content, save=False  # real file path will be set in self.get_svg_upload_path()
+        # real file path will be set in self.get_svg_upload_path()
+        name="temp.svg",
+        content=content,
+        save=False,
     )
     log.debug(f"SVG created: {gpx_track.track_svg!r}")
     gpx_track.save()

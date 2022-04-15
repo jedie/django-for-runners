@@ -23,7 +23,7 @@ class GeoTests(ClearCacheMixin, TestCase):
                     '?lat=51.43789&lon=6.61701&format=json&addressdetails=1&zoom=17'
                 ),
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5143789_661701.json')
+                content=fixture_content('metaweather_5143789_661701.json'),
             )
             address = reverse_geo(lat, lon)
 
@@ -44,16 +44,18 @@ class GeoTests(ClearCacheMixin, TestCase):
         assert address is not None
         assert address == (
             '148, Filder Straße, Vinn, Moers, Kreis Wesel, Nordrhein-Westfalen, 47447, Deutschland',
-            {'city': 'Moers',
-             'country': 'Deutschland',
-             'country_code': 'de',
-             'county': 'Kreis Wesel',
-             'hamlet': 'Vinn',
-             'house_number': '148',
-             'postcode': '47447',
-             'road': 'Filder Straße',
-             'state': 'Nordrhein-Westfalen',
-             'suburb': 'Moers'}
+            {
+                'city': 'Moers',
+                'country': 'Deutschland',
+                'country_code': 'de',
+                'county': 'Kreis Wesel',
+                'hamlet': 'Vinn',
+                'house_number': '148',
+                'postcode': '47447',
+                'road': 'Filder Straße',
+                'state': 'Nordrhein-Westfalen',
+                'suburb': 'Moers',
+            },
         )
 
         # Second request is cached -> no request

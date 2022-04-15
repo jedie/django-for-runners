@@ -19,7 +19,9 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.superuser = baker.make(User, username='test-superuser', is_staff=True, is_active=True, is_superuser=True)
+        cls.superuser = baker.make(
+            User, username='test-superuser', is_staff=True, is_active=True, is_superuser=True
+        )
 
     def test_staff_upload(self):
         self.client.force_login(self.superuser)
@@ -27,8 +29,9 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         gpx_file_path1 = Path(FIXTURES_PATH, "garmin_connect_1.gpx")
         gpx_file_path2 = Path(FIXTURES_PATH, "no_track_points.gpx")
 
-        with gpx_file_path1.open("rb") as file1, gpx_file_path2.open("rb") as file2, \
-                locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
+        with gpx_file_path1.open("rb") as file1, gpx_file_path2.open(
+            "rb"
+        ) as file2, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
@@ -102,7 +105,9 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                     '<p class="paginator">1 GPX Track</p>',
                 ),
             )
-            self.assertTemplateUsed(response, template_name="admin/for_runners/gpxmodel/change_list.html")
+            self.assertTemplateUsed(
+                response, template_name="admin/for_runners/gpxmodel/change_list.html"
+            )
             self.assert_messages(
                 response,
                 expected_messages=[

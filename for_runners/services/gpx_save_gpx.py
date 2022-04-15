@@ -33,6 +33,9 @@ def save_gpx_file(*, gpx_track, force=False):
 
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.fields.files.FieldFile.save
     gpx_track.gpx_file.save(
-        name="temp.gpx", content=content, save=False  # real file path will be set in self.get_gpx_upload_path()
+        # real file path will be set in self.get_gpx_upload_path()
+        name="temp.gpx",
+        content=content,
+        save=False,
     )
     log.debug(f"gpx file created: {gpx_track.gpx_file!r}")

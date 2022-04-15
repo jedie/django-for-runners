@@ -17,5 +17,10 @@ log = logging.getLogger(__name__)
 
 @admin.register(DistanceModel)
 class DistanceModelAdmin(admin.ModelAdmin):
-    list_display = ("get_human_distance", "get_human_variance", "get_human_variance_as_length", "get_human_min_max")
+    list_display = (
+        "get_human_distance",
+        "get_human_variance",
+        "get_human_variance_as_length",
+        "get_human_min_max",
+    )
     list_display_links = ("get_human_distance",)

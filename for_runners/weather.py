@@ -150,11 +150,19 @@ class MetaWeatherCom:
         weather_state_counter = collections.Counter()
         for delta_seconds, result in sorted(data.items()):
             if len(temperatures) > 0 and delta_seconds > max_seconds:
-                # Skip if "created" date time is more than max_seconds, but collect at least one result
+                # Skip if "created" date time is more than max_seconds,
+                # but collect at least one result
                 continue
 
-            temperature = statistics.median([result["min_temp"], result["the_temp"], result["max_temp"]])
-            log.debug("Collect %.1f°C from %s (delta: %isec)", temperature, result["created"], delta_seconds)
+            temperature = statistics.median(
+                [result["min_temp"], result["the_temp"], result["max_temp"]]
+            )
+            log.debug(
+                "Collect %.1f°C from %s (delta: %isec)",
+                temperature,
+                result["created"],
+                delta_seconds,
+            )
             temperatures.append(temperature)
 
             weather_state_counter[result["weather_state_name"]] += 1
@@ -163,7 +171,9 @@ class MetaWeatherCom:
 
         temperature = statistics.median(temperatures)
 
-        # print(weather_state_counter) # e.g.: Counter({'Light Cloud': 5, 'Showers': 2, 'Heavy Cloud': 1})
+        # print(weather_state_counter)
+        # e.g.: Counter({'Light Cloud': 5, 'Showers': 2, 'Heavy Cloud': 1})
+
         weather_states = [
             item[0] for item in weather_state_counter.most_common()
         ]  # e.g.: ['Light Cloud', 'Showers', 'Heavy Cloud']
@@ -174,7 +184,6 @@ class MetaWeatherCom:
 
         return temperature, weather_state
 
-        #
         # print(
         #     created_datetime,
         #     "%s°C" % round(result["min_temp"]),
@@ -192,9 +201,7 @@ class MetaWeatherCom:
         nearest_woeid, woe_data, json_data = self.lat_lon2woeid(lat, lon)
         log.info("Use nearest WOEID: %i (%r)", nearest_woeid, woe_data)
         temperature, weather_state = self.location_day(
-            woeid=nearest_woeid,
-            date=date,
-            max_seconds=max_seconds
+            woeid=nearest_woeid, date=date, max_seconds=max_seconds
         )
         return temperature, weather_state
 

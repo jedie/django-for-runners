@@ -13,7 +13,6 @@ admin.autodiscover()
 
 urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
-
     # until there is not real CMS pages: redirect to the interesting admin page:
     url(r"^$", RedirectView.as_view(url="/admin/for_runners/gpxmodel/")),
 )
@@ -31,4 +30,5 @@ if settings.SERVE_FILES:
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [url(r'^__debug__/', include(debug_toolbar.urls))] + urlpatterns

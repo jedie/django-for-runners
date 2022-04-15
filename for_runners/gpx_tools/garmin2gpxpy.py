@@ -37,7 +37,9 @@ def garmin2gpxpy(content):
         point_time = gpxpy.gpxfield.parse_time(point_time)
 
         # print('latitude', latitude, 'longitude', longitude, "elevation", elevation)
-        point = gpxpy.gpx.GPXTrackPoint(latitude=latitude, longitude=longitude, elevation=elevation, time=point_time)
+        point = gpxpy.gpx.GPXTrackPoint(
+            latitude=latitude, longitude=longitude, elevation=elevation, time=point_time
+        )
         gpx.tracks[0].segments[0].points.append(point)
 
     return gpx

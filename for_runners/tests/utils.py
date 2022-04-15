@@ -42,7 +42,11 @@ def kilometers2lon_count(kilometers):
 
 
 def generate_gpx_track(
-    track_length_km, point_count, pace_min, start_longitude=0, start_date=datetime(2018, 5, 30, 10, 00)
+    track_length_km,
+    point_count,
+    pace_min,
+    start_longitude=0,
+    start_date=datetime(2018, 5, 30, 10, 00),
 ):
     distance_km = track_length_km / point_count
     print("km between points:", distance_km)
@@ -57,7 +61,9 @@ def generate_gpx_track(
     gpxpy_instance.tracks.append(GPXTrack())
     gpxpy_instance.tracks[0].segments.append(GPXTrackSegment())
     points = gpxpy_instance.tracks[0].segments[0].points
-    points.append(GPXTrackPoint(latitude=0, longitude=start_longitude, elevation=0, time=start_date))
+    points.append(
+        GPXTrackPoint(latitude=0, longitude=start_longitude, elevation=0, time=start_date)
+    )
     print("Start point:", points[-1])
 
     td = 0
@@ -66,7 +72,11 @@ def generate_gpx_track(
     for point_no in range(point_count):
         current_longitude += longitude_diff
         current_datetime += time_delta
-        points.append(GPXTrackPoint(latitude=0, longitude=current_longitude, elevation=0, time=current_datetime))
+        points.append(
+            GPXTrackPoint(
+                latitude=0, longitude=current_longitude, elevation=0, time=current_datetime
+            )
+        )
         print("point %i: %s" % (point_no + 1, points[-1]))
 
         print("\ttime diff:", points[-1].time_difference(points[-2]))

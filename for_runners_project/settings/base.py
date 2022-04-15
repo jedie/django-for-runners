@@ -3,7 +3,6 @@
 """
 
 import logging
-import sys as __sys
 from pathlib import Path as __Path
 
 from django.utils.translation import ugettext_lazy as _
@@ -14,26 +13,9 @@ from for_runners.app_settings import *  # noqa
 ###############################################################################
 
 # Build paths relative to the project root:
-PROJECT_PATH = __Path(__file__).parent.parent.parent
-print(f'PROJECT_PATH:{PROJECT_PATH}', file=__sys.stderr)
-
-if __Path('/.dockerenv').is_file():
-    # We are inside a docker container
-    BASE_PATH = __Path('/django_volumes')
-    assert BASE_PATH.is_dir()
-else:
-    # Build paths relative to the current working directory:
-    BASE_PATH = __Path().cwd().resolve()
-
-print(f'BASE_PATH:{BASE_PATH}', file=__sys.stderr)
-
-# Paths with Django dev. server:
-# BASE_PATH...: .../django-for-runners
-# PROJECT_PATH: .../django-for-runners/src
-#
-# Paths in Docker container:
-# BASE_PATH...: /for_runners_volumes
-# PROJECT_PATH: /usr/local/lib/python3.9/site-packages
+BASE_PATH = __Path(__file__).parent.parent.parent
+print(f'BASE_PATH:{BASE_PATH}')
+assert __Path(BASE_PATH, 'for_runners_project').is_dir()
 
 ###############################################################################
 
@@ -42,7 +24,7 @@ print(f'BASE_PATH:{BASE_PATH}', file=__sys.stderr)
 DEBUG = False
 
 # Serve static/media files by Django?
-# In production Caddy should serve this!
+# In production the Webserver should serve this!
 SERVE_FILES = False
 
 
@@ -51,6 +33,7 @@ __SECRET_FILE = __Path(BASE_PATH, 'secret.txt').resolve()
 if not __SECRET_FILE.is_file():
     print(f'Generate {__SECRET_FILE}')
     from secrets import token_urlsafe as __token_urlsafe
+
     __SECRET_FILE.open('w').write(__token_urlsafe(128))
 
 SECRET_KEY = __SECRET_FILE.open('r').read().strip()
@@ -66,14 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
     'bx_py_utils',  # https://github.com/boxine/bx_py_utils
     'import_export',  # https://github.com/django-import-export/django-import-export
     'dbbackup',  # https://github.com/django-dbbackup/django-dbbackup
-
     'axes',  # https://github.com/jazzband/django-axes
     'django_processinfo',  # https://github.com/jedie/django-processinfo/
-
     # Django-ForRunners
     'for_runners.apps.ForRunnersConfig',
     'for_runners_project.for_runners_helper_app',
@@ -90,24 +70,23 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     'django_processinfo.middlewares.ProcessInfoMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
     'axes.middleware.AxesMiddleware',  # AxesMiddleware should be the last middleware
 ]
 
+__TEMPLATE_DIR = __Path(BASE_PATH, 'for_runners_project', 'templates')
+assert __TEMPLATE_DIR.is_dir()
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        "DIRS": [str(__Path(PROJECT_PATH, 'for_runners_project', 'templates'))],
+        "DIRS": [str(__TEMPLATE_DIR)],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,7 +99,6 @@ TEMPLATES = [
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.tz',
                 'django.template.context_processors.static',
-
                 'for_runners.context_processors.for_runners_version_string',
             ],
         },

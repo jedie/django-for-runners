@@ -135,7 +135,7 @@ lines_after_imports=2
 # https://docs.pytest.org/en/latest/customize.html#pyproject-toml
 minversion = "6.0"
 DJANGO_SETTINGS_MODULE="for_runners_project.settings.tests"
-norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes"
+norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes migrations"
 # sometimes helpfull "addopts" arguments:
 #    -vv
 #    --verbose

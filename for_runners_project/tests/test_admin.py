@@ -36,8 +36,12 @@ class AdminLoggedinTests(HtmlAssertionMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.superuser = baker.make(User, username='superuser', is_staff=True, is_active=True, is_superuser=True)
-        cls.staffuser = baker.make(User, username='staff_test_user', is_staff=True, is_active=True, is_superuser=False)
+        cls.superuser = baker.make(
+            User, username='superuser', is_staff=True, is_active=True, is_superuser=True
+        )
+        cls.staffuser = baker.make(
+            User, username='staff_test_user', is_staff=True, is_active=True, is_superuser=False
+        )
 
     def test_staff_admin_index(self):
         self.client.force_login(self.staffuser)

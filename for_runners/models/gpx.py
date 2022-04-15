@@ -138,7 +138,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     length = models.PositiveIntegerField(
         help_text=_(
-            "Length in meters (calculated from GPX track 3-dimensional used latitude, longitude, and elevation)"
+            "Length in meters"
+            " (calculated from GPX track 3-dimensional used latitude, longitude, and elevation)"
         ),
         null=True,
         blank=True,
@@ -147,13 +148,18 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         to=DistanceModel,
         on_delete=models.SET_NULL,
         related_name="tracks",
-        help_text=_("Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"),
+        help_text=_(
+            "Length in meters (calculated 3-dimensional used latitude, longitude, and elevation)"
+        ),
         null=True,
         blank=True,
     )
 
     duration_s = models.PositiveIntegerField(
-        help_text=_("Duration in seconds (from the GPX track)"), editable=False, null=True, blank=True
+        help_text=_("Duration in seconds (from the GPX track)"),
+        editable=False,
+        null=True,
+        blank=True,
     )
     pace = models.DecimalField(
         help_text=_("Min/km (number of minutes it takes to cover a kilometer)"),
@@ -206,11 +212,11 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         e.g:
             ~/DjangoForRunnersEnv/media/gpx_track_<date>/<prefix_id>.<file_extension>
         """
+        # settings.MEDIA_ROOT,
+        # TODO: Use https://github.com/jedie/django-tools/tree/master/django_tools/serve_media_app
         date_prefix = self.start_time.strftime("%Y_%m")
         upload_path = "/".join(
             (
-                # settings.MEDIA_ROOT,
-                # TODO: Use https://github.com/jedie/django-tools/tree/master/django_tools/serve_media_app
                 self.tracked_by.username,
                 f"gpx_track_{date_prefix}",
                 f"{self.get_prefix_id()}.{file_extension}",
@@ -246,7 +252,9 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
     def svg_tag_big(self):
         if self.track_svg:
-            html = f'<img src="{self.track_svg.url}" alt="gpx track" height="200px" width="200px" />'
+            html = (
+                f'<img src="{self.track_svg.url}" alt="gpx track" height="200px" width="200px" />'
+            )
             return mark_safe(html)
         return ""
 
@@ -400,19 +408,17 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     human_weather.admin_order_field = "start_temperature"
 
     def _coordinate2link(self, lat, lon):
+        url1 = (
+            'https://nominatim.openstreetmap.org/reverse'
+            f'?lat={lat}&lon={lon}&format=json&addressdetails=1'
+        )
+        url2 = f'https://www.openstreetmap.org/search?query={lat}%2C{lon}'
+        title = f'Reverse {lat},{lon} address with OpenStreepMap'
         html = (
-            "<a"
-            ' href="https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"'
-            ' title="Reverse {lat},{lon} address with OpenStreepMap"'
-            ' target="_blank"'
-            ">reverse address</a>"
+            f'<a href="{url1}" title="{title}" target="_blank">reverse address</a>'
             "<br>"
-            "<a"
-            ' href="https://www.openstreetmap.org/search?query={lat}%2C{lon}"'
-            ' title="OpenStreepMap at {lat},{lon}"'
-            ' target="_blank"'
-            ">map</a>"
-        ).format(lat=lat, lon=lon)
+            f'<a href="{url2}" title="OpenStreepMap at {lat},{lon}" target="_blank">map</a>'
+        )
         return mark_safe(html)
 
     def start_coordinate_html(self):

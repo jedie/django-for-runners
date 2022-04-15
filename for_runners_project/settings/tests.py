@@ -13,9 +13,7 @@ SECRET_KEY = 'No individual secret for tests ;)'
 DEBUG = True
 
 # Speedup tests by change the Password hasher:
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-)
+PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
 
 # _____________________________________________________________________________
 

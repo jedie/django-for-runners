@@ -31,8 +31,5 @@ class UserMediaView(View):
 
         # Send the file to the user:
         return serve(
-            request,
-            path=media_path,
-            document_root=settings.MEDIA_ROOT,
-            show_indexes=False
+            request, path=media_path, document_root=settings.MEDIA_ROOT, show_indexes=False
         )

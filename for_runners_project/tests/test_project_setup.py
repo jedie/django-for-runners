@@ -11,7 +11,7 @@ from django.test import TestCase
 import for_runners
 
 
-PACKAGE_ROOT = Path(for_runners.__file__).parent.parent.parent
+PACKAGE_ROOT = Path(for_runners.__file__).parent.parent
 
 
 def assert_file_contains_string(file_path, string):
@@ -33,23 +33,15 @@ def test_version(package_root=None, version=None):
         version_string = f'v{version}'
 
         assert_file_contains_string(
-            file_path=Path(package_root, 'README.creole'),
-            string=version_string
+            file_path=Path(package_root, 'README.creole'), string=version_string
         )
 
         assert_file_contains_string(
-            file_path=Path(package_root, 'README.rst'),
-            string=version_string
+            file_path=Path(package_root, 'README.rst'), string=version_string
         )
 
     assert_file_contains_string(
-        file_path=Path(package_root, 'pyproject.toml'),
-        string=f'version = "{version}"'
-    )
-
-    assert_file_contains_string(
-        file_path=Path(package_root, 'deployment', 'project.env'),
-        string=f'PROJECT_VERSION={version}'
+        file_path=Path(package_root, 'pyproject.toml'), string=f'version = "{version}"'
     )
 
 
@@ -71,9 +63,7 @@ def test_poetry_check(package_root=None):
 
 
 def test_update_rst_readme(capsys):
-    rest_readme_path = update_rst_readme(
-        package_root=PACKAGE_ROOT, filename='README.creole'
-    )
+    rest_readme_path = update_rst_readme(package_root=PACKAGE_ROOT, filename='README.creole')
     captured = capsys.readouterr()
     assert captured.out == 'Generate README.rst from README.creole...nothing changed, ok.\n'
     assert captured.err == ''
@@ -83,7 +73,7 @@ def test_update_rst_readme(capsys):
 
 class ProjectSettingsTestCase(TestCase):
     def test_project_path(self):
-        project_path = settings.PROJECT_PATH
+        project_path = settings.BASE_PATH
         assert project_path.is_dir()
         assert Path(project_path, 'for_runners').is_dir()
         assert Path(project_path, 'for_runners_project').is_dir()

@@ -100,7 +100,8 @@ class GpxIdentifier:
 
 def parse_gpx(content):
     # if 'creator="Garmin Connect"' in content:
-    #     # work-a-round until https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
+    #     work-a-round until
+    #     https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
     #     return garmin2gpxpy(content)
 
     return gpxpy.parse(content)
@@ -122,7 +123,8 @@ def iter_points(gpxpy_instance):
 
 def iter_coordinates(gpxpy_instance):
     for point in iter_points(gpxpy_instance):
-        # log.debug('Point at ({0},{1}) -> {2}'.format(point.latitude, point.longitude, point.elevation))
+        # log.debug('Point at ({0},{1})
+        # -> {2}'.format(point.latitude, point.longitude, point.elevation))
         yield (point.latitude, point.longitude, point.elevation)
 
 
@@ -213,7 +215,8 @@ def iter_distance(gpxpy_instance, distance):
 
         previous_total_distance = total_distance
         total_distance += geo_distance(
-            old_latitude, old_longitude, old_elevation, latitude, longitude, elevation)
+            old_latitude, old_longitude, old_elevation, latitude, longitude, elevation
+        )
 
         old_latitude, old_longitude, old_elevation = latitude, longitude, elevation
 

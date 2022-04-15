@@ -26,8 +26,10 @@ def construct_short_address(address):
         parts.append(address["county"])
     else:
         parts.append(
-            address.get("city") or address.get("town")
-            or address.get("county") or address.get("state")
+            address.get("city")
+            or address.get("town")
+            or address.get("county")
+            or address.get("state")
         )
         parts.append(address.get("suburb"))
 
@@ -73,16 +75,13 @@ def reverse_geo(lat, lon):
         location = geolocator.reverse(
             query=f"{lat2}, {lon2}",
             # TODO: language={user language}
-            zoom=17  # major and minor streets
+            zoom=17,  # major and minor streets
         )
         full_address = location.address
         raw_address = location.raw["address"]
         address = (full_address, raw_address)
         log.debug('Store to cache: %r', cache_key)
-        cache.set(
-            cache_key, address,
-            timeout=None  # cache forever
-        )
+        cache.set(cache_key, address, timeout=None)  # cache forever
 
     short_address = construct_short_address(address=raw_address)
     log.info(f'short_address={short_address}')

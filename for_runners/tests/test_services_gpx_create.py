@@ -39,19 +39,19 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json')
+                content=fixture_content('metaweather_5144_662.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/2/21/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json')
+                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
             )
             gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
             instance = add_gpx(gpx_content=gpx_content, user=self.user)
             self.assert_garmin_connect_1_gpx(instance)
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
-            ('for_runners', 'gpxmodel', 'gpx_file')
+            ('for_runners', 'gpxmodel', 'gpx_file'),
         ]
         assert storage_stats.fields_read == []
 
@@ -60,21 +60,20 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json')
+                content=fixture_content('metaweather_5144_662.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/2/21/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json')
+                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
             )
             instance = add_from_file(
-                gpx_file_file_path=FIXTURES_PATH / 'garmin_connect_1.gpx',
-                user=self.user
+                gpx_file_file_path=FIXTURES_PATH / 'garmin_connect_1.gpx', user=self.user
             )
             self.assert_garmin_connect_1_gpx(instance)
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
-            ('for_runners', 'gpxmodel', 'gpx_file')
+            ('for_runners', 'gpxmodel', 'gpx_file'),
         ]
         assert storage_stats.fields_read == []
 
@@ -83,17 +82,17 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=51.44,6.62',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5144_662.json')
+                content=fixture_content('metaweather_5144_662.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/648820/2018/2/21/',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_location_648820_2018_2_21.json')
+                content=fixture_content('metaweather_location_648820_2018_2_21.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=52.52,13.38',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_5252_1338.json')  # 4.5°C 'Light Cloud'
+                content=fixture_content('metaweather_5252_1338.json'),  # 4.5°C 'Light Cloud'
             )
             m.get(
                 'https://www.metaweather.com/api/location/638242/2011/1/13/',
@@ -103,7 +102,7 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(
                 'https://www.metaweather.com/api/location/search/?lattlong=46.95,7.44',
                 headers={'Content-Type': 'application/json'},
-                content=fixture_content('metaweather_4695_744.json')
+                content=fixture_content('metaweather_4695_744.json'),
             )
             m.get(
                 'https://www.metaweather.com/api/location/784794/2011/1/15/',
@@ -118,11 +117,9 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
                     skip_errors=True,
                 )
             ]
-            assert_pformat_equal(
-                instances, ["2018-02-21", "2011-01-13"]
-            )
+            assert_pformat_equal(instances, ["2018-02-21", "2011-01-13"])
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
-            ('for_runners', 'gpxmodel', 'gpx_file')
+            ('for_runners', 'gpxmodel', 'gpx_file'),
         ]
         assert storage_stats.fields_read == []

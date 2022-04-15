@@ -205,7 +205,8 @@ class GpxInfoView(BaseChangelistView):
         context = super().get_context_data(**kwargs)
         context.update(
             {
-                "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList,
+                # get the filtered queryset form GpxModelChangeList:
+                "tracks": self.change_list.queryset,
                 "title": _("GPX Infomation"),
                 "user": self.request.user,
                 "opts": GpxModel._meta,
@@ -221,7 +222,8 @@ class GpxMetadataView(BaseChangelistView):
         context = super().get_context_data(**kwargs)
         context.update(
             {
-                "tracks": self.change_list.queryset,  # get the filteres queryset form GpxModelChangeList
+                # get the filtered queryset form GpxModelChangeList:
+                "tracks": self.change_list.queryset,
                 "title": _("GPX Metadata"),
                 "user": self.request.user,
                 "opts": GpxModel._meta,
@@ -388,7 +390,9 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
             "coordinates": coordinates,
             "km_gpx_points": km_gpx_points,
         }
-        return render_to_string(template_name="admin/for_runners/gpxmodel/leaflet_map.html", context=context)
+        return render_to_string(
+            template_name="admin/for_runners/gpxmodel/leaflet_map.html", context=context
+        )
 
     leaflet_map_html.short_description = _("Route")
 
@@ -459,7 +463,9 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
             "km_points": km_points,
             "time2coordinates": time2coordinates,
         }
-        return render_to_string(template_name="admin/for_runners/gpxmodel/dygraphs.html", context=context)
+        return render_to_string(
+            template_name="admin/for_runners/gpxmodel/dygraphs.html", context=context
+        )
 
     dygraphs_html.short_description = _("Graphs")
 
@@ -471,7 +477,9 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         gpx_tracks = GpxModel.objects.all().filter(participation__event=event).exclude(pk=obj.pk)
 
         context = {"event": event, "gpx_tracks": gpx_tracks}
-        return render_to_string(template_name="admin/for_runners/gpxmodel/participation_links.html", context=context)
+        return render_to_string(
+            template_name="admin/for_runners/gpxmodel/participation_links.html", context=context
+        )
 
     participation_links.short_description = _("Links")
 
@@ -596,7 +604,11 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         urls = super().get_urls()
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            url(r"^upload/$", self.admin_site.admin_view(UploadGpxFileView.as_view()), name="upload-gpx-file"),
+            url(
+                r"^upload/$",
+                self.admin_site.admin_view(UploadGpxFileView.as_view()),
+                name="upload-gpx-file",
+            ),
             url(
                 r"^distance-statistics/$",
                 self.admin_site.admin_view(DistanceStatisticsView.as_view()),
@@ -607,7 +619,11 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
                 name="distance-pace-statistics",
             ),
-            url(r"^print_mini/$", self.admin_site.admin_view(PrintMiniView.as_view()), name="print-mini"),
+            url(
+                r"^print_mini/$",
+                self.admin_site.admin_view(PrintMiniView.as_view()),
+                name="print-mini",
+            ),
             url(
                 r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),
