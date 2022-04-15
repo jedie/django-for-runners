@@ -327,11 +327,11 @@ Older changes, see:
 history
 -------
 
-* `compare v0.13.0rc1...main <https://github.com/jedie/django-for-runners/compare/v0.13.0rc1...main>`_ **dev**
+* `compare v0.13.0...main <https://github.com/jedie/django-for-runners/compare/v0.13.0...main>`_ **dev**
 
     * tbc
 
-* `15.04.2022 - v0.13.0rc1 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0rc1>`_:
+* `15.04.2022 - v0.13.0 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0>`_:
 
     * Switch git branch from "master" to "main"
 
