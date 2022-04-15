@@ -1,6 +1,6 @@
 # https://github.com/actions/setup-python
 
-name: test
+name: Test
 
 on:
   push:
@@ -23,6 +23,11 @@ jobs:
         os: [ubuntu-latest] # TODO: macOS-latest, windows-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: 'fetch main'
+      run: |
+        git fetch origin main
     - name: 'Set up Python ${{ matrix.python-version }}'
       uses: actions/setup-python@v2
       with:

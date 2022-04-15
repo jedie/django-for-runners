@@ -103,7 +103,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.darker]
 src = ['.']
-revision = "origin/master..."
+revision = "origin/main..."
 line_length = 100
 verbose = true
 skip_string_normalization = true
