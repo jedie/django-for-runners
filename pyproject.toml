@@ -146,7 +146,7 @@ norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes migrations"
 addopts = """
     --reuse-db
     --nomigrations
-    --cov=src
+    --cov=.
     --cov-report term-missing
     --cov-report html
     --cov-report xml
