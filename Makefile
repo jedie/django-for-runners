@@ -37,16 +37,6 @@ manage-update: ## Collectstatic + makemigration + migrate
 	./manage.sh makemigrations
 	./manage.sh migrate
 
-lint: ## Run code formatters and linter
-	poetry run flynt -e "volumes" --fail-on-change --line-length=${MAX_LINE_LENGTH} .
-	poetry run isort --check-only .
-	poetry run flake8 .
-
-fix-code-style: ## Fix code formatting
-	poetry run flynt -e "volumes" --line-length=${MAX_LINE_LENGTH} src
-	poetry run pyupgrade --exit-zero-even-if-changed --py3-plus --py36-plus --py37-plus `find src -name "*.py" -type f ! -path "./.tox/*" ! -path "./volumes/*" 2>/dev/null`
-	poetry run isort src
-	poetry run autopep8 --exclude="volumes,migrations" --aggressive --aggressive --in-place --recursive src
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
