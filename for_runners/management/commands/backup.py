@@ -96,7 +96,7 @@ class Command(BaseCommand):
         now = datetime.datetime.now()
         timestamp = now.strftime("%Y%m%d_%H%M")
 
-        backup_path = Path(settings.PROJECT_PATH, "backups", timestamp)
+        backup_path = Path(settings.BASE_PATH, "backups", timestamp)
 
         print("_" * 100)
         print(f" *** Create backup to: {backup_path} ***")
