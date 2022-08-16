@@ -68,12 +68,12 @@ postgres = ["psycopg2-binary"]
 [tool.poetry.dev-dependencies]
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 python-creole = "*"  # https://github.com/jedie/python-creole
+colorlog = "*"  # https://github.com/borntyping/python-colorlog
 tox = "*"
 pytest = "*"
 pytest-randomly = "*"
 pytest-cov = "*"
 pytest-django = "*"
-selenium = "*"
 django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
 pytest-darker = "*"  # https://github.com/akaihola/pytest-darker
 coveralls = "*"
@@ -89,8 +89,8 @@ update_rst_readme = "for_runners_project.publish:update_readme"
 publish = "for_runners_project.publish:publish"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
 
 
 [tool.darker]
@@ -107,10 +107,6 @@ lint = [
     "flake8",
 ]
 log_level = "INFO"
-
-
-[tool.flynt]
-line_length = 100
 
 
 [tool.isort]
@@ -136,6 +132,7 @@ norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes migrations"
 #    --full-trace
 #    -p no:warnings
 addopts = """
+    --import-mode=importlib
     --reuse-db
     --nomigrations
     --cov=.
@@ -157,10 +154,14 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{37,38,39,310}
+envlist = py{37,38,39,310}-django{3.2,4.0,4.1}
 skip_missing_interpreters = True
 
 [testenv]
+deps =
+    django3.2: django>=3.2,<3.3
+    django4.0: django>=4.0,<4.1
+    django4.1: django>=4.1,<4.2
 whitelist_externals = make
 commands =
     make pytest
