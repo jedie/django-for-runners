@@ -7,7 +7,7 @@
 import logging
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # https://github.com/jedie/django-for-runners
 from for_runners.gpx_tools.humanize import human_distance

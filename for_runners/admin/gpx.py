@@ -10,7 +10,6 @@ import statistics
 from pprint import pprint
 
 from django import forms
-from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
 from django.db import IntegrityError, NotSupportedError, models
@@ -18,10 +17,10 @@ from django.db.models import Avg, Max, Min
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from django.urls import reverse
+from django.urls import path, re_path, reverse
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 # https://github.com/jedie/django-tools
@@ -604,27 +603,27 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         urls = super().get_urls()
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            url(
-                r"^upload/$",
+            path(
+                'upload/',
                 self.admin_site.admin_view(UploadGpxFileView.as_view()),
                 name="upload-gpx-file",
             ),
-            url(
-                r"^distance-statistics/$",
+            path(
+                'distance-statistics/',
                 self.admin_site.admin_view(DistanceStatisticsView.as_view()),
                 name="distance-statistics",
             ),
-            url(
-                r"^distance-pace-statistics/$",
+            path(
+                'distance-pace-statistics/',
                 self.admin_site.admin_view(DistancePaceStatisticsView.as_view()),
                 name="distance-pace-statistics",
             ),
-            url(
-                r"^print_mini/$",
+            path(
+                'print_mini/',
                 self.admin_site.admin_view(PrintMiniView.as_view()),
                 name="print-mini",
             ),
-            url(
+            re_path(
                 r"^(.+)/calculate_values/$",
                 self.admin_site.admin_view(CalculateValuesView.as_view()),
                 name="%s_%s_calculate-values" % info,
