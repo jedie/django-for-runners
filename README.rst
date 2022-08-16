@@ -91,7 +91,7 @@ prepare
     ~/django-for-runners$ make
     _________________________________________________________________
     DjangoForRunners - *dev* Makefile
-
+    
     install-poetry         install or update poetry
     install                install DjangoForRunners via poetry
     manage-update          Collectstatic + makemigration + migrate
@@ -118,17 +118,17 @@ local development installation
 
     # install or update Poetry:
     ~/django-for-runners$ make install-poetry
-
+    
     # install  Django-ForRunners via poetry:
     ~/django-for-runners$ make install
     ...
-
+    
     # Collectstatic + makemigration + migrate:
     ~/django-for-runners$ make manage-update
-
+    
     # Create a django super user:
     ~/django-for-runners$ ./manage.sh createsuperuser
-
+    
     # start local dev. web server:
     ~/django-for-runners$ make run-dev-server
 
@@ -222,9 +222,9 @@ run tests
 ::
 
     ~/Django-ForRunners$ make test
-
+    
     or:
-
+    
     ~/Django-ForRunners$ make tox
 
 **Note:**
@@ -304,9 +304,11 @@ Django compatibility
 +--------------------+----------------+---------------------+
 | django-for-runners | django version | python              |
 +====================+================+=====================+
-| >=v0.12.0          | 2.2.x LTS      | 3.7, 3.8, 3.9, 3.10 |
+| >=v0.14.0          | 3.2            | 3.7, 3.8, 3.9, 3.10 |
 +--------------------+----------------+---------------------+
-| >=v0.11.0          | 2.2.x LTS      | 3.7, 3.8, 3.9       |
+| >=v0.12.0          | 2.2            | 3.7, 3.8, 3.9, 3.10 |
++--------------------+----------------+---------------------+
+| >=v0.11.0          | 2.2            | 3.7, 3.8, 3.9       |
 +--------------------+----------------+---------------------+
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7       |
 +--------------------+----------------+---------------------+
@@ -327,9 +329,15 @@ Older changes, see:
 history
 -------
 
-* `compare v0.13.0...main <https://github.com/jedie/django-for-runners/compare/v0.13.0...main>`_ **dev**
+* `compare v0.14.0...main <https://github.com/jedie/django-for-runners/compare/v0.14.0...main>`_ **dev** 
 
     * tbc
+
+* `16.08.2022 - v0.14.0 <https://github.com/jedie/django-for-runners/compare/v0.13.0...v0.14.0>`_:
+
+    * Update to Django v3.2
+
+    * Bugfix backup manage command
 
 * `15.04.2022 - v0.13.0 <https://github.com/jedie/django-for-runners/compare/v0.12.1...v0.13.0>`_:
 
@@ -575,4 +583,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2022-04-15 21:02:00 with "python-creole"``
+``Note: this file is generated from README.creole 2022-08-16 17:12:45 with "python-creole"``
