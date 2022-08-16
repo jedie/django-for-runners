@@ -56,6 +56,10 @@ tox-py38: check-poetry ## Run pytest via tox with *python v3.8*
 pytest: check-poetry ## Run pytest
 	DJANGO_SETTINGS_MODULE=for_runners_project.settings.tests poetry run pytest
 
+lint: ## Run code formatters and linter
+	poetry run isort --check-only .
+	poetry run flake8 .
+
 renew-fixtures: ## Renew all fixture files
 	./manage.sh renew_fixtures
 

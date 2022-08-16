@@ -4,7 +4,7 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-__version__ = "0.13.0"
+__version__ = "0.14.0"
 
 # https://docs.djangoproject.com/en/2.0/ref/applications/#configuring-applications-ref
 default_app_config = "for_runners.apps.ForRunnersConfig"
