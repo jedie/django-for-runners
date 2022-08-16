@@ -16,7 +16,7 @@ end_of_line = crlf
 insert_final_newline = false
 
 [*.py]
-line_length = 119
+max_line_length = 100
 
 [{Makefile,**.mk}]
 indent_style = tab
@@ -24,4 +24,3 @@ insert_final_newline = false
 
 [*.yml]
 indent_style = tab
-indent_size = 4
