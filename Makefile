@@ -54,7 +54,7 @@ tox-py38: check-poetry ## Run pytest via tox with *python v3.8*
 	poetry run tox -e py38
 
 pytest: check-poetry ## Run pytest
-	DJANGO_SETTINGS_MODULE=for_runners_project.settings.tests poetry run pytest --workers auto --tests-per-worker 1
+	DJANGO_SETTINGS_MODULE=for_runners_project.settings.tests poetry run pytest
 
 renew-fixtures: ## Renew all fixture files
 	./manage.sh renew_fixtures

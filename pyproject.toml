@@ -41,10 +41,8 @@ python = ">=3.7,<4.0.0"
 click = "*"  # https://github.com/mitsuhiko/click
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
 gunicorn = "*"  # https://github.com/benoimyproject.wsgitc/gunicorn
-#
-# https://www.djangoproject.com/download/#supported-versions
-# v2.2 LTS - extended support until April 2022
-django = "2.2.*"
+
+django = "*"
 django-processinfo = "*"  # https://github.com/jedie/django-processinfo/
 django-debug-toolbar = "*"  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
 django-tools = "*"  # https://github.com/jedie/django-tools/
@@ -75,18 +73,12 @@ pytest = "*"
 pytest-randomly = "*"
 pytest-cov = "*"
 pytest-django = "*"
-pytest-parallel = "*"
 selenium = "*"
 django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
 pytest-darker = "*"  # https://github.com/akaihola/pytest-darker
-pytest-flake8 = "*"
-pytest-isort = "*"
 coveralls = "*"
 isort = "*"
 flake8 = "*"
-flynt = "*"
-darker = "*"  # https://github.com/akaihola/darker
-pyupgrade = "*"
 model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 requests-mock = "*"
 django-override-storage = "*"  # https://github.com/danifus/django-override-storage
@@ -153,8 +145,6 @@ addopts = """
     --no-cov-on-fail
     --showlocals
     --darker
-    --flake8
-    --isort
     --doctest-modules
     --failed-first
     --last-failed-no-failures all
@@ -167,11 +157,11 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = px310,py39,py38,py37
+envlist = py{37,38,39,310}
 skip_missing_interpreters = True
 
 [testenv]
-whitelist_externals = pytest
+whitelist_externals = make
 commands =
-    pytest --workers auto --tests-per-worker 1 --pyargs for_runners for_runners_project
+    make pytest
 """

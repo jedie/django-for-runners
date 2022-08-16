@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
 
 from for_runners.gpx_tools.humanize import human_distance, human_seconds
