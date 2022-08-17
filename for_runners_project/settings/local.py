@@ -42,6 +42,9 @@ print(f'Use Database: {DATABASES["default"]["NAME"]!r}', file=__sys.stderr)
 # Download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
 MAP_DOWNLOAD = True
 
+# Auto login for dev. server:
+MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
+
 # _____________________________________________________________________________
 # Django-Debug-Toolbar
 
