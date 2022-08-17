@@ -28,11 +28,6 @@ update: install-poetry ## update the sources and installation
 	poetry run pip install -U pip
 	poetry update
 
-manage-update: ## Collectstatic + makemigration + migrate
-	./manage.sh collectstatic --noinput --link
-	./manage.sh makemigrations
-	./manage.sh migrate
-
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
 	poetry run flake8 .
@@ -61,8 +56,8 @@ update-rst-readme: ## update README.rst from README.creole
 publish: ## Release new version to PyPi
 	poetry run publish
 
-run-dev-server: manage-update  ## Run the django dev server in endless loop.
-	./manage.sh runserver
+run-dev-server: ## Run the django dev server in endless loop.
+	./manage.sh run_dev_server
 
 createsuperuser:  ## Create super user
 	./manage.sh createsuperuser
