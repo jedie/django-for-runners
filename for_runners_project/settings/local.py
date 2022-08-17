@@ -43,11 +43,13 @@ print(f'Use Database: {DATABASES["default"]["NAME"]!r}', file=__sys.stderr)
 MAP_DOWNLOAD = True
 
 # Auto login for dev. server:
+MIDDLEWARE = MIDDLEWARE.copy()
 MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
 
 # _____________________________________________________________________________
 # Django-Debug-Toolbar
 
+INSTALLED_APPS = INSTALLED_APPS.copy()
 INSTALLED_APPS += ['debug_toolbar']
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
