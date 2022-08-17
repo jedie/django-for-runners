@@ -131,6 +131,7 @@ norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes migrations"
 #    --trace-config
 #    --full-trace
 #    -p no:warnings
+#    -p no:randomly
 addopts = """
     --import-mode=importlib
     --reuse-db

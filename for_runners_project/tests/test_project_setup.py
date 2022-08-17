@@ -93,3 +93,9 @@ class ProjectSettingsTestCase(TestCase):
         assert cache.get(cache_key) == 'the cache content'
         cache.delete(cache_key)
         assert cache.get(cache_key) is None
+
+    def test_settings(self):
+        assert settings.SETTINGS_MODULE == 'for_runners_project.settings.tests'
+        middlewares = [entry.rsplit('.', 1)[-1] for entry in settings.MIDDLEWARE]
+        assert 'AlwaysLoggedInAsSuperUserMiddleware' not in middlewares
+        assert 'DebugToolbarMiddleware' not in middlewares
