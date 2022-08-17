@@ -22,7 +22,7 @@ install-poetry:  ## install or update poetry
 install: check-poetry  ## install project via poetry
 	poetry install
 
-update: check-poetry ## update the sources and installation
+update: install-poetry ## update the sources and installation
 	git fetch --all
 	git pull origin main
 	poetry run pip install -U pip
