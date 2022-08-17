@@ -304,6 +304,8 @@ Django compatibility
 +--------------------+----------------+---------------------+
 | django-for-runners | django version | python              |
 +====================+================+=====================+
+| >=v0.15.0          | 3.2, 4.0, 4.1  | 3.7, 3.8, 3.9, 3.10 |
++--------------------+----------------+---------------------+
 | >=v0.14.0          | 3.2            | 3.7, 3.8, 3.9, 3.10 |
 +--------------------+----------------+---------------------+
 | >=v0.12.0          | 2.2            | 3.7, 3.8, 3.9, 3.10 |
@@ -330,6 +332,8 @@ history
 -------
 
 * `compare v0.14.0...main <https://github.com/jedie/django-for-runners/compare/v0.14.0...main>`_ **dev** 
+
+    * Test against different Django Versions: 3.2, 4.0 and 4.1
 
     * tbc
 
@@ -583,4 +587,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2022-08-16 17:12:45 with "python-creole"``
+``Note: this file is generated from README.creole 2022-08-16 19:33:50 with "python-creole"``
