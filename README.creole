@@ -238,6 +238,7 @@ https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards
 == history
 
 * [[https://github.com/jedie/django-for-runners/compare/v0.14.0...main|compare v0.14.0...main]] **dev**
+** Activate auto login for local dev. server, for easier developing.
 ** Test against different Django Versions: 3.2, 4.0 and 4.1
 ** tbc
 * [[https://github.com/jedie/django-for-runners/compare/v0.13.0...v0.14.0|16.08.2022 - v0.14.0]]:

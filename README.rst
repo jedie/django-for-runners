@@ -333,6 +333,8 @@ history
 
 * `compare v0.14.0...main <https://github.com/jedie/django-for-runners/compare/v0.14.0...main>`_ **dev** 
 
+    * Activate auto login for local dev. server, for easier developing.
+
     * Test against different Django Versions: 3.2, 4.0 and 4.1
 
     * tbc
@@ -587,4 +589,4 @@ donation
 
 ------------
 
-``Note: this file is generated from README.creole 2022-08-16 19:33:50 with "python-creole"``
+``Note: this file is generated from README.creole 2022-08-17 10:01:22 with "python-creole"``
