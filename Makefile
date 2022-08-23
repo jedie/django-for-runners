@@ -50,9 +50,6 @@ pytest: check-poetry  ## Run pytest
 renew-fixtures: ## Renew all fixture files
 	./manage.sh renew_fixtures
 
-update-rst-readme: ## update README.rst from README.creole
-	poetry run update_rst_readme
-
 publish: ## Release new version to PyPi
 	poetry run publish
 
