@@ -224,11 +224,13 @@ Older changes, see:
 ## history
 
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.14.0...main)
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.15.0...main)
+  * tbc
+* [29.09.2022 - v0.15.0](https://github.com/jedie/django-for-runners/compare/v0.14.0...v0.15.0):
+  * Update requirements
   * Activate auto login for local dev. server, for easier developing.
   * Test against different Django Versions: 3.2, 4.0 and 4.1
   * Replace creole README with Markdown
-  * tbc
 * [16.08.2022 - v0.14.0](https://github.com/jedie/django-for-runners/compare/v0.13.0...v0.14.0):
   * Update to Django v3.2
   * Bugfix backup manage command

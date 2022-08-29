@@ -8,7 +8,7 @@ BASE_PATH = Path(__file__).parent
 
 
 def main():
-    assert 'DJANGO_SETTINGS_MODULE' in os.environ, 'No "DJANGO_SETTINGS_MODULE" in environment!'
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'for_runners_project.settings.local')
 
     try:
         from django.core.management import execute_from_command_line

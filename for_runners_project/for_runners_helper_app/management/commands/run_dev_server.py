@@ -7,7 +7,7 @@ from for_runners.models import DistanceModel
 class Command(RunServerCommand):
     help = "Run Django-ForRunners with django developer server"
 
-    def post_setup(self) -> None:
+    def post_setup(self, **options) -> None:
         self.stderr.write('_' * 79)
         self.stdout.write('Fill DistanceModel...')
         distance_model_count = DistanceModel.objects.all().count()
