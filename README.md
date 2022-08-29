@@ -225,6 +225,7 @@ Older changes, see:
 
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.14.0...main)
+  * Update requirements
   * Activate auto login for local dev. server, for easier developing.
   * Test against different Django Versions: 3.2, 4.0 and 4.1
   * Replace creole README with Markdown
