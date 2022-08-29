@@ -31,8 +31,7 @@ classifiers = [
 ]
 include = ['AUTHORS', 'LICENSE', 'README.creole']
 
-# Will be generated from README.creole with: 'poetry run update_rst_readme'
-readme='README.rst'
+readme='README.md'
 license = "GPL"
 
 [tool.poetry.dependencies]
@@ -67,7 +66,6 @@ postgres = ["psycopg2-binary"]
 
 [tool.poetry.dev-dependencies]
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
-python-creole = "*"  # https://github.com/jedie/python-creole
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
 tox = "*"
 pytest = "*"
@@ -85,12 +83,11 @@ django-override-storage = "*"  # https://github.com/danifus/django-override-stor
 
 [tool.poetry.scripts]
 manage = "for_runners_project.manage:main"
-update_rst_readme = "for_runners_project.publish:update_readme"
 publish = "for_runners_project.publish:publish"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 
 [tool.darker]
