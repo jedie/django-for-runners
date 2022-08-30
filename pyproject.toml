@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-for-runners"
-version = "0.15.0"
+version = "0.16.0rc1"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 homepage = "https://github.com/jedie/django-for-runners"
 authors = ["JensDiemer <git@jensdiemer.de>"]
@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
     "Topic :: Database :: Front-Ends",
@@ -46,6 +47,7 @@ django-processinfo = "*"  # https://github.com/jedie/django-processinfo/
 django-debug-toolbar = "*"  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
 django-tools = "*"  # https://github.com/jedie/django-tools/
 django-import-export = "*"  # https://github.com/django-import-export/django-import-export
+django-admin-sortable2 = "*"  # https://github.com/jrief/django-admin-sortable2
 autotask = "*"  # https://bitbucket.org/kbr/autotask
 gpxpy = "*" # https://github.com/tkrajina/gpxpy
 matplotlib = "*"  # http://matplotlib.org/

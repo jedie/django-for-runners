@@ -7,9 +7,11 @@ import collections
 import logging
 from decimal import Decimal as D
 
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.template.response import TemplateResponse
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -22,7 +24,12 @@ from for_runners.gpx_tools.humanize import (
     human_seconds,
 )
 from for_runners.models import EventLinkModel, EventModel
-from for_runners.models.event import CostModel, ParticipationModel
+from for_runners.models.event import (
+    CostModel,
+    ParticipationFileModel,
+    ParticipationImageModel,
+    ParticipationModel,
+)
 
 
 log = logging.getLogger(__name__)
@@ -268,6 +275,40 @@ class CostModelInline(admin.TabularInline):
     max_num = None
 
 
+class ParticipationAttachmentBaseInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = None  # Must be set in child class
+    fields = None  # Must be set in child class
+    extra = 0
+
+    def save_model(self, request, obj, form, change):
+        if obj.user_id is None:
+            obj.user = request.user
+
+        super().save_model(request, obj, form, change)
+
+
+class ParticipationFileModelInline(ParticipationAttachmentBaseInline):
+    model = ParticipationFileModel
+    fields = ('position', 'file', 'name')
+
+
+class ParticipationImageModelInline(ParticipationAttachmentBaseInline):
+    def preview(self, instance):
+        return format_html(
+            (
+                '<a href="{url}" title="{name}"'
+                ' target="_blank" class="image_file_input_preview">'
+                '<img style="width:9em;" src="{url}"></a>'
+            ),
+            url=instance.image.url,
+            name=instance.name,
+        )
+
+    model = ParticipationImageModel
+    fields = ('position', 'preview', 'image', 'name')
+    readonly_fields = ('preview',)
+
+
 @admin.register(ParticipationModel)
 class ParticipationModelAdmin(admin.ModelAdmin):
     def start_date(self, obj):
@@ -324,4 +365,4 @@ class ParticipationModelAdmin(admin.ModelAdmin):
     list_filter = ("user", "distance_km")
     date_hierarchy = "event__start_date"
     search_fields = ("user__username", "event__name", "event__start_date")
-    inlines = [CostModelInline]
+    inlines = [CostModelInline, ParticipationImageModelInline, ParticipationFileModelInline]

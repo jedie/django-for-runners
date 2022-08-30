@@ -52,8 +52,16 @@ INSTALLED_APPS = [
     'bx_py_utils',  # https://github.com/boxine/bx_py_utils
     'import_export',  # https://github.com/django-import-export/django-import-export
     'dbbackup',  # https://github.com/django-dbbackup/django-dbbackup
+    'adminsortable2',  # https://github.com/jrief/django-admin-sortable2
     'axes',  # https://github.com/jazzband/django-axes
     'django_processinfo',  # https://github.com/jedie/django-processinfo/
+    #
+    # https://github.com/jedie/django-tools/tree/master/django_tools/serve_media_app
+    'django_tools.serve_media_app.apps.UserMediaFilesConfig',
+    #
+    # https://github.com/jedie/django-tools/tree/master/django_tools/model_version_protect
+    # TODO: 'django_tools.model_version_protect.apps.ModelVersionProtectConfig',
+    #
     # Django-ForRunners
     'for_runners.apps.ForRunnersConfig',
     'for_runners_project.for_runners_helper_app',
