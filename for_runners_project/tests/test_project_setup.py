@@ -6,6 +6,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.cache import cache
 from django.test import TestCase
+from django_tools.unittest_utils.project_setup import check_editor_config
 
 import for_runners
 
@@ -85,3 +86,7 @@ class ProjectSettingsTestCase(TestCase):
         middlewares = [entry.rsplit('.', 1)[-1] for entry in settings.MIDDLEWARE]
         assert 'AlwaysLoggedInAsSuperUserMiddleware' not in middlewares
         assert 'DebugToolbarMiddleware' not in middlewares
+
+
+def test_check_editor_config():
+    check_editor_config(package_root=PACKAGE_ROOT)
