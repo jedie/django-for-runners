@@ -82,6 +82,7 @@ flake8 = "*"
 model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 requests-mock = "*"
 django-override-storage = "*"  # https://github.com/danifus/django-override-storage
+EditorConfig = "*"
 
 [tool.poetry.scripts]
 manage = "for_runners_project.manage:main"
