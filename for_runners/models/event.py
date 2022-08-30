@@ -5,13 +5,17 @@
 """
 
 import logging
+import uuid
+from pathlib import Path
 from urllib.parse import urlparse
 
+from bx_django_utils.filename import clean_filename
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_tools.models import UpdateInfoBaseModel, UpdateTimeBaseModel
+from django_tools.serve_media_app.models import user_directory_path
 
 from for_runners.gpx_tools.humanize import human_distance, human_seconds
 from for_runners.model_utils import ModelAdminUrlMixin
@@ -231,6 +235,101 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         verbose_name = _("Event Participation")
         verbose_name_plural = _("Event Participations")
         ordering = ("-event__start_date", "user")
+
+
+class ParticipationAttachmentBaseModel(UpdateTimeBaseModel):
+    """
+    Store files to Participations
+
+    inherit from UpdateTimeBaseModel:
+        * createtime
+        * lastupdatetime
+    """
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        verbose_name=_('ParticipationFileModel.id.verbose_name'),
+        help_text=_('ParticipationFileModel.id.help_text'),
+    )
+    user = models.ForeignKey(  # "Owner" of this entry
+        settings.AUTH_USER_MODEL,
+        related_name='+',
+        on_delete=models.CASCADE,
+        editable=False,  # Must be set automatically and never changed
+        verbose_name=_('ParticipationFileModel.user.verbose_name'),
+        help_text=_('ParticipationFileModel.user.help_text'),
+    )
+    name = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name=_('ParticipationFileModel.name.verbose_name'),
+        help_text=_('ParticipationFileModel.name.help_text'),
+    )
+    position = models.PositiveSmallIntegerField(
+        # Note: Will be set in admin via adminsortable2
+        # The JavaScript which performs the sorting is 1-indexed !
+        default=0,
+        blank=False,
+        null=False,
+    )
+    participation = models.ForeignKey(ParticipationModel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name or self.file.name
+
+    def full_clean(self, **kwargs):
+        if self.user_id is None:
+            self.user = self.participation.user
+
+        return super().full_clean(**kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class ParticipationFileModel(ParticipationAttachmentBaseModel):
+    file = models.FileField(
+        upload_to=user_directory_path,
+        verbose_name=_('ParticipationFileModel.file.verbose_name'),
+        help_text=_('ParticipationFileModel.file.help_text'),
+    )
+
+    def full_clean(self, **kwargs):
+        # Set name by filename:
+        if not self.name:
+            filename = Path(self.file.name).name
+            self.name = clean_filename(filename)
+
+        return super().full_clean(**kwargs)
+
+    class Meta:
+        verbose_name = _('ParticipationFileModel.verbose_name')
+        verbose_name_plural = _('ParticipationFileModel.verbose_name_plural')
+        ordering = ('position',)
+
+
+class ParticipationImageModel(ParticipationAttachmentBaseModel):
+    image = models.ImageField(
+        upload_to=user_directory_path,
+        verbose_name=_('ParticipationImageModel.image.verbose_name'),
+        help_text=_('ParticipationImageModel.image.help_text'),
+    )
+
+    def full_clean(self, **kwargs):
+        # Set name by filename:
+        if not self.name:
+            filename = Path(self.image.name).name
+            self.name = clean_filename(filename)
+
+        return super().full_clean(**kwargs)
+
+    class Meta:
+        verbose_name = _('ParticipationImageModel.verbose_name')
+        verbose_name_plural = _('ParticipationImageModel.verbose_name_plural')
+        ordering = ('position',)
 
 
 class CostModel(UpdateTimeBaseModel):

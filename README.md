@@ -225,6 +225,7 @@ Older changes, see:
 
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.15.0...main)
+  * NEW: Attach files and images to "Event Participations"
   * tbc
 * [29.09.2022 - v0.15.0](https://github.com/jedie/django-for-runners/compare/v0.14.0...v0.15.0):
   * Update requirements
