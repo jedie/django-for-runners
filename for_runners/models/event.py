@@ -151,7 +151,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     """
 
     event = models.ForeignKey(EventModel, related_name="participations", on_delete=models.CASCADE)
-    person = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="+",
         help_text="The person who participated to this competition.",
@@ -211,7 +211,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
         parts = [
             self.event.verbose_name(),
             "-",
-            self.person.username,
+            self.user.username,
             "-",
             self.get_human_distance(),
         ]
@@ -230,7 +230,7 @@ class ParticipationModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     class Meta:
         verbose_name = _("Event Participation")
         verbose_name_plural = _("Event Participations")
-        ordering = ("-event__start_date", "person")
+        ordering = ("-event__start_date", "user")
 
 
 class CostModel(UpdateTimeBaseModel):

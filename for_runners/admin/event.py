@@ -71,7 +71,7 @@ class EventStatistics:
         for event in events:
             # print(event)
             for participation in event.participations.all():
-                # print(participation.person)
+                # print(participation.user)
                 participation_data = {
                     "_count": 1,
                     self.KEY_DISTANCE: participation.distance_km or 0,
@@ -82,7 +82,7 @@ class EventStatistics:
                     # print(cost)
                     participation_data[cost.name] = cost.amount
 
-                raw_person_data[participation.person.username] += collections.Counter(
+                raw_person_data[participation.user.username] += collections.Counter(
                     participation_data
                 )
 
@@ -177,7 +177,7 @@ class EventModelAdmin(admin.ModelAdmin):
             if gpx_track:
                 change_url = gpx_track.get_admin_change_url()
                 html.append(
-                    f'{participation.person.username}:'
+                    f'{participation.user.username}:'
                     f' <a href="{change_url}">{gpx_track.human_length_html()}'
                     f' <strong>{gpx_track.human_duration_html()}</strong>'
                     f' {gpx_track.human_pace()}</a>'
@@ -217,7 +217,7 @@ class EventModelAdmin(admin.ModelAdmin):
         for participation in participations:
             change_url = participation.get_admin_change_url()
             html.append(
-                f'<a href="{change_url}">{participation.person.username} ({participation.get_human_distance()})</a>'
+                f'<a href="{change_url}">{participation.user.username} ({participation.get_human_distance()})</a>'
             )
 
         html = "<br>".join(html)
@@ -249,7 +249,7 @@ class EventModelAdmin(admin.ModelAdmin):
         "discipline",
     )
     date_hierarchy = "start_date"
-    list_filter = (HasTracksFilter, "participations__person")
+    list_filter = (HasTracksFilter, "participations__user")
     list_display_links = ("verbose_name",)
     search_fields = ("name",)
     inlines = [LinkModelInline]
@@ -314,14 +314,14 @@ class ParticipationModelAdmin(admin.ModelAdmin):
         "event_name",
         "distance_km",
         "finisher_count",
-        "person",
+        "user",
         "costs",
         "start_number",
         "human_duration",
         "pace",
     )
     list_display_links = ("event_name",)
-    list_filter = ("person", "distance_km")
+    list_filter = ("user", "distance_km")
     date_hierarchy = "event__start_date"
-    search_fields = ("person__username", "event__name", "event__start_date")
+    search_fields = ("user__username", "event__name", "event__start_date")
     inlines = [CostModelInline]
