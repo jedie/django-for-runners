@@ -13,3 +13,6 @@ from django.apps import AppConfig
 class ForRunnersConfig(AppConfig):
     name = "for_runners"
     verbose_name = "ForRunners"
+
+    def ready(self):
+        import for_runners.checks  # noqa

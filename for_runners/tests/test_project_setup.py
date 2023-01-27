@@ -1,17 +1,11 @@
 from pathlib import Path
+from unittest import TestCase
 
-from bx_py_utils.test_utils.unittest_utils import assert_no_flat_tests_functions
 from django.conf import settings
 from django.core.cache import cache
-from django.test import TestCase
-
-import for_runners
 
 
-PACKAGE_ROOT = Path(for_runners.__file__).parent.parent
-
-
-class ProjectSettingsTestCase(TestCase):
+class ProjectSetupTestCase(TestCase):
     def test_project_path(self):
         project_path = settings.BASE_PATH
         assert project_path.is_dir()
@@ -39,9 +33,3 @@ class ProjectSettingsTestCase(TestCase):
         middlewares = [entry.rsplit('.', 1)[-1] for entry in settings.MIDDLEWARE]
         assert 'AlwaysLoggedInAsSuperUserMiddleware' not in middlewares
         assert 'DebugToolbarMiddleware' not in middlewares
-
-    def test_no_ignored_test_function(self):
-        # In the past we used pytest ;)
-        # Check if we still have some flat test function that will be not executed by unittests
-        assert_no_flat_tests_functions(PACKAGE_ROOT / 'for_runners')
-        assert_no_flat_tests_functions(PACKAGE_ROOT / 'for_runners_project')
