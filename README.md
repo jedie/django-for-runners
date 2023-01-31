@@ -49,34 +49,43 @@
 ~$ git clone https://github.com/jedie/django-for-runners.git
 ~$ cd django-for-runners/
 ~/django-for-runners$ make
-_________________________________________________________________
-DjangoForRunners - *dev* Makefile
-
-install-poetry         install or update poetry
-install                install DjangoForRunners via poetry
-manage-update          Collectstatic + makemigration + migrate
-update                 update the sources and installation
-tox-listenvs           List all tox test environments
-tox                    Run pytest via tox with all environments
-tox-py36               Run pytest via tox with *python v3.6*
-tox-py37               Run pytest via tox with *python v3.7*
-tox-py38               Run pytest via tox with *python v3.8*
-pytest                 Run pytest
-publish                Release new version to PyPi
-run-dev-server         Run the django dev server in endless loop.
-createsuperuser        Create super user
-messages               Make and compile locales message files
-dbbackup               Backup database
-dbrestore              Restore a database backup
-run-docker-dev-server  Start docker containers with current dev source code
 ```
+
+The output of `make` looks like:
+
+[comment]: <> (✂✂✂ auto generated make help start ✂✂✂)
+```
+help                 List all commands
+install-base-req     Install needed base packages via apt
+install-poetry       install or update poetry
+install              install project via poetry
+update               update the sources and installation
+lint                 Run code formatters and linter
+fix-code-style       Fix code formatting
+tox-listenvs         List all tox test environments
+tox                  Run pytest via tox with all environments
+pytest               Run pytest
+renew-fixtures       Renew all fixture files
+publish              Release new version to PyPi
+run-dev-server       Run the django dev server in endless loop.
+createsuperuser      Create super user
+messages             Make and compile locales message files
+dumpdata             Backup database with Django's dumpdata
+dbbackup             Backup database
+dbrestore            Restore a database backup
+```
+[comment]: <> (✂✂✂ auto generated make help end ✂✂✂)
+
 
 ### local development installation
 ```
-# install or update Poetry:
+# Install needed base packages via apt:
+~/django-for-runners$ make install-base-req
+
+# Install or update Poetry:
 ~/django-for-runners$ make install-poetry
 
-# install  Django-ForRunners via poetry:
+# Install  Django-ForRunners via poetry:
 ~/django-for-runners$ make install
 ...
 

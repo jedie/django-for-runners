@@ -17,8 +17,6 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3 :: Only",
@@ -36,8 +34,7 @@ readme='README.md'
 license = "GPL"
 
 [tool.poetry.dependencies]
-# Keep Python 3.7 until Yunohost contains a newer Python Version ;)
-python = ">=3.7,<4.0.0"
+python = ">=3.9,<4.0.0"  # Stay with 3.9 until YunoHost used >=Debian 11 (Bullseye)
 click = "*"  # https://github.com/mitsuhiko/click
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
 gunicorn = "*"  # https://github.com/benoimyproject.wsgitc/gunicorn
@@ -75,7 +72,7 @@ pytest-randomly = "*"
 pytest-cov = "*"
 pytest-django = "*"
 django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
-pytest-darker = "*"  # https://github.com/akaihola/pytest-darker
+darker = "*"  # https://github.com/akaihola/darker
 coveralls = "*"
 isort = "*"
 flake8 = "*"
@@ -142,7 +139,6 @@ addopts = """
     --cov-report xml
     --no-cov-on-fail
     --showlocals
-    --darker
     --doctest-modules
     --failed-first
     --last-failed-no-failures all
@@ -155,7 +151,7 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{37,38,39,310}-django{3.2,4.0,4.1}
+envlist = py{39,310}-django{3.2,4.0,4.1}
 skip_missing_interpreters = True
 
 [testenv]
@@ -163,7 +159,7 @@ deps =
     django3.2: django>=3.2,<3.3
     django4.0: django>=4.0,<4.1
     django4.1: django>=4.1,<4.2
-whitelist_externals = make
+allowlist_externals = make
 commands =
     make pytest
 """

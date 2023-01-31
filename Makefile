@@ -15,17 +15,24 @@ check-poetry:
 		exit 1 ; \
 	fi
 
+install-base-req: ## Install needed base packages via apt
+	sudo apt install python3-pip python3-venv
+
 install-poetry:  ## install or update poetry
 	pip3 install -U pip
-	pip3 install -U poetry
+	pip3 install -U pipx
+	pipx install poetry
 
 install: check-poetry  ## install project via poetry
+	python3 -m venv .venv
 	poetry install
 
-update: install-poetry ## update the sources and installation
+update: check-poetry ## update the sources and installation
 	git fetch --all
 	git pull origin main
-	poetry run pip install -U pip
+	pip3 install -U pip
+	pip3 install -U pipx
+	pipx upgrade poetry
 	poetry update
 
 lint: ## Run code formatters and linter
