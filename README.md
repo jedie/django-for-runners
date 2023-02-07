@@ -57,22 +57,22 @@ The output of `make` looks like:
 ```
 help                 List all commands
 install-base-req     Install needed base packages via apt
-install-poetry       install or update poetry
-install              install project via poetry
-update               update the sources and installation
+install-poetry       install poetry
+install              install via poetry
+update               Update the dependencies as according to the pyproject.toml file
 lint                 Run code formatters and linter
 fix-code-style       Fix code formatting
 tox-listenvs         List all tox test environments
-tox                  Run pytest via tox with all environments
-pytest               Run pytest
-renew-fixtures       Renew all fixture files
+tox                  Run unittests via tox with all environments
+test                 Run unittests
+update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
 publish              Release new version to PyPi
-run-dev-server       Run the django dev server in endless loop.
-createsuperuser      Create super user
-messages             Make and compile locales message files
-dumpdata             Backup database with Django's dumpdata
-dbbackup             Backup database
-dbrestore            Restore a database backup
+makemessages         Make and compile locales message files
+start-dev-server     Start Django dev. server with the test project
+clean                Remove created files from the test project (e.g.: SQlite, static files)
+playwright-install   Install test browser for Playwright tests
+playwright-inspector Run Playwright inspector
+playwright-tests     Run only the Playwright tests
 ```
 [comment]: <> (✂✂✂ auto generated make help end ✂✂✂)
 

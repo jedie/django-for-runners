@@ -10,10 +10,7 @@ from override_storage import locmem_stats_override_storage
 from for_runners import __version__
 from for_runners.models import GpxModel
 from for_runners.tests.fixture_files import FIXTURES_PATH
-from for_runners.tests.fixtures.metaweather import (
-    MetaWeather5144_662Fixtures,
-    MetaWeather648820_2018_2_21Fixtures,
-)
+from for_runners.tests.fixtures.metaweather import MetaWeather5144_662Fixtures, MetaWeather648820_2018_2_21Fixtures
 from for_runners.tests.fixtures.openstreetmap import (
     OpenStreetMap5143785_661701Fixtures,
     OpenStreetMap5143789_661701Fixtures,

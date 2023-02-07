@@ -7,7 +7,7 @@ import collections
 import logging
 from decimal import Decimal as D
 
-from adminsortable2.admin import SortableInlineAdminMixin
+from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.template.response import TemplateResponse
@@ -17,19 +17,9 @@ from django.utils.translation import gettext_lazy as _
 
 # https://github.com/jedie/django-for-runners
 from for_runners.admin.utils import BaseChangelistView
-from for_runners.gpx_tools.humanize import (
-    convert_cash_values,
-    human_distance,
-    human_duration,
-    human_seconds,
-)
+from for_runners.gpx_tools.humanize import convert_cash_values, human_distance, human_duration, human_seconds
 from for_runners.models import EventLinkModel, EventModel
-from for_runners.models.event import (
-    CostModel,
-    ParticipationFileModel,
-    ParticipationImageModel,
-    ParticipationModel,
-)
+from for_runners.models.event import CostModel, ParticipationFileModel, ParticipationImageModel, ParticipationModel
 
 
 log = logging.getLogger(__name__)
@@ -310,7 +300,7 @@ class ParticipationImageModelInline(ParticipationAttachmentBaseInline):
 
 
 @admin.register(ParticipationModel)
-class ParticipationModelAdmin(admin.ModelAdmin):
+class ParticipationModelAdmin(SortableAdminBase, admin.ModelAdmin):
     def start_date(self, obj):
         return obj.event.start_date
 

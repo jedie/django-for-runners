@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     'dbbackup',  # https://github.com/django-dbbackup/django-dbbackup
     'adminsortable2',  # https://github.com/jrief/django-admin-sortable2
     'axes',  # https://github.com/jazzband/django-axes
-    'django_processinfo',  # https://github.com/jedie/django-processinfo/
+    #
+    # FIXME: https://github.com/jedie/django-processinfo/issues/19
+    # 'django_processinfo',  # https://github.com/jedie/django-processinfo/
     #
     # https://github.com/jedie/django-tools/tree/master/django_tools/serve_media_app
     'django_tools.serve_media_app.apps.UserMediaFilesConfig',
@@ -77,7 +79,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MIDDLEWARE = [
-    'django_processinfo.middlewares.ProcessInfoMiddleware',
+    #
+    # FIXME: https://github.com/jedie/django-processinfo/issues/19
+    # 'django_processinfo.middlewares.ProcessInfoMiddleware',
+    #
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',

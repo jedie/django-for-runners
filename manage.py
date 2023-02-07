@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
+
 import os
 import sys
-from pathlib import Path
-
-
-BASE_PATH = Path(__file__).parent
 
 
 def main():

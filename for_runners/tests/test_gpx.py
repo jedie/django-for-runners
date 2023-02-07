@@ -17,12 +17,7 @@ from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
 from for_runners.gpx import GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.utils import (
-    earth_circumference,
-    generate_gpx_track,
-    kilometers2lon_count,
-    lon2kilometers,
-)
+from for_runners.tests.utils import earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers
 
 
 BASE_PATH = Path(__file__).parent

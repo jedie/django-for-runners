@@ -22,9 +22,15 @@ class ReadmeTestCase(SimpleTestCase):
         assert_is_file(readme_path)
 
         make_bin = shutil.which('make')
-        output = subprocess.check_output(make_bin, cwd=base_path, text=True)
+        output = subprocess.check_output(
+            (make_bin, 'help'),
+            stderr=subprocess.STDOUT,
+            cwd=base_path,
+            text=True,
+        )
         output = strip_ansi(output)
         output = output.strip()
+        output = '\n'.join(line for line in output.splitlines() if not line.startswith('make['))
         self.assertIn('List all commands', output)
         self.assertIn('fix-code-style', output)
         output = f'```\n{output}\n```'
