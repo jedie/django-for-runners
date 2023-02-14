@@ -6,6 +6,7 @@
 
 """
 
+import os as __os
 import sys as __sys
 
 from for_runners_project.settings.base import *  # noqa
@@ -42,9 +43,10 @@ print(f'Use Database: {DATABASES["default"]["NAME"]!r}', file=__sys.stderr)
 # Download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
 MAP_DOWNLOAD = True
 
-# Auto login for dev. server:
-MIDDLEWARE = MIDDLEWARE.copy()
-MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
+if __os.environ.get('AUTOLOGIN') == '1':
+    # Auto login for dev. server:
+    MIDDLEWARE = MIDDLEWARE.copy()
+    MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
 
 # _____________________________________________________________________________
 # Django-Debug-Toolbar

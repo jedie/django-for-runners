@@ -1,6 +1,6 @@
-# https://github.com/actions/setup-python
 
-name: Test
+
+name: tests
 
 on:
   push:
@@ -12,52 +12,53 @@ on:
 
 jobs:
   test:
-    name: '${{ matrix.os }} Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
-    runs-on: ${{ matrix.os }}
+    name: 'Python ${{ matrix.python-version }}'
+    runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest] # TODO: macOS-latest, windows-latest ;)
-        python-version: ["3.10", "3.9", "3.8"]
-        django: ["3.2", "4.0", "4.1"]
+        python-version: ["3.11", "3.10", "3.9"]
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
     - name: 'fetch main'
-      run: |
-        git fetch origin main
+      run: git fetch origin main
     - name: 'Set up Python ${{ matrix.python-version }}'
       uses: actions/setup-python@v2
       with:
         python-version: '${{ matrix.python-version }}'
 
-    - uses: actions/cache@v2
+    - name: Setup Github Cache
+      uses: actions/cache@v3
       with:
+        key: dot-cache-${{ matrix.python-version }}
         path: ~/.cache/
-        key: dot-cache-files
+
+    - name: 'Bootstrap Poetry'
+      run: make install-poetry
+
+    - name: 'Update PATH for Poetry'
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
 
     - name: 'Install package'
-      run: |
-        make install-poetry
-        make install
+      run: make install
 
     - name: 'List installed packages'
-      run: |
-        poetry run pip freeze
+      run: poetry run pip freeze
 
     - name: 'List all tox test environments'
-      run: |
-        make tox-listenvs
+      run: make tox-listenvs
 
-    - name: 'Run tests on ${{ matrix.os }} with Python ${{ matrix.python-version }} Django ${{ matrix.django }}'
-      run: |
-        poetry run tox -e python-django${{ matrix.django }}
+    - name: 'Install Browsers for Playwright tests'
+      run: make playwright-install
+
+    - name: 'Run tests with Python ${{ matrix.python-version }}'
+      run: make tox
 
     - name: 'Upload coverage report'
-      uses: codecov/codecov-action@v2
-      with:
-        fail_ci_if_error: false
-        verbose: true
+      run: bash <(curl -s https://codecov.io/bash)
+
+

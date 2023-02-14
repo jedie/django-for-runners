@@ -13,10 +13,7 @@ import datetime
 import requests_mock
 
 from for_runners.tests.base import BaseTestCase
-from for_runners.tests.fixtures.metaweather import (
-    MetaWeather5141_678Fixtures,
-    MetaWeather648820_2018_6_20Fixtures,
-)
+from for_runners.tests.fixtures.metaweather import MetaWeather5141_678Fixtures, MetaWeather648820_2018_6_20Fixtures
 from for_runners.tests.utils import ClearCacheMixin
 from for_runners.weather import NoWeatherData, meta_weather_com
 

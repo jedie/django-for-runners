@@ -1,5 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-export DJANGO_SETTINGS_MODULE=for_runners_project.settings.local
+(
+    set -x
+    poetry run python --version
+    poetry run django-admin --version
+)
 
 exec poetry run python3 manage.py "$@"

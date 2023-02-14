@@ -3,46 +3,40 @@ name = "django-for-runners"
 version = "0.16.0rc1"
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 homepage = "https://github.com/jedie/django-for-runners"
-authors = ["JensDiemer <git@jensdiemer.de>"]
 packages = [
     { include = "for_runners" },
     { include = "for_runners_project" },
 ]
 keywords=['running','gpx','gps-tracking','gps-data','django']
+authors = [
+    "Jens Diemer <git@jensdiemer.de>",
+]
+maintainers = [
+    "Jens Diemer <git@jensdiemer.de>",
+]
+license = 'GPL-3.0-or-later'
+readme='README.md'
+include = ['LICENSE', 'README.md']
 classifiers = [
-    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    "Development Status :: 4 - Beta",
-    #"Development Status :: 5 - Production/Stable",
-    "Environment :: Web Environment",
-    "Intended Audience :: End Users/Desktop",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
+    'Development Status :: 5 - Production/Stable',
+    'Topic :: Software Development :: Libraries :: Python Modules',
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
     'Framework :: Django',
-    "Topic :: Database :: Front-Ends",
-    "Topic :: Documentation",
-    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-    "Topic :: Internet :: WWW/HTTP :: Site Management",
-    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-    "Operating System :: OS Independent",
+    'Intended Audience :: Developers',
 ]
-include = ['AUTHORS', 'LICENSE', 'README.creole']
 
-readme='README.md'
-license = "GPL"
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/john-doh/for_runners/issues"
 
 [tool.poetry.dependencies]
-# Keep Python 3.7 until Yunohost contains a newer Python Version ;)
-python = ">=3.7,<4.0.0"
+python = '>=3.9,<4.0.0'
+django = '>=4.1,<4.2'
 click = "*"  # https://github.com/mitsuhiko/click
 colorlog = "*"  # https://github.com/borntyping/python-colorlog
 gunicorn = "*"  # https://github.com/benoimyproject.wsgitc/gunicorn
-
-django = "*"
 django-processinfo = "*"  # https://github.com/jedie/django-processinfo/
 django-debug-toolbar = "*"  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
 django-tools = "*"  # https://github.com/jedie/django-tools/
@@ -59,44 +53,45 @@ requests = "*"  # https://github.com/psf/requests
 bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
 bx_django_utils = "*"  # https://github.com/boxine/bx_django_utils
 django-axes = "*"  # https://github.com/jazzband/django-axes
-docker-compose = { version = "*", optional = true }  # install via: poetry install --extras "docker"
-psycopg2-binary = { version = "*", optional = true }  # install via: poetry install --extras "postgres"
 
-[tool.poetry.extras]
-docker = ["docker-compose"]
-postgres = ["psycopg2-binary"]
 
 [tool.poetry.dev-dependencies]
-poetry-publish = "*"  # https://github.com/jedie/poetry-publish
-colorlog = "*"  # https://github.com/borntyping/python-colorlog
-tox = "*"
-pytest = "*"
-pytest-randomly = "*"
-pytest-cov = "*"
-pytest-django = "*"
 django-dynamic-fixtures = "*"  # https://github.com/Peter-Slump/django-dynamic-fixtures
-pytest-darker = "*"  # https://github.com/akaihola/pytest-darker
-coveralls = "*"
-isort = "*"
-flake8 = "*"
-model_bakery = "*"  # https://github.com/model-bakers/model_bakery
 requests-mock = "*"
 django-override-storage = "*"  # https://github.com/danifus/django-override-storage
-EditorConfig = "*"
+bx_py_utils = '*'  # https://github.com/boxine/bx_py_utils
+bx_django_utils = '*'  # https://github.com/boxine/bx_django_utils
+tox = '>=4.4.4'  # https://github.com/tox-dev/tox
+coveralls = '*'  # https://github.com/TheKevJames/coveralls-python
+darker = '*'  # https://github.com/akaihola/darker
+isort = '*'  # https://github.com/pycqa/isort
+flake8 = '*'  # https://github.com/pycqa/flake8
+EditorConfig = '*'  # https://github.com/editorconfig/editorconfig-core-py
+safety = '*'  # https://github.com/pyupio/safety
+mypy = '*'  # https://github.com/python/mypy
+tomli = '*'  # https://github.com/hukkin/tomli
+twine = '*'  # https://github.com/pypa/twine
+poetry-publish = '*'  # https://github.com/jedie/poetry-publish
+django-debug-toolbar = '*'
+beautifulsoup4 = '*'
+lxml = '*'
+playwright = '*'  # https://playwright.dev/python/
+model-bakery = '*'  # https://github.com/model-bakers/model_bakery
+tblib = '*'  # https://github.com/ionelmc/python-tblib
 
 [tool.poetry.scripts]
 manage = "for_runners_project.manage:main"
 publish = "for_runners_project.publish:publish"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ['poetry-core>=1.0.0']
+build-backend = 'poetry.core.masonry.api'
 
 
 [tool.darker]
 src = ['.']
 revision = "origin/main..."
-line_length = 100
+line_length = 119
 verbose = true
 skip_string_normalization = true
 diff = false
@@ -104,66 +99,82 @@ check = false
 stdout = false
 isort = true
 lint = [
-    "flake8",
+    'flake8',
 ]
-log_level = "INFO"
+log_level = 'INFO'
 
 
 [tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
+# https://pycqa.github.io/isort/docs/configuration/config_files.html
 atomic=true
 profile='black'
-line_length=100
-skip_glob=["*/htmlcov/*","*/migrations/*"]
 known_first_party=["for_runners", "for_runners_project"]
+skip_glob=['.*', '*/htmlcov/*','*/migrations/*']
+line_length=119
 lines_after_imports=2
 
 
-[tool.pytest.ini_options]
-# https://docs.pytest.org/en/latest/customize.html#pyproject-toml
-minversion = "6.0"
-DJANGO_SETTINGS_MODULE="for_runners_project.settings.tests"
-norecursedirs = ".* .git __pycache__ coverage* dist htmlcov volumes migrations"
-# sometimes helpfull "addopts" arguments:
-#    -vv
-#    --verbose
-#    --capture=no
-#    --trace-config
-#    --full-trace
-#    -p no:warnings
-#    -p no:randomly
-addopts = """
-    --import-mode=importlib
-    --reuse-db
-    --nomigrations
-    --cov=.
-    --cov-report term-missing
-    --cov-report html
-    --cov-report xml
-    --no-cov-on-fail
-    --showlocals
-    --darker
-    --doctest-modules
-    --failed-first
-    --last-failed-no-failures all
-    --new-first
-"""
-# TODO: --mypy
+[tool.coverage.run]
+branch = true
+source_pkgs=['for_runners']
+omit = ['.*', '*/tests/*','*/migrations/*']
+command_line = 'manage.py test --parallel --shuffle'
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 45
+
 
 [tool.tox]
 # https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{37,38,39,310}-django{3.2,4.0,4.1}
+envlist = py{39,310,311}
 skip_missing_interpreters = True
 
 [testenv]
+passenv = *
 deps =
-    django3.2: django>=3.2,<3.3
-    django4.0: django>=4.0,<4.1
-    django4.1: django>=4.1,<4.2
-whitelist_externals = make
+    django>=4.1,<4.2
+    bx_django_utils
+    requests-mock
+    django-override-storage
+    model-bakery
+    playwright
+    beautifulsoup4
+    lxml
+    django-debug-toolbar
+    tblib
+    coverage[toml]
 commands =
-    make pytest
+    python -m coverage run --rcfile=pyproject.toml manage.py test --parallel --shuffle
 """
+
+
+[tool.mypy]
+warn_unused_configs = true
+ignore_missing_imports = true
+allow_redefinition = true  # https://github.com/python/mypy/issues/7165
+show_error_codes = true
+plugins = []
+exclude = ['.venv', 'tests', 'migrations']
+
+
+[manageprojects] # https://github.com/jedie/manageprojects
+initial_revision = "8ad65ee"
+initial_date = 2023-02-07T17:06:14+01:00
+cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
+cookiecutter_directory = "poetry-django-app"
+
+[manageprojects.cookiecutter_context.cookiecutter]
+full_name = "Jens Diemer"
+github_username = "jedie"
+author_email = "git@jensdiemer.de"
+package_name = "for_runners"
+package_version = "0.0.1"
+package_description = "Store your GPX tracks of your running (or other sports activity) in django."
+package_url = "https://github.com/jedie/django-for-runners"
+issues_url = "https://github.com/jedie/django-for-runners/issues"
+license = "GPL-3.0-or-later"
+_template = "https://github.com/jedie/cookiecutter_templates/"
