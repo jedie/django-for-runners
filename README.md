@@ -68,29 +68,16 @@ To start hacking: Just clone the project and start `./manage.py` to bootstrap a 
     tox
     update_req
 ...
-```
-
-
-### local development installation
-```
-# Install needed base packages via apt:
-~/django-for-runners$ make install-base-req
-
-# Install or update Poetry:
-~/django-for-runners$ make install-poetry
-
-# Install  Django-ForRunners via poetry:
-~/django-for-runners$ make install
-...
-
-# Collectstatic + makemigration + migrate:
-~/django-for-runners$ make manage-update
-
-# Create a django super user:
-~/django-for-runners$ ./manage.sh createsuperuser
 
 # start local dev. web server:
-~/django-for-runners$ make run-dev-server
+~/django-for-runners$ ./manage.py run_dev_server
+
+# run tests:
+~/django-for-runners$ ./manage.py test
+# or with coverage
+~/django-for-runners$ ./manage.py coverage
+# or via tox:
+~/django-for-runners$ ./manage.py tox
 ```
 
 The web page is available in Port 8000, e.g.: `http://127.0.0.1:8000/`
