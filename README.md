@@ -86,7 +86,7 @@ The web page is available in Port 8000, e.g.: `http://127.0.0.1:8000/`
 
 e.g.:
 ```
-~/django-for-runners$ poetry run manage import_gpx --username <django_username> ~/backups/gpx_files
+~/django-for-runners$ ./manage.py import_gpx --username <django_username> ~/backups/gpx_files
 ```
 
 **Note:** It is no problem to start **import_gpx** with the same GPX files: Duplicate entries are avoided. The start/finish (time/latitude/longitude) are compared.
@@ -95,7 +95,7 @@ e.g.:
 
 Create a backup into `.../backups/<timestamp>/` e.g.:
 ```
-~/django-for-runners$ poetry run for_runners backup
+~/django-for-runners$ ./manage.py backup
 ```
 
 The backup does:
@@ -107,10 +107,7 @@ The backup does:
 * a complete file with all running tracks
 * one file for every user
 
-### regenerate all SVG files
-```
-~/django-for-runners$ poetry run for_runners recreate-svg
-```
+
 
 ## Screenshots
 
@@ -134,34 +131,6 @@ The backup does:
 
 ![for-runners v0.10.0 2010-06-26 print small overview 2.png](https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/django-for-runners/for-runners%20v0.10.0%202010-06-26%20print%20small%20overview%202.png "for-runners v0.10.0 2010-06-26 print small overview 2.png")
 
-## run tests
-```
-~/Django-ForRunners$ make test
-
-or:
-
-~/Django-ForRunners$ make tox
-```
-
-**Note:**
-
-To run all tests, you need:
-
-
-* **Chromium Browser WebDriver** e.g.: `apt install chromium-chromedriver`
-* **Firefox Browser WebDriver** aka **geckodriver**
-
-install **geckodriver** e.g.:
-```
-~$ cd /tmp
-/tmp$ wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz -O geckodriver.tar.gz
-/tmp$ sudo sh -c 'tar -x geckodriver -zf geckodriver.tar.gz -O > /usr/bin/geckodriver'
-/tmp$ sudo chmod +x /usr/bin/geckodriver
-/tmp$ rm geckodriver.tar.gz
-/tmp$ geckodriver --version
-geckodriver 0.20.1
-...
-```
 
 ## some notes
 
