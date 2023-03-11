@@ -2,8 +2,6 @@
 
 """
     Django settings for local development
-
-
 """
 
 import os as __os
@@ -49,11 +47,17 @@ if __os.environ.get('AUTOLOGIN') == '1':
     MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
 
 # _____________________________________________________________________________
+# Manage Django Project
+
+INSTALLED_APPS.append('manage_django_project')
+MANAGE_DJANGO_PROJECT_MODULE_NAME = 'for_runners'
+
+# _____________________________________________________________________________
 # Django-Debug-Toolbar
 
-INSTALLED_APPS = INSTALLED_APPS.copy()
-INSTALLED_APPS += ['debug_toolbar']
-MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
+INSTALLED_APPS.append('debug_toolbar')
+MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 from debug_toolbar.settings import CONFIG_DEFAULTS as DEBUG_TOOLBAR_CONFIG  # noqa

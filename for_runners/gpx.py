@@ -67,6 +67,14 @@ def get_identifier(gpxpy_instance):
 
 
 def cutted_hash(text, hash_name="sha512", length=6):
+    """
+    >>> cutted_hash("foobar", length=20)
+    'BJICMHV5DI4Q73JL6MTP'
+    >>> cutted_hash("foobar", length=10)
+    'BJICMHV5DI'
+    >>> cutted_hash("foobar", length=4)
+    'BJIC'
+    """
     h = hashlib.new(hash_name)
     h.update(bytes(text, encoding="UTF-8"))
     digest = h.digest()

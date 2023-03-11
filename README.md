@@ -45,36 +45,30 @@
 ## Developer information
 
 ### prepare
+
+To start hacking: Just clone the project and start `./manage.py` to bootstrap a virtual environment:
+
 ```
+# Install base requirements for bootstraping:
+~$ sudo apt install python3-pip python3-venv
+
+# Get the sources:
 ~$ git clone https://github.com/jedie/django-for-runners.git
 ~$ cd django-for-runners/
-~/django-for-runners$ make
-```
 
-The output of `make` looks like:
-
-[comment]: <> (✂✂✂ auto generated make help start ✂✂✂)
+# Just call manage.py:
+~/django-for-runners$ ./manage.py --help
+...
+[manage_django_project]
+    code_style
+    coverage
+    project_info
+    run_dev_server
+    safety
+    tox
+    update_req
+...
 ```
-help                 List all commands
-install-base-req     Install needed base packages via apt
-install-poetry       install poetry
-install              install via poetry
-update               Update the dependencies as according to the pyproject.toml file
-lint                 Run code formatters and linter
-fix-code-style       Fix code formatting
-tox-listenvs         List all tox test environments
-tox                  Run unittests via tox with all environments
-test                 Run unittests
-update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
-publish              Release new version to PyPi
-makemessages         Make and compile locales message files
-start-dev-server     Start Django dev. server with the test project
-clean                Remove created files from the test project (e.g.: SQlite, static files)
-playwright-install   Install test browser for Playwright tests
-playwright-inspector Run Playwright inspector
-playwright-tests     Run only the Playwright tests
-```
-[comment]: <> (✂✂✂ auto generated make help end ✂✂✂)
 
 
 ### local development installation
@@ -214,7 +208,8 @@ See also: [https://wiki.openstreetmap.org/wiki/Precision_of_coordinates](https:/
 ## Django compatibility
 
 | django-for-runners | django version | python              |
-| ------------------ | -------------- | ------------------- |
+|--------------------|----------------|---------------------|
+| >=v0.16.0          | 4.0, 4.1       | 3.9, 3.10, 3.11     |
 | >=v0.15.0          | 3.2, 4.0, 4.1  | 3.7, 3.8, 3.9, 3.10 |
 | >=v0.14.0          | 3.2            | 3.7, 3.8, 3.9, 3.10 |
 | >=v0.12.0          | 2.2            | 3.7, 3.8, 3.9, 3.10 |
@@ -234,8 +229,11 @@ Older changes, see:
 
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.15.0...main)
+  * 0.16.0rc2 changes:
   * NEW: Attach files and images to "Event Participations"
-  * tbc
+  * Switch from Poetry to pip-tools
+  * Add a new way to bootstrap an developer environment
+  * TBC
 * [29.09.2022 - v0.15.0](https://github.com/jedie/django-for-runners/compare/v0.14.0...v0.15.0):
   * Update requirements
   * Activate auto login for local dev. server, for easier developing.

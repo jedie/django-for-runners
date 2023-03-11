@@ -28,9 +28,7 @@ class GeoTests(ClearCacheMixin, TestCase):
         )
 
         # Check if cache works in tests:
-        assert settings.CACHES['default']['BACKEND'] == (
-            'django.core.cache.backends.locmem.LocMemCache'
-        )
+        self.assertEqual(settings.CACHES['default']['BACKEND'], 'django.core.cache.backends.locmem.LocMemCache')
         cache.set('foo', 'bar', timeout=None)
         assert cache.get('foo') == 'bar'
 

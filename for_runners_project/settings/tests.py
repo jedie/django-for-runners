@@ -1,3 +1,7 @@
+# flake8: noqa: E405
+"""
+    Settings used to run tests
+"""
 from for_runners_project.settings.base import *  # noqa
 
 
@@ -25,3 +29,9 @@ MAP_DOWNLOAD = False
 # Set root to not existing path, so that wrong tests will fail:
 STATIC_ROOT = '/not/exists/static/'
 MEDIA_ROOT = '/not/exists/media/'
+
+# _____________________________________________________________________________
+# Manage Django Project
+
+INSTALLED_APPS.append('manage_django_project')
+MANAGE_DJANGO_PROJECT_MODULE_NAME = 'for_runners'
