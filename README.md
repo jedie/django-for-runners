@@ -10,6 +10,9 @@
 
 (The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: [http://rvier.fr/#forrunners](http://rvier.fr/#forrunners) )
 
+[![Install Django-ForRunners with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=django-for-runners_ynh)
+
+> [django-for-runners_ynh](https://github.com/YunoHost-Apps/django-for-runners_ynh) allows you to install Django-ForRunners quickly and simply on a YunoHost server. If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.
 
 ## Features:
 
@@ -40,15 +43,13 @@
   * Multiple user support (However: no rights management and currently only suitable for a handful of users)
 
 
-* Install as [YunoHost](https://yunohost.org) App via [django-for-runners_ynh](https://github.com/YunoHost-Apps/django-for-runners_ynh)
-
 ## Developer information
 
 ### prepare
 
 To start hacking: Just clone the project and start `./manage.py` to bootstrap a virtual environment:
 
-```
+```bash
 # Install base requirements for bootstraping:
 ~$ sudo apt install python3-pip python3-venv
 
@@ -62,25 +63,36 @@ To start hacking: Just clone the project and start `./manage.py` to bootstrap a 
 [manage_django_project]
     code_style
     coverage
+    install
     project_info
+    publish
     run_dev_server
     safety
     tox
     update_req
 ...
+```
+This bootstrap is realized with: https://github.com/jedie/manage_django_project
 
-# start local dev. web server:
+
+
+Start Django's dev server:
+```bash
 ~/django-for-runners$ ./manage.py run_dev_server
+````
+The web page is available in Port 8000, e.g.: `http://127.0.0.1:8000/`
 
-# run tests:
+
+Run tests, e.g.:
+```bash
 ~/django-for-runners$ ./manage.py test
 # or with coverage
 ~/django-for-runners$ ./manage.py coverage
 # or via tox:
 ~/django-for-runners$ ./manage.py tox
-```
+````
 
-The web page is available in Port 8000, e.g.: `http://127.0.0.1:8000/`
+
 
 ### import GPX files
 
@@ -165,7 +177,7 @@ See also: [https://wiki.openstreetmap.org/wiki/Precision_of_coordinates](https:/
 
 | django-for-runners | django version | python              |
 |--------------------|----------------|---------------------|
-| >=v0.16.0          | 4.0, 4.1       | 3.9, 3.10, 3.11     |
+| >=v0.16.0          | 4.1            | 3.9, 3.10, 3.11     |
 | >=v0.15.0          | 3.2, 4.0, 4.1  | 3.7, 3.8, 3.9, 3.10 |
 | >=v0.14.0          | 3.2            | 3.7, 3.8, 3.9, 3.10 |
 | >=v0.12.0          | 2.2            | 3.7, 3.8, 3.9, 3.10 |
@@ -173,23 +185,30 @@ See also: [https://wiki.openstreetmap.org/wiki/Precision_of_coordinates](https:/
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7       |
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7       |
 
-(See also combinations in [tox.ini](https://github.com/jedie/django-for-runners/blob/main/tox.ini) and [github actions](https://github.com/jedie/django-for-runners/blob/main/.github/workflows/pythonapp.yml))
+(See also combinations in [tox settings in pyproject.toml](https://github.com/jedie/django-for-runners/blob/main/pyproject.toml) and [github actions](https://github.com/jedie/django-for-runners/blob/main/.github/workflows/tests.yml))
+
 
 ## Backwards-incompatible changes
 
-Older changes, see:
 
-[https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes](https://github.com/jedie/django-for-runners/blob/v0.10.1/README.creole#backwards-incompatible-changes)
+### v0.16.0
+
+We switched from Poetry to pip-tools and https://github.com/jedie/manage_django_project
+Just remove the old Poetry venv and bootstrap by call the `./manage.py`, see above.
+
+We also remove different Django Versions from test matrix and just use the current newest version.
+Because this is a project and not really a reuse-able-app ;)
+
 
 ## history
 
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.15.0...main)
-  * 0.16.0rc2 changes:
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.16.0...main)
+  * TBC
+* [12.03.2023 - v0.16.0](https://github.com/jedie/django-for-runners/compare/v0.15.0...v0.16.0):
   * NEW: Attach files and images to "Event Participations"
   * Switch from Poetry to pip-tools
-  * Add a new way to bootstrap an developer environment
-  * TBC
+  * Add a new way to bootstrap the developer environment
 * [29.09.2022 - v0.15.0](https://github.com/jedie/django-for-runners/compare/v0.14.0...v0.15.0):
   * Update requirements
   * Activate auto login for local dev. server, for easier developing.

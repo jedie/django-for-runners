@@ -21,7 +21,7 @@ def main():
             project_root_path=Path(for_runners.__file__).parent.parent,
             prod_settings='for_runners_project.settings.prod',
             local_settings='for_runners_project.settings.local',
-            test_settings='for_runners_project.settings.test',
+            test_settings='for_runners_project.settings.tests',
         )
     )
 
