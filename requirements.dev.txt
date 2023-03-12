@@ -77,6 +77,7 @@ bx-py-utils==76 \
     #   bx-django-utils
     #   django-for-runners (pyproject.toml)
     #   django-tools
+    #   manage-django-project
     #   manageprojects
 cachetools==5.3.0 \
     --hash=sha256:13dfddc7b8df938c21a940dfa6557ce6e94a2f1cdfa58eb90c805721d58f2c14 \
@@ -475,11 +476,15 @@ django-processinfo==1.1.0 \
 django-rich==1.5.0 \
     --hash=sha256:62562169c4117a7e930ddea1a402f0b0afcfa9d296bb5a08fe0fc865c1df590f \
     --hash=sha256:cd09c53cf5d9313ef1c06c0ff71297839dc9e239269fa85b4672daf8b6e98a96
-    # via django-for-runners (pyproject.toml)
+    # via
+    #   django-for-runners (pyproject.toml)
+    #   manage-django-project
 django-tools==0.54.0 \
     --hash=sha256:5040a91282be9d1c9d379b0c65da50bcb3691bff03cee54fd4123ace238c3a43 \
     --hash=sha256:a7b7bfa5b9c5a81966454d17dffb2403cee25a806c858ee0486a08798227598f
-    # via django-for-runners (pyproject.toml)
+    # via
+    #   django-for-runners (pyproject.toml)
+    #   manage-django-project
 docutils==0.19 \
     --hash=sha256:33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6 \
     --hash=sha256:5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc
@@ -731,10 +736,14 @@ lxml==4.9.2 \
     --hash=sha256:f1496ea22ca2c830cbcbd473de8f114a320da308438ae65abad6bab7867fe38f \
     --hash=sha256:f49e52d174375a7def9915c9f06ec4e569d235ad428f70751765f48d5926678c
     # via django-for-runners (pyproject.toml)
+manage-django-project==0.0.1 \
+    --hash=sha256:32b19dcc662be122ecc7c02272f1c3f1217e55dd5dbb963097bcb0e584b31422 \
+    --hash=sha256:8af11da16a8ffd8565f9dcc35f2094d55bcb6116aeb8eb0b5f1dd4ef7df20519
+    # via django-for-runners (pyproject.toml)
 manageprojects==0.9.4 \
     --hash=sha256:3aa98cecdaa42685206e127f385c73f9091e3edd826786eee4dc2c58e206d9c7 \
     --hash=sha256:83b8b3c26df462d25a232f6bf276a0af80666373f96f1a10a0b6160e0e2e028a
-    # via django-for-runners (pyproject.toml)
+    # via manage-django-project
 markdown-it-py==2.2.0 \
     --hash=sha256:5a35f8d1870171d9acc47b99612dc146129b631baf04970128b568f190d0cc30 \
     --hash=sha256:7c9a5e412688bc771c67432cbfebcdd686c93ce6484913dccf06cb5a0bea35a1
@@ -1073,9 +1082,9 @@ pyparsing==3.0.9 \
     --hash=sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb \
     --hash=sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc
     # via matplotlib
-pyproject-api==1.5.0 \
-    --hash=sha256:0962df21f3e633b8ddb9567c011e6c1b3dcdfc31b7860c0ede7e24c5a1200fbe \
-    --hash=sha256:4c111277dfb96bcd562c6245428f27250b794bfe3e210b8714c4f893952f2c17
+pyproject-api==1.5.1 \
+    --hash=sha256:435f46547a9ff22cf4208ee274fca3e2869aeb062a4834adfc99a4dd64af3cf9 \
+    --hash=sha256:4698a3777c2e0f6b624f8a4599131e2a25376d90fe8d146d7ac74c67c6f97c43
     # via tox
 pyproject-hooks==1.0.0 \
     --hash=sha256:283c11acd6b928d2f6a7c73fa0d01cb2bdc5f07c57a2eeb6e83d5e56b97976f8 \
@@ -1296,9 +1305,9 @@ tomlkit==0.11.6 \
     --hash=sha256:07de26b0d8cfc18f871aec595fda24d95b08fef89d147caa861939f37230bf4b \
     --hash=sha256:71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73
     # via manageprojects
-tox==4.4.6 \
-    --hash=sha256:9786671d23b673ace7499c602c5746e2a225d1ecd9d9f624d0461303f40bd93b \
-    --hash=sha256:e3d4a65852f029e5ba441a01824d2d839d30bb8fb071635ef9cb53952698e6bf
+tox==4.4.7 \
+    --hash=sha256:52c92a96e2c3fd47c5301e9c26f5a871466133d5376958c1ed95ef4ff4629cbe \
+    --hash=sha256:da10ca1d809b99fae80b706b9dc9656b1daf505a395ac427d130a8a85502d08f
     # via django-for-runners (pyproject.toml)
 twine==4.0.2 \
     --hash=sha256:929bc3c280033347a00f847236564d1c52a3e61b1ac2516c97c48f3ceab756d8 \
@@ -1316,9 +1325,9 @@ urllib3==1.26.15 \
     # via
     #   requests
     #   twine
-virtualenv==20.20.0 \
-    --hash=sha256:3c22fa5a7c7aa106ced59934d2c20a2ecb7f49b4130b8bf444178a16b880fa45 \
-    --hash=sha256:a8a4b8ca1e28f864b7514a253f98c1d62b64e31e77325ba279248c65fb4fcef4
+virtualenv==20.21.0 \
+    --hash=sha256:31712f8f2a17bd06234fa97fdf19609e789dd4e3e4bf108c3da71d710651adbc \
+    --hash=sha256:f50e3e60f990a0757c9b68333c9fdaa72d7188caa417f96af9e52407831a3b68
     # via tox
 webencodings==0.5.1 \
     --hash=sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78 \

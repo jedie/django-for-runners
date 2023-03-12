@@ -2,7 +2,7 @@
 """
     Settings used to run tests
 """
-from for_runners_project.settings.base import *  # noqa
+from for_runners_project.settings.prod import *  # noqa
 
 
 DATABASES = {
@@ -34,4 +34,3 @@ MEDIA_ROOT = '/not/exists/media/'
 # Manage Django Project
 
 INSTALLED_APPS.append('manage_django_project')
-MANAGE_DJANGO_PROJECT_MODULE_NAME = 'for_runners'

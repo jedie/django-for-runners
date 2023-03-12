@@ -38,7 +38,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-    "manageprojects",  # https://github.com/jedie/manageprojects
+    "manage_django_project",  # https://github.com/jedie/manage_django_project
     "tblib",   # https://github.com/ionelmc/python-tblib
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
@@ -76,17 +76,14 @@ Documentation = "https://github.com/jedie/django-for-runners"
 Source = "https://github.com/jedie/django-for-runners"
 
 [project.scripts]
-manage_for_runners = "for_runners_project.manage:main"
+for_runners_project = "for_runners_project.__main__:main"
 
 #[tool.setuptools.packages.find]
 #where = ["."]
 #include = ["for_runners*"]
 
 [tool.setuptools]
-packages = [
-    "for_runners", "for_runners_project",
-    "manage_django_project" # TODO: Create own Python package for this!
-]
+packages = ["for_runners", "for_runners_project"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -125,7 +122,7 @@ lines_after_imports=2
 branch = true
 parallel = true
 source = ['.']
-command_line = 'for_runners_project/manage.py test --shuffle --parallel --buffer'
+command_line = '-m for_runners_project test --shuffle --parallel --buffer'
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*', '*/migrations/*']
@@ -144,19 +141,17 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{39,310,311}-django{4.0,4.1}
+envlist = py{311,310,39}
 skip_missing_interpreters = True
 
 [testenv]
-deps =
-    django4.0: django>=4.0,<4.1
-    django4.1: django>=4.1,<4.2
-    manageprojects
-    coverage
-    tblib
 passenv = *
+skip_install = true
+deps = pip-tools
+commands_pre =
+    pip-sync requirements.dev.txt
 commands =
-    {envpython} -m for_runners_project coverage
+    {envpython} -m for_runners_project coverage --no-processing --context='{envname}'
 """
 
 
