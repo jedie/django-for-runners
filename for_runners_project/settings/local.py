@@ -7,7 +7,7 @@
 import os as __os
 import sys as __sys
 
-from for_runners_project.settings.base import *  # noqa
+from for_runners_project.settings.prod import *  # noqa
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -50,7 +50,6 @@ if __os.environ.get('AUTOLOGIN') == '1':
 # Manage Django Project
 
 INSTALLED_APPS.append('manage_django_project')
-MANAGE_DJANGO_PROJECT_MODULE_NAME = 'for_runners'
 
 # _____________________________________________________________________________
 # Django-Debug-Toolbar
