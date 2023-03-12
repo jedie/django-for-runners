@@ -38,7 +38,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-    "manage_django_project",  # https://github.com/jedie/manage_django_project
+    "manage_django_project>=0.1.0",  # https://github.com/jedie/manage_django_project
     "tblib",   # https://github.com/ionelmc/python-tblib
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
