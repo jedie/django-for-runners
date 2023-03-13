@@ -205,7 +205,7 @@ Because this is a project and not really a reuse-able-app ;)
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.16.0...main)
   * TBC
-* [12.03.2023 - v0.16.0](https://github.com/jedie/django-for-runners/compare/v0.15.0...v0.16.0):
+* [13.03.2023 - v0.16.0](https://github.com/jedie/django-for-runners/compare/v0.15.0...v0.16.0):
   * NEW: Attach files and images to "Event Participations"
   * Switch from Poetry to pip-tools
   * Add a new way to bootstrap the developer environment
