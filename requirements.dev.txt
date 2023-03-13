@@ -66,9 +66,9 @@ build==0.10.0 \
     --hash=sha256:af266720050a66c893a6096a2f410989eeac74ff9a68ba194b3f6473e8e26171 \
     --hash=sha256:d5b71264afdb5951d6704482aac78de887c80691c52b88a9ad195983ca2c9269
     # via pip-tools
-bx-django-utils==49 \
-    --hash=sha256:343397a40a61b4ea523425163905b7f5d8406ba147697c9b1165266b71b6ced0 \
-    --hash=sha256:dbf629ca7f9bb3e0d77ce9c0a8cfab593da2b441564d65ec00bd47b5d0628a50
+bx-django-utils==50 \
+    --hash=sha256:a08332fe2e0a75b7611d0f66e37373bb4c3cd82400925c29a05b63e57be50616 \
+    --hash=sha256:cb51e403117ac6679a499243b4da0ef6ee247659b1ba0877b85ebdb3a77a64f4
     # via django-for-runners (pyproject.toml)
 bx-py-utils==76 \
     --hash=sha256:c9fcedc76daa9782b0a0c535d0d803061f61117f95957862ef58253f3c35fc0e \
@@ -736,9 +736,9 @@ lxml==4.9.2 \
     --hash=sha256:f1496ea22ca2c830cbcbd473de8f114a320da308438ae65abad6bab7867fe38f \
     --hash=sha256:f49e52d174375a7def9915c9f06ec4e569d235ad428f70751765f48d5926678c
     # via django-for-runners (pyproject.toml)
-manage-django-project==0.1.0 \
-    --hash=sha256:618fc1c9e74daac445e6f146eb1facb527dba3696b5933068fdeefdbe44418df \
-    --hash=sha256:cad26d4d0c9204230ca79a67a1588f1943f0307c8d574560571aa3492ccea31b
+manage-django-project==0.1.1 \
+    --hash=sha256:3cb8e13a407acb8a810069bf45b6e31741e94b054624a4b29896b585ee2a3130 \
+    --hash=sha256:75455c1213343967ec857e65c7457ccfec948759e1cc1ca15b08f5f6eeb3b33c
     # via django-for-runners (pyproject.toml)
 manageprojects==0.9.6 \
     --hash=sha256:5c8d63bef1cf91a8b081b9e0716e44db397153b951dae5cc067d9305e2bb6e0f \
