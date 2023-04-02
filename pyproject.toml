@@ -86,8 +86,9 @@ for_runners_project = "for_runners_project.__main__:main"
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["for_runners", "for_runners_project"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["for_runners*", "for_runners_project*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "for_runners.__version__"}
