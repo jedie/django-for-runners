@@ -203,9 +203,9 @@ Because this is a project and not really a reuse-able-app ;)
 ## history
 
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.1...main)
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.2...main)
   * TBC
-* [02.04.2023 - v0.17.1](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.1):
+* [02.04.2023 - v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.2):
   * Bugfix packaging and missing files
 * [02.04.2023 - v0.17.0](https://github.com/jedie/django-for-runners/compare/v0.16.0...v0.17.0):
   * Bugfix edit a `GpxModel` instance in admin with a large GPX track by remove the raw gpx XML as text field from admin change page
