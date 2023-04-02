@@ -1,10 +1,10 @@
-from pathlib import Path
 import subprocess
+from pathlib import Path
 from unittest import TestCase
 
+from bx_py_utils.path import assert_is_file
 from django.conf import settings
 from django.core.cache import cache
-from bx_py_utils.path import assert_is_file
 from manageprojects.test_utils.click_cli_utils import subprocess_cli
 from manageprojects.test_utils.project_setup import check_editor_config, get_py_max_line_length
 from manageprojects.utilities import code_style
@@ -42,6 +42,7 @@ class ProjectSetupTestCase(TestCase):
         middlewares = [entry.rsplit('.', 1)[-1] for entry in settings.MIDDLEWARE]
         assert 'AlwaysLoggedInAsSuperUserMiddleware' not in middlewares
         assert 'DebugToolbarMiddleware' not in middlewares
+
     def test_version(self):
         self.assertIsNotNone(__version__)
 
