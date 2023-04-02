@@ -1,6 +1,6 @@
 [project]
 name = "django-for-runners"
-version = "0.16.0"
+dynamic = ["version"]
 description = "Store your GPX tracks of your running (or other sports activity) in django."
 readme = "README.md"
 authors = [
@@ -43,11 +43,8 @@ dev = [
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
     "coverage",  # https://github.com/nedbat/coveragepy
-    "darker>=1.7",  # https://github.com/akaihola/darker
     "autopep8",  # https://github.com/hhatto/autopep8
     "pyupgrade",  # https://github.com/asottile/pyupgrade
-    "isort",  # https://github.com/pycqa/isort
-    "flynt",  # https://github.com/ikamensh/flynt
     "flake8",  # https://github.com/pycqa/flake8
     "pyflakes",  # https://github.com/PyCQA/pyflakes
     "codespell",  # https://github.com/codespell-project/codespell
@@ -55,6 +52,12 @@ dev = [
     "safety",  # https://github.com/pyupio/safety
     "mypy",  # https://github.com/python/mypy
     "twine",  # https://github.com/pypa/twine
+
+    # https://github.com/akaihola/darker
+    # https://github.com/ikamensh/flynt
+    # https://github.com/pycqa/isort
+    # https://github.com/pygments/pygments
+    "darker[flynt, isort, color]",
 
     "tomli",  # https://github.com/hukkin/tomli
     # tomli only needed for Python <3.11, but see bug:
@@ -75,19 +78,19 @@ dev = [
 Documentation = "https://github.com/jedie/django-for-runners"
 Source = "https://github.com/jedie/django-for-runners"
 
+
 [project.scripts]
 for_runners_project = "for_runners_project.__main__:main"
-
-#[tool.setuptools.packages.find]
-#where = ["."]
-#include = ["for_runners*"]
-
-[tool.setuptools]
-packages = ["for_runners", "for_runners_project"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["for_runners", "for_runners_project"]
+
+[tool.setuptools.dynamic]
+version = {attr = "for_runners.__version__"}
 
 
 [tool.darker]
@@ -121,6 +124,7 @@ lines_after_imports=2
 [tool.coverage.run]
 branch = true
 parallel = true
+concurrency = ["multiprocessing"]
 source = ['.']
 command_line = '-m for_runners_project test --shuffle --parallel --buffer'
 
@@ -147,11 +151,14 @@ skip_missing_interpreters = True
 [testenv]
 passenv = *
 skip_install = true
-deps = pip-tools
 commands_pre =
+    pip install -U pip-tools
     pip-sync requirements.dev.txt
 commands =
-    {envpython} -m for_runners_project coverage --no-processing --context='{envname}'
+    {envpython} -m coverage run --context='{envname}'
+    {envpython} -m coverage combine --append
+    {envpython} -m coverage xml
+    {envpython} -m coverage report
 """
 
 
@@ -168,7 +175,11 @@ exclude = ['.venv', 'tests', 'migrations']
 initial_revision = "01611af"
 initial_date = 2023-01-25T09:47:16+01:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "piptools-django-project"
+cookiecutter_directory = "piptools-python"
+applied_migrations = [
+    "89aadc0", # 2023-03-17T09:44:50+01:00
+    "2281f4b", # 2023-04-02T17:40:58+02:00
+]
 
 [manageprojects.cookiecutter_context.cookiecutter]
 full_name = "Jens Diemer"
