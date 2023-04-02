@@ -8,6 +8,7 @@ from manage_django_project.config import ManageConfig
 from manage_django_project.manage import execute_django_from_command_line
 
 import for_runners
+import for_runners_project
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
     """
     execute_django_from_command_line(
         config=ManageConfig(
-            module=for_runners,
+            module=for_runners_project,
             project_root_path=Path(for_runners.__file__).parent.parent,
             local_settings='for_runners_project.settings.local',
             test_settings='for_runners_project.settings.tests',

@@ -203,8 +203,11 @@ Because this is a project and not really a reuse-able-app ;)
 ## history
 
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.16.0...main)
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.0...main)
   * TBC
+* [02.04.2023 - v0.17.0](https://github.com/jedie/django-for-runners/compare/v0.16.0...v0.17.0):
+  * Bugfix edit a `GpxModel` instance in admin with a large GPX track by remove the raw gpx XML as text field from admin change page
+  * Add a admin action to download selected GPX tracks as ZIP archive
 * [13.03.2023 - v0.16.0](https://github.com/jedie/django-for-runners/compare/v0.15.0...v0.16.0):
   * NEW: Attach files and images to "Event Participations"
   * Switch from Poetry to pip-tools

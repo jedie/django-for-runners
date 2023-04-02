@@ -1,22 +1,27 @@
+import subprocess
 from pathlib import Path
+from unittest import TestCase
 
-from bx_py_utils.test_utils.unittest_utils import assert_no_flat_tests_functions
+from bx_py_utils.path import assert_is_dir, assert_is_file
 from django.conf import settings
 from django.core.cache import cache
-from django.test import TestCase
+from django.core.management import call_command
+from manage_django_project.management.commands import code_style
+from manageprojects.test_utils.project_setup import check_editor_config, get_py_max_line_length
+from packaging.version import Version
 
-import for_runners
+from for_runners import __version__
+from manage import BASE_PATH
 
 
-PACKAGE_ROOT = Path(for_runners.__file__).parent.parent
-
-
-class ProjectSettingsTestCase(TestCase):
+class ProjectSetupTestCase(TestCase):
     def test_project_path(self):
         project_path = settings.BASE_PATH
-        assert project_path.is_dir()
-        assert Path(project_path, 'for_runners').is_dir()
-        assert Path(project_path, 'for_runners_project').is_dir()
+        assert_is_dir(project_path)
+        assert_is_dir(project_path / 'for_runners')
+        assert_is_dir(project_path / 'for_runners_project')
+
+        self.assertEqual(project_path, BASE_PATH)
 
     def test_template_dirs(self):
         assert len(settings.TEMPLATES) == 1
@@ -40,8 +45,33 @@ class ProjectSettingsTestCase(TestCase):
         assert 'AlwaysLoggedInAsSuperUserMiddleware' not in middlewares
         assert 'DebugToolbarMiddleware' not in middlewares
 
-    def test_no_ignored_test_function(self):
-        # In the past we used pytest ;)
-        # Check if we still have some flat test function that will be not executed by unittests
-        assert_no_flat_tests_functions(PACKAGE_ROOT / 'for_runners')
-        assert_no_flat_tests_functions(PACKAGE_ROOT / 'for_runners_project')
+    def test_version(self):
+        self.assertIsNotNone(__version__)
+
+        version = Version(__version__)  # Will raise InvalidVersion() if wrong formatted
+        self.assertEqual(str(version), __version__)
+
+        manage_bin = BASE_PATH / 'manage.py'
+        assert_is_file(manage_bin)
+
+        output = subprocess.check_output([manage_bin, 'version'], text=True)
+        self.assertIn(__version__, output)
+
+    def test_manage(self):
+        manage_bin = BASE_PATH / 'manage.py'
+        assert_is_file(manage_bin)
+
+        output = subprocess.check_output([manage_bin, 'project_info'], text=True)
+        self.assertIn('for_runners_project', output)
+        self.assertIn('for_runners_project.settings.local', output)
+        self.assertIn('for_runners_project.settings.tests', output)
+        self.assertIn(__version__, output)
+
+    def test_code_style(self):
+        call_command(code_style.Command())
+
+    def test_check_editor_config(self):
+        check_editor_config(package_root=BASE_PATH)
+
+        max_line_length = get_py_max_line_length(package_root=BASE_PATH)
+        self.assertEqual(max_line_length, 119)

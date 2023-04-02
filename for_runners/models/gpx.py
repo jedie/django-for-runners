@@ -516,14 +516,15 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             else:
                 self.pace = pace
 
-    def short_name(self, start_time=True):
+    def short_name(self, start_time=True, prefix_id=False):
         if self.pk is None:
             return "new, unsaved GPX Track"
 
-        if start_time:
-            parts = [self.start_time.strftime("%Y-%m-%d")]
-        else:
-            parts = []
+        parts = []
+        if prefix_id:
+            parts.append(self.get_prefix_id())
+        elif start_time:
+            parts.append(self.start_time.strftime("%Y-%m-%d"))
 
         if self.participation:
             parts.append(self.participation.event.name)
@@ -534,8 +535,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
             return result
         return f"GPX Track ID:{self.pk}"
 
-    def get_short_slug(self):
-        name = self.short_name()
+    def get_short_slug(self, prefix_id=False):
+        name = self.short_name(prefix_id=prefix_id)
         return slugify(name)
 
     def get_prefix_id(self):
