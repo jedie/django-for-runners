@@ -4,9 +4,11 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 import collections
+import io
 import logging
 import math
 import statistics
+import zipfile
 from pprint import pprint
 
 from django import forms
@@ -14,7 +16,7 @@ from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
 from django.db import IntegrityError, NotSupportedError, models
 from django.db.models import Avg, Max, Min
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.urls import path, re_path, reverse
@@ -350,9 +352,24 @@ class HasEventPartricipationFilter(admin.SimpleListFilter):
             return queryset.filter(participation__isnull=True)
 
 
+@admin.action(description=_('Download selected GPX files'))
+def download_gpx_files(modeladmin, request, queryset):
+    buf = io.BytesIO()
+
+    with zipfile.ZipFile(buf, 'w') as zf:
+        for instance in queryset:
+            short_slug = instance.get_short_slug(prefix_id=True)
+            filename = f'{short_slug}.gpx'
+            zf.writestr(filename, instance.gpx, compress_type=zipfile.ZIP_LZMA)
+
+    response = HttpResponse(buf.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="gpx_tracks.zip"'
+    return response
+
+
 @admin.register(GpxModel)
 class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
-    actions = ["print_mini"]
+    actions = ["print_mini", download_gpx_files]
     # change_list_template = 'admin/import_export/change_list_export.html'
     change_list_template = "admin/for_runners/gpxmodel/change_list.html"
     resource_class = GpxModelResource
@@ -534,6 +551,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         "human_length_html",
         "human_duration_html",
         "human_pace",
+        "points_no",
     )
 
     fieldsets = (
@@ -567,7 +585,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
             _("GPX data"),
             {
                 "classes": ("collapse",),
-                "fields": (("gpx", "points_no"), ("track_svg", "svg_tag_big")),
+                "fields": ("points_no", ("track_svg", "svg_tag_big")),
             },
         ),
         (
