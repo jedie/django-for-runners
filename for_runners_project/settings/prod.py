@@ -95,7 +95,7 @@ MIDDLEWARE = [
 ]
 
 __TEMPLATE_DIR = __Path(BASE_PATH, 'for_runners_project', 'templates')
-assert __TEMPLATE_DIR.is_dir()
+assert __TEMPLATE_DIR.is_dir(), f'Directory not exists: {__TEMPLATE_DIR}'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
