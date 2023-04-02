@@ -17,7 +17,7 @@ dependencies = [
     "django-tools",  # https://github.com/jedie/django-tools/
     "django-import-export",  # https://github.com/django-import-export/django-import-export
     "django-admin-sortable2",  # https://github.com/jrief/django-admin-sortable2
-    "autotask",  # https://bitbucket.org/kbr/autotask
+    "autotask",  # https://github.com/kbr/autotask
     "gpxpy", # https://github.com/tkrajina/gpxpy
     "matplotlib",  # http://matplotlib.org/
     "svgwrite",  # http://github.com/mozman/svgwrite.git
