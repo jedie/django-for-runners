@@ -43,11 +43,8 @@ dev = [
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
     "coverage",  # https://github.com/nedbat/coveragepy
-    "darker>=1.7",  # https://github.com/akaihola/darker
     "autopep8",  # https://github.com/hhatto/autopep8
     "pyupgrade",  # https://github.com/asottile/pyupgrade
-    "isort",  # https://github.com/pycqa/isort
-    "flynt",  # https://github.com/ikamensh/flynt
     "flake8",  # https://github.com/pycqa/flake8
     "pyflakes",  # https://github.com/PyCQA/pyflakes
     "codespell",  # https://github.com/codespell-project/codespell
@@ -55,6 +52,12 @@ dev = [
     "safety",  # https://github.com/pyupio/safety
     "mypy",  # https://github.com/python/mypy
     "twine",  # https://github.com/pypa/twine
+
+    # https://github.com/akaihola/darker
+    # https://github.com/ikamensh/flynt
+    # https://github.com/pycqa/isort
+    # https://github.com/pygments/pygments
+    "darker[flynt, isort, color]",
 
     "tomli",  # https://github.com/hukkin/tomli
     # tomli only needed for Python <3.11, but see bug:
@@ -175,6 +178,7 @@ cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
 cookiecutter_directory = "piptools-python"
 applied_migrations = [
     "89aadc0", # 2023-03-17T09:44:50+01:00
+    "2281f4b", # 2023-04-02T17:40:58+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
