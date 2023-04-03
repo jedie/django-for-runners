@@ -203,8 +203,10 @@ Because this is a project and not really a reuse-able-app ;)
 ## history
 
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.2...main)
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.3...main)
   * TBC
+* [03.04.2023 - v0.17.3](https://github.com/jedie/django-for-runners/compare/v0.17.2...v0.17.3):
+  * Bugfix system check on fresh start with Postgres before migration is running
 * [02.04.2023 - v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.2):
   * Bugfix packaging and missing files
 * [02.04.2023 - v0.17.0](https://github.com/jedie/django-for-runners/compare/v0.16.0...v0.17.0):

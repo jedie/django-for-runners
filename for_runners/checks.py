@@ -1,5 +1,5 @@
 from django.core.checks import Warning, register
-from django.db import OperationalError
+from django.db import DatabaseError
 
 from for_runners.models import DistanceModel
 
@@ -10,7 +10,7 @@ def distance_model_filled(app_configs, **kwargs):
 
     try:
         distance_model_count = DistanceModel.objects.all().count()
-    except OperationalError:
+    except DatabaseError:
         # e.g.: migration not done, yet
         pass
     else:
