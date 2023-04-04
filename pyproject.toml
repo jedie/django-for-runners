@@ -176,10 +176,11 @@ exclude = ['.venv', 'tests', 'migrations']
 initial_revision = "01611af"
 initial_date = 2023-01-25T09:47:16+01:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "piptools-python"
+cookiecutter_directory = "managed-django-project"
 applied_migrations = [
     "89aadc0", # 2023-03-17T09:44:50+01:00
     "2281f4b", # 2023-04-02T17:40:58+02:00
+    "10c547a", # 2023-04-04T20:37:52+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
