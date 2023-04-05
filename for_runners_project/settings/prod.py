@@ -22,6 +22,8 @@ assert __Path(BASE_PATH, 'for_runners_project').is_dir()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+PRINT_TRACEBACKS = False
+RAISE_CAPTURE_EXCEPTIONS = False
 
 # Serve static/media files by Django?
 # In production the Webserver should serve this!

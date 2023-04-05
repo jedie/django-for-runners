@@ -180,9 +180,9 @@ diff-match-patch==20200713 \
     --hash=sha256:8bf9d9c4e059d917b5c6312bac0c137971a32815ddbda9c682b949f2986b4d34 \
     --hash=sha256:da6f5a01aa586df23dfc89f3827e1cafbb5420be9d87769eeb079ddfd9477a18
     # via django-import-export
-django==4.1.7 \
-    --hash=sha256:44f714b81c5f190d9d2ddad01a532fe502fa01c4cb8faf1d081f4264ed15dcd8 \
-    --hash=sha256:f2f431e75adc40039ace496ad3b9f17227022e8b11566f4b363da44c7e44761e
+django==4.1.8 \
+    --hash=sha256:43253f4b4a2c3a1694cd52d3517847271934c84dbd060ca0e82a9f90e569dab3 \
+    --hash=sha256:dba9dd0bf8b748aa9c98d6c679f8b1c0bfa43124844bea9425ad9ba0cd5e65c3
     # via
     #   bx-django-utils
     #   django-admin-sortable2
@@ -198,17 +198,17 @@ django-admin-sortable2==2.1.5 \
     --hash=sha256:4fe40552c138c557e366ebcbfeb5447ee0dd5ae6719aa8395df0d15fa2b6c460 \
     --hash=sha256:b435c696ff410d1fc108684bb3f7de34c5f6dd24bb08dc15ff7d9a0b9161c8c7
     # via django-for-runners (pyproject.toml)
-django-axes==5.40.1 \
-    --hash=sha256:347e3dbce46051e63cacc7c9ad43cb4382e910f243b6086cf181639d082fa6d0 \
-    --hash=sha256:b5bc4a6f528ca10fc8b94d02ac3c3726ef879ec0868600f2cb3c32b6dea28717
+django-axes==5.41.0 \
+    --hash=sha256:7e73c6cfe8e2390e60e5a189976833838206ab7fc04dc9b5c3f27fe589364eb3 \
+    --hash=sha256:cd2b6350d47168b4fc8d37cd159855bc0d55e7b1e6469d76708bc456bc377212
     # via django-for-runners (pyproject.toml)
 django-dbbackup==4.0.2 \
     --hash=sha256:1874d684abc22260972a67668a6db3331b24d7e1e8af89eaffdcd61eb27dbc2a \
     --hash=sha256:3ccde831f1a8268fb031b37a8e7e2de3abb556623023af1e859cd7104c09ea2a
     # via django-for-runners (pyproject.toml)
-django-debug-toolbar==3.8.1 \
-    --hash=sha256:24ef1a7d44d25e60d7951e378454c6509bf536dce7e7d9d36e7c387db499bc27 \
-    --hash=sha256:879f8a4672d41621c06a4d322dcffa630fc4df056cada6e417ed01db0e5e0478
+django-debug-toolbar==4.0.0 \
+    --hash=sha256:89619f6e0ea1057dca47bfc429ed99b237ef70074dabc065a7faa5f00e1459cf \
+    --hash=sha256:bad339d68520652ddc1580c76f136fcbc3e020fd5ed96510a89a02ec81bb3fb1
     # via django-for-runners (pyproject.toml)
 django-import-export==3.1.0 \
     --hash=sha256:0760414c125142f5db02382f661b091f7597dbbebf82c8797c7830cc140a6a1a \

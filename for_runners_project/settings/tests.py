@@ -2,6 +2,8 @@
 """
     Settings used to run tests
 """
+import requests_mock
+
 from for_runners_project.settings.prod import *  # noqa
 
 
@@ -15,9 +17,23 @@ DATABASES = {
 SECRET_KEY = 'No individual secret for tests ;)'
 
 DEBUG = True
+PRINT_TRACEBACKS = True
+RAISE_CAPTURE_EXCEPTIONS = True
 
 # Speedup tests by change the Password hasher:
 PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+
+# _____________________________________________________________________________
+# Deny any real request in tests:
+
+
+def _unmocked_requests_error_message(request, response):
+    raise RuntimeError(f'Unmocked request to {request.url} in tests, wrap in  with requests_mock.mock() as m:')
+
+
+fallback_mocker = requests_mock.Mocker()
+fallback_mocker.get(requests_mock.ANY, content=_unmocked_requests_error_message)
+fallback_mocker.__enter__()
 
 # _____________________________________________________________________________
 

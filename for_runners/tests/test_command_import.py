@@ -17,7 +17,12 @@ from for_runners.tests.fixtures.metaweather import (
     MetaWeather5252_1338Fixtures,
     MetaWeather648820_2018_2_21Fixtures,
 )
-from for_runners.tests.fixtures.openstreetmap import OpenStreetMap51437889_66617012Fixtures
+from for_runners.tests.fixtures.openstreetmap import (
+    OpenStreetMap00000000_00000000Fixtures,
+    OpenStreetMap5143789_661701Fixtures,
+    OpenStreetMap5251861_1337611Fixtures,
+    OpenStreetMap51437889_66617012Fixtures,
+)
 from for_runners.tests.utils import ClearCacheMixin
 
 
@@ -89,6 +94,9 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
                 json={"error": "Unable to geocode"},
             )
             m.get(**OpenStreetMap51437889_66617012Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap00000000_00000000Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5251861_1337611Fixtures().get_requests_mock_kwargs())
 
             call_command(import_gpx.Command(), "--username", test_username, str(fixture_files_path))
             assert storage_stats.fields_saved == [
@@ -109,7 +117,7 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
             qs = GpxModel.objects.filter(tracked_by__username=test_username)
 
             existing_tracks = [str(track) for track in qs]
-            assert_pformat_equal(existing_tracks, ['2018-02-21', '2011-01-13'])
+            assert_pformat_equal(existing_tracks, ['2018-02-21 Moers', '2011-01-13 Berlin Tiergarten'])
 
             assert qs.count() == 2
             assert storage_stats.fields_read == []
