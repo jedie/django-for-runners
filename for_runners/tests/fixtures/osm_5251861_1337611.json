@@ -1,0 +1,25 @@
+{
+  "address": {
+    "ISO3166-2-lvl4": "DE-BE",
+    "borough": "Mitte",
+    "city": "Berlin",
+    "country": "Deutschland",
+    "country_code": "de",
+    "postcode": "11011",
+    "road": "Versorgungstunnel Regierungsviertel",
+    "suburb": "Tiergarten"
+  },
+  "boundingbox": [
+    "52.5191162",
+    "52.5194841",
+    "13.37641",
+    "13.3764685"
+  ],
+  "display_name": "Versorgungstunnel Regierungsviertel, Tiergarten, Mitte, Berlin, 11011, Deutschland",
+  "lat": "52.5191162",
+  "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+  "lon": "13.37641",
+  "osm_id": 416419153,
+  "osm_type": "way",
+  "place_id": 203697932
+}

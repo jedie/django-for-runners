@@ -120,10 +120,13 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         with locmem_stats_override_storage(), requests_mock.mock() as m:
             m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
             m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
             gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
             instance = add_gpx(gpx_content=gpx_content, user=self.superuser)
 
-        self.assertEqual(instance.get_prefix_id(), '20180221_1430_UMD2RR')
+        self.assertEqual(instance.short_start_address, 'Moers')
+        self.assertEqual(instance.get_short_slug(prefix_id=True), '20180221_1430_umd2rr-moers')
 
         self.client.force_login(self.superuser)
         response = self.client.post(
@@ -141,5 +144,5 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         zf = zipfile.ZipFile(io.BytesIO(response.content), 'r')
         self.assertEqual(
             zf.namelist(),
-            ['20180221_1430_umd2rr.gpx'],
+            ['20180221_1430_umd2rr-moers.gpx'],
         )

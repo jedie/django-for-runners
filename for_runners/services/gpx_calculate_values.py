@@ -7,6 +7,8 @@
 import logging
 import statistics
 
+from for_runners.error_handling import capture_exception
+
 # https://github.com/jedie/django-for-runners
 from for_runners.geo import reverse_geo
 from for_runners.gpx import get_extension_data, get_identifier
@@ -103,9 +105,11 @@ def calculate_values(*, gpx_track):
         except Exception as err:
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
             log.error(f"Can't reverse geo: {err}")
+            capture_exception(err)
         else:
-            gpx_track.short_start_address = start_address.short
-            gpx_track.full_start_address = start_address.full
+            if start_address:
+                gpx_track.short_start_address = start_address.short
+                gpx_track.full_start_address = start_address.full
 
     if not gpx_track.full_finish_address:
         try:
@@ -114,8 +118,9 @@ def calculate_values(*, gpx_track):
             # e.g.: geopy.exc.GeocoderTimedOut: Service timed out
             log.error(f"Can't reverse geo: {err}")
         else:
-            gpx_track.short_finish_address = finish_address.short
-            gpx_track.full_finish_address = finish_address.full
+            if finish_address:
+                gpx_track.short_finish_address = finish_address.short
+                gpx_track.full_finish_address = finish_address.full
 
     # TODO: Handle other extensions, too.
     # Garmin containes also 'cad'

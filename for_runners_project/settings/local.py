@@ -12,7 +12,8 @@ from for_runners_project.settings.prod import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+PRINT_TRACEBACKS = True
+RAISE_CAPTURE_EXCEPTIONS = True
 
 # Serve static/media files for local development:
 SERVE_FILES = True

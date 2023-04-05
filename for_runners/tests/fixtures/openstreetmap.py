@@ -17,9 +17,15 @@ class OpenStreetMapBaseFixtures(BaseFixtures):
 @fixtures_registry.register()
 class OpenStreetMap0_0Fixtures(OpenStreetMapBaseFixtures):
     file_name = 'osm_0_0.json'
+    url = 'https://nominatim.openstreetmap.org/reverse?lat=0.0&lon=0.0&format=json&addressdetails=1&zoom=17'
+
+
+@fixtures_registry.register()
+class OpenStreetMap00000000_00000000Fixtures(OpenStreetMapBaseFixtures):
+    file_name = 'osm_0.0000000_0.0000000.json'
     url = (
         'https://nominatim.openstreetmap.org/reverse'
-        '?lat=0.0&lon=0.0&format=json&addressdetails=1&zoom=17'
+        '?lat=0.0000000&lon=0.0000000&format=json&addressdetails=1&zoom=17'
     )
 
 
@@ -49,3 +55,9 @@ class OpenStreetMap51437889_66617012Fixtures(OpenStreetMapBaseFixtures):
         '?lat=51.437889290973544&lon=6.617012657225132'
         '&format=json&addressdetails=1&zoom=17'
     )
+
+
+@fixtures_registry.register()
+class OpenStreetMap5251861_1337611Fixtures(OpenStreetMapBaseFixtures):
+    file_name = 'osm_5251861_1337611.json'
+    url = 'https://nominatim.openstreetmap.org/reverse?lat=52.51861&lon=13.37611&format=json&addressdetails=1&zoom=17'

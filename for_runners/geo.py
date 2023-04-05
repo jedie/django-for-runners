@@ -5,6 +5,7 @@
 """
 import collections
 import logging
+from typing import Optional
 
 from django.core.cache import cache
 from geopy.geocoders import Nominatim
@@ -42,7 +43,7 @@ def construct_short_address(address):
     return short_address
 
 
-def reverse_geo(lat, lon):
+def reverse_geo(lat, lon) -> Optional[Address]:
     """
     Create short+full address string from given geo coordinates
 
@@ -77,6 +78,10 @@ def reverse_geo(lat, lon):
             # TODO: language={user language}
             zoom=17,  # major and minor streets
         )
+        if not location:
+            log.warning('reverse_geo lat=%s lon=%s failed', lat2, lon2)
+            return
+
         full_address = location.address
         raw_address = location.raw["address"]
         address = (full_address, raw_address)

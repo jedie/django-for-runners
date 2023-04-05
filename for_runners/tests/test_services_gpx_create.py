@@ -19,6 +19,13 @@ from for_runners.tests.fixtures.metaweather import (
     MetaWeather5252_1338Fixtures,
     MetaWeather648820_2018_2_21Fixtures,
 )
+from for_runners.tests.fixtures.openstreetmap import (
+    OpenStreetMap00000000_00000000Fixtures,
+    OpenStreetMap0_0Fixtures,
+    OpenStreetMap5143785_661701Fixtures,
+    OpenStreetMap5143789_661701Fixtures,
+    OpenStreetMap5251861_1337611Fixtures,
+)
 from for_runners.tests.utils import ClearCacheMixin
 
 
@@ -28,9 +35,7 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
         self.user = self._get_user(usertype="normal")
 
     def assert_garmin_connect_1_gpx(self, instance):
-        print(instance)
-
-        self.assertEqual(repr(instance), "<GpxModel: 2018-02-21>")
+        self.assertEqual(repr(instance), "<GpxModel: 2018-02-21 Moers>")
 
         self.assertEqual(instance.points_no, 3)
         self.assertEqual(round(instance.length, 3), 4.727)
@@ -38,12 +43,15 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
         self.assertEqual(round(instance.pace, 3), 7.052)
         self.assertEqual(instance.heart_rate_avg, 125)
 
-        self.assertEqual(instance.get_short_slug(), "2018-02-21")
+        self.assertEqual(instance.get_short_slug(), "2018-02-21-moers")
+        self.assertEqual(instance.get_short_slug(prefix_id=True), '20180221_1430_umd2rr-moers')
 
     def test_add_gpx(self):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
             m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
             m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
             gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
             instance = add_gpx(gpx_content=gpx_content, user=self.user)
             self.assert_garmin_connect_1_gpx(instance)
@@ -57,6 +65,8 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
         with locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
             m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
             m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
             instance = add_from_file(
                 gpx_file_file_path=FIXTURES_PATH / 'garmin_connect_1.gpx', user=self.user
             )
@@ -81,6 +91,11 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
                 'https://www.metaweather.com/api/location/784794/2011/1/15/',
                 json=[],  # No weather data
             )
+            m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap0_0Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap00000000_00000000Fixtures().get_requests_mock_kwargs())
+            m.get(**OpenStreetMap5251861_1337611Fixtures().get_requests_mock_kwargs())
             instances = [
                 str(instance)
                 for instance in add_from_files(
@@ -89,7 +104,8 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
                     skip_errors=True,
                 )
             ]
-            assert_pformat_equal(instances, ["2018-02-21", "2011-01-13"])
+            assert_pformat_equal(instances, ['2018-02-21 Moers', '2011-01-13 Berlin Tiergarten'])
+
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
             ('for_runners', 'gpxmodel', 'gpx_file'),
