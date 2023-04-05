@@ -726,9 +726,9 @@ lxml==4.9.2 \
     --hash=sha256:f1496ea22ca2c830cbcbd473de8f114a320da308438ae65abad6bab7867fe38f \
     --hash=sha256:f49e52d174375a7def9915c9f06ec4e569d235ad428f70751765f48d5926678c
     # via django-for-runners (pyproject.toml)
-manage-django-project==0.2.2 \
-    --hash=sha256:262672cf1ef86cd0ae5ffe18e80de47d5f8b2fedb65c26c0d2377f6fab64a83b \
-    --hash=sha256:f39d575c36ebb2af366cf62818454eab33328c3a1809590b4389ef31b865c21d
+manage-django-project==0.3.0rc0 \
+    --hash=sha256:0ce7254e2d45ae99f0054acc0d32e513aebd31af0babaeec31371ec509b129f4 \
+    --hash=sha256:f45c7d001f839bc5c54ae3c2681229b4fbb17118b1acdf1da0d97da448dab975
     # via django-for-runners (pyproject.toml)
 manageprojects==0.9.9 \
     --hash=sha256:41a26119df5d03f57c83f04b30e8f6908025e6e59a7e79b2777393fa33f44481 \
