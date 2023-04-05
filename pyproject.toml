@@ -38,7 +38,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-    "manage_django_project>=0.1.0",  # https://github.com/jedie/manage_django_project
+    "manage_django_project>=0.3.0rc0",  # https://github.com/jedie/manage_django_project
     "tblib",   # https://github.com/ionelmc/python-tblib
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
@@ -81,6 +81,16 @@ Source = "https://github.com/jedie/django-for-runners"
 
 [project.scripts]
 for_runners_project = "for_runners_project.__main__:main"
+
+[manage_django_project]
+module_name="for_runners_project"
+
+# Django settings used for all commands except test/coverage/tox:
+local_settings='for_runners_project.settings.local'
+
+# Django settings used for test/coverage/tox commands:
+test_settings='for_runners_project.settings.tests'
+
 
 [build-system]
 requires = ["setuptools>=61.0", "setuptools_scm>=7.1"]
