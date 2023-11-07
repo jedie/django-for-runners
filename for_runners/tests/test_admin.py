@@ -56,11 +56,16 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                 data={"gpx_files": [file1, file2]},
                 HTTP_ACCEPT_LANGUAGE="en",
             )
+            self.assertEqual(response.status_code, 302, response.content.decode())
+
             # debug_response(response)
-            assert storage_stats.fields_saved == [
-                ('for_runners', 'gpxmodel', 'track_svg'),
-                ('for_runners', 'gpxmodel', 'gpx_file'),
-            ]
+            self.assertEqual(
+                storage_stats.fields_saved,
+                [
+                    ('for_runners', 'gpxmodel', 'track_svg'),
+                    ('for_runners', 'gpxmodel', 'gpx_file'),
+                ],
+            )
             assert storage_stats.fields_read == []
 
             tracks = GpxModel.objects.all()
