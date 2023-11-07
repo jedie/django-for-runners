@@ -221,7 +221,8 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.3...main)
+* [v0.17.4](https://github.com/jedie/django-for-runners/compare/v0.17.3...v0.17.4)
+  * 2023-11-07 - audo generate README history
   * 2023-11-07 - Update Requirements
   * 2023-11-07 - Update UploadGpxFileForm
   * 2023-04-05 - Update to manage-django-project v0.3.0rc0
