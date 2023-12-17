@@ -7,6 +7,14 @@ import requests_mock
 from for_runners_project.settings.prod import *  # noqa
 
 
+# _____________________________________________________________________________
+# Manage Django Project
+
+INSTALLED_APPS.append('manage_django_project')
+
+# _____________________________________________________________________________
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -45,8 +53,3 @@ MAP_DOWNLOAD = False
 # Set root to not existing path, so that wrong tests will fail:
 STATIC_ROOT = '/not/exists/static/'
 MEDIA_ROOT = '/not/exists/media/'
-
-# _____________________________________________________________________________
-# Manage Django Project
-
-INSTALLED_APPS.append('manage_django_project')

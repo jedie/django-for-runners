@@ -42,7 +42,7 @@ print(f'Use Database: {DATABASES["default"]["NAME"]!r}', file=__sys.stderr)
 # Download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
 MAP_DOWNLOAD = True
 
-if __os.environ.get('AUTOLOGIN') == '1':
+if __os.environ.get('AUTOLOGIN') != '0':
     # Auto login for dev. server:
     MIDDLEWARE = MIDDLEWARE.copy()
     MIDDLEWARE += ['django_tools.middlewares.local_auto_login.AlwaysLoggedInAsSuperUserMiddleware']
