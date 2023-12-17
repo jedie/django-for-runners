@@ -12,7 +12,7 @@ dependencies = [
     "colorlog",  # https://github.com/borntyping/python-colorlog
     "gunicorn",  # https://github.com/benoimyproject.wsgitc/gunicorn
 
-    "django",
+    "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
     "django-processinfo",  # https://github.com/jedie/django-processinfo/
     "django-debug-toolbar",  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
     "django-tools",  # https://github.com/jedie/django-tools/
