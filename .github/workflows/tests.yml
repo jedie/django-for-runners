@@ -17,9 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.10", "3.9"]
-    env:
-      PYTHONUNBUFFERED: 1
-      PYTHONWARNINGS: always
     steps:
     - name: Checkout
       run: |
@@ -50,6 +47,9 @@ jobs:
         ./manage.py safety
 
     - name: 'Run tests with Python v${{ matrix.python-version }}'
+      env:
+        PYTHONUNBUFFERED: 1
+        PYTHONWARNINGS: always
       run: |
         ./manage.py coverage
 

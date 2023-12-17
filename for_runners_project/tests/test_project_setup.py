@@ -33,11 +33,11 @@ class ProjectSetupTestCase(TestCase):
     def test_cache(self):
         # django cache should work in tests, because some tests "depends" on it
         cache_key = 'a-cache-key'
-        assert cache.get(cache_key) is None
+        self.assertIs(cache.get(cache_key), None)
         cache.set(cache_key, 'the cache content', timeout=1)
-        assert cache.get(cache_key) == 'the cache content'
+        self.assertEqual(cache.get(cache_key), 'the cache content', f'Check: {settings.CACHES=}')
         cache.delete(cache_key)
-        assert cache.get(cache_key) is None
+        self.assertIs(cache.get(cache_key), None)
 
     def test_settings(self):
         self.assertEqual(settings.SETTINGS_MODULE, 'for_runners_project.settings.tests')
@@ -66,6 +66,12 @@ class ProjectSetupTestCase(TestCase):
         self.assertIn('for_runners_project.settings.local', output)
         self.assertIn('for_runners_project.settings.tests', output)
         self.assertIn(__version__, output)
+
+        output = subprocess.check_output([manage_bin, 'check'], text=True)
+        self.assertIn('System check identified no issues (0 silenced).', output)
+
+        output = subprocess.check_output([manage_bin, 'makemigrations'], text=True)
+        self.assertIn("No changes detected", output)
 
     def test_code_style(self):
         call_command(code_style.Command())
