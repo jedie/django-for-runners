@@ -91,7 +91,7 @@ def human_duration(t):
     if t < 60 * 60:
         return _("%.1f min") % round(t / 60, 1)
 
-    for seconds, name in chunks:
+    for seconds, name in chunks:  # noqa: B007
         count = t / seconds
         if count >= 1:
             count = round(count, 1)

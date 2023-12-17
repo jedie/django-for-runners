@@ -139,7 +139,7 @@ def iter_coordinates(gpxpy_instance):
 def get_2d_coordinate_list(gpxpy_instance):
     lat_list = []
     lon_list = []
-    for latitude, longitude, elevation in iter_coordinates(gpxpy_instance):
+    for latitude, longitude, _elevation in iter_coordinates(gpxpy_instance):
         lat_list.append(latitude)
         lon_list.append(longitude)
 

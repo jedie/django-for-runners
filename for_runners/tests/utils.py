@@ -46,8 +46,11 @@ def generate_gpx_track(
     point_count,
     pace_min,
     start_longitude=0,
-    start_date=datetime(2018, 5, 30, 10, 00),
+    start_date=None,
 ):
+    if start_date is None:
+        start_date = datetime(2018, 5, 30, 10, 00)
+
     distance_km = track_length_km / point_count
     print("km between points:", distance_km)
 
