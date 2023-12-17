@@ -221,6 +221,11 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.4...main)
+  * 2023-12-17 - Use cli_base.cli_tools.git_history.update_readme_history()
+  * 2023-12-17 - Update requirements ; TODO: Update to Django 5.0
+  * 2023-12-17 - Code style fixes
+  * 2023-12-17 - Apply manageprojects updates
 * [v0.17.4](https://github.com/jedie/django-for-runners/compare/v0.17.3...v0.17.4)
   * 2023-11-07 - audo generate README history
   * 2023-11-07 - Update Requirements
@@ -233,12 +238,12 @@ Because this is a project and not really a reuse-able-app ;)
 * [v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.1...v0.17.2)
   * 2023-04-02 - release 0.17.2
   * 2023-04-02 - Bugfix adding all template files
-* [v0.17.1](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.1)
-  * 2023-04-02 - Bugfix packaging and missing files
-  * 2023-04-02 - update link to https://github.com/kbr/autotask
 
 <details><summary>Expand older history entries ...</summary>
 
+* [v0.17.1](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.1)
+  * 2023-04-02 - Bugfix packaging and missing files
+  * 2023-04-02 - update link to https://github.com/kbr/autotask
 * [v0.17.0](https://github.com/jedie/django-for-runners/compare/v0.16.0...v0.17.0)
   * 2023-04-02 - Bugfix edit a `GpxModel` instance in admin with a large GPX track
   * 2023-04-02 - Bugfix manage call and merge project test code

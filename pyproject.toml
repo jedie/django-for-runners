@@ -107,6 +107,10 @@ include = ["for_runners*", "for_runners_project*"]
 version = {attr = "for_runners.__version__"}
 
 
+[tool.cli_base]
+version_module_name = "for_runners"  # Used by update_readme_history()
+
+
 [tool.darker]
 src = ['.']
 revision = "origin/main..."
