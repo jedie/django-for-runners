@@ -7,12 +7,13 @@ readme = "README.md"
 authors = [
     {name = 'Jens Diemer', email = 'django-for-runners@jensdiemer.de'}
 ]
-requires-python = ">=3.9,<4" # Keep Python 3.9 until Yunohost contains a newer Python Version ;)
+requires-python = ">=3.9" # Keep Python 3.9 until Yunohost contains a newer Python Version ;)
 dependencies = [
+    "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
+
     "colorlog",  # https://github.com/borntyping/python-colorlog
     "gunicorn",  # https://github.com/benoimyproject.wsgitc/gunicorn
 
-    "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
     "django-processinfo",  # https://github.com/jedie/django-processinfo/
     "django-debug-toolbar",  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
     "django-tools",  # https://github.com/jedie/django-tools/
@@ -39,7 +40,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-    "manage_django_project>=0.6.4",  # https://github.com/jedie/manage_django_project
+    "manage_django_project>=0.7.1",  # https://github.com/jedie/manage_django_project
     "tblib",   # https://github.com/ionelmc/python-tblib
     "pip-tools",  # https://github.com/jazzband/pip-tools/
     "tox",  # https://github.com/tox-dev/tox
