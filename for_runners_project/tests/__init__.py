@@ -3,6 +3,11 @@ import unittest.util
 from pathlib import Path
 
 from bx_py_utils.test_utils.deny_requests import deny_any_real_request
+from typeguard import install_import_hook
+
+
+# Check type annotations via typeguard in all tests:
+install_import_hook(packages=('for_runners', 'for_runners_project'))
 
 
 def pre_configure_tests() -> None:

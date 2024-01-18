@@ -55,6 +55,7 @@ dev = [
     "safety",  # https://github.com/pyupio/safety
     "mypy",  # https://github.com/python/mypy
     "twine",  # https://github.com/pypa/twine
+    "typeguard",  # https://github.com/agronholm/typeguard/
 
     # https://github.com/akaihola/darker
     # https://github.com/ikamensh/flynt
@@ -200,6 +201,7 @@ applied_migrations = [
     "2281f4b", # 2023-04-02T17:40:58+02:00
     "10c547a", # 2023-04-04T20:37:52+02:00
     "d65b082", # 2023-12-17T12:51:22+01:00
+    "a66e5ae", # 2024-01-16T19:13:13+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
