@@ -222,6 +222,7 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.4...main)
+  * 2024-01-18 - +typeguard +manageprojects updates
   * 2024-01-18 - Update requirements
   * 2023-12-17 - Use cli_base.cli_tools.git_history.update_readme_history()
   * 2023-12-17 - Update requirements ; TODO: Update to Django 5.0
