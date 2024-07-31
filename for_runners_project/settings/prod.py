@@ -36,9 +36,9 @@ if not __SECRET_FILE.is_file():
     print(f'Generate {__SECRET_FILE}')
     from secrets import token_urlsafe as __token_urlsafe
 
-    __SECRET_FILE.open('w').write(__token_urlsafe(128))
+    __SECRET_FILE.write_text(__token_urlsafe(128))
 
-SECRET_KEY = __SECRET_FILE.open('r').read().strip()
+SECRET_KEY = __SECRET_FILE.read_text().strip()
 
 
 # Application definition
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'bx_py_utils',  # https://github.com/boxine/bx_py_utils
     'import_export',  # https://github.com/django-import-export/django-import-export
     'dbbackup',  # https://github.com/django-dbbackup/django-dbbackup
@@ -67,13 +66,12 @@ INSTALLED_APPS = [
     # TODO: 'django_tools.model_version_protect.apps.ModelVersionProtectConfig',
     #
     # Django-ForRunners
-    'for_runners.apps.ForRunnersConfig',
     'for_runners_project.for_runners_helper_app',
+    'for_runners.apps.AppConfig',
 ]
 
 ROOT_URLCONF = 'for_runners_project.urls'
 WSGI_APPLICATION = 'for_runners_project.wsgi.application'
-SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesBackend',

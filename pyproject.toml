@@ -200,6 +200,7 @@ applied_migrations = [
     "10c547a", # 2023-04-04T20:37:52+02:00
     "d65b082", # 2023-12-17T12:51:22+01:00
     "a66e5ae", # 2024-01-16T19:13:13+01:00
+    "f8be3e0", # 2024-07-16T19:35:26+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
