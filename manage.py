@@ -34,7 +34,7 @@ else:
         sys.exit(-1)
 
 
-assert sys.version_info >= (3, 9), f'Python version {sys.version_info} is too old!'
+assert sys.version_info >= (3, 10), f'Python version {sys.version_info} is too old!'
 
 
 if sys.platform == 'win32':  # wtf
@@ -62,7 +62,7 @@ PROJECT_SHELL_SCRIPT = BIN_PATH / 'for_runners_project'
 
 
 def get_dep_hash():
-    """Get SHA512 hash from poetry.lock content."""
+    """Get SHA512 hash from lock file content."""
     return hashlib.sha512(DEP_LOCK_PATH.read_bytes()).hexdigest()
 
 
@@ -98,14 +98,14 @@ def main(argv):
         print(f'Create virtual env here: {VENV_PATH.absolute()}')
         builder = venv.EnvBuilder(symlinks=True, upgrade=True, with_pip=True)
         builder.create(env_dir=VENV_PATH)
+
+    if not PROJECT_SHELL_SCRIPT.is_file() or not venv_up2date():
         # Update pip
         verbose_check_call(PYTHON_PATH, '-m', 'pip', 'install', '-U', 'pip')
 
-    if not PIP_SYNC_PATH.is_file():
         # Install pip-tools
         verbose_check_call(PYTHON_PATH, '-m', 'pip', 'install', '-U', 'pip-tools')
 
-    if not PROJECT_SHELL_SCRIPT.is_file() or not venv_up2date():
         # install requirements via "pip-sync"
         verbose_check_call(PIP_SYNC_PATH, str(DEP_LOCK_PATH))
 
