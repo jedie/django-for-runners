@@ -16,8 +16,9 @@ attrs==23.2.0 \
     # via
     #   cattrs
     #   requests-cache
-autotask==0.5.4 \
-    --hash=sha256:d21578ab14adafb0d9be3490a444d261fd2bcdcbb1ee941b28d4b5e5d1a386ad
+autocron==1.0 \
+    --hash=sha256:4c3624308ccfd8f05c3ff4f09f4b87c3c5edffbcc1975ee839945b17ea69a65b \
+    --hash=sha256:db73b7b5a10359d88cc2e68c8709ba0abacad36fd3846b579899a423f1b1e66a
     # via django-for-runners (pyproject.toml)
 bleach==6.1.0 \
     --hash=sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe \

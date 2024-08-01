@@ -28,3 +28,5 @@ __pycache__
 # Django
 secret.txt
 
+# Autocron own SQLite database file:
+autocron.db
