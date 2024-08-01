@@ -3,10 +3,13 @@
     :copyleft: 2018 by the django-for-runners team, see AUTHORS for more details.
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
-from for_runners.tests.base import BaseTestCase
+
+from unittest import TestCase
+
+from for_runners.tests.utils import AssertsMixin
 
 
-class TestBase(BaseTestCase):
+class AssertsMixinTestBase(AssertsMixin, TestCase):
     def test_assert_equal_rounded(self):
         self.assert_equal_rounded(1.21, 1.22, decimal_places=1)
         self.assert_equal_rounded([1.57, 1.6], [1.6, 1.58], decimal_places=1)

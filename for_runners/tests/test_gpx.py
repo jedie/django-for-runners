@@ -13,17 +13,23 @@ from pathlib import Path
 # https://github.com/jedie/django-for-runners
 from pprint import pprint
 
+from django.test import SimpleTestCase
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
 from for_runners.gpx import GpxIdentifier, GpxMedian, iter_distances, parse_gpx_file
-from for_runners.tests.base import BaseTestCase
-from for_runners.tests.utils import earth_circumference, generate_gpx_track, kilometers2lon_count, lon2kilometers
+from for_runners.tests.utils import (
+    AssertsMixin,
+    earth_circumference,
+    generate_gpx_track,
+    kilometers2lon_count,
+    lon2kilometers,
+)
 
 
 BASE_PATH = Path(__file__).parent
 
 
-class GpxTests(BaseTestCase):
+class GpxTests(AssertsMixin, SimpleTestCase):
     def test_parse_gpx(self):
         filepath = Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")
 
@@ -93,7 +99,7 @@ class GpxTests(BaseTestCase):
         self.assertEqual(distances, [0, 2.413028183109784, 2.313525316082677])
 
 
-class GpxMedianTests(BaseTestCase):
+class GpxMedianTests(AssertsMixin, SimpleTestCase):
     def test_garmin_connect_1_gpx(self):
         # containes 3 points:
         filepath = Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx")
@@ -168,7 +174,7 @@ class GpxMedianTests(BaseTestCase):
         # 20015.086796020572
 
 
-class GpxIdentifierTests(BaseTestCase):
+class GpxIdentifierTests(SimpleTestCase):
     def setUp(self):
         gpxpy_instance = parse_gpx_file(Path(BASE_PATH, "fixture_files/garmin_connect_1.gpx"))
         self.gi = GpxIdentifier(gpxpy_instance)

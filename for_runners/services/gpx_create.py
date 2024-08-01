@@ -7,7 +7,8 @@
 import logging
 import os
 
-from django.db import IntegrityError, transaction
+import gpxpy
+from django.db import IntegrityError
 
 # https://github.com/jedie/django-tools
 from django_tools.unittest_utils.assertments import assert_is_dir, assert_is_file
@@ -15,7 +16,7 @@ from gpxpy.gpx import GPX
 
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
-from for_runners.gpx import get_identifier, parse_gpx
+from for_runners.gpx import get_identifier
 from for_runners.gpx_tools.kml import kml2gpx
 from for_runners.models import GpxModel
 
@@ -31,9 +32,12 @@ def add_gpx(*, gpx: GPX, user) -> GpxModel | None:
     :return: GpxModel instance
     """
     identifier = get_identifier(gpx)
+    log.info(f'{identifier=}')
+
+    log.error(str(list(GpxModel.objects.values_list('tracked_by', 'start_time', 'start_latitude'))))
 
     try:
-        instance = GpxModel.objects.get_by_identifier(identifier)
+        instance: GpxModel = GpxModel.objects.get_by_identifier(identifier)
     except GpxModel.DoesNotExist:
         log.debug("Create new track for user: %s", user)
         gpx_content = gpx.to_xml()
@@ -43,7 +47,7 @@ def add_gpx(*, gpx: GPX, user) -> GpxModel | None:
         if instance.tracked_by != user:
             log.error("Skip existing track: %s (Tracked by: %s)", instance, instance.tracked_by)
         else:
-            log.info("Skip existing track: %s", instance)
+            log.info("Skip existing track: %s %s", instance, instance.get_identifier())
         return
 
 
@@ -59,7 +63,7 @@ def add_from_file(*, track_path, user):
         gpx: GPX = kml2gpx(track_path)
     elif file_suffix == '.gpx':
         gpx_content = track_path.read_text()
-        gpx: GPX = parse_gpx(gpx_content)
+        gpx: GPX = gpxpy.parse(gpx_content)
     else:
         raise GpxDataError(f"Unknown file extension: {track_path}")
 
@@ -85,10 +89,9 @@ def add_from_files(*, tracks_path, user, skip_errors=True):
 
     for track_path in sorted(tracks):
         try:
-            with transaction.atomic():
-                instance = add_from_file(track_path=track_path, user=user)
+            instance = add_from_file(track_path=track_path, user=user)
         except (IntegrityError, GpxDataError) as err:
-            log.exception("Skip track file: %s", err)
+            log.exception("Skip %s: %s", track_path, err)
             if not skip_errors:
                 raise
         else:

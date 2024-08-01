@@ -113,21 +113,10 @@ class GpxIdentifier:
         return result
 
 
-def parse_gpx(content):
-    # if 'creator="Garmin Connect"' in content:
-    #     work-a-round until
-    #     https://github.com/tkrajina/gpxpy/issues/115#issuecomment-392798245 fixed
-    #     return garmin2gpxpy(content)
-
-    return gpxpy.parse(content)
-
-
-def parse_gpx_file(filepath):
+def parse_gpx_file(filepath) -> GPX:
     assert filepath.is_file(), f"File not found: '{filepath}'"
-    with filepath.open("r") as f:
-        content = f.read()
-
-    return parse_gpx(content)
+    content = filepath.read_text()
+    return gpxpy.parse(content)
 
 
 def iter_points(gpxpy_instance):

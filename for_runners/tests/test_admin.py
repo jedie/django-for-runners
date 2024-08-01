@@ -13,11 +13,11 @@ from for_runners import __version__
 from for_runners.models import GpxModel
 from for_runners.services.gpx_create import add_from_file
 from for_runners.tests.fixture_files import FIXTURES_PATH, get_fixture_path
-from for_runners.tests.fixtures.metaweather import MetaWeather5144_662Fixtures, MetaWeather648820_2018_2_21Fixtures
 from for_runners.tests.fixtures.openstreetmap import (
     OpenStreetMap5143785_661701Fixtures,
     OpenStreetMap5143789_661701Fixtures,
 )
+from for_runners.tests.mocks.weather_mock import WeatherMock
 
 
 class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
@@ -37,11 +37,16 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         gpx_file_path1 = Path(FIXTURES_PATH, "garmin_connect_1.gpx")
         gpx_file_path2 = Path(FIXTURES_PATH, "no_track_points.gpx")
 
-        with gpx_file_path1.open("rb") as file1, gpx_file_path2.open(
-            "rb"
-        ) as file2, locmem_stats_override_storage() as storage_stats, requests_mock.mock() as m:
-            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
-            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+        with (
+            gpx_file_path1.open("rb") as file1,
+            gpx_file_path2.open("rb") as file2,
+            locmem_stats_override_storage() as storage_stats,
+            requests_mock.mock() as m,
+            WeatherMock() as weather_mock,
+            # patch.object(weather, 'coordinates2weather', weather_mock),
+        ):
+            # m.get(**Weather5144_662Fixtures().get_requests_mock_kwargs())
+            # m.get(**Weather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
 
             m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
 
@@ -78,6 +83,22 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                 status_code=302,
                 target_status_code=200,
                 fetch_redirect_response=False,
+            )
+
+            self.assertEqual(
+                weather_mock.call_data,
+                [
+                    {
+                        'latitude': 51.437889290973544,
+                        'longitude': 6.617012657225132,
+                        'dt': '2018-02-21T14:30:50+00:00',
+                    },
+                    {
+                        'latitude': 51.437847297638655,
+                        'longitude': 6.6170057002455,
+                        'dt': '2018-02-21T14:30:52+00:00',
+                    },
+                ],
             )
 
             response = self.client.get("/en/admin/for_runners/gpxmodel/", HTTP_ACCEPT_LANGUAGE="en")
@@ -122,9 +143,7 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         )
 
     def test_download_gpx_files(self):
-        with locmem_stats_override_storage(), requests_mock.mock() as m:
-            m.get(**MetaWeather5144_662Fixtures().get_requests_mock_kwargs())
-            m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
+        with locmem_stats_override_storage(), requests_mock.mock() as m, WeatherMock() as weather_mock:
             m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
             instance = add_from_file(track_path=get_fixture_path('garmin_connect_1.gpx'), user=self.superuser)
@@ -149,4 +168,19 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
         self.assertEqual(
             zf.namelist(),
             ['20180221_1430_umd2rr-moers.gpx'],
+        )
+        self.assertEqual(
+            weather_mock.call_data,
+            [
+                {
+                    'latitude': 51.437889290973544,
+                    'longitude': 6.617012657225132,
+                    'dt': '2018-02-21T14:30:50+00:00',
+                },
+                {
+                    'latitude': 51.437847297638655,
+                    'longitude': 6.6170057002455,
+                    'dt': '2018-02-21T14:30:52+00:00',
+                },
+            ],
         )

@@ -7,6 +7,7 @@
 import logging
 from decimal import Decimal as D
 
+import gpxpy
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -16,9 +17,10 @@ from django.utils.translation import gettext_lazy as _
 # https://github.com/jedie/django-tools
 from django_tools.file_storage.file_system_storage import OverwriteFileSystemStorage
 from django_tools.models import UpdateTimeBaseModel
+from gpxpy.gpx import GPX
 
 # https://github.com/jedie/django-for-runners
-from for_runners.gpx import GpxIdentifier, parse_gpx
+from for_runners.gpx import GpxIdentifier, Identifier
 from for_runners.gpx_tools.humanize import human_distance, human_duration, human_seconds
 from for_runners.managers.gpx import GpxModelManager
 from for_runners.model_utils import ModelAdminUrlMixin
@@ -477,17 +479,8 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
 
         return result
 
-    _GPXPY_CACHE = {}
-
-    def get_gpxpy_instance(self):
-        try:
-            return self._GPXPY_CACHE[self.pk]
-        except KeyError:
-            if self.gpx:
-                gpxpy_instance = parse_gpx(content=self.gpx)
-                if self.pk is not None:
-                    self._GPXPY_CACHE[self.pk] = gpxpy_instance
-                return gpxpy_instance
+    def get_gpxpy_instance(self) -> GPX:
+        return gpxpy.parse(self.gpx)
 
     def calc_pace(self):
         duration_s = self.get_net_duration_s()
@@ -538,6 +531,16 @@ class GpxModel(ModelAdminUrlMixin, UpdateTimeBaseModel):
     def get_short_slug(self, prefix_id=False):
         name = self.short_name(prefix_id=prefix_id)
         return slugify(name)
+
+    def get_identifier(self) -> Identifier:
+        return Identifier(
+            start_time=self.start_time,
+            finish_time=self.finish_time,
+            start_lat=self.start_latitude,
+            start_lon=self.start_longitude,
+            finish_lat=self.finish_latitude,
+            finish_lon=self.finish_longitude,
+        )
 
     def get_prefix_id(self):
         gpxpy_instance = self.get_gpxpy_instance()

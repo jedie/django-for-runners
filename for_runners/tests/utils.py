@@ -95,3 +95,15 @@ class ClearCacheMixin:
     def setUp(self):
         super().setUp()
         cache.clear()
+
+
+class AssertsMixin:
+    def assert_equal_rounded(self, value1, value2, decimal_places=5, msg=None):
+
+        if isinstance(value1, (tuple, list)):
+            value1 = [round(v, decimal_places) for v in value1]
+            value2 = [round(v, decimal_places) for v in value2]
+        else:
+            value1 = round(value1, decimal_places)
+            value2 = round(value2, decimal_places)
+        self.assertEqual(value1, value2, msg=msg)

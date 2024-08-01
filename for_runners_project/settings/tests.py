@@ -34,6 +34,9 @@ PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
 
 # _____________________________________________________________________________
 
+# Don't use requests cache in tests:
+REQUEST_CACHE = False
+
 # _____________________________________________________________________________
 
 # Skip download map via geotiler in for_runners.gpx_tools.gpxpy2map.generate_map
