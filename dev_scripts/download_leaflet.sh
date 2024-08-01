@@ -12,7 +12,7 @@ cd ../for_runners/static/leaflet
 # download link from:
 # https://leafletjs.com/download.html
 #
-wget http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.zip
+wget http://cdn.leafletjs.com/leaflet/v1.9.4/leaflet.zip
 
 unzip -u leaflet.zip
 

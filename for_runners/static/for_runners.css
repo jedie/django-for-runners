@@ -1,8 +1,8 @@
-{% comment%}
-    include from template:
-        "django-for-runners/for_runners/templates/admin/for_runners/gpxmodel/leaflet_map.html"
-{% endcomment %}
-
+#map {
+    position: relative;
+    height: 500px;
+    width: 100vw;
+}
 #map .leaflet-marker-start, #map .leaflet-marker-kilometers, #map .leaflet-marker-finish {
     font-weight: bold;
     color: white;
@@ -22,3 +22,12 @@
 #map .leaflet-marker-finish {
     background-color: red;
 }
+
+#dygraph_gpx_track {
+    width: 100vw;
+    height: 500px;
+}
+.dygraph-axis-label {
+  color: var(--primary-fg);
+}
+

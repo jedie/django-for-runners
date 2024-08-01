@@ -1,5 +1,16 @@
 {% extends "admin/change_form.html" %}
-{% load i18n admin_urls %}
+{% load i18n admin_urls static %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}"/>
+    <link rel="stylesheet" href="{% static 'dygraphs/dygraph.min.css' %}" />
+    <link rel="stylesheet" href="{% static "for_runners.css" %}">
+{% endblock %}
+
+{% block extrahead %}{{ block.super }}
+    <script src="{% static 'leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'dygraphs/dygraph.min.js' %}"></script>
+{% endblock %}
 
 {% block pretitle %}
     <h1>{{ original.tracked_by }} - <strong>{{ original }}</strong> - {{ original.human_length }} - {{ original.human_duration }} - {{ original.human_pace }}</h1>
