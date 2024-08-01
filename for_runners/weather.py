@@ -16,7 +16,7 @@ import statistics
 import time
 
 import requests
-from requests import HTTPError
+from requests import HTTPError, RequestException
 
 
 log = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def request_json(url, timeout=3, user_agent="django-for-runners"):
         r = requests.get(url, headers=headers, timeout=timeout)
         r.raise_for_status()
         data = r.json()
-    except (HTTPError, ValueError) as err:
+    except (HTTPError, RequestException, ValueError) as err:
         print(f"ERROR: {err} (url: {url!r})")
         raise NoWeatherData
     else:
