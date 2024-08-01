@@ -11,6 +11,7 @@ from django_tools.unittest_utils.assertments import assert_pformat_equal
 from django_tools.unittest_utils.user import TestUserMixin
 from override_storage import locmem_stats_override_storage
 
+from for_runners.gpx import parse_gpx
 from for_runners.services.gpx_create import add_from_file, add_from_files, add_gpx
 from for_runners.tests.fixture_files import FIXTURES_PATH, fixture_content
 from for_runners.tests.fixtures.metaweather import (
@@ -53,7 +54,8 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
             gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
-            instance = add_gpx(gpx_content=gpx_content, user=self.user)
+            gpx = parse_gpx(gpx_content)
+            instance = add_gpx(gpx=gpx, user=self.user)
             self.assert_garmin_connect_1_gpx(instance)
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
