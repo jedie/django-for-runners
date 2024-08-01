@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+ <Document>
+  <StyleMap id="smap_icon">
+   <Pair>
+    <key>normal</key>
+    <styleUrl>#s_normal_icon</styleUrl>
+   </Pair>
+   <Pair>
+    <key>highlight</key>
+    <styleUrl>#s_highlight_icon</styleUrl>
+   </Pair>
+  </StyleMap>
+  <StyleMap id="sstart_icon">
+   <Pair>
+    <key>normal</key>
+    <styleUrl>#s_start_normal_icon</styleUrl>
+   </Pair>
+   <Pair>
+    <key>highlight</key>
+    <styleUrl>#s_start_highlight_icon</styleUrl>
+   </Pair>
+  </StyleMap>
+  <StyleMap id="send_icon">
+   <Pair>
+    <key>normal</key>
+    <styleUrl>#s_end_normal_icon</styleUrl>
+   </Pair>
+   <Pair>
+    <key>highlight</key>
+    <styleUrl>#s_end_highlight_icon</styleUrl>
+   </Pair>
+  </StyleMap>
+  <Style id="s_normal_icon">
+   <LabelStyle>
+    <scale>0.0</scale>
+   </LabelStyle>
+   <IconStyle>
+    <scale>0.8</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
+    </Icon>
+   </IconStyle>
+   <LineStyle>
+    <color>ff0000ff</color>
+    <width>2.5</width>
+   </LineStyle>
+  </Style>
+  <Style id="s_highlight_icon">
+   <IconStyle>
+    <scale>1.2</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
+    </Icon>
+   </IconStyle>
+   <LineStyle>
+    <color>ff00ff00</color>
+    <width>2.5</width>
+   </LineStyle>
+  </Style>
+  <Style id="s_start_normal_icon">
+   <LabelStyle>
+    <scale>1.0</scale>
+   </LabelStyle>
+   <IconStyle>
+    <scale>1.0</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/flag.png</href>
+    </Icon>
+   </IconStyle>
+  </Style>
+  <Style id="s_start_highlight_icon">
+   <IconStyle>
+    <scale>1.5</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/flag.png</href>
+    </Icon>
+   </IconStyle>
+  </Style>
+  <Style id="s_end_normal_icon">
+   <LabelStyle>
+    <scale>1.0</scale>
+   </LabelStyle>
+   <IconStyle>
+    <scale>1.0</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/flag.png</href>
+    </Icon>
+   </IconStyle>
+  </Style>
+  <Style id="s_end_highlight_icon">
+   <IconStyle>
+    <scale>1.5</scale>
+    <Icon>
+     <href>http://maps.google.com/mapfiles/kml/shapes/flag.png</href>
+    </Icon>
+   </IconStyle>
+  </Style>
+  <Folder>
+   <name>Points</name>
+   <Placemark>
+    <name>14:30:24</name>
+    <description><![CDATA[2024/07/21 14:30:24 UTC+01:00<br>Longitude:2&deg;26'40.43"E<br>Latitude:51&deg;3'9.14"N]]></description>
+    <styleUrl>#sstart_icon</styleUrl>
+    <Point>
+     <coordinates>2.444563,51.052540,8.0</coordinates>
+    </Point>
+   </Placemark>
+   <Placemark>
+    <name>66:66:01</name>
+    <description>No timestamp</description>
+    <Point>
+     <coordinates>2.666,51.666,666.0</coordinates>
+    </Point>
+   </Placemark>
+   <Placemark>
+    <name>21:28:31</name>
+    <description><![CDATA[2024/07/21 21:28:31 UTC+01:00<br>Longitude:1&deg;50'52.44"E<br>Latitude:50&deg;56'41.49"N]]></description>
+    <styleUrl>#send_icon</styleUrl>
+    <Point>
+     <coordinates>1.847900,50.944859,14.0</coordinates>
+    </Point>
+   </Placemark>
+  </Folder>
+  <Folder>
+   <name>Track</name>
+   <Placemark>
+    <styleUrl>#smap_icon</styleUrl>
+    <LineString>
+     <extrude>0</extrude>
+     <tessellate>1</tessellate>
+     <coordinates>
+      2.444563,51.052540,8.0
+      1.847900,50.944859,14.0
+     </coordinates>
+    </LineString>
+   </Placemark>
+  </Folder>
+ </Document>
+</kml>

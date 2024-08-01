@@ -67,9 +67,7 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
-            instance = add_from_file(
-                gpx_file_file_path=FIXTURES_PATH / 'garmin_connect_1.gpx', user=self.user
-            )
+            instance = add_from_file(track_path=FIXTURES_PATH / 'garmin_connect_1.gpx', user=self.user)
             self.assert_garmin_connect_1_gpx(instance)
         assert storage_stats.fields_saved == [
             ('for_runners', 'gpxmodel', 'track_svg'),
@@ -99,7 +97,7 @@ class GpxTests(TestUserMixin, ClearCacheMixin, TestCase):
             instances = [
                 str(instance)
                 for instance in add_from_files(
-                    gpx_files_file_path=FIXTURES_PATH,
+                    tracks_path=FIXTURES_PATH,
                     user=self.user,
                     skip_errors=True,
                 )

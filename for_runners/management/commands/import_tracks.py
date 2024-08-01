@@ -16,7 +16,7 @@ from for_runners.services.gpx_create import add_from_files
 
 
 class Command(BaseCommand):
-    help = "Import GPS files (*.gpx)"
+    help = "Import GPS track files (*.gpx|*.kml) for a user"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -27,7 +27,7 @@ class Command(BaseCommand):
             required=True,
             help="The user to assign to the imported files",
         )
-        parser.add_argument("path", help="Path to *.gpx files")
+        parser.add_argument("path", help="Path to *.gpx/*.kml files")
 
     def handle(self, *args, **options):
         username = options.get("username")
@@ -44,15 +44,20 @@ class Command(BaseCommand):
         path = Path(options.get("path"))
         path = path.expanduser()
         path = path.resolve()
+
+        if path.is_file():
+            self.stderr.write(f"ERROR: Given path '{path}' is a file, but must be a directory that conains the files!")
+            sys.exit(4)
+
         if not path.is_dir():
             self.stderr.write(f"ERROR: Given path '{path}' is not a existing directory!")
-            sys.exit(4)
+            sys.exit(5)
 
         self.stdout.write(f"Read directory: {path}")
         self.stdout.write("\n")
 
         new_tracks = 0
-        for no, instance in enumerate(add_from_files(gpx_files_file_path=path, user=user), 1):
+        for no, instance in enumerate(add_from_files(tracks_path=path, user=user), 1):
             self.stdout.write(self.style.SUCCESS("%i - Add new track: %s" % (no, instance)))
             new_tracks += 1
 

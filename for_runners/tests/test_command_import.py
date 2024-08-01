@@ -9,7 +9,7 @@ from django_tools.unittest_utils.user import TestUserMixin
 from override_storage import locmem_stats_override_storage
 
 import for_runners
-from for_runners.management.commands import import_gpx
+from for_runners.management.commands import import_tracks
 from for_runners.models import GpxModel
 from for_runners.tests.fixtures.metaweather import (
     MetaWeather4695_744Fixtures,
@@ -98,7 +98,7 @@ class ImportTestCase(TestUserMixin, ClearCacheMixin, TestCase):
             m.get(**OpenStreetMap00000000_00000000Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5251861_1337611Fixtures().get_requests_mock_kwargs())
 
-            call_command(import_gpx.Command(), "--username", test_username, str(fixture_files_path))
+            call_command(import_tracks.Command(), "--username", test_username, str(fixture_files_path))
             assert storage_stats.fields_saved == [
                 ('for_runners', 'gpxmodel', 'track_svg'),
                 ('for_runners', 'gpxmodel', 'gpx_file'),

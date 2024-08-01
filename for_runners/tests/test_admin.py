@@ -11,8 +11,8 @@ from override_storage import locmem_stats_override_storage
 
 from for_runners import __version__
 from for_runners.models import GpxModel
-from for_runners.services.gpx_create import add_gpx
-from for_runners.tests.fixture_files import FIXTURES_PATH, fixture_content
+from for_runners.services.gpx_create import add_from_file
+from for_runners.tests.fixture_files import FIXTURES_PATH, get_fixture_path
 from for_runners.tests.fixtures.metaweather import MetaWeather5144_662Fixtures, MetaWeather648820_2018_2_21Fixtures
 from for_runners.tests.fixtures.openstreetmap import (
     OpenStreetMap5143785_661701Fixtures,
@@ -104,7 +104,7 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
                     "Process garmin_connect_1.gpx...",
                     "Created: 2018-02-21 Moers",
                     "Process no_track_points.gpx...",
-                    "Error process GPX data: Can't get first track",
+                    "Error process GPX data: No start time found!",
                 ],
             )
 
@@ -127,8 +127,7 @@ class ForRunnerAdminTests(HtmlAssertionMixin, TestCase):
             m.get(**MetaWeather648820_2018_2_21Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143785_661701Fixtures().get_requests_mock_kwargs())
             m.get(**OpenStreetMap5143789_661701Fixtures().get_requests_mock_kwargs())
-            gpx_content = fixture_content('garmin_connect_1.gpx', mode='r')
-            instance = add_gpx(gpx_content=gpx_content, user=self.superuser)
+            instance = add_from_file(track_path=get_fixture_path('garmin_connect_1.gpx'), user=self.superuser)
 
         self.assertEqual(instance.short_start_address, 'Moers')
         self.assertEqual(instance.get_short_slug(prefix_id=True), '20180221_1430_umd2rr-moers')

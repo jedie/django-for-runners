@@ -10,6 +10,7 @@ import statistics
 
 import gpxpy
 from gpxpy.geo import distance as geo_distance
+from gpxpy.gpx import GPX
 
 # https://github.com/jedie/django-for-runners
 from for_runners.exceptions import GpxDataError
@@ -20,11 +21,17 @@ Identifier = collections.namedtuple(
 )
 
 
-def get_identifier(gpxpy_instance):
+def get_identifier(gpxpy_instance: GPX) -> Identifier:
     """
     :return: Identifier named tuple
     """
     time_bounds = gpxpy_instance.get_time_bounds()
+
+    if not time_bounds.start_time:
+        raise GpxDataError("No start time found!")
+
+    if not time_bounds.end_time:
+        raise GpxDataError("No end time found!")
 
     try:
         first_track = gpxpy_instance.tracks[0]
