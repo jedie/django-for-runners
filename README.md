@@ -221,7 +221,12 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
-* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.17.4...main)
+* [v0.18.0.dev1](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0.dev1)
+  * 2024-08-01 - Replace metaweather.com with open-meteo.com
+  * 2024-08-01 - Update test_add_gpx()
+  * 2024-08-01 - Update Leaflet to v1.9.4 and fix styles
+  * 2024-08-01 - Support KML track import created by Pentax K-1
+  * 2024-08-01 - Catch metaweather.com error
   * 2024-07-31 - Project updates
   * 2024-07-31 - Update requirements
   * 2024-01-18 - +typeguard +manageprojects updates

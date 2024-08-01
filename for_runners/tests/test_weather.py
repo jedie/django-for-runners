@@ -8,60 +8,43 @@
     :license: GNU GPL v3 or above, see LICENSE for more details.
 """
 
-import datetime
+import logging
 
 import requests_mock
+from bx_py_utils.test_utils.datetime import parse_dt
+from django.test import SimpleTestCase
 
-from for_runners.tests.base import BaseTestCase
-from for_runners.tests.fixtures.metaweather import MetaWeather5141_678Fixtures, MetaWeather648820_2018_6_20Fixtures
-from for_runners.tests.utils import ClearCacheMixin
-from for_runners.weather import NoWeatherData, meta_weather_com
+from for_runners.tests.fixtures.weather import Weather5141_678_20180621Fixtures, WeatherWrongLatitudeFixtures
+from for_runners.tests.utils import AssertsMixin, ClearCacheMixin
+from for_runners.weather import NoWeatherData, weather
 
 
-class WeatherTest(ClearCacheMixin, BaseTestCase):
-    def test(self):
-        lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
-        date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
-
-        with requests_mock.mock() as m:
-            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
-            m.get(**MetaWeather648820_2018_6_20Fixtures().get_requests_mock_kwargs())
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                lat, lon, date=date, max_seconds=12 * 60 * 60
+class WeatherTest(ClearCacheMixin, AssertsMixin, SimpleTestCase):
+    def test_happy_path(self):
+        with self.assertLogs('for_runners', level=logging.INFO), requests_mock.mock() as m:
+            m.get(**Weather5141_678_20180621Fixtures().get_requests_mock_kwargs())
+            temperature, weather_state = weather.coordinates2weather(
+                # Duisburg - https://www.google.de/maps/@51.4109,6.7828,12z
+                latitude=51.4109,
+                longitude=6.7828,
+                dt=parse_dt('2018-06-21T14:30:24+01:00'),
             )
 
-            self.assert_equal_rounded(temperature, 25.41, decimal_places=2)
-            self.assertEqual(weather_state, "Light Cloud/Showers")
+        self.assert_equal_rounded(temperature, 16.4, decimal_places=2)
+        self.assertEqual(weather_state, 'Overcast')
 
-    def test_small_max_seconds(self):
-        lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
-        date = datetime.datetime(year=2018, month=6, day=20, hour=20, minute=30)
-
-        with requests_mock.mock() as m:
-            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
-            m.get(**MetaWeather648820_2018_6_20Fixtures().get_requests_mock_kwargs())
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                lat, lon, date=date, max_seconds=0.1
+    def test_error(self):
+        with (
+            self.assertLogs('for_runners', level=logging.INFO),
+            requests_mock.mock() as m,
+            self.assertRaisesMessage(
+                NoWeatherData,
+                'Latitude must be in range of -90 to 90°. Given: 91.0.',
+            ),
+        ):
+            m.get(**WeatherWrongLatitudeFixtures().get_requests_mock_kwargs())
+            weather.coordinates2weather(
+                latitude=91,  # Latitude must be in range of -90 to 90°
+                longitude=0,
+                dt=parse_dt('2024-07-01T18:10:02+01:00'),
             )
-
-            self.assert_equal_rounded(temperature, 27.94, decimal_places=2)
-            self.assertEqual(weather_state, "Light Cloud")
-
-    def test_no_json_data(self):
-        """
-        Request weather for Essen City on 11.02.2017 will raise into 500 - Server error:
-            https://www.metaweather.com/de/648820/2017/2/11/
-
-        The API Request will return []:
-            https://www.metaweather.com/api/location/648820/2017/2/11/
-
-        MetaWeatherCom().location_day() will raise NoWeatherData
-        """
-        lat, lon = (51.4109, 6.7828)  # Duisburg -> WOEID: 648820 (Essen, city)
-        date = datetime.datetime(year=2017, month=2, day=10, hour=12, minute=00)
-
-        with requests_mock.mock() as m:
-            m.get(**MetaWeather5141_678Fixtures().get_requests_mock_kwargs())
-            m.get('https://www.metaweather.com/api/location/648820/2017/2/10/', json=[])
-            with self.assertRaises(NoWeatherData):
-                meta_weather_com.coordinates2weather(lat, lon, date=date)

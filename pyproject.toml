@@ -26,17 +26,20 @@ dependencies = [
     "geopy",  # https://github.com/geopy/geopy
     "lxml",
     "django-dbbackup",  # https://github.com/django-dbbackup/django-dbbackup
+
     "requests",  # https://github.com/psf/requests
+    "requests-cache",  # https://github.com/requests-cache/requests-cache
+    "retry-requests",  # https://github.com/bustawin/retry-requests
+
     "bx_py_utils",  # https://github.com/boxine/bx_py_utils
     "bx_django_utils",  # https://github.com/boxine/bx_django_utils
     "django-axes",  # https://github.com/jazzband/django-axes
 
     "django-rich",  # https://github.com/adamchainz/django-rich
 
-    # Only needed for Python 3.9,
-    # see: https://github.com/jedie/django-for-runners/actions/runs/4393466572/jobs/7693878810
-    # and: https://github.com/pypa/pip/issues/9644#issuecomment-1456583402
+    # Remove after pip bug https://github.com/pypa/pip/issues/9644 fixed:
     "importlib-resources",
+    "exceptiongroup", # indirect requirements from cattrs==23.2.3 for Python < 3.11
 ]
 [project.optional-dependencies]
 dev = [

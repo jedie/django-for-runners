@@ -13,7 +13,7 @@ from for_runners.error_handling import capture_exception
 from for_runners.geo import reverse_geo
 from for_runners.gpx import get_extension_data, get_identifier
 from for_runners.models import DistanceModel
-from for_runners.weather import NoWeatherData, meta_weather_com
+from for_runners.weather import NoWeatherData, weather
 
 
 log = logging.getLogger(__name__)
@@ -73,11 +73,10 @@ def calculate_values(*, gpx_track):
 
     if not gpx_track.start_temperature:
         try:
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                gpx_track.start_latitude,
-                gpx_track.start_longitude,
-                date=gpx_track.start_time,
-                max_seconds=gpx_track.duration_s,
+            temperature, weather_state = weather.coordinates2weather(
+                latitude=gpx_track.start_latitude,
+                longitude=gpx_track.start_longitude,
+                dt=gpx_track.start_time,
             )
         except NoWeatherData:
             log.error("No weather data for start.")
@@ -87,11 +86,10 @@ def calculate_values(*, gpx_track):
 
     if not gpx_track.finish_temperature:
         try:
-            temperature, weather_state = meta_weather_com.coordinates2weather(
-                gpx_track.finish_latitude,
-                gpx_track.finish_longitude,
-                date=gpx_track.finish_time,
-                max_seconds=gpx_track.duration_s,
+            temperature, weather_state = weather.coordinates2weather(
+                latitude=gpx_track.finish_latitude,
+                longitude=gpx_track.finish_longitude,
+                dt=gpx_track.finish_time,
             )
         except NoWeatherData:
             log.error("No weather data for finish.")

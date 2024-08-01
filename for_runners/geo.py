@@ -10,6 +10,8 @@ from typing import Optional
 from django.core.cache import cache
 from geopy.geocoders import Nominatim
 
+from for_runners.request_session import USER_AGENT
+
 
 log = logging.getLogger(__name__)
 
@@ -70,7 +72,7 @@ def reverse_geo(lat, lon) -> Optional[Address]:
         log.debug('reverse geo from cache')
         full_address, raw_address = address
     else:
-        geolocator = Nominatim(user_agent="django-for-runners")
+        geolocator = Nominatim(user_agent=USER_AGENT)
 
         # https://nominatim.org/release-docs/develop/api/Reverse/
         location = geolocator.reverse(
@@ -89,7 +91,7 @@ def reverse_geo(lat, lon) -> Optional[Address]:
         cache.set(cache_key, address, timeout=None)  # cache forever
 
     short_address = construct_short_address(address=raw_address)
-    log.info(f'short_address={short_address}')
+    log.info(f'lat={lat2} lon={lon2} {short_address=}')
 
     return Address(short_address, full_address)
 

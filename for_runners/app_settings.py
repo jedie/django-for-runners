@@ -38,3 +38,6 @@ BASE_IDEAL_TRACK_LENGTHS = (  # All values are in kilometers ;)
 # All cash values are stored as decimal field without any currency information
 # This symbol will be just added ;)
 FOR_RUNNERS_CURRENCY_SYMBOL = "€"
+
+# Use requests cache:
+REQUEST_CACHE = True

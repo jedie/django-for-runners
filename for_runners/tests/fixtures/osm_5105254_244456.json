@@ -1,0 +1,35 @@
+{
+  "address": {
+    "ISO3166-2-lvl4": "FR-HDF",
+    "ISO3166-2-lvl6": "FR-59",
+    "country": "France",
+    "country_code": "fr",
+    "county": "Nord",
+    "municipality": "Dunkerque",
+    "neighbourhood": "Les Dunes",
+    "postcode": "59495",
+    "region": "France métropolitaine",
+    "road": "Chemin du Fort",
+    "state": "Hauts-de-France",
+    "village": "Leffrinckoucke"
+  },
+  "addresstype": "road",
+  "boundingbox": [
+    "51.0520469",
+    "51.0528530",
+    "2.4448796",
+    "2.4449119"
+  ],
+  "class": "highway",
+  "display_name": "Chemin du Fort, Les Dunes, Leffrinckoucke, Dunkerque, Nord, Hauts-de-France, France métropolitaine, 59495, France",
+  "importance": 0.10000999999999993,
+  "lat": "51.05255927090651",
+  "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+  "lon": "2.4448890054337613",
+  "name": "Chemin du Fort",
+  "osm_id": 620602712,
+  "osm_type": "way",
+  "place_id": 117608987,
+  "place_rank": 26,
+  "type": "living_street"
+}

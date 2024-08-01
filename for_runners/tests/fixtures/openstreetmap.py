@@ -1,7 +1,7 @@
 from bx_django_utils.test_utils.fixtures import fixtures_registry
 
+from for_runners.request_session import request_get
 from for_runners.tests.fixtures import BaseFixtures
-from for_runners.weather import request_json
 
 
 class OpenStreetMapBaseFixtures(BaseFixtures):
@@ -10,7 +10,9 @@ class OpenStreetMapBaseFixtures(BaseFixtures):
         if self.file_path.is_file():
             print(f'Skip {self.file_path}')
             return
-        data = request_json(url=self.url)
+        response = request_get(url=self.url)
+        response.raise_for_status()
+        data = response.json()
         self.store_fixture_data(data=data)
 
 
@@ -61,3 +63,9 @@ class OpenStreetMap51437889_66617012Fixtures(OpenStreetMapBaseFixtures):
 class OpenStreetMap5251861_1337611Fixtures(OpenStreetMapBaseFixtures):
     file_name = 'osm_5251861_1337611.json'
     url = 'https://nominatim.openstreetmap.org/reverse?lat=52.51861&lon=13.37611&format=json&addressdetails=1&zoom=17'
+
+
+@fixtures_registry.register()
+class OpenStreetMap5105254_244456Fixtures(OpenStreetMapBaseFixtures):
+    file_name = 'osm_5105254_244456.json'
+    url = 'https://nominatim.openstreetmap.org/reverse?lat=51.05254&lon=2.44456&format=json&addressdetails=1&zoom=17'

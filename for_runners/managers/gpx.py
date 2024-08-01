@@ -7,12 +7,14 @@ import logging
 
 from django.db import models
 
+from for_runners.gpx import Identifier
+
 
 log = logging.getLogger(__name__)
 
 
 class GpxModelQuerySet(models.QuerySet):
-    def get_by_identifier(self, identifier):
+    def get_by_identifier(self, identifier: Identifier):
         """
         :param identifier: 'Identifier' namedtuple created here: for_runners.gpx.get_identifier
         """
