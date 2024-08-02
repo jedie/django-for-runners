@@ -2,11 +2,11 @@
 
 ![Logo](https://github.com/jedie/django-for-runners/raw/main/for_runners/static/Django-ForRunners128.png "Logo") Store your GPX tracks of your running (or other sports activity) in django.
 
-[![pytest](https://github.com/jedie/django-for-runners/workflows/test/badge.svg?branch=main)](https://github.com/jedie/django-for-runners/actions)
-[![Coverage Status on codecov.io](https://codecov.io/gh/jedie/django-for-runners/branch/main/graph/badge.svg)](https://codecov.io/gh/jedie/django-for-runners)
-[![django_yunohost_integration @ PyPi](https://img.shields.io/pypi/v/django_yunohost_integration?label=django_yunohost_integration%20%40%20PyPi)](https://pypi.org/project/django_yunohost_integration/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/django_yunohost_integration)](https://github.com/jedie/django-for-runners/blob/main/pyproject.toml)
-[![License GPL](https://img.shields.io/pypi/l/django_yunohost_integration)](https://github.com/jedie/django-for-runners/blob/main/LICENSE)
+[![tests](https://github.com/jedie/django-for-runners/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/jedie/django-for-runners/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/github/jedie/for_runners/branch/main/graph/badge.svg)](https://app.codecov.io/github/jedie/for_runners)
+[![django-for-runners @ PyPi](https://img.shields.io/pypi/v/django-for-runners?label=django-for-runners%20%40%20PyPi)](https://pypi.org/project/django-for-runners/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/django-for-runners)](https://github.com/jedie/django-for-runners/blob/main/pyproject.toml)
+[![License GPL-3.0-or-later](https://img.shields.io/pypi/l/django-for-runners)](https://github.com/jedie/django-for-runners/blob/main/LICENSE)
 
 (The name **Django-ForRunners** has the origin from the great Android tracking app **ForRunners** by Benoît Hervier: [http://rvier.fr/#forrunners](http://rvier.fr/#forrunners) )
 
