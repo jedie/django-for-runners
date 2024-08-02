@@ -175,7 +175,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{311,310,39}
+envlist = py{312,311,310}
 skip_missing_interpreters = True
 
 [testenv]
