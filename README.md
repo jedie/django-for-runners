@@ -221,6 +221,8 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
+* [v0.18.1](https://github.com/jedie/django-for-runners/compare/v0.18.0...v0.18.1)
+  * 2024-08-02 - Update/fix "fill_basedata" command
 * [v0.18.0](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0)
   * 2024-08-02 - Update README.md
   * 2024-08-02 - Expand test matrix with 3.12 and remove 3.9 support
@@ -248,12 +250,12 @@ Because this is a project and not really a reuse-able-app ;)
   * 2023-04-04 - Switch to "managed-django-project" template:
 * [v0.17.3](https://github.com/jedie/django-for-runners/compare/v0.17.2...v0.17.3)
   * 2023-04-03 - Bugfix check if Postgres is used and migration not done
-* [v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.1...v0.17.2)
-  * 2023-04-02 - release 0.17.2
-  * 2023-04-02 - Bugfix adding all template files
 
 <details><summary>Expand older history entries ...</summary>
 
+* [v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.1...v0.17.2)
+  * 2023-04-02 - release 0.17.2
+  * 2023-04-02 - Bugfix adding all template files
 * [v0.17.1](https://github.com/jedie/django-for-runners/compare/v0.17.0...v0.17.1)
   * 2023-04-02 - Bugfix packaging and missing files
   * 2023-04-02 - update link to https://github.com/kbr/autotask

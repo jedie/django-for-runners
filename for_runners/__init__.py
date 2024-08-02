@@ -3,5 +3,5 @@
     Store your GPX tracks of your running (or other sports activity) in django.
 """
 
-__version__ = '0.18.0'
+__version__ = '0.18.1'
 __author__ = 'Jens Diemer <django-for-runners@jensdiemer.de>'
