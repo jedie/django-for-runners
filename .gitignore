@@ -24,8 +24,10 @@ __pycache__
 *.sqlite3
 *.json
 
+
 # Include "ignored" *.json:
 !**/fixtures/*.json
+!*.snapshot.json
 
 # Django
 secret.txt
