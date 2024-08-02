@@ -222,6 +222,7 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.18.0.dev1](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0.dev1)
+  * 2024-08-02 - Update README.md
   * 2024-08-02 - Expand test matrix with 3.12 and remove 3.9 support
   * 2024-08-02 - Bugfix CI: Add "*.snapshot.json" files ;)
   * 2024-08-02 - Add https://pre-commit.com hook
