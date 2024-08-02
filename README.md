@@ -221,7 +221,7 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
-* [v0.18.0.dev1](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0.dev1)
+* [v0.18.0](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0)
   * 2024-08-02 - Update README.md
   * 2024-08-02 - Expand test matrix with 3.12 and remove 3.9 support
   * 2024-08-02 - Bugfix CI: Add "*.snapshot.json" files ;)
@@ -709,8 +709,8 @@ Because this is a project and not really a reuse-able-app ;)
 
 ## links
 
-| Homepage | [http://github.com/jedie/django-for-runners](http://github.com/jedie/django-for-runners)     |
-| PyPi     | [https://pypi.org/project/django-for-runners/](https://pypi.org/project/django-for-runners/) |
+* Homepage: [http://github.com/jedie/django-for-runners](http://github.com/jedie/django-for-runners)
+* PyPi: [https://pypi.org/project/django-for-runners/](https://pypi.org/project/django-for-runners/)
 
 ### activity exporter
 
