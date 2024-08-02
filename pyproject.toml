@@ -55,7 +55,7 @@ dev = [
     "pyflakes",  # https://github.com/PyCQA/pyflakes
     "codespell",  # https://github.com/codespell-project/codespell
     "EditorConfig",  # https://github.com/editorconfig/editorconfig-core-py
-    "safety",  # https://github.com/pyupio/safety
+    "pip-audit",  # https://github.com/pypa/pip-audit
     "mypy",  # https://github.com/python/mypy
     "twine",  # https://github.com/pypa/twine
     "typeguard",  # https://github.com/agronholm/typeguard/
@@ -114,6 +114,14 @@ version = {attr = "for_runners.__version__"}
 
 [tool.cli_base]
 version_module_name = "for_runners"  # Used by update_readme_history()
+
+
+[tool.cli_base.pip_audit]
+# https://github.com/jedie/cli-base-utilities/blob/main/docs/pip_audit.md
+requirements=["requirements.dev.txt"]
+strict=true
+require_hashes=true
+ignore-vuln=[]
 
 
 [tool.darker]
@@ -204,6 +212,7 @@ applied_migrations = [
     "d65b082", # 2023-12-17T12:51:22+01:00
     "a66e5ae", # 2024-01-16T19:13:13+01:00
     "f8be3e0", # 2024-07-16T19:35:26+02:00
+    "52669d0", # 2024-08-02T15:47:04+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]

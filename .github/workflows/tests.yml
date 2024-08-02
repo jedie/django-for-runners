@@ -42,9 +42,9 @@ jobs:
       run: |
         ./manage.py --help
 
-    - name: 'Safety'
+    - name: 'Run pip-audit'
       run: |
-        ./manage.py safety
+        ./manage.py pip_audit
 
     - name: 'Run tests with Python v${{ matrix.python-version }}'
       env:
