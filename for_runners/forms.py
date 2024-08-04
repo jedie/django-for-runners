@@ -26,8 +26,8 @@ class MultipleFileField(forms.FileField):
         return result
 
 
-class UploadGpxFileForm(forms.Form):
-    gpx_files = MultipleFileField()
+class UploadFilesForm(forms.Form):
+    files = MultipleFileField()
 
     def send_email(self):
         # send email using the self.cleaned_data dictionary

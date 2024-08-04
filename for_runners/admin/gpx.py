@@ -11,6 +11,7 @@ import statistics
 import zipfile
 from pprint import pprint
 
+import gpxpy
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
@@ -27,6 +28,7 @@ from django.views import generic
 
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
+from gpxpy.gpx import GPX, GPXTrackPoint
 from import_export.admin import ExportMixin
 
 # https://github.com/jedie/django-for-runners
@@ -34,9 +36,12 @@ from for_runners import constants
 from for_runners.admin.gpx_import_export import GpxModelResource
 from for_runners.admin.utils import BaseChangelistView, BaseFormChangelistView
 from for_runners.exceptions import GpxDataError
-from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadGpxFileForm
+from for_runners.forms import INITIAL_DISTANCE, DistanceStatisticsForm, UploadFilesForm
 from for_runners.gpx import add_extension_data, get_2d_coordinate_list, iter_distance, iter_points
+from for_runners.gpx_tools.detect_track_type import TrackType, detect_type
+from for_runners.gpx_tools.kml import kml2gpx
 from for_runners.models import GpxModel
+from for_runners.services.gpx_create import add_gpx
 from for_runners.services.gpx_svg_generator import generate_svg
 
 
@@ -51,41 +56,46 @@ STATISTICS_CHOICES = (
 assert len(dict(STATISTICS_CHOICES)) == len(STATISTICS_CHOICES), "Double keys?!?"
 
 
-class UploadGpxFileView(generic.FormView):
-    template_name = "for_runners/upload_gpx_file.html"
-    form_class = UploadGpxFileForm
+class UploadTracksFormView(generic.FormView):
+    template_name = "for_runners/upload_tracks.html"
+    form_class = UploadFilesForm
     success_url = "../"  # FIXME
 
     def post(self, request, *args, **kwargs):
         user = request.user
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        files = request.FILES.getlist("gpx_files")
+        files = request.FILES.getlist("files")
         if form.is_valid():
             log.debug("files: %r", files)
             for f in files:
                 messages.info(request, f"Process {f.name}...")
 
-                content = f.file.read()
-                log.debug("raw content......: %s", repr(content)[:100])
-                content = content.decode("utf-8")
-                log.debug("decoded content..: %s", repr(content)[:100])
+                track_type = detect_type(f.file)
+                log.debug("Track type.......: %s", track_type)
+                if track_type == TrackType.UNKNOWN:
+                    messages.error(request, 'Unknown track type: %s' % f.name)
+                    continue
+
+                if track_type == TrackType.KML:
+                    gpx: GPX = kml2gpx(f.file)
+                elif track_type == TrackType.GPX:
+                    gpx: GPX = gpxpy.parse(f.file)
+                else:
+                    raise NotImplementedError(f"Unknown track type: {track_type}")
 
                 try:
-                    try:
-                        gpx = GpxModel.objects.create(gpx=content, tracked_by=user)
-                    except IntegrityError as err:
-                        # catch: UNIQUE constraint failed
-                        # give a better error message
-                        messages.error(request, f"Error process GPX data: {err}")
-                        continue
+                    instance: GpxModel = add_gpx(gpx=gpx, user=user)
                 except GpxDataError as err:
                     messages.error(request, f"Error process GPX data: {err}")
                 else:
-                    messages.success(request, f"Created: {gpx}")
+                    if not instance:
+                        messages.success(request, f"Skip existing track {f.name}")
+                    else:
+                        messages.success(request, f"Created: {instance}")
 
-                    # redirect to change view:
-                    self.success_url = gpx.get_admin_change_url()
+                        # redirect to change view:
+                        self.success_url = instance.get_admin_change_url()
 
             return self.form_valid(form)
         else:
@@ -623,7 +633,7 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         urls = [
             path(
                 'upload/',
-                self.admin_site.admin_view(UploadGpxFileView.as_view()),
+                self.admin_site.admin_view(UploadTracksFormView.as_view()),
                 name="upload-gpx-file",
             ),
             path(

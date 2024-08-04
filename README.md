@@ -222,6 +222,8 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.18.1...main)
+  * 2024-08-04 - Enhance tracks upload in change list:
+  * 2024-08-04 - Set min. Python v3.11
   * 2024-08-04 - update requirements
 * [v0.18.1](https://github.com/jedie/django-for-runners/compare/v0.18.0...v0.18.1)
   * 2024-08-02 - Update/fix "fill_basedata" command
