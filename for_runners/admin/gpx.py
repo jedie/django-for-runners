@@ -15,7 +15,7 @@ import gpxpy
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
-from django.db import IntegrityError, NotSupportedError, models
+from django.db import NotSupportedError, models
 from django.db.models import Avg, Max, Min
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -28,7 +28,7 @@ from django.views import generic
 
 # https://github.com/jedie/django-tools
 from django_tools.decorators import display_admin_error
-from gpxpy.gpx import GPX, GPXTrackPoint
+from gpxpy.gpx import GPX
 from import_export.admin import ExportMixin
 
 # https://github.com/jedie/django-for-runners
@@ -74,7 +74,7 @@ class UploadTracksFormView(generic.FormView):
                 track_type = detect_type(f.file)
                 log.debug("Track type.......: %s", track_type)
                 if track_type == TrackType.UNKNOWN:
-                    messages.error(request, 'Unknown track type: %s' % f.name)
+                    messages.error(request, f'Unknown track type: {f.name}')
                     continue
 
                 if track_type == TrackType.KML:
