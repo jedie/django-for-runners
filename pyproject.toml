@@ -64,18 +64,15 @@ dev = [
     "darker[flynt, isort, color]",
 
     "tomli",  # https://github.com/hukkin/tomli
-    # tomli only needed for Python <3.11, but see bug:
-    # https://github.com/pypa/pip/issues/9644#issuecomment-1456583402
-    #"tomli;python_version<\"3.11\"",  # https://github.com/hukkin/tomli
-
-    # Work-a-round for:
-    # https://github.com/jazzband/pip-tools/issues/994#issuecomment-1321226661
-    "typing-extensions>=3.10",
 
     "django-dynamic-fixtures",  # https://github.com/Peter-Slump/django-dynamic-fixtures
     "model_bakery",  # https://github.com/model-bakers/model_bakery
     "requests-mock",
     "django-override-storage",  # https://github.com/danifus/django-override-storage
+
+    # Work-a-round for:
+    # https://github.com/jazzband/pip-tools/issues/994
+    "backports.tarfile",
 ]
 
 [project.urls]

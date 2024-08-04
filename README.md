@@ -222,6 +222,7 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [**dev**](https://github.com/jedie/django-for-runners/compare/v0.18.1...main)
+  * 2024-08-04 - bugfix 3.11 installation
   * 2024-08-04 - Fix Code style
   * 2024-08-04 - Enhance tracks upload in change list:
   * 2024-08-04 - Set min. Python v3.11
