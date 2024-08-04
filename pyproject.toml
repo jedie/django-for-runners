@@ -7,7 +7,7 @@ readme = "README.md"
 authors = [
     {name = 'Jens Diemer', email = 'django-for-runners@jensdiemer.de'}
 ]
-requires-python = ">=3.9" # Keep Python 3.9 until Yunohost contains a newer Python Version ;)
+requires-python = ">=3.11"
 dependencies = [
     "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
 
@@ -36,10 +36,6 @@ dependencies = [
     "django-axes",  # https://github.com/jazzband/django-axes
 
     "django-rich",  # https://github.com/adamchainz/django-rich
-
-    # Remove after pip bug https://github.com/pypa/pip/issues/9644 fixed:
-    "importlib-resources",
-    "exceptiongroup", # indirect requirements from cattrs==23.2.3 for Python < 3.11
 ]
 [project.optional-dependencies]
 dev = [
@@ -68,18 +64,15 @@ dev = [
     "darker[flynt, isort, color]",
 
     "tomli",  # https://github.com/hukkin/tomli
-    # tomli only needed for Python <3.11, but see bug:
-    # https://github.com/pypa/pip/issues/9644#issuecomment-1456583402
-    #"tomli;python_version<\"3.11\"",  # https://github.com/hukkin/tomli
-
-    # Work-a-round for:
-    # https://github.com/jazzband/pip-tools/issues/994#issuecomment-1321226661
-    "typing-extensions>=3.10",
 
     "django-dynamic-fixtures",  # https://github.com/Peter-Slump/django-dynamic-fixtures
     "model_bakery",  # https://github.com/model-bakers/model_bakery
     "requests-mock",
     "django-override-storage",  # https://github.com/danifus/django-override-storage
+
+    # Work-a-round for:
+    # https://github.com/jazzband/pip-tools/issues/994
+    "backports.tarfile",
 ]
 
 [project.urls]
@@ -175,7 +168,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{312,311,310}
+envlist = py{312,311}
 skip_missing_interpreters = True
 
 [testenv]

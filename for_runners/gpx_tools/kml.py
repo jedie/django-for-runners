@@ -2,6 +2,7 @@ import dataclasses
 import datetime
 import logging
 import re
+from typing import BinaryIO
 
 import gpxpy.gpx
 from gpxpy.gpx import GPX, GPXTrackPoint
@@ -73,7 +74,7 @@ def datetime_from_description(placemark: Element, namespaces):
         return parse_datetime(dt_str)
 
 
-def kml2gpx(kml_file) -> GPX:
+def kml2gpx(kml_file: BinaryIO) -> GPX:
     """
     Convert a KML file to a GPX object.
     Notes:
