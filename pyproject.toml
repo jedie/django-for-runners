@@ -7,7 +7,7 @@ readme = "README.md"
 authors = [
     {name = 'Jens Diemer', email = 'django-for-runners@jensdiemer.de'}
 ]
-requires-python = ">=3.9" # Keep Python 3.9 until Yunohost contains a newer Python Version ;)
+requires-python = ">=3.11"
 dependencies = [
     "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
 
@@ -36,10 +36,6 @@ dependencies = [
     "django-axes",  # https://github.com/jazzband/django-axes
 
     "django-rich",  # https://github.com/adamchainz/django-rich
-
-    # Remove after pip bug https://github.com/pypa/pip/issues/9644 fixed:
-    "importlib-resources",
-    "exceptiongroup", # indirect requirements from cattrs==23.2.3 for Python < 3.11
 ]
 [project.optional-dependencies]
 dev = [
@@ -175,7 +171,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{312,311,310}
+envlist = py{312,311}
 skip_missing_interpreters = True
 
 [testenv]
