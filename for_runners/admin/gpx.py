@@ -509,34 +509,31 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
 
     participation_links.short_description = _("Links")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.list_display = [
-            "tracked_by",
-            "svg_tag",
-            "overview",
-            "start_time",
-            "human_length_html",
-            "human_duration_html",
-            "human_pace",
-            "heart_rate_avg",
-            "human_weather",
-            "uphill",
-            "downhill",
-            "min_elevation",
-            "max_elevation",
-        ]
-        self.list_filter = [
-            StatisticsListFilter,
-            HasNetDurationFilter,
-            HasEventPartricipationFilter,
-            "tracked_by",
-            "start_time",
-            "ideal_distance",
-            "creator",
-        ]
-
+    list_display = (
+        "tracked_by",
+        "svg_tag",
+        "overview",
+        "start_time",
+        "human_length_html",
+        "human_duration_html",
+        "human_pace",
+        "heart_rate_avg",
+        "human_weather",
+        "uphill",
+        "downhill",
+        "min_elevation",
+        "max_elevation",
+    )
+    list_filter = (
+        StatisticsListFilter,
+        HasNetDurationFilter,
+        HasEventPartricipationFilter,
+        "tracked_by",
+        "start_time",
+        "ideal_distance",
+        "creator",
+    )
+    show_facets = admin.ShowFacets.ALLOW
     search_fields = ("full_start_address", "full_finish_address", "creator")
     date_hierarchy = "start_time"
     list_per_page = 50
@@ -673,18 +670,22 @@ class GpxModelAdmin(ExportMixin, admin.ModelAdmin):
         return user_count
 
     def get_list_display(self, request):
-        list_display = super().get_list_display(request).copy()
+        list_display = super().get_list_display(request)
 
         if self.user_count <= 1 and "tracked_by" in list_display:
+            list_display = list(list_display)
             list_display.remove("tracked_by")
+            list_display = tuple(list_display)
 
         return list_display
 
     def get_list_filter(self, request):
-        list_filter = super().get_list_filter(request).copy()
+        list_filter = super().get_list_filter(request)
 
         if self.user_count <= 1 and "tracked_by" in list_filter:
+            list_filter = list(list_filter)
             list_filter.remove("tracked_by")
+            list_filter = tuple(list_filter)
 
         return list_filter
 
