@@ -223,6 +223,8 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.20.0.dev0](https://github.com/jedie/django-for-runners/compare/v0.19.0...v0.20.0.dev0)
+  * 2024-08-13 - Allow facets in GPX change list
+  * 2024-08-13 - Dump Version
   * 2024-08-13 - Update README
   * 2024-08-13 - Update to Django 5.1
   * 2024-08-13 - Update requirements
