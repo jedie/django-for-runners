@@ -9,7 +9,7 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "django>=4.2,<4.3",  # TODO: Update to Django v5.0 !
+    "django",  # https://docs.djangoproject.com
 
     "colorlog",  # https://github.com/borntyping/python-colorlog
     "gunicorn",  # https://github.com/benoimyproject.wsgitc/gunicorn
