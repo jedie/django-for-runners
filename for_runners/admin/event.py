@@ -85,7 +85,7 @@ class EventStatistics:
 
         # turn defaultdict and counter to normal dict and convert some values:
 
-        total_costs = collections.Counter()
+        total_costs = collections.Counter(total=0)
 
         # pprint(raw_person_data)
         person_data = {}
@@ -106,7 +106,7 @@ class EventStatistics:
                 else:
                     # costs item
                     # collect total costs:
-                    total_costs += collections.Counter({"total": value, key: value})
+                    total_costs.update({"total": value, key: value})
                     # convert decimal field:
                     value = convert_cash_values(value)
 
