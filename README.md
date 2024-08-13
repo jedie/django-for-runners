@@ -221,6 +221,8 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.19.0...main)
+  * 2024-08-13 - Update requirements
 * [v0.19.0](https://github.com/jedie/django-for-runners/compare/v0.18.1...v0.19.0)
   * 2024-08-04 - Relase as v0.19.0
   * 2024-08-04 - bugfix 3.11 installation
@@ -248,6 +250,9 @@ Because this is a project and not really a reuse-able-app ;)
   * 2023-12-17 - Update requirements ; TODO: Update to Django 5.0
   * 2023-12-17 - Code style fixes
   * 2023-12-17 - Apply manageprojects updates
+
+<details><summary>Expand older history entries ...</summary>
+
 * [v0.17.4](https://github.com/jedie/django-for-runners/compare/v0.17.3...v0.17.4)
   * 2023-11-07 - audo generate README history
   * 2023-11-07 - Update Requirements
@@ -255,9 +260,6 @@ Because this is a project and not really a reuse-able-app ;)
   * 2023-04-05 - Update to manage-django-project v0.3.0rc0
   * 2023-04-05 - Bugfixes:
   * 2023-04-04 - Switch to "managed-django-project" template:
-
-<details><summary>Expand older history entries ...</summary>
-
 * [v0.17.3](https://github.com/jedie/django-for-runners/compare/v0.17.2...v0.17.3)
   * 2023-04-03 - Bugfix check if Postgres is used and migration not done
 * [v0.17.2](https://github.com/jedie/django-for-runners/compare/v0.17.1...v0.17.2)
