@@ -222,7 +222,7 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
-* [v0.20.0.dev0](https://github.com/jedie/django-for-runners/compare/v0.19.0...v0.20.0.dev0)
+* [v0.20.0](https://github.com/jedie/django-for-runners/compare/v0.19.0...v0.20.0)
   * 2024-08-25 - Update requirements
   * 2024-08-25 - Apply manageprojects updates
   * 2024-08-13 - Bugfix broken event change list, if no events exists
