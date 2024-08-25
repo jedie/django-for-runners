@@ -16,7 +16,7 @@ dependencies = [
 
     "django-processinfo",  # https://github.com/jedie/django-processinfo/
     "django-debug-toolbar",  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
-    "django-tools",  # https://github.com/jedie/django-tools/
+    "django-tools>=0.56.2",  # https://github.com/jedie/django-tools/
     "django-import-export",  # https://github.com/django-import-export/django-import-export
     "django-admin-sortable2",  # https://github.com/jrief/django-admin-sortable2
     "autotask",  # https://github.com/kbr/autotask
@@ -207,6 +207,7 @@ applied_migrations = [
     "a66e5ae", # 2024-01-16T19:13:13+01:00
     "f8be3e0", # 2024-07-16T19:35:26+02:00
     "52669d0", # 2024-08-02T15:47:04+02:00
+    "3dac094", # 2024-08-25T15:13:50+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
