@@ -16,7 +16,7 @@ dependencies = [
 
     "django-processinfo",  # https://github.com/jedie/django-processinfo/
     "django-debug-toolbar",  # http://django-debug-toolbar.readthedocs.io/en/stable/changes.html
-    "django-tools",  # https://github.com/jedie/django-tools/
+    "django-tools>=0.56.2",  # https://github.com/jedie/django-tools/
     "django-import-export",  # https://github.com/django-import-export/django-import-export
     "django-admin-sortable2",  # https://github.com/jrief/django-admin-sortable2
     "autotask",  # https://github.com/kbr/autotask
