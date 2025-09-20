@@ -187,10 +187,11 @@ To make a new release, do this:
 * Create release
 
 
-## Django compatibility
+## Django/Python compatibility
 
 | django-for-runners | django version | python              |
 |--------------------|----------------|---------------------|
+| >=v0.20.1          | 5.2, 5.1       | 3.11, 3.12, 3.13    |
 | >=v0.20.0          | 5.1            | 3.11, 3.12          |
 | >=v0.16.0          | 4.1            | 3.9, 3.10, 3.11     |
 | >=v0.15.0          | 3.2, 4.0, 4.1  | 3.7, 3.8, 3.9, 3.10 |
@@ -200,7 +201,7 @@ To make a new release, do this:
 | >=v0.7.1           | 2.1            | 3.5, 3.6, 3.7       |
 | v0.5.x             | 2.0            | 3.5, 3.6, 3.7       |
 
-(See also combinations in [tox settings in pyproject.toml](https://github.com/jedie/django-for-runners/blob/main/pyproject.toml) and [github actions](https://github.com/jedie/django-for-runners/blob/main/.github/workflows/tests.yml))
+(See also combinations in [noxfile.py](https://github.com/jedie/django-for-runners/blob/main/noxfile.py) and [github actions](https://github.com/jedie/django-for-runners/blob/main/.github/workflows/tests.yml))
 
 
 ## Backwards-incompatible changes
@@ -223,6 +224,7 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.20.1](https://github.com/jedie/django-for-runners/compare/v0.20.0...v0.20.1)
+  * 2025-09-20 - Update Django/Python compatibility
   * 2025-09-20 - Remove Django 4.2 support
   * 2025-09-20 - Add PyCharm run config files
   * 2025-09-20 - apply ruff code style fixes
