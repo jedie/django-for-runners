@@ -9,8 +9,8 @@ from django.core.cache import cache
 from manageprojects.test_utils.project_setup import check_editor_config, get_py_max_line_length
 from packaging.version import Version
 
-from manage import BASE_PATH
 from for_runners import __version__
+from manage import BASE_PATH
 
 
 class ProjectSetupTestCase(TestCase):

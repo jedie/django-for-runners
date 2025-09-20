@@ -108,6 +108,7 @@ ignore-vuln=[
 line-length = 120
 exclude = [
   ".*/",
+  "*/migrations/*",
 ]
 
 [tool.ruff.lint]
