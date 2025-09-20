@@ -223,6 +223,7 @@ Because this is a project and not really a reuse-able-app ;)
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.20.1](https://github.com/jedie/django-for-runners/compare/v0.20.0...v0.20.1)
+  * 2025-09-20 - Add PyCharm run config files
   * 2025-09-20 - apply ruff code style fixes
   * 2025-09-20 - apply manageprojects project setup updates
   * 2025-09-20 - Update requirements
