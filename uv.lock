@@ -751,7 +751,7 @@ requires-dist = [
     { name = "bx-django-utils" },
     { name = "bx-py-utils" },
     { name = "colorlog" },
-    { name = "django" },
+    { name = "django", specifier = ">=5.1" },
     { name = "django-admin-sortable2" },
     { name = "django-axes" },
     { name = "django-dbbackup" },
