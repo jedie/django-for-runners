@@ -222,6 +222,8 @@ Because this is a project and not really a reuse-able-app ;)
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
+* [**dev**](https://github.com/jedie/django-for-runners/compare/v0.20.0...main)
+  * 2025-09-20 - Update requirements
 * [v0.20.0](https://github.com/jedie/django-for-runners/compare/v0.19.0...v0.20.0)
   * 2024-08-25 - Update requirements
   * 2024-08-25 - Apply manageprojects updates
@@ -239,6 +241,9 @@ Because this is a project and not really a reuse-able-app ;)
   * 2024-08-04 - update requirements
 * [v0.18.1](https://github.com/jedie/django-for-runners/compare/v0.18.0...v0.18.1)
   * 2024-08-02 - Update/fix "fill_basedata" command
+
+<details><summary>Expand older history entries ...</summary>
+
 * [v0.18.0](https://github.com/jedie/django-for-runners/compare/v0.17.4...v0.18.0)
   * 2024-08-02 - Update README.md
   * 2024-08-02 - Expand test matrix with 3.12 and remove 3.9 support
@@ -257,9 +262,6 @@ Because this is a project and not really a reuse-able-app ;)
   * 2023-12-17 - Update requirements ; TODO: Update to Django 5.0
   * 2023-12-17 - Code style fixes
   * 2023-12-17 - Apply manageprojects updates
-
-<details><summary>Expand older history entries ...</summary>
-
 * [v0.17.4](https://github.com/jedie/django-for-runners/compare/v0.17.3...v0.17.4)
   * 2023-11-07 - audo generate README history
   * 2023-11-07 - Update Requirements
