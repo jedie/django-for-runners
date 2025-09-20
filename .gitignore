@@ -7,6 +7,7 @@ __pycache__
 *.orig
 
 !.github
+!.run
 !.editorconfig
 !.flake8
 !.gitignore
@@ -24,11 +25,11 @@ __pycache__
 *.sqlite3
 *.json
 
-
 # Include "ignored" *.json:
 !**/fixtures/*.json
-!*.snapshot.json
 
 # Django
+# Include all test snapshot files:
+!**/*.snapshot.*
 secret.txt
 

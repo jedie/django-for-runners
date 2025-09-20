@@ -15,8 +15,8 @@ from override_storage import locmem_stats_override_storage
 from for_runners.services.gpx_create import add_from_file, add_from_files, add_gpx
 from for_runners.tests.fixture_files import FIXTURES_PATH, fixture_content
 from for_runners.tests.fixtures.openstreetmap import (
-    OpenStreetMap00000000_00000000Fixtures,
     OpenStreetMap0_0Fixtures,
+    OpenStreetMap00000000_00000000Fixtures,
     OpenStreetMap5105254_244456Fixtures,
     OpenStreetMap5143785_661701Fixtures,
     OpenStreetMap5143789_661701Fixtures,
